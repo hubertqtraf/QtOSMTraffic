@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/prefix">
+        <file>application-exit.svg</file>
+        <file>document-open.svg</file>
+    </qresource>
+</RCC>
