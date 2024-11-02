@@ -98,7 +98,6 @@ uint8_t TrMapLinkRoad::getLanes()
 
 void TrMapLinkRoad::setParking(uint16_t park)
 {
-	//TR_INF << HEX << park;
 	m_parking = park;
 }
 
@@ -164,7 +163,6 @@ bool TrMapLinkRoad::getParSegment(const TrZoomMap & zoom_ref, poly_add & add, bo
 	else
 	{
 		TrGeoSegment seg(m_par_line[m_par_line.size()-2], m_par_line[m_par_line.size()-1]);
-		//TR_INF << "2 " << seg;
 		seg.getSegmentData(zoom_ref, add, m_par_line[m_par_line.size()-1].x);
 	}
 	return true;
@@ -186,7 +184,6 @@ TrMapLinkRoad * TrMapLinkRoad::getNextLink(TrMapNode & node, int n, bool dir, do
 int TrMapLinkRoad::moveCheck(TrMapNode & node)
 {
 	double ang = 10.0;
-	//double ang_in = ang;
 	int ret = 0;
 
 	int count_one_in = 0;
@@ -199,14 +196,12 @@ int TrMapLinkRoad::moveCheck(TrMapNode & node)
 				count_one_in++;
 			if(next == this)
 			{
-				//TR_INF << "ang: " << ang;
 				//ang_in = ang;
 			}
 			//TR_INF << "IN  " << node.getIn(false) << "# " << count_one_in << " #" << *next;
 		}
 		else
 		{
-			//TR_INF << "--border-- " << *this;
 			return 0;
 		}
 	}
