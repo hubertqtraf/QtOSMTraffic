@@ -37,9 +37,10 @@
 
 
 #include "tr_import_osm_stream.h"
-//#include "tr_import_osm_rel.h"
 
 #include <tr_prof_class_def.h>
+
+#include <QtCore/qfile.h>
 
 TrImportOsmStream::TrImportOsmStream(const QString & name)
 	: TrGeoObject()

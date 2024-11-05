@@ -41,7 +41,6 @@
 #include <tr_geo_object.h>
 
 #include <QtCore/qvector.h>
-#include <QtXml/qxml.h>
 
 #include "osm_load.h"
 
