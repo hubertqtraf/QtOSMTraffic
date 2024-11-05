@@ -331,11 +331,12 @@ uint64_t TrGeoObject::readXmlDescription(QXmlStreamReader & xml_in)
 	return TR_NO_VALUE;
 }
 
-bool TrGeoObject::readDefStartElement(QXmlStreamReader & xml_in, QStringRef & ref)
+#ifdef TR_SERIALIZATION
+bool TrGeoObject::readDefStartElement(QXmlStreamReader & xml_in, QString & ref)
 {
 	if(xml_in.isStartElement())
 	{
-		ref = xml_in.name();
+        ref = xml_in.name().toString();
 		return true;
 	}
 	if(xml_in.isCharacters())
@@ -350,20 +351,21 @@ bool TrGeoObject::readDefStartElement(QXmlStreamReader & xml_in, QStringRef & re
 	return false;
 }
 
-QStringRef TrGeoObject::readXmlHeader(QXmlStreamReader & xml_in)
+const QString TrGeoObject::readXmlHeader(QXmlStreamReader & xml_in)
 {
-	QStringRef ref;
+    QString ref;
 
 	while(!xml_in.atEnd())
 	{
-		if(readDefStartElement(xml_in, ref))
+        if(readDefStartElement(xml_in, ref))
 		{
 			if(ref == getXmlName())
-				return ref;
+                return ref;
 		}
 	}
-	return ref;
+    return ref;
 }
+#endif
 
 void TrGeoObject::abortOnLine(QXmlStreamReader & xml_in, const QString & text)
 {
