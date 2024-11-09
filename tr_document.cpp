@@ -303,14 +303,14 @@ void TrDocument::draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mo
 
 int TrDocument::checkFileHeader(const QXmlStreamAttributes & attrs)
 {
-	QStringRef doc_type = attrs.value("", "doc");
+	QStringView doc_type = attrs.value("", "doc");
 
-	if(doc_type == "road_description")
+	if(doc_type.toString() == "road_description")
 	{
 		// TODO version check...
 		return 0;
 	}
-	if(doc_type == "profile")
+	if(doc_type.toString() == "profile")
 	{
 		return 1;
 	}

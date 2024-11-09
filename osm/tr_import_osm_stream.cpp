@@ -79,25 +79,25 @@ bool TrImportOsmStream::osmRead(World_t & world)
 		xml.readNext();
 		if(xml.isStartElement())
 		{
-			if(xml.name() == "osm")
+			if(xml.name().toString() == "osm")
 			{
 				QXmlStreamAttributes attrs = xml.attributes();
 				//readTrackPoint(attrs);
 				world.act_name_idx = 1;
 			}
-			if(xml.name() == "node")
+			if(xml.name().toString() == "node")
 			{
 				QXmlStreamAttributes attrs = xml.attributes();
 				readNodePoint(attrs);
 			}
-			if(xml.name() == "way")
+			if(xml.name().toString() == "way")
 			{
 				QXmlStreamAttributes attrs = xml.attributes();
 				//TR_INF << m_tags;
 				readWay(attrs);
 				//m_tags.clear();
 			}
-			if(xml.name() == "relation")
+			if(xml.name().toString() == "relation")
 			{
 				TrImportOsmRel rel_read;
 				Relation rel;
@@ -112,12 +112,12 @@ bool TrImportOsmStream::osmRead(World_t & world)
 					}
 				}
 			}
-			if(xml.name() == "tag")
+			if(xml.name().toString() == "tag")
 			{
 				QXmlStreamAttributes attrs = xml.attributes();
 				readTag(attrs);
 			}
-			if(xml.name() == "nd")
+			if(xml.name().toString() == "nd")
 			{
 				bool ok;
 				QXmlStreamAttributes attrs = xml.attributes();
@@ -128,27 +128,27 @@ bool TrImportOsmStream::osmRead(World_t & world)
 		}
 		if(xml.isEndElement())
 		{
-			if(xml.name() == "osm")
+			if(xml.name().toString() == "osm")
 			{
 				closeOsm(world);
 			}
-			if(xml.name() == "node")
+			if(xml.name().toString() == "node")
 			{
 				closeNode(world.m_name_map, world.act_name_idx, world.m_point_name_map);
 			}
-			if(xml.name() == "way")
+			if(xml.name().toString() == "way")
 			{
 				//TR_INF << "close way" << m_tags;
 				closeWay(world.m_name_map, world.act_name_idx);
 			}
-			if(xml.name() == "relation")
+			if(xml.name().toString() == "relation")
 			{
 				//closeRelation();
 			}
-			if(xml.name() == "tag")
+			if(xml.name().toString() == "tag")
 			{
 			}
-			if(xml.name() == "nd")
+			if(xml.name().toString() == "nd")
 			{
 			}
 		}

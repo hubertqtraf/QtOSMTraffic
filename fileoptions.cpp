@@ -57,8 +57,18 @@ QString FileOptions::getProfileFileName()
 void FileOptions::on_setOsmDir_clicked()
 {
     QFileDialog dialog;
+#if QT_VERSION < 0x060000
     dialog.setFileMode(QFileDialog::DirectoryOnly);
     dialog.setOption(QFileDialog::ShowDirsOnly, true);
+#else
+    dialog.setFileMode(QFileDialog::Directory);
+    //dialog.setOption(QFileDialog::ShowDirsOnly, true);
+#endif
+    QString oldPath = ui->osmDir->text();
+    if(!oldPath.size())
+        oldPath = ".";
+    TR_INF << oldPath;
+    dialog.setDirectory(oldPath);
     dialog.exec();
     ui->osmDir->clear();
     ui->osmDir->insert(dialog.directory().path());

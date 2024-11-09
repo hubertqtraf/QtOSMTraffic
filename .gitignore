@@ -1,4 +1,10 @@
 *.[oa]
 *.so
 moc*.cpp
+moc*.h
 *.pro.user
+.qmake.stash
+ui_*.h
+qrc_res.cpp
+Makefile
+QTrafalgar

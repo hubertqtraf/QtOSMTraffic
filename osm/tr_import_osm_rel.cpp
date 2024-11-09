@@ -108,28 +108,28 @@ bool TrImportOsmRel::osmRelationRead(QXmlStreamReader & xml, QMap<uint64_t, Way_
 		xml.readNext();
 		if(xml.isStartElement())
 		{
-			if(xml.name() == "osm")
+			if(xml.name().toString() == "osm")
 			{
 				TR_WRN << xml.name() << "not allowed";
 			}
-			if(xml.name() == "node")
+			if(xml.name().toString() == "node")
 			{
 				TR_WRN << xml.name() << "not allowed";
 			}
-			if(xml.name() == "way")
+			if(xml.name().toString() == "way")
 			{
 				TR_WRN << xml.name() << "not allowed";
 			}
-			if(xml.name() == "relation")
+			if(xml.name().toString() == "relation")
 			{
 				TR_WRN << xml.name() << "inside";
 			}
-			if(xml.name() == "tag")
+			if(xml.name().toString() == "tag")
 			{
 				QXmlStreamAttributes attrs = xml.attributes();
 				readTag(attrs);
 			}
-			if(xml.name() == "member")
+			if(xml.name().toString() == "member")
 			{
 				QXmlStreamAttributes attrs = xml.attributes();
 				readMember(attrs, rel);
@@ -137,30 +137,30 @@ bool TrImportOsmRel::osmRelationRead(QXmlStreamReader & xml, QMap<uint64_t, Way_
 		}
 		if(xml.isEndElement())
 		{
-			if(xml.name() == "osm")
+			if(xml.name().toString() == "osm")
 			{
 				TR_WRN << xml.name() << "not allowed";
 			}
-			if(xml.name() == "member")
+			if(xml.name().toString() == "member")
 			{
 				//TR_INF << xml.name();
 				//closeMember();
 			}
-			if(xml.name() == "way")
+			if(xml.name().toString() == "way")
 			{
 				TR_WRN << xml.name() << "not allowed";
 				//TR_INF << "close way" << m_tags;
 				//closeWay(world.m_name_map, world.act_name_idx);
 			}
-			if(xml.name() == "relation")
+			if(xml.name().toString() == "relation")
 			{
 				closeRelation(waylist, rel);
 				return true;
 			}
-			if(xml.name() == "tag")
+			if(xml.name().toString() == "tag")
 			{
 			}
-			if(xml.name() == "nd")
+			if(xml.name().toString() == "nd")
 			{
 			}
 		}
