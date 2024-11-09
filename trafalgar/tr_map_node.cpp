@@ -406,10 +406,14 @@ bool TrMapNode::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject * ba
 		//m_test.clear();
 		//TR_INF << "in out" << getIn(false) << getOut(false);
 		if((getIn(false) <= 1) && (getOut(false) <= 1))
+		{
 			return true;
+		}
 		// TODO: one to one double dir -> more checking...
 		if((getIn(false) == 2) && (getOut(false) == 2))
+		{
 			;//return true;
+		}
 		// TODO: check: is needed! -> old? double used?
 		setConnectionAngles(zoom_ref, TR_NODE_OUT);
 		setConnectionAngles(zoom_ref, TR_NODE_IN);
@@ -562,7 +566,7 @@ TrGeoObject * TrMapNode::getNextOutElement(double angle)
 			if(getGeoId() == 26952875)
 				TR_INF << idx;
 		}
-		TrMapLink * link = dynamic_cast<TrMapLink *>(m_vec_out[i].tr_obj);
+		//TrMapLink * link = dynamic_cast<TrMapLink *>(m_vec_out[i].tr_obj);
 		//TR_INF << getGeoId() << (angle - m_vec_out[i].m_dir) << idx << *link;
 	}
 	if(idx != (-1))
@@ -800,8 +804,10 @@ int TrMapNode::getDirNextAngle(TrConnectionMember & member, QVector<TrConnection
 	// return the one to one connection
 	// check the change of the width of the links
 	if(con_count == 1)
-	// TODO, needed?
+	{
+		// TODO, needed?
 		;//return 3;
+	}
 	member.m_dir = ret_ang;
 	TR_MSG << "ret: " << ret << member.m_dir;
 	return ret;

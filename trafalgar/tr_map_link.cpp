@@ -663,12 +663,16 @@ bool TrMapLink::handleSmallElement(const TrZoomMap & zoom_ref, double a_limit, d
     if(removeSmallSeg(zoom_ref, l_limit, true))
     {
             if(removeSmallSeg(zoom_ref, l_limit, true))
+            {
                     ;
+            }
     }
     if(removeSmallSeg(zoom_ref, l_limit, false))
     {
             if(removeSmallSeg(zoom_ref, l_limit, false))
+            {
                     ;
+	    }
     }
     return true;
 }

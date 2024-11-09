@@ -219,7 +219,7 @@ uint64_t TrMapList::findObjectId(TrGeoObject * obj)
 		if(ii.value() == obj)
 			return ii.key();
 	}
-    for(uint64_t i = 0; i < obj_list.size(); ++i)
+    for(int i = 0; i < obj_list.size(); ++i)
 	{
 		if(obj_list[i] == obj)
 			return i;

@@ -64,7 +64,9 @@ public:
 
 	bool setName(const QString & name);
 
-	QString & getName();
+	QString getName() const;
+
+	QString & getNameRef();
 
 	void setNameNumber(uint32_t number);
 

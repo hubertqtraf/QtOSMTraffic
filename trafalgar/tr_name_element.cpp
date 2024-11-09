@@ -113,7 +113,12 @@ bool TrNameElement::setName(const QString & name)
 	return true;
 }
 
-QString & TrNameElement::getName()
+QString TrNameElement::getName() const
+{
+	return m_name;
+}
+
+QString & TrNameElement::getNameRef()
 {
 	return m_name;
 }
