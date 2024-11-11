@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="About_2">
       <attribute name="title">
@@ -27,7 +27,11 @@
        <item>
         <widget class="QLabel" name="label">
          <property name="text">
-          <string>OSM Traffic</string>
+          <string>QtOSMTraffic (C) 2024
+
+Visualisation of OSM Data on base of a directed Graph. 
+Calculate the road dimensions using given width OSM data or estimated lane width and number of the lanes.
+Option to move the base line from middle of the road to the left side to get a better dimensions view.</string>
          </property>
         </widget>
        </item>
@@ -41,7 +45,9 @@
        <item>
         <widget class="QLabel" name="label_2">
          <property name="text">
-          <string>Hubert Schmid</string>
+          <string>Hubert Schmid
+Developer
+hubert-schmid@gmx.de</string>
          </property>
         </widget>
        </item>
