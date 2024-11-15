@@ -121,9 +121,11 @@ bool TrImportOsmStream::osmRead(World_t & world)
 			{
 				bool ok;
 				QXmlStreamAttributes attrs = xml.attributes();
-				uint64_t ref = attrs.value("ref").toULongLong(&ok);
-				if(ref > 0)
-					m_way_reflist.append(ref);
+				int64_t ref = attrs.value("ref").toLongLong(&ok);
+				if(ref < 0)
+					ref = abs(ref);
+				if(ok)
+					m_way_reflist.append(static_cast<uint64_t>(ref));
 			}
 		}
 		if(xml.isEndElement())
@@ -203,9 +205,13 @@ void TrImportOsmStream::readNodePoint(const QXmlStreamAttributes &attributes)
 	bool ok;
 
 	//<node id="134" version="1" lon="11.50333" lat="48.12541"/>
-	m_id = attributes.value("id").toULongLong(&ok);
+	int64_t id = attributes.value("id").toLongLong(&ok);
 	if(!ok)
 		TR_WRN << "integer fault" << attributes.value("id");
+	if(id < 0)
+		m_id = static_cast<uint64_t>(abs(id));
+	else
+		m_id = static_cast<uint64_t>(id);
 	m_point.x = attributes.value("lon").toDouble(&ok) * TR_COOR_FACTOR;
 	if(!ok)
 		TR_WRN << "float fault" << attributes.value("lon");
@@ -219,8 +225,8 @@ void TrImportOsmStream::closeNode(QMap<QString, name_set> & name_map,
 {
 	Point_t point;
 
-    point.x = static_cast<int32_t>(m_point.x * 100.0);
-    point.y = static_cast<int32_t>(m_point.y * 100.0);
+	point.x = static_cast<int32_t>(m_point.x * 100.0);
+	point.y = static_cast<int32_t>(m_point.y * 100.0);
 	point.id = m_id;
 
 	point.pt_type = 0;
@@ -288,7 +294,7 @@ void TrImportOsmStream::closeNode(QMap<QString, name_set> & name_map,
 			name_map[m_tags["name"]] = set;
 			// TODO: use of point.id -> crash!
 			point.id = act_id;
-            //TR_INF << "POI: " << point.id << m_tags["name"];
+			//TR_INF << "POI: " << point.id << m_tags["name"];
 			n_map[point.id] = m_tags["name"];
 			act_id++;
 		}
@@ -324,11 +330,15 @@ void TrImportOsmStream::readWay(const QXmlStreamAttributes &attributes)
 {
 	bool ok;
 	m_way_reflist.clear();
-	m_id = attributes.value("id").toULongLong(&ok);
+	int64_t id = attributes.value("id").toLongLong(&ok);
+	if(id < 0)
+	{
+		m_id = static_cast<uint64_t>(abs(id));
+	}
+	else
+		m_id = static_cast<uint64_t>(id);
 	if(!ok)
 		TR_WRN << "integer fault" << attributes.value("id");
-
-	//TR_INF << m_id << ok;
 }
 
 void TrImportOsmStream::closeWay(QMap<QString, name_set> & name_map, uint64_t & act_id)
@@ -362,15 +372,15 @@ void TrImportOsmStream::closeWay(QMap<QString, name_set> & name_map, uint64_t & 
 		//TR_INF << HEX << code;
 	}
 
-    if(m_tags.contains("railway"))
-    {
-        uint64_t code = TrImportOsmRel::getRailWayClass(m_tags["railway"]);
-        //TR_INF << "## railway ##" << m_tags["railway"] << HEX << code;
-        if(code)
-        {
-            way.type = TYPE_RAIL | code;
-        }
-    }
+	if(m_tags.contains("railway"))
+	{
+		uint64_t code = TrImportOsmRel::getRailWayClass(m_tags["railway"]);
+		//TR_INF << "## railway ##" << m_tags["railway"] << HEX << code;
+		if(code)
+		{
+			way.type = TYPE_RAIL | code;
+		}
+	}
 
 	if(m_tags.contains("barrier"))
 	{
@@ -418,17 +428,17 @@ void TrImportOsmStream::closeWay(QMap<QString, name_set> & name_map, uint64_t & 
 	if(m_tags.contains("oneway"))
 	{
 		uint64_t one = getDir(m_tags["oneway"]) << 32;
-        if(!((way.type >> 32) & 0x03))
-            way.type |= one;
+		if(!((way.type >> 32) & 0x03))
+			way.type |= one;
 		//world_->way_flags |= one;
 	}
 
-    if(m_tags.contains("junction"))
-    {
-        uint64_t one = getDir(m_tags["junction"]) << 32;
-        if(!((way.type >> 32) & 0x03))
-            way.type |= one;
-    }
+	if(m_tags.contains("junction"))
+	{
+		uint64_t one = getDir(m_tags["junction"]) << 32;
+		if(!((way.type >> 32) & 0x03))
+			way.type |= one;
+	}
 
 	if(m_tags.contains("width"))
 	{
@@ -437,7 +447,7 @@ void TrImportOsmStream::closeWay(QMap<QString, name_set> & name_map, uint64_t & 
 		double width = m_tags["width"].toDouble(&ok);
 		if(ok)
 		{
-            way.width = static_cast<uint32_t>(width * 1000);
+			way.width = static_cast<uint32_t>(width * 1000);
 		}
 		//TR_INF << m_tags["width"] << way.width;
 	}
@@ -452,7 +462,7 @@ void TrImportOsmStream::closeWay(QMap<QString, name_set> & name_map, uint64_t & 
 			name_map[m_tags["name"]] = set;
 			way.name_id = act_id;
 
-            //TR_INF << "Way: " << way.name_id << m_tags["name"];
+			//TR_INF << "Way: " << way.name_id << m_tags["name"];
 			act_id++;
 		}
 		else
@@ -485,11 +495,11 @@ void TrImportOsmStream::closeWay(QMap<QString, name_set> & name_map, uint64_t & 
 	if(!way.lanes)
 		way.lanes = 1;
 
-	way.nd_id = (uint64_t*)malloc(sizeof(uint64_t) * m_way_reflist.size());
+    way.nd_id = (uint64_t*)malloc(sizeof(uint64_t) * m_way_reflist.size());
 	memset(way.nd_id, 0x00, sizeof(uint64_t) * m_way_reflist.size());
-	for(int i = 0; i<m_way_reflist.size(); i++)
+    for(int64_t i = 0; i<m_way_reflist.size(); i++)
 	{
-		way.nd_id[i] = m_way_reflist[i];
+        way.nd_id[i] = m_way_reflist[i];
 	}
 	way.n_nd_id = m_way_reflist.size();
 	//memcpy(act_way->nd_id, world->tmp_id_buf,
@@ -513,20 +523,20 @@ void TrImportOsmStream::closeWay(QMap<QString, name_set> & name_map, uint64_t & 
 
 void TrImportOsmStream::closeOsm(World_t & world)
 {
-#ifdef TESTX
-	world.info.way.count = m_waylist.size();
+#ifdef OSM_C_FILTER
+    world.info.way.count = static_cast<uint64_t>(m_waylist.size());
 	if((world.ways = (Way_t *)malloc(sizeof(Way_t) * world.info.way.count)) == nullptr)
-    {
-        return;
-    }
-    memset(world.ways, 0x00, sizeof(Way_t) * world.info.way.count);
-#else
-    world.way_count = m_waylist.size();
-    if((world.ways = (Way_t *)malloc(sizeof(Way_t) * world.way_count)) == nullptr)
-    {
+	{
 		return;
 	}
-    memset(world.ways, 0x00, sizeof(Way_t) * world.way_count);
+	memset(world.ways, 0x00, sizeof(Way_t) * world.info.way.count);
+#else
+    world.way_count = static_cast<uint64_t>(m_waylist.size());
+	if((world.ways = (Way_t *)malloc(sizeof(Way_t) * world.way_count)) == nullptr)
+	{
+		return;
+	}
+	memset(world.ways, 0x00, sizeof(Way_t) * world.way_count);
 #endif
 
 	int index = 0;
@@ -544,20 +554,20 @@ void TrImportOsmStream::closeOsm(World_t & world)
 		world.ways[index].parking = way.parking;
 		index++;
 	}
-#ifdef TESTX
-	world.info.node.count = m_nodelist.size();
+#ifdef OSM_C_FILTER
+    world.info.node.count = static_cast<uint64_t>(m_nodelist.size());
 	if((world.nodes = (Point_t *)malloc(sizeof(Point_t) * world.info.node.count)) == nullptr)
 	{
 		return;
 	}
 	memset(world.nodes, 0x00, sizeof(Point_t) * world.info.node.count);
 #else
-    world.node_count = m_nodelist.size();
-    if((world.nodes = (Point_t *)malloc(sizeof(Point_t) * world.node_count)) == nullptr)
-    {
-        return;
-    }
-    memset(world.nodes, 0x00, sizeof(Point_t) * world.node_count);
+    world.node_count = static_cast<uint64_t>(m_nodelist.size());
+	if((world.nodes = (Point_t *)malloc(sizeof(Point_t) * world.node_count)) == nullptr)
+	{
+		return;
+	}
+	memset(world.nodes, 0x00, sizeof(Point_t) * world.node_count);
 #endif
 	index = 0;
 	for (auto i = m_nodelist.cbegin(), end = m_nodelist.cend(); i != end; ++i)
@@ -586,9 +596,9 @@ void TrImportOsmStream::addRelation(const Relation & rel)
 {
 	Rel_t crel;
 	crel.flags = rel.m_flags;
-	crel.r_count = rel.m_members.size();
+    crel.r_count = static_cast<uint>(rel.m_members.size());
 	crel.id = 0;
-    if((crel.members = (RelMember_t *)malloc(sizeof(RelMember_t) * crel.r_count)) == nullptr)
+	if((crel.members = (RelMember_t *)malloc(sizeof(RelMember_t) * crel.r_count)) == nullptr)
 		return;
 	for(size_t i = 0; i<crel.r_count; i++)
 	{
@@ -617,9 +627,14 @@ uint64_t TrImportOsmStream::getClass(const QString & value)
 		return 0x000000000000000B;
 	if(value == "footway")
 		return 0x000000000000000F;
+	if(value == "corridor")
+		return 0x000000000000000F;
+
 	if(value == "cycleway")
 		return 0x000000000000000C;
 	if(value == "steps")
+		return 0x000000000000000D;
+	if(value == "via_ferrata")
 		return 0x000000000000000D;
 
 	if(value == "pedestrian")
@@ -848,10 +863,5 @@ uint64_t TrImportOsmStream::getParking()
 		}
 	}
 	return ret;
-}
-
-QString TrImportOsmStream::errorString() const
-{
-    return QString();
 }
 
