@@ -501,7 +501,6 @@ void TrMapLink::initDoubleLine(const TrZoomMap & zoom_ref, int32_t width)
 
 TrGeoObject * TrMapLink::manageGap(const TrZoomMap & zoom_ref, uint8_t mode, const TrPoint & pt, TrGeoObject * obj)
 {
-	TR_MSG;
 	TrGeoPolygon * poly = nullptr;
 	TrMapLink * parallel_link = nullptr;
 
@@ -529,7 +528,7 @@ TrGeoObject * TrMapLink::manageGap(const TrZoomMap & zoom_ref, uint8_t mode, con
 		break;
 
 	case TR_NET_GAP_REMOVE:         //0x02
-		TR_INF << "del" << m_pline;
+        //TR_INF << "del" << m_pline;
 		if(m_pline != nullptr)
 		{
 			parallel_link = this->getParallelLink();
@@ -553,7 +552,7 @@ TrGeoObject * TrMapLink::manageGap(const TrZoomMap & zoom_ref, uint8_t mode, con
 			// thread problem? -> parallel link!?
 			setPolygon(nullptr);
 			initDoubleLine(zoom_ref, 100);
-			TR_INF << "del 2" << m_pline << *this << m_node_from << m_node_to;
+            //TR_INF << "del 2" << m_pline << *this << m_node_from << m_node_to;
 		}
 		break;
 
