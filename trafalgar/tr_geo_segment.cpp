@@ -47,8 +47,8 @@ TrGeoSegment::TrGeoSegment()
 	, m_first{0.0, 0.0}
 	, m_second{0.0, 0.0}
 {
-    m_inst_mask = (TR_MASK_EXIST | TR_MASK_DRAW);
-    //m_geo_id = -1;
+        m_inst_mask = (TR_MASK_EXIST | TR_MASK_DRAW);
+        //m_geo_id = -1;
 }
 
 TrGeoSegment::TrGeoSegment(TrPoint first, TrPoint second)
@@ -83,13 +83,15 @@ void TrGeoSegment::setPoints(TrPoint first, TrPoint second)
 {
 	m_first = first;
 	m_second = second;
+	m_inst_mask |= TR_MASK_DATA;
 }
 
-void TrGeoSegment::setPoints(TrGeoPolygon & poly, int pos)
+void TrGeoSegment::setPoints(TrGeoPolygon & poly, size_t pos)
 {
 	// TODO: check size
 	m_first = poly.getPoint(pos);
 	m_second = poly.getPoint(pos + 1);
+	m_inst_mask |= TR_MASK_DATA;
 	//TR_INF << "X this:  0 " << m_first.x << m_first.y << " 1 " << m_second.x << m_second.y;
 }
 
@@ -114,6 +116,7 @@ bool TrGeoSegment::setPointsFromPoly(TrGeoPolygon & poly, uint64_t idx, bool dir
 		m_first = poly.getPoint(idx);
 		m_second = poly.getPoint(idx + 1);
 	}
+	m_inst_mask |= TR_MASK_DATA;
 	return true;
 }
 
@@ -127,13 +130,20 @@ TrPoint TrGeoSegment::getSecondPoint()
 	return m_second;
 }
 
+bool TrGeoSegment::hasData()
+{
+	return ((m_inst_mask & TR_MASK_DATA) == TR_MASK_DATA);
+}
+
 void TrGeoSegment::setFirstPoint(TrPoint & pt)
 {
+	m_inst_mask |= TR_MASK_DATA;
 	m_first = pt;
 }
 
 void TrGeoSegment::setSecondPoint(TrPoint & pt)
 {
+	m_inst_mask |= TR_MASK_DATA;
 	m_second = pt;
 }
 
@@ -185,7 +195,9 @@ bool TrGeoSegment::getCrossPoint(const TrZoomMap & zoom_ref, TrPoint & pt, TrGeo
 
 double TrGeoSegment::getAngle(const TrZoomMap & zoom_ref) const
 {
-	return zoom_ref.getAngle(m_first, m_second);
+	if(m_inst_mask & TR_MASK_DATA)
+		return zoom_ref.getAngle(m_first, m_second);
+	return 100.0;
 }
 
 int TrGeoSegment::getAngleCode(const TrZoomMap & zoom_ref, const TrGeoSegment& other)
@@ -193,6 +205,9 @@ int TrGeoSegment::getAngleCode(const TrZoomMap & zoom_ref, const TrGeoSegment& o
 	double ang1 = getAngle(zoom_ref);
 	double ang2 = other.getAngle(zoom_ref);
 	double diff = abs(ang1 - ang2);
+
+	if((ang1 > 99.0) || (ang2 > 99.0))
+		return -2;
 
 	int err_code = zoom_ref.getErrorCode();
 	if(err_code)
@@ -212,7 +227,7 @@ int TrGeoSegment::getAngleCode(const TrZoomMap & zoom_ref, const TrGeoSegment& o
 		//TR_WRN << "code: 2 " << ang1 << ang2 << "diff" << diff;
 		return 2;
 	}
-    return 0;
+	return 0;
 }
 
 double TrGeoSegment::getLength(const TrZoomMap & zoom_ref)
@@ -224,7 +239,9 @@ void TrGeoSegment::clearData()
 {
 	m_first = {0.0, 0.0};
 	m_second = {0.0, 0.0};
+	m_inst_mask &= ~(TR_MASK_DATA);
 }
+
 
 bool TrGeoSegment::getSegmentData(const TrZoomMap & zoom_ref, poly_add & add, double shift)
 {
@@ -250,6 +267,20 @@ void TrGeoSegment::getSegList(QList<TrGeoSegment> & seg_list, TrGeoPolygon & pol
 	seg_list.append(seg);
 }
 
+bool TrGeoSegment::isEvenPolygon(const TrZoomMap & zoom_ref, QList<TrGeoSegment> & seg_list, double ctrl)
+{
+	bool ret = true;
+	double ang = getAngle(zoom_ref);
+	//TR_INF << "====" << ang;
+	for (int i = 0; i < seg_list.size(); ++i)
+	{
+		double diff = fabs(ang - seg_list[i].getAngle(zoom_ref));
+		if(diff > ctrl)
+			ret = false;
+		//TR_INF << " - " << seg_list[i].getAngle(zoom_ref) << diff << ret;
+	}
+	return ret;
+}
 
 bool TrGeoSegment::managePolygon(const TrZoomMap & zoom_ref, TrGeoPolygon & poly,
 	QList<TrGeoSegment> & seg_list, int width)
@@ -289,7 +320,7 @@ bool TrGeoSegment::managePolygon(const TrZoomMap & zoom_ref, TrGeoPolygon & poly
 				poly.removePoint(1);
 			}
 			idx_fwd++;
-			length_fwd += seg_list[idx_fwd -1].getLength(zoom_ref);
+			length_fwd += seg_list[static_cast<int>(idx_fwd) -1].getLength(zoom_ref);
 		}
 		else
 			do_fwd = false;
@@ -301,7 +332,7 @@ bool TrGeoSegment::managePolygon(const TrZoomMap & zoom_ref, TrGeoPolygon & poly
 				poly.removePoint(poly.getSize());
 			}
 			idx_bwd--;
-            length_bwd += seg_list[idx_bwd -1].getLength(zoom_ref);
+			length_bwd += seg_list[static_cast<int>(idx_bwd) -1].getLength(zoom_ref);
 		}
 		else
 			do_bwd = false;
@@ -314,9 +345,8 @@ bool TrGeoSegment::managePolygon(const TrZoomMap & zoom_ref, TrGeoPolygon & poly
 void TrGeoSegment::draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mode)
 {
 	if(!(m_inst_mask & TR_MASK_DRAW))
-    {
-        //return;
-    }
+		;//return;
+
 	if(this->clip(zoom_ref))
 		return;
 
@@ -326,14 +356,9 @@ void TrGeoSegment::draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char 
 	zoom_ref.setMovePoint(&screen_2.x,&screen_2.y);
 	//TR_INF << screen_1.x << screen_1.y << screen_2.x << screen_2.y;
 	p->setPen(QPen(QColor(0,200,0)));
-    p->drawLine(static_cast <int>(screen_1.x),
-                static_cast <int>(screen_1.y),
-                static_cast <int>(screen_2.x),
-                static_cast <int>(screen_2.y));
-    p->drawEllipse(static_cast <int>(screen_1.x-5),
-                   static_cast <int>(screen_1.y-5), 10, 10);
-    p->drawRect(static_cast <int>(screen_2.x-5),
-                static_cast <int>(screen_2.y-5), 10, 10);
+	//p->drawLine(screen_1.x, screen_1.y, screen_2.x, screen_2.y);
+	p->drawEllipse(static_cast<int>(screen_1.x)-5, static_cast<int>(screen_1.y)-5, 10, 10);
+	p->drawRect(static_cast<int>(screen_2.x)-5, static_cast<int>(screen_2.y)-5, 10, 10);
 }
 
 #ifdef TR_SERIALIZATION

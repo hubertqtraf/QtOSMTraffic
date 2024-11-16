@@ -157,13 +157,13 @@ void TrImportOsm::appendPoi(void * world, const Point_t & point)
 }
 
 
-bool TrImportOsm::read(const QString & filename, TrMapList & name_list)
+bool TrImportOsm::read(const QString & filename, TrMapList & name_list, uint8_t mode)
 {
 	World_t osm2_world;
-    bool add_it = true;
+	bool add_it = true;
 	TrPoint pt;
 
-    TrOsmLink * olink = nullptr;
+	TrOsmLink * olink = nullptr;
 
 	emit valueChanged(3);
 
@@ -174,33 +174,33 @@ bool TrImportOsm::read(const QString & filename, TrMapList & name_list)
 
 	if(filename.endsWith(".OSM", Qt::CaseInsensitive))
 	{
-        TR_INF << "osm file: " << filename;
+		TR_INF << "osm file: " << filename;
 
-        TrImportOsmStream ios(filename);
+		TrImportOsmStream ios(filename);
 		ios.osmRead(osm2_world);
 		for (auto i = ios.getNodeMap().cbegin(), end = ios.getNodeMap().cend(); i != end; ++i)
 		{
-            appendPoi(&osm2_world, i.value());
+			appendPoi(&osm2_world, i.value());
 		}
 		ios.setNodeIds(osm2_world);
 #ifdef OSM_C_FILTER
-        m_nodeSize = osm2_world.info.node.count;
+		m_nodeSize = osm2_world.info.node.count;
 #else
-        m_nodeSize = osm2_world.node_count;
+		m_nodeSize = osm2_world.node_count;
 #endif
-        m_nodes = osm2_world.nodes;
+		m_nodes = osm2_world.nodes;
 		for (int i = 0; i<ios.getRelationList().size(); i++)
 		{
 #ifdef TESTX
 			createRelFace(ios.getRelationList()[i], osm2_world.ways, osm2_world.info.way.count);
 #endif
-        }
+		}
 		//return true;
 	}
 	else
-    {
+	{
 #ifdef OSM_C_FILTER
-        QByteArray ba = filename.toLatin1();
+		QByteArray ba = filename.toLatin1();
 		//osm2_world.m_name_list = &name_list;
 
 		if(read_main(1, ba.data(), &osm2_world) == (-1))
@@ -226,52 +226,52 @@ bool TrImportOsm::read(const QString & filename, TrMapList & name_list)
 		// single point list
 		appendPoi(&osm2_world, osm2_world.points[i]);
 	}
- #endif
- #ifdef OSM_C_FILTER
-    for(unsigned int i=0; i < osm2_world.info.node.count; i++)
- #else
-    for(unsigned int i=0; i < osm2_world.node_count; i++)
- #endif
+#endif
+#ifdef OSM_C_FILTER
+	for(unsigned int i=0; i < osm2_world.info.node.count; i++)
+#else
+	for(unsigned int i=0; i < osm2_world.node_count; i++)
+#endif
 	{
 		// way points with POI info
 		appendPoi(&osm2_world, osm2_world.nodes[i]);
 	}
 #ifdef OSM_C_FILTER
-    m_nodeSize = osm2_world.info.node.count;
+	m_nodeSize = osm2_world.info.node.count;
 #else
-    m_nodeSize = osm2_world.node_count;
+	m_nodeSize = osm2_world.node_count;
 #endif
 	m_nodes = osm2_world.nodes;
 #ifdef OSM_C_FILTER
-    for(unsigned int i=0; i < osm2_world.info.rel.count; i++)
+	for(unsigned int i=0; i < osm2_world.info.rel.count; i++)
 	{
 		if(count_outer(&(osm2_world.relations[i])))
 		{
 			createRelFace((osm2_world.relations[i]), osm2_world.ways, osm2_world.info.way.count);
 		}
-    }
+	}
 #endif
 	//printRawData(&osm2_world);
 
 	QVector <RawNode> osm_nodes;
 	RawNode act_node;
 #ifdef OSM_C_FILTER
-    m_nodeSize = osm2_world.info.node.count;
+	m_nodeSize = osm2_world.info.node.count;
 	m_waySize = osm2_world.info.way.count;
 #else
-    m_nodeSize = osm2_world.node_count;
-    m_waySize = osm2_world.way_count;
+	m_nodeSize = osm2_world.node_count;
+	m_waySize = osm2_world.way_count;
 #endif
 	m_ways = osm2_world.ways;
 	m_nodes = osm2_world.nodes;
 
 	emit valueChanged(20);
 
-    unsigned int level = m_waySize/8;
+	unsigned int level = m_waySize/8;
 	unsigned int count = 1;
 
-    for(unsigned int i=0; i < m_waySize; i++)
-    {
+	for(unsigned int i=0; i < m_waySize; i++)
+	{
 		add_it = true;
 		olink = new TrOsmLink();
 		//link->setId(osm2_world.ways[i].id);	// TODO: setId unused?
@@ -284,8 +284,8 @@ bool TrImportOsm::read(const QString & filename, TrMapList & name_list)
 
 		for(int j=0; j < osm2_world.ways[i].n_nd_id; j++)
 		{
-            int id = findNode(osm2_world.nodes, m_nodeSize,
-                osm2_world.ways[i].nd_id[j]);
+			int id = findNode(osm2_world.nodes, m_nodeSize,
+				osm2_world.ways[i].nd_id[j]);
 
 			if(id < 0)
 			{
@@ -348,7 +348,7 @@ bool TrImportOsm::read(const QString & filename, TrMapList & name_list)
 			case TYPE_RAIL:
 				olink->setRdClass(setTrainType(olink, osm2_world.ways[i].type));
 				// TODO: set the name of the train connection?
-                olink->setNameId(static_cast<uint32_t>(osm2_world.ways[i].name_id));
+				olink->setNameId(static_cast<uint32_t>(osm2_world.ways[i].name_id));
 
 				rail_raw_link_list.append(olink);
 				if(addRawNodes(olink->getRawNodes(), rail_poly_nodes, olink->getOneWay()) == true)
@@ -359,7 +359,7 @@ bool TrImportOsm::read(const QString & filename, TrMapList & name_list)
 				//TR_MSG << "stream";
 				olink->setRdClass(setWaterType(olink, osm2_world.ways[i].type));
 				// TODO: set the name of the river?
-                olink->setNameId(static_cast<uint32_t>(osm2_world.ways[i].name_id));
+				olink->setNameId(static_cast<uint32_t>(osm2_world.ways[i].name_id));
 				stream_raw_link_list.append(olink);
 
 				if(addRawNodes(olink->getRawNodes(), stream_poly_nodes, olink->getOneWay()) == true)

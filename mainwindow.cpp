@@ -292,7 +292,7 @@ void MainWindow::on_loadWorld(const QString & filename, int shift)
         TrGeoObject::s_mask |= TR_MASK_MOVE_LINE;
 
     TrImportOsm osm_filter;
-    if(osm_filter.read(filename, m_map_view->getDocument().getNameList()) == false)
+    if(osm_filter.read(filename, m_map_view->getDocument().getNameList(), 0) == false)
         return;
 
     QStringList rlist = m_profile_dlg->getElemStringList("layer", "roadnet");

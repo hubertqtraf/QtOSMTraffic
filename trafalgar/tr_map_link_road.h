@@ -54,7 +54,7 @@
 #include "tr_geo_segment.h"
 #include "tr_map_node.h"
 
-#ifdef TESTX
+#ifdef TR_SERIALIZATION
 #include "tr_map_assembly.h"
 #endif
 #include "tr_map_link.h"
@@ -74,6 +74,7 @@ private:
 
 	int32_t m_mm_calc_width;
 
+	// TODO: new road class?
 	QPen m_pen_para;
 	// TODO: memmory?
 

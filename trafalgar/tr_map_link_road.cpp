@@ -41,7 +41,6 @@
 #include "tr_map_net_road.h"
 #include "tr_name_element.h"
 
-//#include <QPainterPath>
 #include <math.h>
 
 #define SEGMENT_TO true
@@ -78,7 +77,6 @@ QString TrMapLinkRoad::getXmlName() const
 	return "map_link_road";
 }
 
-
 void TrMapLinkRoad::setLanes(uint32_t r_lanes)
 {
 	// TODO: dir?
@@ -88,7 +86,7 @@ void TrMapLinkRoad::setLanes(uint32_t r_lanes)
 		m_lanes = 1;
 	//if(r_lanes > 0)
 	else
-        m_lanes = static_cast<uint8_t>(r_lanes);
+		m_lanes = static_cast<uint8_t>(r_lanes);
 }
 
 uint8_t TrMapLinkRoad::getLanes()
@@ -105,7 +103,6 @@ uint16_t TrMapLinkRoad::getParking()
 {
 	return m_parking;
 }
-
 
 bool TrMapLinkRoad::getSegment(TrGeoSegment & seg, bool dir, bool par)
 {
@@ -135,7 +132,6 @@ bool TrMapLinkRoad::getSegment(TrGeoSegment & seg, bool dir, bool par)
 				seg.setPoints(m_node_from->getPoint(), m_node_to->getPoint());
 			else
 				seg.setPoints(m_node_to->getPoint(), m_node_from->getPoint());
-			//TR_INF << "3333" << seg;
 			return true;
 		}
 		if(dir)
@@ -157,7 +153,6 @@ bool TrMapLinkRoad::getParSegment(const TrZoomMap & zoom_ref, poly_add & add, bo
 	if(dir)
 	{
 		TrGeoSegment seg(m_par_line[0], m_par_line[1]);
-		//TR_INF << "1 " << seg;
 		seg.getSegmentData(zoom_ref, add, m_par_line[0].x);
 	}
 	else
@@ -167,7 +162,6 @@ bool TrMapLinkRoad::getParSegment(const TrZoomMap & zoom_ref, poly_add & add, bo
 	}
 	return true;
 }
-
 
 TrMapLinkRoad * TrMapLinkRoad::getNextLink(TrMapNode & node, int n, bool dir, double & ang)
 {
@@ -257,18 +251,21 @@ void TrMapLinkRoad::triCross(const TrZoomMap & zoom_ref, TrMapNode & node)
 	TrMapLink * link_3 = dynamic_cast<TrMapLink *>(node.getSingleElement(3));
 	if((link_1 == nullptr) || (link_2 == nullptr) || (link_3 == nullptr))
 		return;
-    TrGeoSegment seg1;
+	//TR_INF << "#1#" << link_1->getAngle(zoom_ref, true) << *link_1;
+	TrGeoSegment seg1;
 	link_1->getSegment(seg1, false, true);
 	double ang1 = seg1.getAngle(zoom_ref);
-    //link_1->getSegment(*TrMapNet::ms_seg_1, false, true);
+	//link_1->getSegment(*TrMapNet::ms_seg_1, false, true);
+	//TR_INF << "#2#" << link_2->getAngle(zoom_ref, true) << *link_2;
 	TrGeoSegment seg2;
 	link_2->getSegment(seg2, true, true);
 	double ang2 = seg2.getAngle(zoom_ref);
 	if(fabs(ang1 - ang2) > 0.1)
-        return;
+		return;
 	m_node_to->setPoint(seg1.getFirstPoint());
-    //link_2->getSegment(*TrMapNet::ms_seg_2, true, true);
+	//link_2->getSegment(*TrMapNet::ms_seg_2, true, true);
 	TrGeoSegment seg3;
+	//TR_INF << "#3#" << link_3->getAngle(zoom_ref, true) << *link_3;
 	link_3->getSegment(seg3, true, true);
 	//link_3->getSegment(*TrMapNet::ms_seg_1, true, false);
 }
@@ -277,7 +274,6 @@ void TrMapLinkRoad::triCross(const TrZoomMap & zoom_ref, TrMapNode & node)
 bool TrMapLinkRoad::getMoveCrossPoint(const TrZoomMap & zoom_ref)
 {
 	double ang = getAngle(zoom_ref, true);
-	//TR_INF << "~~~ " << ang << geoInvertAngle(ang) << *this;
 	TrGeoObject * obj = m_node_to->getNextOutElement(geoInvertAngle(ang));
 	if(obj == nullptr)
 		return false;
@@ -294,7 +290,6 @@ bool TrMapLinkRoad::getMoveCrossPoint(const TrZoomMap & zoom_ref)
 		TrGeoSegment seg1;
 		TrGeoSegment seg2;
 		TrPoint pt;
-		//TR_INF << *next;
 		if(getSegment(seg1, true, true) == false)
 			return false;
 		if(next->getSegment(seg2, false, true) == false)
@@ -305,8 +300,6 @@ bool TrMapLinkRoad::getMoveCrossPoint(const TrZoomMap & zoom_ref)
 		{
 			return false;
 		}
-		//if(m_node_to->getViewOpt() & TR_POINT_MOVE)
-		//	return false;
 		m_node_to->setViewOpt(m_node_to->getViewOpt() | TR_POINT_MOVE | TR_POINT_MOVE_CROSS);
 		// TODO tmp
 		if(m_node_to->getShiftPoint(zoom_ref) == 1)
@@ -333,7 +326,6 @@ bool TrMapLinkRoad::moveBaseLine(const TrZoomMap & zoom_ref)
 	{
 		// TODO: check return state
 	}
-
 	// TODO: tmp - move node #2
 	if(!(m_node_to->getViewOpt() & (TR_POINT_MOVE | TR_POINT_MOVE_CROSS)))
 	{
@@ -343,7 +335,7 @@ bool TrMapLinkRoad::moveBaseLine(const TrZoomMap & zoom_ref)
 		else
 		{
 			triCross(zoom_ref, *m_node_to);
-        }
+		}
 	}
 	// TODO end
 	if(m_pline)
@@ -367,7 +359,6 @@ void TrMapLinkRoad::setMoveParLine(const TrZoomMap & zoom_ref)
 		initDoubleLine(zoom_ref, test_width);
 	}
 }
-
 
 bool TrMapLinkRoad::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject * base)
 {
@@ -400,9 +391,11 @@ bool TrMapLinkRoad::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject 
 	if(ctrl & TR_INIT_GEOMETRY)
 	{
 		ctrl &= 0xff;
+
+		/* TODO: code for shadow nodes
 		if(ctrl == 10)
 		{
-		}
+		}*/
 
 		// code for the angles
 		if(ctrl == 11)
@@ -421,18 +414,24 @@ bool TrMapLinkRoad::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject 
 			{
 				QList<TrGeoSegment> seg_list;
 				TrGeoSegment seg(m_node_from->getPoint(), m_node_to->getPoint());
-				//TR_INF << *this;
 				seg.getSegList(seg_list, *m_pline);
-				if(seg.managePolygon(zoom_ref, *m_pline, seg_list, m_mm_calc_width))
+				if(seg.isEvenPolygon(zoom_ref, seg_list, 0.01))
 				{
-					seg.getSegList(seg_list, *m_pline);
-					//for(int i = 0; i < seg_list.size(); ++i)
-					//	TR_INF << "2 a: " << seg_list[i].getAngle(zoom_ref) << "l: " << seg_list[i].getLength(zoom_ref);
+					TrPoint pt;
+					manageGap(zoom_ref, TR_NET_GAP_REMOVE, pt, m_pline);
 				}
-				if(m_pline->getSize())
-					m_pline->init(zoom_ref, TR_INIT_GEOMETRY, nullptr);
 				else
-					m_pline = nullptr;
+				{
+					//TR_INF << *this << *m_pline << getWidth();
+					if(seg.managePolygon(zoom_ref, *m_pline, seg_list, 6000)) //m_mm_calc_width * 2))
+					{
+						seg.getSegList(seg_list, *m_pline);
+					}
+					if(m_pline->getSize())
+						m_pline->init(zoom_ref, TR_INIT_GEOMETRY, nullptr);
+					else
+						m_pline = nullptr;
+				}
 			}
 		}
 
@@ -450,7 +449,7 @@ bool TrMapLinkRoad::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject 
 		if(ctrl == 35)
 		{
 			if((getRdClass() & 0x000f) < 9)
-				handleSmallElement(zoom_ref, 0.2, m_mm_calc_width / 1000.0); //8.0); //4.0); //1.0);
+				handleSmallElement(zoom_ref, 0.2, m_mm_calc_width / 1000.0);
 		}
 
 		// code for double line
@@ -579,7 +578,6 @@ void TrMapLinkRoad::initDoubleLine(const TrZoomMap & zoom_ref, int32_t width)
 	}
 }
 
-
 TrGeoObject * TrMapLinkRoad::getSegmentWithParm(TrGeoSegment & segment, int64_t nd_id, bool dir)
 {
 	if(!(isAsDoubleLine()))
@@ -606,7 +604,6 @@ TrGeoObject * TrMapLinkRoad::getSegmentWithParm(TrGeoSegment & segment, int64_t 
 			{
 				//TR_INF << "FROM" << *this;
 				getSegment(segment, false, false);
-				//TrMapNet::ms_seg_1->setPoints(segment);
 			}
 			else
 			{
@@ -712,6 +709,7 @@ bool TrMapLinkRoad::checkRamps(const TrZoomMap & zoom_ref, bool do_reset)
 
 	if(do_reset)
 	{
+		// TODO remove? set to/from at 'init(zoom_ref, 0)'
 		init(zoom_ref, 0);
 		return false;
 	}
@@ -772,7 +770,7 @@ void TrMapLinkRoad::setParkingPen(uint16_t type, TrGeoObject * base)
 	{
 		//TR_INF << HEX << type;
 		m_pen_park->setStyle(Qt::DotLine);
-        m_pen_park->setWidth(4);
+		m_pen_park->setWidth(5);
 	}
 }
 
@@ -807,11 +805,8 @@ void TrMapLinkRoad::drawParLine(const TrZoomMap & zoom_ref, QPainter * p, unsign
 
 void TrMapLinkRoad::draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mode)
 {
-	//if(m_parking)
-	//	TR_INF << HEX << m_parking;
 	if(!(m_inst_mask & TR_MASK_DRAW))
 		return;
-	//TR_INF << *this;
 	if(this->clip(zoom_ref))
 		return;
 	if(m_geo_active_pen == nullptr)
@@ -819,38 +814,36 @@ void TrMapLinkRoad::draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char
 		//TR_WRN << "no active_pen -> exiting!" << HEX << m_rd_class;
 		return;
 	}
-
-    if((m_parking & 0xff00) && (s_mask & TR_MASK_SHOW_PARKING) && (m_pen_park != nullptr))
-    {
-        if(m_one_way & TR_LINK_DIR_ONEWAY)
-        {
-            p->setPen(*m_pen_park);
-            if(m_pline == nullptr)
-            {
-                QPolygon poly(2);
-                getTwoLine(zoom_ref, poly);
-                p->drawPolyline(poly);
-            }
-            else
-            {
-                if(m_one_way & TR_LINK_DIR_BWD)
-                    m_pline->draw(zoom_ref, p, m_pt_to, m_pt_from, 2);
-                else
-                    m_pline->draw(zoom_ref, p, m_pt_from, m_pt_to, 2);
-            }
-        }
-        // TODO: two pens for base and parallel line on oneway links?
-        if(isAsDoubleLine() && (s_mask & TR_MASK_MORE_LINES ))
-        {
-            p->setPen(*m_pen_park);
-            QVector<QPointF> vptf;
-            getParScreenLine(zoom_ref, vptf);
-            if(vptf.size() > 1)
-            {
-                p->drawPolyline(vptf);
-            }
-        }
-    }
+	// print parking part, draw first, do not overwrite the oher lines
+	if((m_parking & 0xff00) && (s_mask & TR_MASK_SHOW_PARKING) && (m_pen_park != nullptr))
+	{
+		if(m_one_way & TR_LINK_DIR_ONEWAY)
+		{
+			p->setPen(*m_pen_park);
+			if(m_pline == nullptr)
+			{
+				QPolygon poly(2);
+				getTwoLine(zoom_ref, poly);
+				p->drawPolyline(poly);
+			}
+			else
+			{
+				if(m_one_way & TR_LINK_DIR_BWD)
+					m_pline->draw(zoom_ref, p, m_pt_to, m_pt_from, 2);
+				else
+					m_pline->draw(zoom_ref, p, m_pt_from, m_pt_to, 2);
+			}
+		}
+		// TODO: two pens for base and parallel line on oneway links?
+		if(isAsDoubleLine() && (s_mask & TR_MASK_MORE_LINES ))
+		{
+			p->setPen(*m_pen_park);
+			QVector<QPointF> vptf;
+			getParScreenLine(zoom_ref, vptf);
+			if(vptf.size() > 1)
+				p->drawPolyline(vptf);
+		}
+	}
 	// show the parallel line
 	//drawParLine(zoom_ref, p, 0);
 	// print base line
@@ -877,54 +870,46 @@ void TrMapLinkRoad::draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char
 			m_pline->draw(zoom_ref, p, m_pt_from, m_pt_to, 2);
 	}
 
-	// print parking part
+	// draw the parallel line
 	if(isAsDoubleLine() && (s_mask & TR_MASK_MORE_LINES ))
 	{
 		p->setPen(m_pen_para);
 		QVector<QPointF> vptf;
 		getParScreenLine(zoom_ref, vptf);
 		if(vptf.size() > 1)
-        {
 			p->drawPolyline(vptf);
+	}
+	if((s_mask & TR_MASK_SHOW_ROADNAME) /*&& (m_pline != nullptr)*/)
+	{
+		TrGeoSegment seg;
+		TrPoint screen;
 
-            QString rd_name = getElementName();
-            if(rd_name.size())
-            {
-                //p->drawText((int)vptf.at(0).x(), (int)vptf.at(0).y(), rd_name);
-            }
-        }
-    }
-    if((s_mask & TR_MASK_SHOW_ROADNAME) /*&& (m_pline != nullptr)*/)
-    {
-        TrGeoSegment seg;
-        TrPoint screen;
+		QString rd_name = getElementName();
+		if(rd_name.size())
+		{
+			TrMapNode * nd = getNodeFromRef();
+			if(nd == nullptr)
+				return;
+			screen = nd->getPoint();
 
-        QString rd_name = getElementName();
-        if(rd_name.size())
-        {
-            TrMapNode * nd = getNodeFromRef();
-            if(nd == nullptr)
-                    return;
-            screen = nd->getPoint();
-
-            QPolygon poly(2);
-            getTwoLine(zoom_ref, poly);
-            if(m_pline != nullptr)
-            {
-                poly.clear();
-                m_pline->getScreenPoints(zoom_ref, poly);
-                if(poly.size() < 2)
-                {
-                    TrPoint pt = m_pt_to;
-                    zoom_ref.setMovePoint(&pt.x,&pt.y);
-                    poly << QPoint(static_cast<int>(pt.x),static_cast<int>(pt.y));
-                }
-            }
-            TrNameElement * el = dynamic_cast<TrNameElement*>(getNameElement());
-            if(el != nullptr)
-                el->drawOnPolygon(p, poly);
-        }
-    }
+			QPolygon poly(2);
+			getTwoLine(zoom_ref, poly);
+			if(m_pline != nullptr)
+			{
+				poly.clear();
+				m_pline->getScreenPoints(zoom_ref, poly);
+				if(poly.size() < 2)
+				{
+					TrPoint pt = m_pt_to;
+					zoom_ref.setMovePoint(&pt.x,&pt.y);
+					poly << QPoint(static_cast<int>(pt.x),static_cast<int>(pt.y));
+				}
+			}
+			TrNameElement * el = dynamic_cast<TrNameElement*>(getNameElement());
+			if(el != nullptr)
+				el->drawOnPolygon(p, poly);
+		}
+	}
 }
 
 bool TrMapLinkRoad::setSurroundingRect()
@@ -953,8 +938,8 @@ bool TrMapLinkRoad::setSurroundingRect()
 uint64_t TrMapLinkRoad::readXmlDescription(QXmlStreamReader & xml_in)
 {
 	uint64_t id = TR_NO_VALUE;
-
-	QStringRef name = readXmlHeader(xml_in);
+	QString name = readXmlHeader(xml_in);
+	// TODO: use 'name' param
 
 	QXmlStreamAttributes attr = xml_in.attributes();
 	m_lanes = attr.value("", "lanes").toInt();
@@ -963,7 +948,7 @@ uint64_t TrMapLinkRoad::readXmlDescription(QXmlStreamReader & xml_in)
 	m_parking = attr.value("", "parking").toInt(&ok, 16);
 	if(!ok)
 	{
-		if(attr.value("", "parking") != "")
+		if(attr.value("", "parking") != QString(""))
 			TR_WRN << "parking: " << attr.value("", "parking") << m_parking;
 	}
 	//if(m_parking)
@@ -971,7 +956,7 @@ uint64_t TrMapLinkRoad::readXmlDescription(QXmlStreamReader & xml_in)
 
 	while(!xml_in.atEnd())
 	{
-		QStringRef ref;
+		QString ref;
 
 		xml_in.readNext();
 		if(readDefStartElement(xml_in, ref))
@@ -992,10 +977,10 @@ uint64_t TrMapLinkRoad::readXmlDescription(QXmlStreamReader & xml_in)
 		{
 			//TR_MSG << xml_in.name();
 
-			if(xml_in.name() == "link")
+			if(xml_in.name().toString() == "link")
 			{
 			}
-			if(xml_in.name() == getXmlName())
+			if(xml_in.name().toString() == getXmlName())
 			{
 				return id;
 			}
@@ -1003,7 +988,6 @@ uint64_t TrMapLinkRoad::readXmlDescription(QXmlStreamReader & xml_in)
 	}
 	return TR_NO_VALUE;
 }
-
 
 void TrMapLinkRoad::writeXmlDescription(QXmlStreamWriter & xml_out, uint64_t id)
 {

@@ -40,6 +40,7 @@
 #define TR_GEO_SEGMENT_H
 
 #include "tr_geo_object.h"
+
 #include <geo_poly.h>
 #include <tr_geo_poly.h>
 
@@ -64,13 +65,15 @@ public:
 
 	void setPoints(TrPoint first, TrPoint second);
 
-	void setPoints(TrGeoPolygon & poly, int pos);
+	void setPoints(TrGeoPolygon & poly, size_t pos);
 
 	void setPoints(const TrGeoSegment& other);
 
 	TrPoint getFirstPoint();
 
 	TrPoint getSecondPoint();
+
+	bool hasData();
 
 	void setFirstPoint(TrPoint & pt);
 
@@ -101,8 +104,9 @@ public:
 	bool managePolygon(const TrZoomMap & zoom_ref, TrGeoPolygon & poly,
 			QList<TrGeoSegment> & seg_list, int width);
 
-	virtual void draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mode = 0);
+	bool isEvenPolygon(const TrZoomMap & zoom_ref, QList<TrGeoSegment> & seg_list, double ctrl);
 
+	virtual void draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mode = 0);
 #ifdef TR_SERIALIZATION
 	virtual bool exportGeoJson(QJsonObject & geojson, uint64_t mode);
 

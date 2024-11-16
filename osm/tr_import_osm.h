@@ -101,7 +101,7 @@ public:
 
 	virtual ~TrImportOsm();
 
-    bool read(const QString & filename, TrMapList & name_list);
+    bool read(const QString & filename, TrMapList & name_list, uint8_t mode = 0);
 	//int64_t osmWaySize();
 
 	//void appendLinkOsm(TrOsmLink * link, QVector<TrOsmLink *> * raw_list);
