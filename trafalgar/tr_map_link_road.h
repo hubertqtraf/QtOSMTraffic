@@ -41,10 +41,6 @@
 #ifndef TR_MAP_LINK_ROAD_H
 #define TR_MAP_LINK_ROAD_H
 
-// it was 3500 -> 3.5m
-#define LANE_WITH_P  3200
-#define LANE_WITH_M  -3200
-
 #define DEF_WITH_P   500
 #define DEF_WITH_M  -500
 
@@ -105,6 +101,9 @@ public:
 	virtual ~TrMapLinkRoad();
 
 	friend QDebug operator<<(QDebug dbg, const TrMapLinkRoad& link);
+
+	static int ms_lane_width_p;
+	static int ms_lane_width_n;
 
 	virtual QString getXmlName() const;
 

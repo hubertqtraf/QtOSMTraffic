@@ -18,13 +18,7 @@
     <layout class="QGridLayout" name="gridLayout_3">
      <item row="0" column="0">
       <layout class="QGridLayout" name="gridLayout_2">
-       <item row="3" column="0">
-        <widget class="QLineEdit" name="profileDir"/>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLineEdit" name="osmDir"/>
-       </item>
-       <item row="4" column="0">
+       <item row="2" column="0">
         <widget class="QCheckBox" name="shiftCheck">
          <property name="text">
           <string>Shift</string>
@@ -34,6 +28,30 @@
          </property>
         </widget>
        </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>OSM files</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Profile file</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1">
+        <widget class="QPushButton" name="setProfileDir">
+         <property name="text">
+          <string>Select</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="QLineEdit" name="profileDir"/>
+       </item>
        <item row="1" column="1">
         <widget class="QPushButton" name="setOsmDir">
          <property name="text">
@@ -41,24 +59,23 @@
          </property>
         </widget>
        </item>
+       <item row="1" column="0">
+        <widget class="QLineEdit" name="osmDir"/>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>Lane width [mm]</string>
+         </property>
+        </widget>
+       </item>
        <item row="3" column="1">
-        <widget class="QPushButton" name="setProfileDir">
-         <property name="text">
-          <string>Select</string>
+        <widget class="QSpinBox" name="laneSpinBox">
+         <property name="maximum">
+          <number>10000</number>
          </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="label_2">
-         <property name="text">
-          <string>Profile file</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QLabel" name="label">
-         <property name="text">
-          <string>OSM files</string>
+         <property name="singleStep">
+          <number>100</number>
          </property>
         </widget>
        </item>
@@ -72,7 +89,7 @@
       <enum>Qt::Horizontal</enum>
      </property>
      <property name="standardButtons">
-      <set>QDialogButtonBox::Ok</set>
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
      </property>
     </widget>
    </item>

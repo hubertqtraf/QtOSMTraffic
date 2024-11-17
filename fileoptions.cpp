@@ -24,6 +24,7 @@
 #include "ui_fileoptions.h"
 
 #include <tr_defs.h>
+#include <tr_map_link_road.h>
 
 #include <QFileDialog>
 
@@ -32,6 +33,7 @@ FileOptions::FileOptions(QWidget *parent) :
     ui(new Ui::FileOptions)
 {
     ui->setupUi(this);
+    ui->laneSpinBox->setValue(TrMapLinkRoad::ms_lane_width_p);
 }
 
 FileOptions::~FileOptions()
@@ -47,6 +49,16 @@ QString FileOptions::getOsmDir()
 bool FileOptions::getShiftOption()
 {
     return (ui->shiftCheck->checkState() == Qt::Checked);
+}
+
+int FileOptions::laneWith()
+{
+    return ui->laneSpinBox->value();
+}
+
+void FileOptions::setLaneWith(int width)
+{
+     ui->laneSpinBox->setValue(TrMapLinkRoad::ms_lane_width_p);
 }
 
 QString FileOptions::getProfileFileName()
@@ -113,4 +125,15 @@ void FileOptions::manageSettings(QSettings & settings, bool mode)
         }
     }
     settings.endGroup();
+}
+
+void FileOptions::on_buttonBox_accepted()
+{
+    TrMapLinkRoad::ms_lane_width_p = ui->laneSpinBox->value();
+    TrMapLinkRoad::ms_lane_width_n = 0-ui->laneSpinBox->value();
+}
+
+void FileOptions::on_buttonBox_rejected()
+{
+    ui->laneSpinBox->setValue(TrMapLinkRoad::ms_lane_width_p);
 }

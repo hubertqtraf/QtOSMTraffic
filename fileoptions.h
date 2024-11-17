@@ -42,12 +42,20 @@ public:
     QString getProfileFileName();
     bool getShiftOption();
 
+    int laneWith();
+    void setLaneWith(int width);
+
+
     void manageSettings(QSettings &settings, bool mode);
 
 private slots:
     void on_setOsmDir_clicked();
 
     void on_setProfileDir_clicked();
+
+    void on_buttonBox_accepted();
+
+    void on_buttonBox_rejected();
 
 private:
     Ui::FileOptions *ui;

@@ -46,6 +46,9 @@
 #define SEGMENT_TO true
 #define SEGMENT_FROM false
 
+int TrMapLinkRoad::ms_lane_width_p = 3200;
+int TrMapLinkRoad::ms_lane_width_n = -3200;
+
 TrMapLinkRoad::TrMapLinkRoad()
 	: TrMapLink()
 	, m_lanes(1)
@@ -472,11 +475,11 @@ bool TrMapLinkRoad::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject 
 		}
 
 		// TODO: create a function for switch to GB
-		double w = m_lanes * LANE_WITH_P;
+		double w = m_lanes * TrMapLinkRoad::ms_lane_width_p;
 
 		if(m_one_way & TR_LINK_DIR_BWD)
 		{
-			w = m_lanes * LANE_WITH_M;
+			w = m_lanes * TrMapLinkRoad::ms_lane_width_n;
 			m_mm_calc_width = DEF_WITH_M;	// default is DEF_WITH_P
 		}
 
