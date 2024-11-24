@@ -1,3 +1,4 @@
+﻿
 #  OSM Visualisation
 
 License:  **GPLv2(GNU  General  Public  License,  version  2)**
@@ -9,7 +10,24 @@ Option to move the base line from middle of the road to the left side to get a b
 ###  How to use: 
 Get an OSM XML-File and load it, for example from 'josm' or 'merkaartor'
 
-###  View options
+#### Profile File
+The Profile File is located in the base directory and is named 'tr_default_profile.xml'.
+With this file is it possible to edit the colours of classes of elements (roads, houses, etc.).
+
+* select the menu point 'Settings->Profile'
+* inflate tree view item
+* double click the colour fields and change the colors
+* test the colours or/and save the settings
+
+#### Directory dialogue
+
+* select the menu point 'Settings->'Directories'
+* check the path of the file 'tr_default_profile.xml'
+* select a path for the OSM files (default '.')
+* select the shift mode
+* change the lane width in [mm]
+
+####  View options
 * Nodes: show the nodes of the directed Graph
 * Cross points
 * POI: subset of "point of interest"
