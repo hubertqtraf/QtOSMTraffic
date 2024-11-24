@@ -130,7 +130,7 @@ QVariant TrSetModel::data(const QModelIndex &index, int role) const
 			else
 				return QVariant();
 		}
-		//return QVariant();
+        return QVariant();
 	
 	default:
 		return QVariant();

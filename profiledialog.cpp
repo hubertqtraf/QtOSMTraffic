@@ -54,6 +54,7 @@ void ProfileDialog::read(QString & filename)
         ui->profileTree->setModel(m_profile);
         m_mapper->setModel(m_profile);
     }
+    m_filename = filename;
 }
 
 ProfileDialog::~ProfileDialog()
@@ -184,9 +185,36 @@ ProfileDialog::TrMapCol ProfileDialog::getElemColorMap(const QString & sec_name)
     return TrMapCol();
 }
 
-
-
-void ProfileDialog::on_treeView_doubleClicked(const QModelIndex &index)
+/*void ProfileDialog::on_treeView_doubleClicked(const QModelIndex &index)
 {
 
+}*/
+
+void ProfileDialog::on_buttonBox_clicked(QAbstractButton *button)
+{
+    QDialogButtonBox::StandardButton role = ui->buttonBox->standardButton(button);
+    if(role == QDialogButtonBox::Save)
+    {
+        if(!m_filename.size())
+        {
+            // MSG BOX..
+            return;
+        }
+        QFile file(m_filename);
+        file.open(QIODevice::WriteOnly);
+        QDomDocument * xml_doc = m_profile->getDocument();
+        QByteArray xml_array = xml_doc->toByteArray(1);
+        file.write(xml_array.constData());
+        file.close();
+    }
+    if(role == QDialogButtonBox::Ok)
+    {
+        //TR_INF << "OK";
+    }
+    if(role == QDialogButtonBox::Reset)
+    {
+        //TR_INF << "Reset";
+        ui->profileTree->reset();
+        read(m_filename);
+    }
 }

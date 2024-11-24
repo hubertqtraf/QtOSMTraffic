@@ -20,7 +20,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>17</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -112,6 +112,10 @@
    </property>
   </action>
   <action name="actionConfigure">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/icon/configure.svg</normaloff>:/icon/configure.svg</iconset>
+   </property>
    <property name="text">
     <string>Profile</string>
    </property>
@@ -143,11 +147,19 @@
    </property>
   </action>
   <action name="actionDirectories">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/icon/configure.svg</normaloff>:/icon/configure.svg</iconset>
+   </property>
    <property name="text">
     <string>Directories</string>
    </property>
   </action>
   <action name="actionPrint">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/icon/document-print.svg</normaloff>:/icon/document-print.svg</iconset>
+   </property>
    <property name="text">
     <string>Print</string>
    </property>
@@ -188,6 +200,8 @@
    </property>
   </action>
  </widget>
- <resources/>
+ <resources>
+  <include location="res.qrc"/>
+ </resources>
  <connections/>
 </ui>

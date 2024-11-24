@@ -26,6 +26,7 @@
 #include "profile.h"
 #include "tr_set_model.h"
 
+#include <QAbstractButton>
 #include <QDataWidgetMapper>
 #include <QDialog>
 
@@ -52,12 +53,16 @@ public:
     ProfileDialog::TrMapCol getElemColorMap(const QString &sec_name);
 
 private slots:
-    void on_treeView_doubleClicked(const QModelIndex &index);
+    //void on_treeView_doubleClicked(const QModelIndex &index);
+
+    void on_buttonBox_clicked(QAbstractButton *button);
 
 private:
     Ui::ProfileDialog *ui;
     TrSetModel * m_profile;
     QDataWidgetMapper * m_mapper;
+    QString m_filename;
+
     bool getElementList(const QString &sec_name, QMap<int, QString> &string_map, TrMapCol & col_map, const QString &filter);
     bool readSection(QDomNode &n, QMap<int, QString> &string_map, TrMapCol & col_map, const QString &filter);
 };
