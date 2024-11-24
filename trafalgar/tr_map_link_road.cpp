@@ -475,7 +475,7 @@ bool TrMapLinkRoad::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject 
 		}
 
 		// TODO: create a function for switch to GB
-		double w = m_lanes * TrMapLinkRoad::ms_lane_width_p;
+        int32_t w = m_lanes * TrMapLinkRoad::ms_lane_width_p;
 
 		if(m_one_way & TR_LINK_DIR_BWD)
 		{

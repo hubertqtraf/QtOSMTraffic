@@ -345,7 +345,9 @@ bool TrGeoSegment::managePolygon(const TrZoomMap & zoom_ref, TrGeoPolygon & poly
 void TrGeoSegment::draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mode)
 {
 	if(!(m_inst_mask & TR_MASK_DRAW))
+	{
 		;//return;
+	}
 
 	if(this->clip(zoom_ref))
 		return;
