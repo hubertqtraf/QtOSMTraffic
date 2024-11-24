@@ -81,9 +81,11 @@ protected:
 	bool createNodeInOut();
 
 public:
+#ifdef SEG_TEST
 	// debug segments for cross poins
-	//static TrGeoSegment * ms_seg_1;
-	//static TrGeoSegment * ms_seg_2;
+	static TrGeoSegment * ms_seg_1;
+	static TrGeoSegment * ms_seg_2;
+#endif
 
 	TrMapNet();
 

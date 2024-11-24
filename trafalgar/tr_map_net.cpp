@@ -36,13 +36,14 @@
 
 
 #include "tr_map_net.h"
-
 #include "tr_map_node.h"
 #include "tr_map_link_road.h"
 
 // Segment: for debug output drawing used for cross point
-//TrGeoSegment * TrMapNet::ms_seg_1 = new TrGeoSegment;
-//TrGeoSegment * TrMapNet::ms_seg_2 = new TrGeoSegment;
+#ifdef SEG_TEST
+TrGeoSegment * TrMapNet::ms_seg_1 = new TrGeoSegment;
+TrGeoSegment * TrMapNet::ms_seg_2 = new TrGeoSegment;
+#endif
 
 TrMapNet::TrMapNet()
 	: TrGeoObject()
@@ -233,13 +234,15 @@ void TrMapNet::draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mode
 	//if(!(TR_MASK_DRAW & m_inst_mask))	// TODO: ??? -> do this by stack?
 	//	return;
 
+#ifdef SEG_TEST
 	// debug output on request, one object per net
-	//p->setPen(QPen(QColor(0,0,155)));
-	//TrMapNet::ms_seg_1->setSurroundingRect();
-	//TrMapNet::ms_seg_2->setSurroundingRect();
-	//p->setPen(QPen(QColor(155,0,0)));
-	//TrMapNet::ms_seg_1->draw(zoom_ref, p, 0);
-	//TrMapNet::ms_seg_2->draw(zoom_ref, p, 0);
+	p->setPen(QPen(QColor(0,0,155)));
+	TrMapNet::ms_seg_1->setSurroundingRect();
+	TrMapNet::ms_seg_2->setSurroundingRect();
+	p->setPen(QPen(QColor(155,0,0)));
+	TrMapNet::ms_seg_1->draw(zoom_ref, p, 0);
+	TrMapNet::ms_seg_2->draw(zoom_ref, p, 0);
+#endif
 
 	if(m_link_list != nullptr)
 	{
