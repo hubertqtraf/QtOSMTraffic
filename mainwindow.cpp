@@ -40,6 +40,7 @@
 #include <QSettings>
 #include <QPrinter>
 #include <QFontDialog>
+#include <QMessageBox>
 //#include <QSvgGenerator>
 
 MainWindow::MainWindow(QWidget *parent)
@@ -280,20 +281,23 @@ void MainWindow::on_loadWorld(const QString & filename, int shift)
     setCursor(Qt::WaitCursor);
     if(m_map_view->getDocument().m_is_loaded)
     {
-        if(m_map_view->getDocument().getFileName() == filename)
-            return;
-        // TODO: do a merge?
+        // TODO: check if file name is same -> Dialog box?
         m_map_view->getDocument().clean();
         m_map_view->getDocument().addLayerType(m_profile_dlg->getElemStringList("modes"));
     }
-    //TR_INF << m_osmload_dlg->getShiftMode();
-    //if(m_osmload_dlg->getShiftMode() != 0)
     if(shift != 0)
         TrGeoObject::s_mask |= TR_MASK_MOVE_LINE;
 
     TrImportOsm osm_filter;
     if(osm_filter.read(filename, m_map_view->getDocument().getNameList(), 0) == false)
+    {
+        QMessageBox msgBox;
+        msgBox.setIcon(QMessageBox::Critical);
+        msgBox.setText("Document Error");
+        msgBox.exec();
+        unsetCursor();
         return;
+    }
 
     QStringList rlist = m_profile_dlg->getElemStringList("layer", "roadnet");
     QStringList llist = m_profile_dlg->getElemStringList("layer", "net");
