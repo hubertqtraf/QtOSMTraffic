@@ -412,7 +412,7 @@ bool TrMapNode::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject * ba
 		// TODO: one to one double dir -> more checking...
 		if((getIn(false) == 2) && (getOut(false) == 2))
 		{
-			;//return true;
+            //return true;
 		}
 		// TODO: check: is needed! -> old? double used?
 		setConnectionAngles(zoom_ref, TR_NODE_OUT);
@@ -443,10 +443,9 @@ bool TrMapNode::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject * ba
 		TrGeoObject * first_obj = nullptr;
 		TrGeoObject * next_obj = nullptr;
 		TrGeoObject * last_obj = nullptr;
-		double ang = 0.0;
+        double ang = -0.0001;
 		int idx = -1;
 		do
-		//for(int i = 0; i< 3; i++)
 		{
 			bool dir = true;
 			idx = getDirNextAngleIndex(ang, dir);
@@ -464,7 +463,6 @@ bool TrMapNode::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject * ba
 			if(idx >= 0)
 				setCrossing(zoom_ref, first_obj, next_obj);
 			first_obj = next_obj;
-		//}
 		}while(idx >= 0);
 		setCrossing(zoom_ref, first_obj, last_obj);
 
