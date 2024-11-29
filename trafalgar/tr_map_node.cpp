@@ -271,7 +271,7 @@ int TrMapNode::getShiftPoint(const TrZoomMap & zoom_ref)
 		TrMapLink * next_link = dynamic_cast<TrMapLink *>(item.tr_obj);
 		if(next_link != nullptr)
 		{
-			if((next_link->getRdClass() & 0x000f) < 9)
+            if((next_link->getType() & 0x000f) < 9)
 			{
 				if(!(next_link->getOneWay() & TR_LINK_DIR_ONEWAY))
 					return false;
@@ -292,14 +292,14 @@ TrGeoObject * TrMapNode::getSingleElement(int mode)
 		TrMapLink * next_link = dynamic_cast<TrMapLink *>(item.tr_obj);
 		if(next_link != nullptr)
 		{
-			if((next_link->getRdClass() & 0x000f) < 9)
+            if((next_link->getType() & 0x000f) < 9)
 			{
 				//TR_INF << "O:" << *next_link << mode;
 				if(next_link->getOneWay() & TR_LINK_DIR_ONEWAY)
 				{
 					if((mode == 1) && (!count))
 					{
-                        //TR_INF << "Ox:" << *next_link << mode;
+						//TR_INF << "Ox:" << *next_link << mode;
 						ret = next_link;
 						count++;
 					}
@@ -308,7 +308,7 @@ TrGeoObject * TrMapNode::getSingleElement(int mode)
 				{
 					if((mode == 3) && (!count))
 					{
-                        //TR_INF << "O-:" << *next_link << mode;
+						//TR_INF << "O-:" << *next_link << mode;
 						ret = next_link;
 						count++;
 					}
@@ -326,14 +326,14 @@ TrGeoObject * TrMapNode::getSingleElement(int mode)
 		TrMapLink * next_link = dynamic_cast<TrMapLink *>(item.tr_obj);
 		if(next_link != nullptr)
 		{
-			if((next_link->getRdClass() & 0x000f) < 9)
+            if((next_link->getType() & 0x000f) < 9)
 			{
 				//TR_INF << "I:" << *next_link << mode;
 				if(next_link->getOneWay() & TR_LINK_DIR_ONEWAY)
 				{
 					if((mode == 2) && (!count))
 					{
-                        //TR_INF << "II:" << count << *next_link << mode;
+						//TR_INF << "II:" << count << *next_link << mode;
 						ret = next_link;
 						count++;
 					}
@@ -412,7 +412,7 @@ bool TrMapNode::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject * ba
 		// TODO: one to one double dir -> more checking...
 		if((getIn(false) == 2) && (getOut(false) == 2))
 		{
-            //return true;
+			//return true;
 		}
 		// TODO: check: is needed! -> old? double used?
 		setConnectionAngles(zoom_ref, TR_NODE_OUT);
@@ -443,7 +443,7 @@ bool TrMapNode::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject * ba
 		TrGeoObject * first_obj = nullptr;
 		TrGeoObject * next_obj = nullptr;
 		TrGeoObject * last_obj = nullptr;
-        double ang = -0.0001;
+		double ang = -0.0001;
 		int idx = -1;
 		do
 		{
@@ -458,6 +458,8 @@ bool TrMapNode::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject * ba
 				else
 					next_obj = m_vec_out[idx].tr_obj;
 			}
+			// TODO: ingnore class > service (9)?
+			// class -> TrGeoObject -> get class?
 			if(last_obj == nullptr)
 				last_obj = next_obj;
 			if(idx >= 0)
@@ -700,7 +702,6 @@ bool TrMapNode::setConnectionAngles(const TrZoomMap & zoom_ref, bool dir)
 		//TR_INF << "OUT" << dir;
 		return setDirectionAngles(zoom_ref, m_vec_out, dir);
 	}
-    //return false;
 }
 
 int TrMapNode::getDirNextAngleIndex(double & angle, bool & dir)
@@ -804,7 +805,7 @@ int TrMapNode::getDirNextAngle(TrConnectionMember & member, QVector<TrConnection
 	if(con_count == 1)
 	{
 		// TODO, needed?
-		;//return 3;
+		//return 3;
 	}
 	member.m_dir = ret_ang;
 	TR_MSG << "ret: " << ret << member.m_dir;
@@ -837,7 +838,7 @@ int TrMapNode::hasRamp(QVector<TrConnectionMember> & vec)
 		TrMapLink * next_link = dynamic_cast<TrMapLink *>(vec[i].tr_obj);
 		if(next_link != nullptr)
 		{
-			if(next_link->getRdClass() & TR_LINK_RAMP_FLAG)
+            if(next_link->getType() & TR_LINK_RAMP_FLAG)
 				count_ramp++;
 			//m_type & TR_LINK_RAMP_FLAG
 		}

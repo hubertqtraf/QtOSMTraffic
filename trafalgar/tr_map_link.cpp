@@ -52,15 +52,14 @@ TrMapLink::TrMapLink()
 	//, m_poly_flags(0)
 	, m_mm_load_width(0)
 	, m_name_id(0)
-	, m_type(0)
 	, m_node_from(nullptr)
 	, m_node_to(nullptr)
 	, m_pline(nullptr)
 	, m_geo_id(0)
 	, m_pt_from{0.0,0.0}
 	, m_pt_to{0.0,0.0}
-    , m_seg_from{{DIR_INIT, 1.0, 2.0}, 3.0}
-    , m_seg_to{{DIR_INIT, 1.0, 2.0}, 3.0}
+	, m_seg_from{{DIR_INIT, 1.0, 2.0}, 3.0}
+	, m_seg_to{{DIR_INIT, 1.0, 2.0}, 3.0}
 	, m_one_way(0)
 {
 	m_inst_mask = TR_MASK_DRAW;
@@ -74,11 +73,11 @@ QDebug operator<<(QDebug dbg, const TrMapLink& link)
 {
 	if((link.m_node_from == nullptr) || (link.m_node_to == nullptr))
 		return dbg << link.getXmlName() << "----" << "----" <<
-			"class " << HEX << link.m_type << link.m_one_way;
+		"class " << HEX << link.getType() << link.m_one_way;
 	return dbg << link.getXmlName() << " " << DEC <<
 		link.m_node_from->getGeoId() << " - " <<
 		link.m_node_to->getGeoId() << " class " << HEX <<
-		link.m_type << " " <<
+		link.getType() << " " <<
 		link.m_one_way << " ";
 }
 
@@ -89,12 +88,12 @@ QString TrMapLink::getXmlName() const
 
 uint16_t TrMapLink::getRdClass()
 {
-	return m_type;
+	return getType();
 }
 
 void TrMapLink::setRdClass(uint16_t road_class)
 {
-	m_type = road_class;
+	setType(road_class);
 }
 
 int32_t TrMapLink::getWidth()
@@ -307,7 +306,7 @@ bool TrMapLink::setPrimiveById(TrMapList * primive)
 
 bool TrMapLink::isAsDoubleLine()
 {
-	return ((getRdClass() & 0x00ff) < 9);
+	return ((getType() & 0x00ff) < 9);
 }
 
 // TODO: function: check if ramp is needed...
@@ -349,8 +348,8 @@ void TrMapLink::setLayerShowMask(uint64_t mask)
 	m_inst_mask &= ~(TR_MASK_DRAW);
 
 	uint64_t class_mask = 1;
-	if((m_type & 0x000f) > 1)
-        class_mask = static_cast <uint64_t>((1 << ((m_type & 0x000f) -1)));
+	if((getType() & 0x000f) > 1)
+		class_mask = static_cast <uint64_t>((1 << ((getType() & 0x000f) -1)));
 	//TR_INF << HEX << (class_mask & mask) << class_mask << mask;
 	if((class_mask & mask) == class_mask)
 	{
@@ -371,7 +370,7 @@ void TrMapLink::setLinkPen(TrGeoObject * base)
 	TrMapList * list = dynamic_cast<TrMapList *>(base);
 	if(list != nullptr)
 	{
-		uint8_t rd_class = (this->getRdClass() & 0x1f);
+		uint8_t rd_class = (this->getType() & 0x1f);
 		if((rd_class == 0) || (rd_class > 16))
 		{
 			setActivePen(list->getObjectPen(1));
@@ -779,7 +778,7 @@ void TrMapLink::draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mod
 
 	if(m_geo_active_pen == nullptr)
 	{
-		TR_WRN << "no active_pen -> exiting!" << HEX << m_type;
+		TR_WRN << "no active_pen -> exiting!" << HEX << getType();
 		return;
 	}
 

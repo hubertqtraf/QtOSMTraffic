@@ -81,9 +81,6 @@ private:
     bool removeSmallSeg(const TrZoomMap &zoom_ref, double l_limit, bool dir);
 
 protected:
-	// 0xff00, common flags; 0x00ff, class (0-255)
-	uint16_t m_type;
-
 	TrMapNode * m_node_from;
 	TrMapNode * m_node_to;
 	TrGeoPolygon * m_pline;
@@ -97,7 +94,7 @@ protected:
 	TrPoint m_pt_to;
 
 	// TODO: use virtual func getSegment, remove member?
-    poly_add m_seg_from;
+	poly_add m_seg_from;
 	poly_add m_seg_to;
 
 	uint8_t m_one_way;
@@ -106,7 +103,7 @@ protected:
 	void writeXmlLinkPart(QXmlStreamWriter & xml_out, uint64_t id);
 	uint64_t readXmlData(QXmlStreamReader & xml_in, const QString & block);
 #endif
-    void setLinkPen(TrGeoObject * base);
+	void setLinkPen(TrGeoObject * base);
 
 	void getTwoLine(const TrZoomMap & zoom_ref, QPolygon & poly);
 

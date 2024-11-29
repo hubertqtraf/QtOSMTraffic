@@ -67,11 +67,11 @@ QDebug operator<<(QDebug dbg, const TrMapLinkRoad& link)
 {
 	if((link.m_node_from == nullptr) || (link.m_node_to == nullptr))
 		return dbg << link.getXmlName() << "----" << "----" <<
-			"class " << HEX << link.m_type << link.m_one_way;
+		"class " << HEX << link.getType() << link.m_one_way;
 	return dbg << link.getXmlName() << " " << DEC <<
 		link.m_node_from->getGeoId() << " - " <<
 		link.m_node_to->getGeoId() << " class " << HEX <<
-		link.m_type << " " << link.m_one_way << " lanes: " <<
+		link.getType() << " " << link.m_one_way << " lanes: " <<
 		link.m_lanes << " parking " << link.m_parking;
 }
 
@@ -212,7 +212,7 @@ int TrMapLinkRoad::moveCheck(TrMapNode & node)
 			if(next->getOneWay() & TR_LINK_DIR_ONEWAY)
 			{
 				count_one_out++;
-				if((next->m_type & 0x00ff) < 9)
+				if((next->getType() & 0x00ff) < 9)
 					count_class_out++;
 			}
 			else
@@ -451,7 +451,7 @@ bool TrMapLinkRoad::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject 
 		}
 		if(ctrl == 35)
 		{
-			if((getRdClass() & 0x000f) < 9)
+			if((getType() & 0x000f) < 9)
 				handleSmallElement(zoom_ref, 0.2, m_mm_calc_width / 1000.0);
 		}
 

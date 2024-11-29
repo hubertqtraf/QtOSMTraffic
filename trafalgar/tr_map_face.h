@@ -52,7 +52,6 @@ class TrMapFace : public TrGeoObject
 {
 private:
 	TrGeoPolygon * m_pline;
-	uint16_t m_f_class;
 	uint16_t m_f_type;
 
 	QBrush * m_actBrush;
@@ -80,16 +79,12 @@ public:
 
 	void setActiveBrush(QBrush * brush);
 
-	uint16_t getFaceClass();
+	virtual uint16_t getDrawType();
 
-	void setFaceClass(uint16_t);
-
-	virtual uint16_t getType();
-
-	virtual void setType(uint16_t type);
+	virtual void setDrawType(uint16_t type);
 
 #ifdef TR_SERIALIZATION
-    virtual bool exportGeoJson(QJsonObject & geojson, uint64_t mode);
+	virtual bool exportGeoJson(QJsonObject & geojson, uint64_t mode);
 
 	bool importArrayJson(const QJsonArray & arrjson, uint64_t mode);
 

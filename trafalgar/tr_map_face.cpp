@@ -41,18 +41,16 @@
 
 TrMapFace::TrMapFace()
 	: m_pline(nullptr)
-	, m_f_class(0xff)
 	, m_f_type(0xff)
-    , m_actBrush(nullptr)
+	, m_actBrush(nullptr)
 {
 }
 
 TrMapFace::TrMapFace(QString name, long id) 
 	: TrGeoObject()
 	, m_pline(nullptr)
-	, m_f_class(0xff)
 	, m_f_type(0xff)
-    , m_actBrush(nullptr)
+	, m_actBrush(nullptr)
 {
 	// polygon version
 	//pline = new TrGeoPolygon("", 0); 
@@ -69,7 +67,7 @@ TrMapFace::~TrMapFace()
 
 QDebug operator<<(QDebug dbg, const TrMapFace & face)
 {
-	return dbg << face.getXmlName() << HEX << "class: " << face.m_f_class <<
+	return dbg << face.getXmlName() << HEX << "class: " << face.getType() <<
 		"type: " << face.m_f_type;
 }
 
@@ -80,7 +78,7 @@ void TrMapFace::setLayerShowMask(uint64_t mask)
 
 	uint64_t class_mask = 1;
 	if((m_f_type & 0x00ff) > 1)
-        class_mask = (static_cast<uint64_t>((1 << (m_f_type  & 0x00ff))));
+		class_mask = (static_cast<uint64_t>((1 << (m_f_type  & 0x00ff))));
 	//TR_MSG << HEX << m_f_type << m_f_class << (class_mask & mask) << class_mask << mask;
 	if((class_mask & mask) == class_mask)
 	{
@@ -136,9 +134,10 @@ void TrMapFace::draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mod
 		p->setBrush(*m_actBrush);
 	}
 
-	if(m_f_type & 0x4000)
+	// TODO: polygon is not closed! append first point?
+ 	if(m_f_type & 0x4000)
 		m_pline->draw(zoom_ref, p, 0x02);
-	else	
+	else
 		m_pline->draw(zoom_ref, p, 0x00);
 
 	if(m_inst_mask & TR_MASK_SELECTED)
@@ -174,25 +173,12 @@ bool TrMapFace::setSurroundingRect()
 	return false;
 }
 
-uint16_t TrMapFace::getFaceClass()
-{
-	return m_f_class;
-}
-
-void TrMapFace::setFaceClass(uint16_t face_class)
-{
-	//TR_MSG << face_class;
-
-	m_f_class = face_class;
-}
-
-
-uint16_t TrMapFace::getType()
+uint16_t TrMapFace::getDrawType()
 {
 	return m_f_type;
 }
 
-void TrMapFace::setType(uint16_t type)
+void TrMapFace::setDrawType(uint16_t type)
 {
 	m_f_type = type;
 }
@@ -229,7 +215,7 @@ bool TrMapFace::importArrayJson(const QJsonArray & arrjson, uint64_t mode)
 {
 	appendPolygon(0x00);
 	setFaceClass(1);
-    return m_pline->importArrayJson(arrjson, 1);
+	return m_pline->importArrayJson(arrjson, 1);
 }
 
 bool TrMapFace::importGeoJson(const QJsonObject & geojson, uint64_t mode)

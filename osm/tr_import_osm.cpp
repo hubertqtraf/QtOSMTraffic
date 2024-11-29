@@ -536,8 +536,8 @@ void TrImportOsm::createRelFace(Rel_t & relation, Way_t * ways, uint64_t n_way)
 		{
 			if(face != nullptr)
 			{
-				face->setFaceClass(relation.flags >> 16);
-				face->setType(relation.flags | 0x4000);
+				face->setClass(relation.flags >> 16);
+				face->setDrawType(relation.flags | 0x4000);
 				face_list.append(face);
 				idx1 = (-1);
 				idx2 = (-1);
@@ -591,7 +591,8 @@ bool TrImportOsm::createFaceList(TrMapList * osm_list, QString name)
 			if(appendFacePoints(m_ways[i], *face, true))
 			{
 				uint64_t type = (m_ways[i].type & 0x000000f000000000) >> 24; //36;
-				face->setType((m_ways[i].type & 0x000000000000000f) | type);
+				face->setType((m_ways[i].type & 0x00000000000000ff) | type);
+				face->setDrawType(type & 0xf000);
 				osm_list->appendObject(face);
 			}
 			else
@@ -606,7 +607,7 @@ bool TrImportOsm::createFaceList(TrMapList * osm_list, QString name)
 	}
 	for (int i = 0; i < face_list.size(); ++i)
 	{
-		uint64_t f_class = face_list[i]->getFaceClass();
+		uint64_t f_class = face_list[i]->getType();
 		//TR_INF << HEX << face_list[i]->getType() << face_list[i]->getFaceClass() << TYPE_NATURAL;
 		if((name == "nature") && ((f_class << 16) & TYPE_NATURAL))
 			osm_list->appendObject(face_list[i]);

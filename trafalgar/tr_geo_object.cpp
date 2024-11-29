@@ -47,6 +47,7 @@ TrGeoObject::TrGeoObject()
 	: m_geo_active_pen(nullptr)
 	, disabled_pen(nullptr)
 	, select_id(-1)
+	, m_flags(0)
 {
 	surroundingRect[0] = surroundingRect[1] = surroundingRect[2] = surroundingRect[3] = 0.0;
 
@@ -207,7 +208,7 @@ void TrGeoObject::drawSurroundingRect(const TrZoomMap & zoom_ref, QPainter * p, 
 		screen2.y = surroundingRect[3];
 		zoom_ref.setMovePoint(&screen1.x,&screen1.y);
 		zoom_ref.setMovePoint(&screen2.x,&screen2.y);
-        QPainter::CompositionMode comp = p->compositionMode();
+		QPainter::CompositionMode comp = p->compositionMode();
 		p->setCompositionMode(QPainter::RasterOp_SourceXorDestination);
 		if(mode & TR_OBJ_DRAW_ERR)
 			p->setPen(QColor(0x00, 0xff, 0xff));
@@ -275,7 +276,7 @@ bool TrGeoObject::clip(const TrZoomMap & zoom_ref)
 	screen1.x = surroundingRect[0] - 100.0;
 	screen1.y = surroundingRect[1] - 100.0;
 
-    zoom_ref.setMovePoint(&screen1.x,&screen1.y);
+	zoom_ref.setMovePoint(&screen1.x,&screen1.y);
 	screen2.x = surroundingRect[2] + 100.0;
 	screen2.y = surroundingRect[3] + 100.0;
 	zoom_ref.setMovePoint(&screen2.x,&screen2.y);
@@ -298,13 +299,15 @@ void TrGeoObject::setActBrush(QBrush * brush)	// Default of virtual
 {
 }
 
-uint16_t TrGeoObject::getType()
+uint16_t TrGeoObject::getType() const
 {
-	return 0xffff;
+	return m_flags & 0x000000000000ffff;
 }
 
 void TrGeoObject::setType(uint16_t type)
 {
+	m_flags &= 0xffffffffffff0000;
+	m_flags |= type;
 }
 
 void TrGeoObject::setLayerShowMask(uint64_t mask)

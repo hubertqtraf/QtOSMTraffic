@@ -94,6 +94,7 @@ protected:
 	QPen * m_geo_active_pen;
 	QPen * disabled_pen;
 	int select_id;
+	uint64_t m_flags;
 	// alternative: std::array<double, 4> surroundingRectx;
 	double surroundingRect[4];
 
@@ -176,7 +177,7 @@ public:
 	virtual void setActBrush(QBrush * brush);
 
 	// TODO: rework
-	virtual uint16_t getType();
+	virtual uint16_t getType() const;
 
 	virtual void setType(uint16_t);
 
@@ -188,9 +189,9 @@ public:
 
 	virtual bool importGeoJson(const QJsonObject & geojson, uint64_t mode);
 #ifdef TR_SERIALIZATION
-    static bool readDefStartElement(QXmlStreamReader & xml_in, QString & ref);
+	static bool readDefStartElement(QXmlStreamReader & xml_in, QString & ref);
 
-    const QString readXmlHeader(QXmlStreamReader & xml_in);
+	const QString readXmlHeader(QXmlStreamReader & xml_in);
 #endif
 	void abortOnLine(QXmlStreamReader & xml_in, const QString & text);
 
