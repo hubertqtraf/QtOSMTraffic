@@ -94,6 +94,8 @@ private:
 	QVector<TrConnectionMember> & getConVec(bool dir);
 	int hasRamp(QVector<TrConnectionMember> & vec);
 
+	bool setCrossingByAngle(const TrZoomMap & zoom_ref, bool type);
+
 protected:
 
 public:
