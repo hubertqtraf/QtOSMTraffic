@@ -57,6 +57,7 @@ SOURCES += \
     trafalgar/tr_map_net.cpp \
     trafalgar/tr_map_net_road.cpp \
     trafalgar/tr_map_node.cpp \
+    trafalgar/tr_map_parklane.cpp \
     trafalgar/tr_map_poi.cpp \
     trafalgar/tr_name_element.cpp \
     trafalgar/tr_stack.cpp \
@@ -102,6 +103,7 @@ HEADERS += \
     trafalgar/tr_map_net.h \
     trafalgar/tr_map_net_road.h \
     trafalgar/tr_map_node.h \
+    trafalgar/tr_map_parklane.h \
     trafalgar/tr_map_poi.h \
     trafalgar/tr_name_element.h \
     trafalgar/tr_point.h \

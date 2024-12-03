@@ -57,6 +57,8 @@
 
 #include "tr_map_list.h"
 
+#include "tr_map_parklane.h"
+
 class TrMapLinkRoad : public TrMapLink
 {
 private:
@@ -66,17 +68,14 @@ private:
 	// TODO: should be part of assembly
 	uint8_t m_lanes;
 
-	uint16_t m_parking;
+	// could be one lane or a list
+	TrGeoObject * m_parking;
 
 	int32_t m_mm_calc_width;
 
 	// TODO: new road class?
 	QPen m_pen_para;
 	// TODO: memmory?
-
-	QPen * m_pen_park;
-
-	void setParkingPen(uint16_t type, TrGeoObject * base);
 
 	void getNodePoints(TrPoint & pt1, TrPoint & pt2);
 
