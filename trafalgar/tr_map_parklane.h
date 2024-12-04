@@ -55,6 +55,8 @@ public:
 
 	void setParkingPen(uint16_t type, TrGeoObject *base);
 
+	void setLinkRef(TrGeoObject * ref);
+
 	virtual bool init(const TrZoomMap & zoom_ref, uint64_t ctrl = 0, TrGeoObject * base = nullptr);
 
 	virtual void draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mode);	
@@ -70,6 +72,7 @@ public:
 private:
 	uint16_t m_parking;
 	QPen * m_pen_park;
+	TrGeoObject * m_ref;
 };
 
 #endif // TR_MAP_PARKLANE_H

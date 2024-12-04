@@ -99,12 +99,14 @@ uint8_t TrMapLinkRoad::getLanes()
 void TrMapLinkRoad::setParking(uint16_t code)
 {
 	if(code && (m_parking == nullptr))
+    {
 		m_parking = new TrMapParkLane();
-
+    }
 	if(m_parking != nullptr)
 	{
 		TrMapParkLane * park = dynamic_cast<TrMapParkLane *>(m_parking);
-		if(park != nullptr)
+        park->setLinkRef(this);
+        if(park != nullptr)
 			park->setParking(code);
 	}
 }
@@ -800,42 +802,7 @@ void TrMapLinkRoad::draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char
 	//if((m_parking & 0xff00) && (s_mask & TR_MASK_SHOW_PARKING) && (m_pen_park != nullptr))
 	if(m_parking != nullptr)
 	{
-		TrMapParkLane * park = dynamic_cast<TrMapParkLane *>(m_parking);
-		if(park != nullptr)
-		{
-			if((park->getParking() & 0xff00) && (s_mask & TR_MASK_SHOW_PARKING)
-				&& (park->getParkPen() != nullptr))
-			{
-				if(m_one_way & TR_LINK_DIR_ONEWAY)
-				{
-					//p->setPen(*m_pen_park);
-					p->setPen(*park->getParkPen());
-					if(m_pline == nullptr)
-					{
-						QPolygon poly(2);
-						getTwoLine(zoom_ref, poly);
-						p->drawPolyline(poly);
-					}
-					else
-					{
-						if(m_one_way & TR_LINK_DIR_BWD)
-							m_pline->draw(zoom_ref, p, m_pt_to, m_pt_from, 2);
-						else
-							m_pline->draw(zoom_ref, p, m_pt_from, m_pt_to, 2);
-					}
-				}
-				// TODO: two pens for base and parallel line on oneway links?
-				if(isAsDoubleLine() && (s_mask & TR_MASK_MORE_LINES ))
-				{
-					//p->setPen(*m_pen_park);
-					p->setPen(*park->getParkPen());
-					QVector<QPointF> vptf;
-					getParScreenLine(zoom_ref, vptf);
-					if(vptf.size() > 1)
-						p->drawPolyline(vptf);
-				}
-			}
-		}
+        m_parking->draw(zoom_ref, p, mode);
 	}
 	// show the parallel line
 	//drawParLine(zoom_ref, p, 0);

@@ -78,7 +78,7 @@ private:
 
 	void getNodePoints(TrPoint & pt1, TrPoint & pt2);
 
-    bool removeSmallSeg(const TrZoomMap &zoom_ref, double l_limit, bool dir);
+	bool removeSmallSeg(const TrZoomMap &zoom_ref, double l_limit, bool dir);
 
 protected:
 	TrMapNode * m_node_from;
@@ -104,8 +104,6 @@ protected:
 	uint64_t readXmlData(QXmlStreamReader & xml_in, const QString & block);
 #endif
 	void setLinkPen(TrGeoObject * base);
-
-	void getTwoLine(const TrZoomMap & zoom_ref, QPolygon & poly);
 
 public:
 	TrMapLink();
@@ -135,6 +133,8 @@ public:
 	int64_t getNodeFrom();
 	int64_t getNodeTo();
 
+	void getTwoLine(const TrZoomMap & zoom_ref, QPolygon & poly);
+
 	bool switchShadowNode(bool dir);
 
 // TODO: use bool to the direction -> getNodeToRef(bool dir) setNodeToRef(TrMapNode * nd, bool dir)
@@ -151,7 +151,7 @@ public:
 	void setNameId(uint32_t id);
 	uint32_t getNameId();
 	QString getElementName();
-    TrGeoObject * getNameElement();
+	TrGeoObject * getNameElement();
 
 	bool isAsDoubleLine();
 
@@ -188,7 +188,7 @@ public:
 	// TODO: rework, only for edge...
 	virtual bool initSecs(const TrZoomMap & zoom_ref, TrMapList * pr_list, TrMapList & nd_list);
 
-    virtual TrGeoObject * getSegmentWithParm(TrGeoSegment & segment, int64_t nd_id, bool dir);
+	virtual TrGeoObject * getSegmentWithParm(TrGeoSegment & segment, int64_t nd_id, bool dir);
 
 	// TODO: virtual - needed?
 	virtual void initDoubleLine(const TrZoomMap & zoom_ref, int32_t width);

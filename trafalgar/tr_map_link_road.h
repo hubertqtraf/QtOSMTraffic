@@ -79,8 +79,6 @@ private:
 
 	void getNodePoints(TrPoint & pt1, TrPoint & pt2);
 
-	void getParScreenLine(const TrZoomMap & zoom_ref, QVector<QPointF> & pointPairs);
-
 	bool getMoveCrossPoint(const TrZoomMap & zoom_ref);
 
 	bool moveBaseLine(const TrZoomMap & zoom_ref);
@@ -113,6 +111,8 @@ public:
 	void setParking(uint16_t park);
 
 	uint16_t getParking();
+
+	void getParScreenLine(const TrZoomMap & zoom_ref, QVector<QPointF> & pointPairs);
 
 	virtual bool getSegment(TrGeoSegment & seg, bool dir, bool par);
 
