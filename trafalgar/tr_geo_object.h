@@ -112,7 +112,7 @@ public:
 
 	TrGeoObject();
 
-	TrGeoObject (const TrGeoObject& other);
+	//TrGeoObject (const TrGeoObject& other);
 
 	virtual ~TrGeoObject();
 
@@ -184,22 +184,22 @@ public:
 	virtual void setLayerShowMask(uint64_t mask);
 
 	virtual void clear();
-
+#ifdef TR_SERIALIZATION
 	virtual bool exportGeoJson(QJsonObject & geojson, uint64_t mode);
 
 	virtual bool importGeoJson(const QJsonObject & geojson, uint64_t mode);
-#ifdef TR_SERIALIZATION
+
 	static bool readDefStartElement(QXmlStreamReader & xml_in, QString & ref);
 
 	const QString readXmlHeader(QXmlStreamReader & xml_in);
-#endif
+
 	void abortOnLine(QXmlStreamReader & xml_in, const QString & text);
 
 	// TODO: vrtual mode: replace by readXmlHeader
 	virtual uint64_t readXmlDescription(QXmlStreamReader & xml_in);
 
 	virtual void writeXmlDescription(QXmlStreamWriter & xml_out, uint64_t id);
-
+#endif
 };
 
 

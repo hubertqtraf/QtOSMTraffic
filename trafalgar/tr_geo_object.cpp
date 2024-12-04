@@ -54,7 +54,7 @@ TrGeoObject::TrGeoObject()
 	m_inst_mask = TR_MASK_EXIST;
 }
 
-TrGeoObject::TrGeoObject (const TrGeoObject& other)
+/*TrGeoObject::TrGeoObject (const TrGeoObject& other) noexcept
 	: m_geo_active_pen(other.m_geo_active_pen)
 	, disabled_pen(other.disabled_pen)
 	, select_id(-1)
@@ -64,7 +64,7 @@ TrGeoObject::TrGeoObject (const TrGeoObject& other)
 	surroundingRect[2] = other.surroundingRect[2];
 	surroundingRect[3] = other.surroundingRect[3];
 	m_inst_mask = other.m_inst_mask;
-}
+}*/
 
 TrGeoObject::~TrGeoObject()
 {
@@ -164,7 +164,6 @@ void TrGeoObject::setNameList(TrGeoObject * list)
 
 void TrGeoObject::draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mode)
 {
-    TR_INF << "bla";
 }
 
 void TrGeoObject::resize(const TrZoomMap & zoom_ref, int x, int y)
@@ -318,6 +317,7 @@ void TrGeoObject::clear()
 {
 }
 
+#ifdef TR_SERIALIZATION
 bool TrGeoObject::exportGeoJson(QJsonObject & geojson, uint64_t mode)
 {
 	return false;
@@ -334,7 +334,6 @@ uint64_t TrGeoObject::readXmlDescription(QXmlStreamReader & xml_in)
 	return TR_NO_VALUE;
 }
 
-#ifdef TR_SERIALIZATION
 bool TrGeoObject::readDefStartElement(QXmlStreamReader & xml_in, QString & ref)
 {
 	if(xml_in.isStartElement())
@@ -356,25 +355,24 @@ bool TrGeoObject::readDefStartElement(QXmlStreamReader & xml_in, QString & ref)
 
 const QString TrGeoObject::readXmlHeader(QXmlStreamReader & xml_in)
 {
-    QString ref;
+	QString ref;
 
 	while(!xml_in.atEnd())
 	{
-        if(readDefStartElement(xml_in, ref))
+		if(readDefStartElement(xml_in, ref))
 		{
 			if(ref == getXmlName())
-                return ref;
+				return ref;
 		}
 	}
-    return ref;
+	return ref;
 }
-#endif
 
 void TrGeoObject::abortOnLine(QXmlStreamReader & xml_in, const QString & text)
 {
 	xml_in.raiseError("Error at line: " +
-			QString::number(xml_in.lineNumber()) +
-			", " + text);
+		QString::number(xml_in.lineNumber()) +
+		", " + text);
 }
 
 void TrGeoObject::writeXmlDescription(QXmlStreamWriter & xml_out, uint64_t id)
@@ -382,5 +380,4 @@ void TrGeoObject::writeXmlDescription(QXmlStreamWriter & xml_out, uint64_t id)
 	xml_out.writeStartElement(getXmlName());
 	xml_out.writeEndElement();
 }
-
-
+#endif

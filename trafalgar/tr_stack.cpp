@@ -459,6 +459,7 @@ void TrStack::draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mode)
 	}
 }
 
+#ifdef TR_SERIALIZATION
 void TrStack::writeXmlDescription(QXmlStreamWriter & xml_out, uint64_t id)
 {
 	if(!m_order.contains("write"))
@@ -482,4 +483,4 @@ void TrStack::writeXmlDescription(QXmlStreamWriter & xml_out, uint64_t id)
 		}
 	}
 }
-
+#endif

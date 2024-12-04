@@ -289,7 +289,7 @@ bool TrImportOsm::read(const QString & filename, TrMapList & name_list, uint8_t 
 
 			if(id < 0)
 			{
-				printf("findNode: cannot find %lu %i %i %i\n",
+                printf("findNode: cannot find %llu %i %i %i\n",
 					osm2_world.ways[i].nd_id[j], id, i, j);
 				add_it = false;
 			}

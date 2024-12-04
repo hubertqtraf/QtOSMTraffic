@@ -45,7 +45,6 @@
 class TrStack : public TrGeoObject
 {
 private:
-	uint32_t m_flags;
 	QMap<QString, TrLayer*> m_layerMap;
 	QMap<QString, QVector<TrGeoObject *>> m_order;
 
@@ -97,8 +96,9 @@ public:
 	void setSurroundingVecRect(const QVector<double> & rect);
 
 	virtual void draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mode = 0);
-
+#ifdef TR_SERIALIZATION
 	virtual void writeXmlDescription(QXmlStreamWriter & xml_out, uint64_t id);
+#endif
 };
 
 #endif //TR_STACK

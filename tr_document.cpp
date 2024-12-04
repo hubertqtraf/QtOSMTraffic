@@ -254,7 +254,9 @@ bool TrDocument::save(const QString & filename)
 	doc.writeAttribute("version","0.2");
 	doc.writeAttribute("protocol","4.0");
 
+#ifdef TR_SERIALIZATION
 	writeXmlDescription(doc, 0);
+#endif
 
 	doc.writeEndElement();		// cont
 	doc.writeEndElement();		// trafalgar

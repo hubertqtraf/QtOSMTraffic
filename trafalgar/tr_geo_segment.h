@@ -56,7 +56,7 @@ public:
 	TrGeoSegment(TrPoint first, TrPoint second);
 	virtual ~TrGeoSegment();
 
-	TrGeoSegment(const TrGeoSegment& other);
+	//TrGeoSegment(const TrGeoSegment& other);
 
 	friend QDebug operator<<(QDebug dbg, const TrGeoSegment& seg);
 	//friend QDataStream& operator << (QDataStream&, TrGeoSegment);

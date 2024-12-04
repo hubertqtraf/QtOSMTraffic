@@ -62,11 +62,11 @@ TrGeoSegment::~TrGeoSegment()
 {
 }
 
-TrGeoSegment::TrGeoSegment(const TrGeoSegment& other)
+/*TrGeoSegment::TrGeoSegment(const TrGeoSegment& other)
 {
 	m_inst_mask = (TR_MASK_EXIST | TR_MASK_DRAW);
 	setPoints(other.m_first, other.m_second);
-}
+}*/
 
 QDebug operator<<(QDebug dbg, const TrGeoSegment& seg)
 {
@@ -346,7 +346,7 @@ void TrGeoSegment::draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char 
 {
 	if(!(m_inst_mask & TR_MASK_DRAW))
 	{
-		;//return;
+        //return;
 	}
 
 	if(this->clip(zoom_ref))
