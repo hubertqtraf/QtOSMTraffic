@@ -241,12 +241,12 @@ QString TrMapLink::getElementName()
 	return elm->getName();
 }
 
-void TrMapLink::setGeoId(uint64_t id)
+void TrMapLink::setGeoId(int64_t id)
 {
 	m_geo_id = id;
 }
 
-uint64_t TrMapLink::getGeoId()
+int64_t TrMapLink::getGeoId()
 {
 	return m_geo_id;
 }
@@ -652,27 +652,25 @@ bool TrMapLink::removeSmallSeg(const TrZoomMap & zoom_ref, double l_limit, bool 
 
 bool TrMapLink::handleSmallElement(const TrZoomMap & zoom_ref, double a_limit, double l_limit)
 {
-    // node to node with no polygon -> exit
-    if(m_pline == nullptr)
-            return false;
-    // backward link points to the same polygon
-    if(m_one_way & TR_LINK_DIR_BWD)
-            return false;
-    if(removeSmallSeg(zoom_ref, l_limit, true))
-    {
-            if(removeSmallSeg(zoom_ref, l_limit, true))
-            {
-                    ;
-            }
-    }
-    if(removeSmallSeg(zoom_ref, l_limit, false))
-    {
-            if(removeSmallSeg(zoom_ref, l_limit, false))
-            {
-                    ;
-	    }
-    }
-    return true;
+	// node to node with no polygon -> exit
+	if(m_pline == nullptr)
+		return false;
+	// backward link points to the same polygon
+	if(m_one_way & TR_LINK_DIR_BWD)
+		return false;
+	if(removeSmallSeg(zoom_ref, l_limit, true))
+	{
+		if(removeSmallSeg(zoom_ref, l_limit, true))
+		{
+		}
+	}
+	if(removeSmallSeg(zoom_ref, l_limit, false))
+	{
+		if(removeSmallSeg(zoom_ref, l_limit, false))
+		{
+		}
+	}
+	return true;
 }
 
 // get the next point near the node

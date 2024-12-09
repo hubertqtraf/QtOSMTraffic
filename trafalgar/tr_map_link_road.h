@@ -112,6 +112,8 @@ public:
 
 	uint16_t getParking();
 
+	int32_t getRoadWidth();
+
 	void getParScreenLine(const TrZoomMap & zoom_ref, QVector<QPointF> & pointPairs);
 
 	virtual bool getSegment(TrGeoSegment & seg, bool dir, bool par);
@@ -122,7 +124,7 @@ public:
 
 	virtual bool init(const TrZoomMap & zoom_ref, uint64_t ctrl = 0, TrGeoObject * base = nullptr);
 
-	virtual void initDoubleLine(const TrZoomMap & zoom_ref, int32_t width);
+	virtual void initDoubleLine(const TrZoomMap & zoom_ref, QVector<TrPoint> &m_par_line, int32_t width);
 
 	void initDoubleLineWidth(const TrZoomMap & zoom_ref);
 

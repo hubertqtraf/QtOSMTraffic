@@ -99,16 +99,27 @@ uint8_t TrMapLinkRoad::getLanes()
 void TrMapLinkRoad::setParking(uint16_t code)
 {
 	if(code && (m_parking == nullptr))
-    {
+	{
 		m_parking = new TrMapParkLane();
-    }
+	}
 	if(m_parking != nullptr)
 	{
 		TrMapParkLane * park = dynamic_cast<TrMapParkLane *>(m_parking);
-        park->setLinkRef(this);
-        if(park != nullptr)
+		park->setLinkRef(this);
+		if(park != nullptr)
 			park->setParking(code);
 	}
+}
+
+int32_t TrMapLinkRoad::getRoadWidth()
+{
+    int32_t w = m_lanes * TrMapLinkRoad::ms_lane_width_p;
+
+    if(m_one_way & TR_LINK_DIR_BWD)
+    {
+        w = m_lanes * TrMapLinkRoad::ms_lane_width_n;
+    }
+    return w;
 }
 
 uint16_t TrMapLinkRoad::getParking()
@@ -372,9 +383,9 @@ void TrMapLinkRoad::setMoveParLine(const TrZoomMap & zoom_ref)
 {
 	if((m_one_way & TR_LINK_DIR_ONEWAY) && (isAsDoubleLine()))
 	{
-		int32_t test_width = (0 - (m_mm_calc_width >> 1));
-		m_par_line.clear();
-		initDoubleLine(zoom_ref, test_width);
+        int32_t test_width = (0 - (m_mm_calc_width >> 1));
+        m_par_line.clear();
+        initDoubleLine(zoom_ref, m_par_line, test_width);
 	}
 }
 
@@ -475,7 +486,7 @@ bool TrMapLinkRoad::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject 
 		if(ctrl == 14)
 		{
 			if(s_mask & TR_MASK_MORE_LINES)
-				initDoubleLine(zoom_ref, m_mm_calc_width);
+                initDoubleLine(zoom_ref, m_par_line, m_mm_calc_width);
 			return true;
 		}
 
@@ -491,23 +502,12 @@ bool TrMapLinkRoad::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject 
 		}
 
 		// TODO: create a function for switch to GB
-        int32_t w = m_lanes * TrMapLinkRoad::ms_lane_width_p;
+		int32_t w = m_lanes * TrMapLinkRoad::ms_lane_width_p;
 
 		if(m_one_way & TR_LINK_DIR_BWD)
 		{
 			w = m_lanes * TrMapLinkRoad::ms_lane_width_n;
 			m_mm_calc_width = DEF_WITH_M;	// default is DEF_WITH_P
-		}
-
-		// TODO: switch for loaded width...
-		if(getWidth() != 0)		// with with form base class, loaded from file
-		{
-			//TR_INF << "L" << m_mm_load_width << "C" << w << HEX << m_rd_class;
-			// id lane based width is positive
-			if(w > 0)
-				w = getWidth(); //m_mm_load_width;
-			else
-				w = 0-getWidth(); //m_mm_load_width;
 		}
 
 		if(isAsDoubleLine())
@@ -543,18 +543,18 @@ void TrMapLinkRoad::getNodePoints(TrPoint & pt1, TrPoint & pt2)
 
 void TrMapLinkRoad::initDoubleLineWidth(const TrZoomMap & zoom_ref)
 {
-	initDoubleLine(zoom_ref, m_mm_calc_width);
+	initDoubleLine(zoom_ref, m_par_line, m_mm_calc_width);
 }
 
 // the 'initDoubleLine->getLength' function needes the length
 // of the segment for all links, not usable for routing
-void TrMapLinkRoad::initDoubleLine(const TrZoomMap & zoom_ref, int32_t width)
+void TrMapLinkRoad::initDoubleLine(const TrZoomMap & zoom_ref, QVector<TrPoint> & par_line, int32_t width)
 {
 	TrPoint pt1;
 	TrPoint pt2;
 	getNodePoints(pt1, pt2);
 
-	m_par_line.clear();
+	par_line.clear();
 
 	if(m_pline)
 	{
@@ -571,14 +571,14 @@ void TrMapLinkRoad::initDoubleLine(const TrZoomMap & zoom_ref, int32_t width)
 		m_seg_from.sl.flags  &= ~(DIR_INIT);
 
 		TrGeoPolygon::calcParPoint(zoom_ref, pt1, m_seg_from.sl, width);
-		m_par_line.append(pt1);
+		par_line.append(pt1);
 
 		TrGeoPolygon::setInfoSect(zoom_ref, m_seg_to,
 			m_pline->getLastPoint(), pt2);
-		m_pline->parallel(&m_par_line, zoom_ref, m_seg_from.sl, m_seg_to.sl, width);
+		m_pline->parallel(&par_line, zoom_ref, m_seg_from.sl, m_seg_to.sl, width);
 
 		TrGeoPolygon::calcParPoint(zoom_ref, pt2, m_seg_to.sl, width);
-		m_par_line.append(pt2);
+		par_line.append(pt2);
 		//setCrossPoint(zoom_ref);
 	}
 	else
@@ -590,8 +590,8 @@ void TrMapLinkRoad::initDoubleLine(const TrZoomMap & zoom_ref, int32_t width)
 
 		TrGeoPolygon::calcParPoint(zoom_ref, pt1, m_seg_from.sl, width);
 		TrGeoPolygon::calcParPoint(zoom_ref, pt2, m_seg_from.sl, width);
-		m_par_line.append(pt1);
-		m_par_line.append(pt2);
+		par_line.append(pt1);
+		par_line.append(pt2);
 
 		m_seg_to = m_seg_from;
 	}
@@ -802,7 +802,7 @@ void TrMapLinkRoad::draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char
 	//if((m_parking & 0xff00) && (s_mask & TR_MASK_SHOW_PARKING) && (m_pen_park != nullptr))
 	if(m_parking != nullptr)
 	{
-        m_parking->draw(zoom_ref, p, mode);
+		m_parking->draw(zoom_ref, p, mode);
 	}
 	// show the parallel line
 	//drawParLine(zoom_ref, p, 0);

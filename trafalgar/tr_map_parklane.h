@@ -53,6 +53,8 @@ public:
 
 	QPen *getParkPen();
 
+	int32_t setParkingWidth(uint16_t type);
+
 	void setParkingPen(uint16_t type, TrGeoObject *base);
 
 	void setLinkRef(TrGeoObject * ref);
@@ -73,6 +75,9 @@ private:
 	uint16_t m_parking;
 	QPen * m_pen_park;
 	TrGeoObject * m_ref;
+	QVector<TrPoint> m_par_line;
+
+	int32_t getWith();
 };
 
 #endif // TR_MAP_PARKLANE_H

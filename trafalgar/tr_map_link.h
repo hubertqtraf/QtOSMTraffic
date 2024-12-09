@@ -145,8 +145,8 @@ public:
 
 	bool setNodeRef(TrMapNode * nd, bool dir);
 
-	void setGeoId(uint64_t id);
-	uint64_t getGeoId();
+    void setGeoId(int64_t id);
+    int64_t getGeoId();
 
 	void setNameId(uint32_t id);
 	uint32_t getNameId();

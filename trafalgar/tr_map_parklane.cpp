@@ -94,8 +94,22 @@ void TrMapParkLane::setParkingPen(uint16_t type, TrGeoObject * base)
 		//TR_INF << HEX << type;
 		m_pen_park->setStyle(Qt::DotLine);
 		m_pen_park->setWidth(5);
-    }
+	}
 }
+
+int32_t TrMapParkLane::setParkingWidth(uint16_t type)
+{
+	if(type & 0x0001)	// parking_par
+		return 1500;
+	if(type & 0x0002)	// parking_dia
+		return 3000;
+	if(type & 0x0004)	// parking_per
+		return 5000;
+	if(type & 0x0030)	// parking_no
+		return 500;
+	return 0;
+}
+
 
 void TrMapParkLane::setLinkRef(TrGeoObject *ref)
 {
@@ -112,7 +126,22 @@ bool TrMapParkLane::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject 
 	if(ctrl & TR_INIT_COLORS)
 	{
 		setParkingPen(m_parking >> 8, base);
-	}	
+	}
+	if(ctrl & TR_INIT_GEOMETRY)
+	{
+		//void TrMapLinkRoad::initDoubleLine(const TrZoomMap & zoom_ref, QVector<TrPoint> & par_line, int32_t width)
+		if((m_ref != nullptr) && (m_parking))
+		{
+			TrMapLinkRoad * link = dynamic_cast<TrMapLinkRoad *>(m_ref);
+			if(link != nullptr)
+			{
+				//int cl = link->getRdClass();
+				int32_t w = getWith();
+				if(w)
+					link->initDoubleLine(zoom_ref, m_par_line, w);
+			}
+		}
+	}
 	return true;
 }
 
@@ -123,43 +152,57 @@ void TrMapParkLane::draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char
 	TrMapLinkRoad * link = dynamic_cast<TrMapLinkRoad *>(m_ref);
 	if(link == nullptr)
 		return;
+	QVector<QPointF> pointPairs;
 	if((m_parking & 0xff00) && (s_mask & TR_MASK_SHOW_PARKING) && m_pen_park != nullptr)
 	{
-		if(link->getOneWay() & TR_LINK_DIR_ONEWAY)
+		for(int i = 0; i<m_par_line.size(); i++)
 		{
-			TrPoint pt_to = link->getCrossingPoint(false);
-			TrPoint pt_from = link->getCrossingPoint(true);
-
-			p->setPen(*m_pen_park);
-			if(link->getPolygon() == nullptr)
-			{
-				QPolygon poly(2);
-				link->getTwoLine(zoom_ref, poly);
-				p->drawPolyline(poly);
-			}
-			else
-			{
-				if(link->getOneWay() & TR_LINK_DIR_BWD)
-					link->getPolygon()->draw(zoom_ref, p, pt_to, pt_from, 2);
-				else
-					link->getPolygon()->draw(zoom_ref, p, pt_from, pt_to, 2);
-			}
+			TrPoint screenx = m_par_line[i];
+			zoom_ref.setMovePoint(&screenx.x, &screenx.y);
+			QPointF ptf;
+			ptf.setX(screenx.x);
+			ptf.setY(screenx.y);
+			pointPairs.append(ptf);
 		}
-		// TODO: two pens for base and parallel line on oneway links?
-		if(link->isAsDoubleLine() && (s_mask & TR_MASK_MORE_LINES ))
+		if(pointPairs.size() > 1)
 		{
 			p->setPen(*m_pen_park);
-			QVector<QPointF> vptf;
-			link->getParScreenLine(zoom_ref, vptf);
-			if(vptf.size() > 1)
-				p->drawPolyline(vptf);
+			p->drawPolyline(pointPairs);
 		}
 	}
 }
 
 bool TrMapParkLane::setSurroundingRect()
 {
-	return false;
+    return false;
+}
+
+int32_t TrMapParkLane::getWith()
+{
+	int32_t w = 0;
+
+	if(m_ref == nullptr)
+		return 0;
+	TrMapLinkRoad * link = dynamic_cast<TrMapLinkRoad *>(m_ref);
+	if(link == nullptr)
+		return 0;
+	if(m_parking == 0)
+		return 0;
+	w = link->getWidth();
+	int32_t w_r = link->getRoadWidth();
+	if(w_r < 0)
+	{
+		return (w_r - setParkingWidth(m_parking >> 8));
+	}
+	// TODO: check 'getWidth()' -> 'width' option usefull?
+	//if(w_r > w)
+	{
+		w = w_r + setParkingWidth(m_parking >> 8);
+	}
+	//if(link->getOneWay() & TR_LINK_DIR_BWD)
+	//	w = 0 - w;
+
+	return w;
 }
 
 
