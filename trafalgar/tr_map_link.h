@@ -191,7 +191,7 @@ public:
 	virtual TrGeoObject * getSegmentWithParm(TrGeoSegment & segment, int64_t nd_id, bool dir);
 
 	// TODO: virtual - needed?
-	virtual void initDoubleLine(const TrZoomMap & zoom_ref, int32_t width);
+    virtual void initDoubleLine(const TrZoomMap & zoom_ref, QVector<TrPoint> &m_par_line, int32_t width);
 
 	virtual void draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mode = 0);
 

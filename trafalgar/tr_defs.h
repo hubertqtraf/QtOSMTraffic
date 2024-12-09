@@ -67,8 +67,8 @@
 // how to redirect qDebug ... stackoverflow ... done :-)
 #define TR_MSG qDebug()    << __func__ << "| " << __FILE__<< ", " << __LINE__ << "| "
 #define TR_INF qInfo()     << __func__ << __FILE__ << __LINE__ << ", "
-#define TR_WRN qWarning()  << " "
-#define TR_ERR qCritical() << " "
+#define TR_WRN qWarning()  << __func__ << __FILE__ << __LINE__ << ", "
+#define TR_ERR qCritical() << __func__ << __FILE__ << __LINE__ << ", "
 // TODO: check qFatal()...
 #define TR_FTL qFatal()    << __func__ << __FILE__ << __LINE__ << ", "
 

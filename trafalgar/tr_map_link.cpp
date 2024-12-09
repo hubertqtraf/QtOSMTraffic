@@ -433,9 +433,9 @@ bool TrMapLink::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject * ba
 		// TODO: remove!
 		if(ctrl == 14)
 		{
-			if(s_mask & TR_MASK_MORE_LINES)
-				initDoubleLine(zoom_ref, 100);
-			return true;
+            //if(s_mask & TR_MASK_MORE_LINES)
+            //	initDoubleLine(zoom_ref, 100);
+            //return true;
 		}
 
 		// code for checking the ramps and set cross points in now road link class
@@ -493,7 +493,7 @@ double TrMapLink::getLength(const TrZoomMap & zoom_ref)
 
 // the 'initDoubleLine->getLength' function needes the length
 // of the segment for all links, not usable for routing
-void TrMapLink::initDoubleLine(const TrZoomMap & zoom_ref, int32_t width)
+void TrMapLink::initDoubleLine(const TrZoomMap & zoom_ref, QVector<TrPoint> &m_par_line, int32_t width)
 {
 	TR_INF << "unused";
 }
@@ -537,7 +537,7 @@ TrGeoObject * TrMapLink::manageGap(const TrZoomMap & zoom_ref, uint8_t mode, con
 				{
 					// TODO check!
 					parallel_link->setPolygon(nullptr);
-					parallel_link->initDoubleLine(zoom_ref, 100);
+                    //parallel_link->initDoubleLine(zoom_ref, 100);
 				}
 			}
 			// TODO: crash on m_pline, check if only one point is left
@@ -550,7 +550,7 @@ TrGeoObject * TrMapLink::manageGap(const TrZoomMap & zoom_ref, uint8_t mode, con
 			// missing init?
 			// thread problem? -> parallel link!?
 			setPolygon(nullptr);
-			initDoubleLine(zoom_ref, 100);
+            //initDoubleLine(zoom_ref, 100);
 			//TR_INF << "del 2" << m_pline << *this << m_node_from << m_node_to;
 		}
 		break;
@@ -562,9 +562,9 @@ TrGeoObject * TrMapLink::manageGap(const TrZoomMap & zoom_ref, uint8_t mode, con
 
 	case TR_NET_GAP_UPDATE:
 		parallel_link = this->getParallelLink();
-		if(parallel_link != nullptr)
-			parallel_link->initDoubleLine(zoom_ref, 100);
-		initDoubleLine(zoom_ref, 100);
+        //if(parallel_link != nullptr)
+        //	parallel_link->initDoubleLine(zoom_ref, 100);
+        //initDoubleLine(zoom_ref, 100);
 		break;
 
 	default:
