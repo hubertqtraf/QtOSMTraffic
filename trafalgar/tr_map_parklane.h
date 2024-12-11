@@ -47,15 +47,13 @@ public:
 	TrMapParkLane();
 	virtual ~TrMapParkLane();
 
-	uint16_t getParking();
+	uint64_t getParking();
 
-	void setParking(uint16_t code);
+	void setParking(uint64_t code);
 
 	QPen *getParkPen();
 
 	int32_t setParkingWidth(uint16_t type);
-
-	void setParkingPen(uint16_t type, TrGeoObject *base);
 
 	void setLinkRef(TrGeoObject * ref);
 
@@ -72,12 +70,17 @@ public:
 #endif
 
 private:
-	uint16_t m_parking;
+	uint64_t m_parking;
 	QPen * m_pen_park;
+	// own object -> list of parklane objects?
+	QPen * m_pen_park_left;
 	TrGeoObject * m_ref;
 	QVector<TrPoint> m_par_line;
+	// own object -> list of parklane objects?
+	QVector<TrPoint> m_par_left_line;
 
-	int32_t getWith();
+	int32_t getWith(uint8_t code);
+	QPen * setParkingSidePen(uint16_t type, TrGeoObject * base);
 };
 
 #endif // TR_MAP_PARKLANE_H

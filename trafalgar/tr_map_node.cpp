@@ -569,16 +569,10 @@ TrGeoObject * TrMapNode::getNextOutElement(double angle)
 	for (int i = 0; i < m_vec_out.size(); ++i)
 	{
 		double check = fabs(angle - m_vec_out[i].m_dir);
-		if(getGeoId() == 26952875)
-			TR_INF << "=== " << check;
 		if((check > 0.5) && (idx == (-1)))
 		{
 			idx = i;
-			if(getGeoId() == 26952875)
-				TR_INF << idx;
 		}
-		//TrMapLink * link = dynamic_cast<TrMapLink *>(m_vec_out[i].tr_obj);
-		//TR_INF << getGeoId() << (angle - m_vec_out[i].m_dir) << idx << *link;
 	}
 	if(idx != (-1))
 		return m_vec_out[idx].tr_obj;
