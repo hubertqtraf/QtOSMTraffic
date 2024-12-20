@@ -51,6 +51,8 @@ int TrMapLinkRoad::ms_lane_width_n = -3200;
 
 TrMapLinkRoad::TrMapLinkRoad()
 	: TrMapLink()
+	, m_pt_from{0.0,0.0}
+	, m_pt_to{0.0,0.0}
 	, m_lanes(1)
 	, m_parking(nullptr)
 	, m_mm_calc_width(DEF_WITH_P)
@@ -60,10 +62,19 @@ TrMapLinkRoad::TrMapLinkRoad()
 
 TrMapLinkRoad::~TrMapLinkRoad()
 {
+	if(m_parking != nullptr)
+		delete m_parking;
 }
 
 QDebug operator<<(QDebug dbg, const TrMapLinkRoad& link)
 {
+	uint64_t park = 0;
+	if(link.m_parking != nullptr)
+	{
+		TrMapParkLane * lpark = dynamic_cast<TrMapParkLane *>(link.m_parking);
+		if(lpark != nullptr)
+			park = lpark->getParking();
+	}
 	if((link.m_node_from == nullptr) || (link.m_node_to == nullptr))
 		return dbg << link.getXmlName() << "----" << "----" <<
 		"class " << HEX << link.getType() << link.m_one_way;
@@ -71,7 +82,7 @@ QDebug operator<<(QDebug dbg, const TrMapLinkRoad& link)
 		link.m_node_from->getGeoId() << " - " <<
 		link.m_node_to->getGeoId() << " class " << HEX <<
 		link.getType() << " " << link.m_one_way << " lanes: " <<
-		link.m_lanes << " parking " << link.m_parking;
+		link.m_lanes << " parking " << park;
 }
 
 QString TrMapLinkRoad::getXmlName() const
@@ -113,13 +124,13 @@ void TrMapLinkRoad::setParking(uint16_t code)
 
 int32_t TrMapLinkRoad::getRoadWidth()
 {
-    int32_t w = m_lanes * TrMapLinkRoad::ms_lane_width_p;
+	int32_t w = m_lanes * TrMapLinkRoad::ms_lane_width_p;
 
-    if(m_one_way & TR_LINK_DIR_BWD)
-    {
-        w = m_lanes * TrMapLinkRoad::ms_lane_width_n;
-    }
-    return w;
+	if(m_one_way & TR_LINK_DIR_BWD)
+	{
+		w = m_lanes * TrMapLinkRoad::ms_lane_width_n;
+	}
+	return w;
 }
 
 uint16_t TrMapLinkRoad::getParking()
@@ -131,6 +142,27 @@ uint16_t TrMapLinkRoad::getParking()
 			return park->getParking();
 	}
 	return 0;
+}
+
+// used for ramp and normal crossing on base line (oneway)
+bool TrMapLinkRoad::setCrossingPoint(TrPoint & pt, bool dir)
+{
+	//TR_INF << TR_COOR(pt) << dir;
+	if(dir == true)
+		m_pt_from = pt;
+	else
+		m_pt_to = pt;
+
+	return true;
+}
+
+TrPoint TrMapLinkRoad::getCrossingPoint(bool dir)
+{
+	//TR_INF << dir;
+	if(dir == true)
+		return m_pt_from;
+	else
+		return m_pt_to;
 }
 
 bool TrMapLinkRoad::getSegment(TrGeoSegment & seg, bool dir, bool par)
@@ -383,9 +415,9 @@ void TrMapLinkRoad::setMoveParLine(const TrZoomMap & zoom_ref)
 {
 	if((m_one_way & TR_LINK_DIR_ONEWAY) && (isAsDoubleLine()))
 	{
-        int32_t test_width = (0 - (m_mm_calc_width >> 1));
-        m_par_line.clear();
-        initDoubleLine(zoom_ref, m_par_line, test_width);
+		int32_t test_width = (0 - (m_mm_calc_width >> 1));
+		m_par_line.clear();
+		initDoubleLine(zoom_ref, m_par_line, test_width);
 	}
 }
 
@@ -412,15 +444,16 @@ bool TrMapLinkRoad::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject 
 		// TODO: '2' -> from static value?
 		m_pen_para.setWidth(2);
 	}
-	/*if(ctrl & TR_INIT_COLORS)
-	{
-		setLinkPen(base);
-			setParkingPen(m_parking >> 8, base);
-	}*/
 
 	if(ctrl & TR_INIT_GEOMETRY)
 	{
 		ctrl &= 0xff;
+
+		if(ctrl == 50)
+		{
+			m_pt_from = m_node_from->getPoint();
+			m_pt_to = m_node_to->getPoint();
+		}
 
 		/* TODO: code for shadow nodes
 		if(ctrl == 10)
@@ -486,7 +519,7 @@ bool TrMapLinkRoad::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject 
 		if(ctrl == 14)
 		{
 			if(s_mask & TR_MASK_MORE_LINES)
-                initDoubleLine(zoom_ref, m_par_line, m_mm_calc_width);
+				initDoubleLine(zoom_ref, m_par_line, m_mm_calc_width);
 			return true;
 		}
 
@@ -513,15 +546,6 @@ bool TrMapLinkRoad::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject 
 		if(isAsDoubleLine())
 		{
 			m_mm_calc_width = w;
-		}
-
-		if(ctrl == 3)		// clear data
-		{
-		}
-		else
-		{
-			//m_pt_from = m_node_from->getPoint();
-			//m_pt_to = m_node_to->getPoint();
 		}
 	}
 	return ret;
@@ -676,8 +700,8 @@ bool TrMapLinkRoad::setRamp(const TrZoomMap & zoom_ref, bool dir)
 
 	double ang1 = 10.0;
 	double ang2 = 10.0;
-	TrMapLink * link1 = dynamic_cast<TrMapLink *>(nd->getElement(0, dir, ang1));
-	TrMapLink * link2 = dynamic_cast<TrMapLink *>(nd->getElement(1, dir, ang2));
+	TrMapLinkRoad * link1 = dynamic_cast<TrMapLinkRoad *>(nd->getElement(0, dir, ang1));
+	TrMapLinkRoad * link2 = dynamic_cast<TrMapLinkRoad *>(nd->getElement(1, dir, ang2));
 
 	if((link1 == nullptr) || (link2 == nullptr))
 	{
@@ -686,7 +710,7 @@ bool TrMapLinkRoad::setRamp(const TrZoomMap & zoom_ref, bool dir)
 
 	if(TrMapNode::switchLinksByAngle(ang2, ang1, dir))
 	{
-		TrMapLink * cp = link1;
+		TrMapLinkRoad * cp = link1;
 		link1 = link2;
 		link2 = cp;
 	}
@@ -793,6 +817,7 @@ void TrMapLinkRoad::draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char
 		return;
 	if(this->clip(zoom_ref))
 		return;
+
 	if(m_geo_active_pen == nullptr)
 	{
 		//TR_WRN << "no active_pen -> exiting!" << HEX << m_rd_class;
@@ -815,7 +840,7 @@ void TrMapLinkRoad::draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char
 		else
 			p->setPen(m_pen_para);
 		QPolygon poly(2);
-		getTwoLine(zoom_ref, poly);
+		getTwoLine(zoom_ref, poly, m_pt_from, m_pt_to);
 		p->drawPolyline(poly);
 	}
 	else
@@ -853,7 +878,7 @@ void TrMapLinkRoad::draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char
 			screen = nd->getPoint();
 
 			QPolygon poly(2);
-			getTwoLine(zoom_ref, poly);
+			getTwoLine(zoom_ref, poly, m_pt_from, m_pt_to);
 			if(m_pline != nullptr)
 			{
 				poly.clear();
@@ -932,11 +957,19 @@ uint64_t TrMapLinkRoad::readXmlDescription(QXmlStreamReader & xml_in)
 						m_type |= TR_LINK_RAMP_FLAG;
 				}
 			}
+			else if (ref == "map_lane_park")
+			{
+				TrMapParkLane * par = new TrMapParkLane;
+				m_parking = par;
+				if(m_parking->readXmlDescription(xml_in) == TR_NO_VALUE)
+				{
+					// TODO: warning..,
+				}
+				par->setLinkRef(this);
+			}
 		}
 		else if(xml_in.isEndElement())
 		{
-			//TR_MSG << xml_in.name();
-
 			if(xml_in.name().toString() == "link")
 			{
 			}
@@ -955,8 +988,7 @@ void TrMapLinkRoad::writeXmlDescription(QXmlStreamWriter & xml_out, uint64_t id)
 	QString hex;
 	if(m_parking)
 	{
-		hex.setNum(m_parking, 16);
-		xml_out.writeAttribute("parking", "0x" + hex);
+		m_parking->writeXmlDescription(xml_out, id);
 	}
 	xml_out.writeAttribute("lanes", QVariant(m_lanes).toString());
 	if(m_type & TR_LINK_RAMP_FLAG)

@@ -76,8 +76,6 @@ private:
 	// id of the name (street name...), 32 bit should be OK
 	uint32_t m_name_id;
 
-	void getNodePoints(TrPoint & pt1, TrPoint & pt2);
-
 	bool removeSmallSeg(const TrZoomMap &zoom_ref, double l_limit, bool dir);
 
 protected:
@@ -87,11 +85,6 @@ protected:
 
 	// store the id while the lists are loaded
 	int64_t m_geo_id;
-
-	// copy of moved position of the node
-	// TODO: check -> move to road link class?
-	TrPoint m_pt_from;
-	TrPoint m_pt_to;
 
 	// TODO: use virtual func getSegment, remove member?
 	poly_add m_seg_from;
@@ -133,7 +126,7 @@ public:
 	int64_t getNodeFrom();
 	int64_t getNodeTo();
 
-	void getTwoLine(const TrZoomMap & zoom_ref, QPolygon & poly);
+	void getTwoLine(const TrZoomMap & zoom_ref, QPolygon & poly, TrPoint pt1, TrPoint pt2);
 
 	bool switchShadowNode(bool dir);
 
@@ -145,8 +138,8 @@ public:
 
 	bool setNodeRef(TrMapNode * nd, bool dir);
 
-    void setGeoId(int64_t id);
-    int64_t getGeoId();
+	void setGeoId(int64_t id);
+	int64_t getGeoId();
 
 	void setNameId(uint32_t id);
 	uint32_t getNameId();
@@ -191,7 +184,7 @@ public:
 	virtual TrGeoObject * getSegmentWithParm(TrGeoSegment & segment, int64_t nd_id, bool dir);
 
 	// TODO: virtual - needed?
-    virtual void initDoubleLine(const TrZoomMap & zoom_ref, QVector<TrPoint> &m_par_line, int32_t width);
+	virtual void initDoubleLine(const TrZoomMap & zoom_ref, QVector<TrPoint> &m_par_line, int32_t width);
 
 	virtual void draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mode = 0);
 
@@ -206,8 +199,7 @@ public:
 	virtual bool setParPoint(bool first, TrPoint & pt);
 
 	virtual bool setRamp(const TrZoomMap & zoom_ref, bool dir);
-	bool setCrossingPoint(TrPoint & pt, bool dir);
-	TrPoint getCrossingPoint(bool dir);
+	virtual bool setCrossingPoint(TrPoint & pt, bool dir);
 
 	virtual void setPolyPoints(TrGeoPolygon & line);
 

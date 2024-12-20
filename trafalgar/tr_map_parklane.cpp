@@ -53,6 +53,16 @@ TrMapParkLane::~TrMapParkLane()
 {
 }
 
+QDebug operator<<(QDebug dbg, const TrMapParkLane& lane)
+{
+	return dbg << lane.getXmlName() << " " << HEX << " parking " << lane.m_parking;
+}
+
+QString TrMapParkLane::getXmlName() const
+{
+	return "map_lane_park";
+}
+
 uint64_t TrMapParkLane::getParking()
 {
 	return m_parking;
@@ -241,10 +251,26 @@ int32_t TrMapParkLane::getWith(uint8_t code)
 #ifdef TR_SERIALIZATION
 uint64_t TrMapParkLane::readXmlDescription(QXmlStreamReader & xml_in)
 {
-	return TR_NO_VALUE;
+	QXmlStreamAttributes attr = xml_in.attributes();
+
+	bool ok = false;
+	m_parking = attr.value("", "parking").toInt(&ok, 16);
+	if(!ok)
+	{
+		if(attr.value("", "parking") != QString(""))
+			TR_WRN << "parking: " << attr.value("", "parking") << m_parking;
+		return TR_NO_VALUE;
+	}
+	return 0;
 }
 
 void TrMapParkLane::writeXmlDescription(QXmlStreamWriter & xml_out, uint64_t id)
 {
+	xml_out.writeStartElement(getXmlName());
+	QString hex;
+
+	hex.setNum(m_parking, 16);
+	xml_out.writeAttribute("parking", "0x" + hex);
+	xml_out.writeEndElement();
 }
 #endif

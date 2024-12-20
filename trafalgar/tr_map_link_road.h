@@ -65,6 +65,11 @@ private:
 	// first attempt -> subclass of geopoly?
 	QVector<TrPoint> m_par_line;
 
+	// copy of moved position of the node
+	// TODO: check -> move to road link class?
+	TrPoint m_pt_from;
+	TrPoint m_pt_to;
+
 	// TODO: should be part of assembly
 	uint8_t m_lanes;
 
@@ -88,6 +93,10 @@ private:
 	void drawParLine(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mode);
 
 	void triCross(const TrZoomMap & zoom_ref, TrMapNode & node);
+
+	bool setCrossingPoint(TrPoint & pt, bool dir);
+
+	TrPoint getCrossingPoint(bool dir);
 
 protected:
 	int moveCheck(TrMapNode & node);

@@ -56,8 +56,6 @@ TrMapLink::TrMapLink()
 	, m_node_to(nullptr)
 	, m_pline(nullptr)
 	, m_geo_id(0)
-	, m_pt_from{0.0,0.0}
-	, m_pt_to{0.0,0.0}
 	, m_seg_from{{DIR_INIT, 1.0, 2.0}, 3.0}
 	, m_seg_to{{DIR_INIT, 1.0, 2.0}, 3.0}
 	, m_one_way(0)
@@ -128,7 +126,10 @@ void TrMapLink::setNodeFrom(TrMapList * node_list, int64_t node)
 	if(m_node_from == nullptr)
 	{
 		TR_WRN << "node" << node;
+		return;
 	}
+	TrPoint pt = m_node_from->getPoint();
+	setCrossingPoint(pt, true);
 }
 
 void TrMapLink::setNodeTo(TrMapList * node_list, int64_t node)
@@ -137,7 +138,10 @@ void TrMapLink::setNodeTo(TrMapList * node_list, int64_t node)
 	if(m_node_to == nullptr)
 	{
 		TR_WRN << "node" << node;
+		return;
 	}
+	TrPoint pt = m_node_to->getPoint();
+	setCrossingPoint(pt, false);
 }
 /* only osm filter */
 
@@ -433,22 +437,13 @@ bool TrMapLink::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject * ba
 		// TODO: remove!
 		if(ctrl == 14)
 		{
-            //if(s_mask & TR_MASK_MORE_LINES)
-            //	initDoubleLine(zoom_ref, 100);
-            //return true;
+			//if(s_mask & TR_MASK_MORE_LINES)
+		//	initDoubleLine(zoom_ref, 100);
+			//return true;
 		}
 
 		// code for checking the ramps and set cross points in now road link class
-
-		if(ctrl == 3)		// clear data
-		{
-		}
-		else
-		{
-			// TODO for double line...
-			m_pt_from = m_node_from->getPoint();
-			m_pt_to = m_node_to->getPoint();
-		}
+		// TODO: ->to road link
 	}
 	return true;
 }
@@ -458,19 +453,6 @@ bool TrMapLink::initSecs(const TrZoomMap & zoom_ref, TrMapList * pr_list, TrMapL
 	return false;
 }
 
-void TrMapLink::getNodePoints(TrPoint & pt1, TrPoint & pt2)
-{
-	pt1 = m_pt_from;
-	pt2 = m_pt_to;
-
-	if(m_one_way & TR_LINK_DIR_BWD)
-	{
-		TrPoint pt_switch = pt2;
-			pt2 = pt1;
-			pt1 = pt_switch;
-	}
-}
-
 TrGeoObject * TrMapLink::getSegmentWithParm(TrGeoSegment & segment, int64_t nd_id, bool dir)
 {
 	TR_WRN << "do not use";
@@ -478,12 +460,17 @@ TrGeoObject * TrMapLink::getSegmentWithParm(TrGeoSegment & segment, int64_t nd_i
 }
 
 // TODO: to check the length
+// virtual -> road link
 double TrMapLink::getLength(const TrZoomMap & zoom_ref)
 {
-	TrPoint pt1;
-	TrPoint pt2;
-	getNodePoints(pt1, pt2);
-
+	TrPoint pt1 = m_node_from->getPoint();
+	TrPoint pt2 = m_node_to->getPoint();
+	// TODO getNodePoints(pt1, pt2);
+	if(m_one_way & TR_LINK_DIR_BWD)
+	{
+		pt1 = pt2;
+		pt2 = m_node_from->getPoint();
+	}
 	if(m_pline)
 	{
 		return m_pline->getLength(zoom_ref, pt1, pt2);
@@ -719,49 +706,30 @@ bool TrMapLink::setRamp(const TrZoomMap & zoom_ref, bool dir)
 // used for ramp and normal crossing on base line (oneway)
 bool TrMapLink::setCrossingPoint(TrPoint & pt, bool dir)
 {
-	//TR_INF << TR_COOR(pt) << dir;
-	if(dir == true)
-		m_pt_from = pt;
-	else
-		m_pt_to = pt;
-
-	return true;
+	// for rail etc.
+	return false;
 }
 
-TrPoint TrMapLink::getCrossingPoint(bool dir)
-{
-	//TR_INF << dir;
-	if(dir == true)
-		return m_pt_from;
-	else
-		return m_pt_to;
-}
-
-void TrMapLink::getTwoLine(const TrZoomMap & zoom_ref, QPolygon & poly)
+void TrMapLink::getTwoLine(const TrZoomMap & zoom_ref, QPolygon & poly, TrPoint pta, TrPoint ptb)
 {
 	if(m_pline != nullptr)
 		return;
-
+	// TODO: to road link
 	//QPolygon poly(2);
-	TrPoint pt1;
-	TrPoint pt2;
+	TrPoint pt1 = pta;
+	TrPoint pt2 = ptb;
 
 	if(m_one_way & TR_LINK_DIR_BWD)
 	{
-		pt1 = m_pt_to;
-		pt2 = m_pt_from;
-	}
-	else
-	{
-		pt1 = m_pt_from;
-		pt2 = m_pt_to;
+		pt1 = ptb;
+		pt2 = pta;
 	}
 	zoom_ref.setMovePoint(&pt1.x,&pt1.y);
 	zoom_ref.setMovePoint(&pt2.x,&pt2.y);
-    poly.setPoint(0, static_cast <int>(pt1.x),
-                  static_cast <int>(pt1.y));
-    poly.setPoint(1, static_cast <int>(pt2.x),
-                  static_cast <int>(pt2.y));
+	poly.setPoint(0, static_cast <int>(pt1.x),
+		static_cast <int>(pt1.y));
+	poly.setPoint(1, static_cast <int>(pt2.x),
+		static_cast <int>(pt2.y));
 }
 
 void TrMapLink::draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mode)
@@ -783,16 +751,17 @@ void TrMapLink::draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mod
 	if(m_pline == nullptr)
 	{
 		QPolygon poly(2);
-		getTwoLine(zoom_ref, poly);
+		getTwoLine(zoom_ref, poly, m_node_from->getPoint(), m_node_to->getPoint());
 		p->drawPolyline(poly);
 	}
 	else
 	{
+		// TODO: check -> to road link?
 		m_pline->setActivePen(getActivePen());
 		if(m_one_way & TR_LINK_DIR_BWD)
-			m_pline->draw(zoom_ref, p, m_pt_to, m_pt_from, 2);
+			m_pline->draw(zoom_ref, p, m_node_to->getPoint(), m_node_from->getPoint(), 2);
 		else
-			m_pline->draw(zoom_ref, p, m_pt_from, m_pt_to, 2);
+			m_pline->draw(zoom_ref, p, m_node_from->getPoint(), m_node_to->getPoint(), 2);
 	}
 }
 
@@ -897,7 +866,8 @@ void TrMapLink::setPolyPoints(TrGeoPolygon & line)
 			next_points.append(pt);
 		}
 	}
-	next_points.append(m_pt_from);
+	// TODO: check
+	next_points.append(m_node_from->getPoint());
 	line.appendPoints(next_points);
 }
 
@@ -1076,7 +1046,7 @@ void TrMapLink::writeXmlLinkPart(QXmlStreamWriter & xml_out, uint64_t id)
 		m_node_to = node;
 		TR_INF << *this;
 	}
-    node = m_node_from->getShadow(true);
+	node = m_node_from->getShadow(true);
 	if(node)
 	{
 		m_node_from = node;

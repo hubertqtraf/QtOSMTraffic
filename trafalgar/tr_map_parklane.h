@@ -47,6 +47,10 @@ public:
 	TrMapParkLane();
 	virtual ~TrMapParkLane();
 
+	friend QDebug operator<<(QDebug dbg, const TrMapParkLane& link);
+
+	QString getXmlName() const;
+
 	uint64_t getParking();
 
 	void setParking(uint64_t code);
