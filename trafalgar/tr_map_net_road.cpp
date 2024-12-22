@@ -103,8 +103,8 @@ bool TrMapNetRoad::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject *
 	{
 		// TODO: check double use! check -> getMovePoint
 		// TODO: merge initSecs and initDoubleLine?
-#ifdef TESTX
-        TrMapEdge * edge = dynamic_cast<TrMapEdge *>(m_link_list->getVecObject(i));
+#ifdef TR_EDGE
+		TrMapEdge * edge = dynamic_cast<TrMapEdge *>(m_link_list->getVecObject(i));
 		if(edge != nullptr)
 		{
 			edge->initSecs(zoom_ref, m_primive_map, *m_node_map);
@@ -171,4 +171,3 @@ void TrMapNetRoad::writeXmlDescription(QXmlStreamWriter & xml_out, uint64_t id)
 	TrMapNet::writeXmlDescription(xml_out, id);
 }
 #endif
-

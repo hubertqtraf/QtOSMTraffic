@@ -56,9 +56,6 @@
 #include "tr_geo_poly.h"
 #include "tr_geo_segment.h"
 #include "tr_map_node.h"
-#ifdef TESTX	// TODO: change def name
-#include "tr_map_assembly.h"
-#endif
 
 #include "tr_map_list.h"
 

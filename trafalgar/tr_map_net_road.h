@@ -46,11 +46,7 @@
 #include "tr_geo_object.h"
 
 #include "tr_map_list.h"
-
 #include "tr_map_link.h"
-#ifdef TESTX
-#include "tr_map_edge.h"
-#endif
 #include "tr_map_net.h"
 
 #include <stdint.h>

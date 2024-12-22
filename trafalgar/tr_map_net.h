@@ -49,7 +49,7 @@
 
 #include "tr_map_link.h"
 
-#ifdef TESTX
+#ifdef TR_EDGE
 #include "tr_map_edge.h"
 #endif
 
@@ -60,6 +60,8 @@
 
 #define LIST_DELETE true
 #define LIST_CREATE false
+
+//#define SEG_TEST
 
 class TrMapNet : public TrGeoObject
 {

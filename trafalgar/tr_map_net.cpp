@@ -68,13 +68,13 @@ TrMapNet::~TrMapNet()
 
 QString TrMapNet::getName() const
 {
-        return m_name;
+	return m_name;
 }
 
 bool TrMapNet::setName(const QString & name)
 {
-        m_name = name;
-        return true;
+	m_name = name;
+	return true;
 }
 
 void TrMapNet::setNameList(TrGeoObject * list)
@@ -166,7 +166,7 @@ TrMapList * TrMapNet::getNetList(uint64_t set, bool create)
 // for new net (document) or import
 void TrMapNet::appendLink(TrMapLink * link)
 {
-    if(m_link_list == nullptr)
+	if(m_link_list == nullptr)
 		return;
 
 	m_link_list->appendObject(link);
@@ -174,7 +174,7 @@ void TrMapNet::appendLink(TrMapLink * link)
 
 bool TrMapNet::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject * base)
 {
-    //TR_INF << HEX << ctrl;
+	//TR_INF << HEX << ctrl;
 	// TODO: check the 'ctrl == 0' line
 
 	if(ctrl == 0)
@@ -534,13 +534,13 @@ bool TrMapNet::createNodeInOut()
 
 		if(link != nullptr)
 		{
-            int64_t nd_from = link->getNodeFrom();
+			int64_t nd_from = link->getNodeFrom();
 			TrMapNode * n_from = dynamic_cast<TrMapNode *>(m_node_map->getMapObject(nd_from));
 			if(n_from != nullptr)
 			{
 				n_from->addConnection(link, TR_NODE_OUT);
 			}
-            int64_t nd_to = link->getNodeTo();
+			int64_t nd_to = link->getNodeTo();
 			TrMapNode * n_to = dynamic_cast<TrMapNode *>(m_node_map->getMapObject(nd_to));
 			if(n_to != nullptr)
 			{
@@ -576,7 +576,7 @@ uint64_t TrMapNet::readXmlDescription(QXmlStreamReader & xml_in)
 		}
 		else if(xml_in.isStartElement())
 		{
-			if(xml_in.name() == "map_list")
+			if(xml_in.name().toString() == "map_list")
 			{
 				TrMapList * tmp_list = new TrMapList();
 
@@ -635,7 +635,7 @@ uint64_t TrMapNet::readXmlDescription(QXmlStreamReader & xml_in)
 							link_rd->reSetNodes(m_node_map);
 						}
 					}
-#ifdef TESTX
+#ifdef TR_EDGE
 					TrMapEdge * edge = dynamic_cast<TrMapEdge *>(m_link_list->getVecObject(i));
 					if(edge != nullptr)
 					{

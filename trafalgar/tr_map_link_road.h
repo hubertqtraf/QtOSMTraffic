@@ -65,11 +65,6 @@ private:
 	// first attempt -> subclass of geopoly?
 	QVector<TrPoint> m_par_line;
 
-	// copy of moved position of the node
-	// TODO: check -> move to road link class?
-	TrPoint m_pt_from;
-	TrPoint m_pt_to;
-
 	// TODO: should be part of assembly
 	uint8_t m_lanes;
 
@@ -96,9 +91,11 @@ private:
 
 	bool setCrossingPoint(TrPoint & pt, bool dir);
 
-	TrPoint getCrossingPoint(bool dir);
-
 protected:
+	// copy of moved position of the node
+	TrPoint m_pt_from;
+	TrPoint m_pt_to;
+
 	int moveCheck(TrMapNode & node);
 	TrMapLinkRoad * getNextLink(TrMapNode & node, int n, bool dir, double & ang);
 
@@ -122,6 +119,8 @@ public:
 	uint16_t getParking();
 
 	int32_t getRoadWidth();
+
+	TrPoint getCrossingPoint(bool dir);
 
 	void getParScreenLine(const TrZoomMap & zoom_ref, QVector<QPointF> & pointPairs);
 

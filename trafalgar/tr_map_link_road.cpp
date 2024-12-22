@@ -51,11 +51,11 @@ int TrMapLinkRoad::ms_lane_width_n = -3200;
 
 TrMapLinkRoad::TrMapLinkRoad()
 	: TrMapLink()
-	, m_pt_from{0.0,0.0}
-	, m_pt_to{0.0,0.0}
 	, m_lanes(1)
 	, m_parking(nullptr)
 	, m_mm_calc_width(DEF_WITH_P)
+	, m_pt_from{0.0,0.0}
+	, m_pt_to{0.0,0.0}
 {
 	//m_inst_mask = TR_MASK_DRAW;
 }
@@ -929,15 +929,6 @@ uint64_t TrMapLinkRoad::readXmlDescription(QXmlStreamReader & xml_in)
 	QXmlStreamAttributes attr = xml_in.attributes();
 	m_lanes = attr.value("", "lanes").toInt();
 	int ramp = attr.value("", "ramp").toInt();
-	bool ok = false;
-	m_parking = attr.value("", "parking").toInt(&ok, 16);
-	if(!ok)
-	{
-		if(attr.value("", "parking") != QString(""))
-			TR_WRN << "parking: " << attr.value("", "parking") << m_parking;
-	}
-	//if(m_parking)
-	//	TR_INF << HEX << m_parking;
 
 	while(!xml_in.atEnd())
 	{
@@ -951,10 +942,10 @@ uint64_t TrMapLinkRoad::readXmlDescription(QXmlStreamReader & xml_in)
 			{
 				id = TrMapLink::readXmlData(xml_in, "link");
 				// TODO: remove double ramp flag
-				if(!(m_type & TR_LINK_RAMP_FLAG))
+				if(!(getType() & TR_LINK_RAMP_FLAG))
 				{
 					if(ramp)
-						m_type |= TR_LINK_RAMP_FLAG;
+						setType(getType() | TR_LINK_RAMP_FLAG);
 				}
 			}
 			else if (ref == "map_lane_park")
@@ -985,19 +976,21 @@ uint64_t TrMapLinkRoad::readXmlDescription(QXmlStreamReader & xml_in)
 void TrMapLinkRoad::writeXmlDescription(QXmlStreamWriter & xml_out, uint64_t id)
 {
 	xml_out.writeStartElement(getXmlName());
-	QString hex;
-	if(m_parking)
-	{
-		m_parking->writeXmlDescription(xml_out, id);
-	}
 	xml_out.writeAttribute("lanes", QVariant(m_lanes).toString());
-	if(m_type & TR_LINK_RAMP_FLAG)
+	if(getType() & TR_LINK_RAMP_FLAG)
 	{
 		xml_out.writeAttribute("ramp", "1");
 	}
+
 	xml_out.writeStartElement("link");
 	writeXmlLinkPart(xml_out, id);
 	xml_out.writeEndElement();
+	if(m_parking != nullptr)
+	{
+		TR_INF << *m_parking;
+		m_parking->writeXmlDescription(xml_out, id);
+	}
+
 	xml_out.writeEndElement();
 }
 #endif
