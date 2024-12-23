@@ -78,8 +78,8 @@ bool KeyEnterReceiver::eventFilter(QObject* obj, QEvent* event)
 }
 
 TrCanvas::TrCanvas(QWidget * parent)
-    : QWidget(parent)
-    , flags(0)
+	: QWidget(parent)
+	, flags(0)
 	, m_double_click(0,0)
 	, m_font(nullptr)
 	, m_count_click(0)
@@ -88,8 +88,8 @@ TrCanvas::TrCanvas(QWidget * parent)
 	palette.setColor(backgroundRole(),QColor(0,155,0));
 	setPalette(palette);
 
-    m_select_box.setParent(this);
-    m_background.setRgb(55, 150, 50);
+	m_select_box.setParent(this);
+	m_background.setRgb(55, 150, 50);
 }
 
 
@@ -116,6 +116,24 @@ void TrCanvas::zoomReset()
 }
 
 bool TrCanvas::notifyCoor(const QPoint pt, int mode, Qt::MouseButton button)
+{
+	// default
+	return false;
+}
+
+bool TrCanvas::notifyPress(const QPoint pt, Qt::MouseButton button)
+{
+	// default
+	return false;
+}
+
+bool TrCanvas::notifyMove(const QPoint pt, Qt::MouseButton button)
+{
+	// default
+	return false;
+}
+
+bool TrCanvas::notifyRelease(const QPoint pt, Qt::MouseButton button)
 {
 	// default
 	return false;
@@ -178,7 +196,9 @@ void TrCanvas::mousePressEvent(QMouseEvent * m)
 	}
 	notifyRectSelect(m_select_box.getRect(), m->button());
 
-	if(notifyCoor(m->pos(), MOUSE_MODE_PRESS, m->button()))
+	// TODO: dialog to select bottons - map the bottons
+
+	if(notifyPress(m->pos(), m->button()))
 	{
 		return;
 	}
@@ -194,7 +214,7 @@ void TrCanvas::mouseMoveEvent(QMouseEvent * m)
 		m_select_box.setSecond(m->pos(), false);
 	}
 
-	notifyCoor(m->pos(), MOUSE_MODE_MOVE, m->button());
+	notifyMove(m->pos(), m->button());
 
 	update();
 }
@@ -215,9 +235,9 @@ void TrCanvas::mouseReleaseEvent(QMouseEvent * m)
 		break;
 	}
 
-	if(notifyCoor(m->pos(), MOUSE_MODE_RELEASE, m->button()))
+	if(notifyRelease(m->pos(), m->button()))
 	{
-		// no need for rect selection -> return	
+		// no need for rect selection -> return
 		m_select_box.setHide();
 		update();
 		return;

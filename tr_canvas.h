@@ -43,10 +43,6 @@
 
 #include "tr_select_box.h"
 
-#define MOUSE_MODE_PRESS 	1
-#define MOUSE_MODE_RELEASE 	2
-#define MOUSE_MODE_MOVE 	3
-
 #define MIN_SELECT		1	// double click range
 
 #include <QtGui/qevent.h>
@@ -96,7 +92,7 @@ protected:
 	const QRect & getSelectRect() const;
 
 public:
-    explicit TrCanvas(QWidget *parent = nullptr);
+	explicit TrCanvas(QWidget *parent = nullptr);
 
 	void setFont(QFont * font);
 
@@ -104,10 +100,13 @@ public:
 	virtual void zoomChange(double value, const QPoint pt, int limit);
 	void setBackgroundColor(QMap<int, QColor> & map);
 
-    virtual bool notifyCoor(const QPoint pt, int mode, Qt::MouseButton button);
-    virtual bool notifyClick(const QPoint pt, int mode, Qt::MouseButton button);
+	virtual bool notifyCoor(const QPoint pt, int mode, Qt::MouseButton button);
+	virtual bool notifyPress(const QPoint pt, Qt::MouseButton button);
+	virtual bool notifyMove(const QPoint pt, Qt::MouseButton button);
+	virtual bool notifyRelease(const QPoint pt, Qt::MouseButton button);
+	virtual bool notifyClick(const QPoint pt, int mode, Qt::MouseButton button);
 	virtual bool notifyWheel(const QPoint pt, int a, int b);
-    virtual bool notifyRectSelect(const QRect & r, Qt::MouseButton button);
+	virtual bool notifyRectSelect(const QRect & r, Qt::MouseButton button);
 
 	void notifyKey(const QString & s);
 

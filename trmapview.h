@@ -37,6 +37,8 @@ private:
     Qt::MouseButton m_move_pressed;
     void paint(QPainter * p);
 
+    TrPoint getWorldPoint(const QPoint & pt);
+
 protected:
     void resizeEvent(QResizeEvent *);
 
@@ -55,6 +57,9 @@ public:
     void zoomChange(bool dir);
 
     bool notifyCoor(const QPoint pt, int mode, Qt::MouseButton button);
+    bool notifyPress(const QPoint pt, Qt::MouseButton button);
+    bool notifyMove(const QPoint pt, Qt::MouseButton button);
+    bool notifyRelease(const QPoint pt, Qt::MouseButton button);
     bool notifyClick(const QPoint,  int mode, Qt::MouseButton button);
     bool notifyWheel(const QPoint, int a, int b);
     bool notifyRectSelect(const QRect & r, Qt::MouseButton button);

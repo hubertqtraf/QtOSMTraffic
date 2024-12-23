@@ -26,196 +26,206 @@
 
 
 TrMapView::TrMapView(QWidget *parent)
-    : TrCanvas(parent)
-    , m_move_pressed(Qt::NoButton)  // TODO: check the default, was '0'
+	: TrCanvas(parent)
+	, m_move_pressed(Qt::NoButton)  // TODO: check the default, was '0'
 {
 }
 
 TrDocument &TrMapView::getDocument()
 {
-    return m_doc;
+	return m_doc;
 }
 
 void TrMapView::setSettingsData(QStringList modes, QStringList layers)
 {
-    // TODO: from profile...
-    //const QStringList layers = {"road", "poi"};
-    //TR_INF << layers << modes;
-    for (int i = 0; i < modes.size(); ++i)
-    {
-        //TR_INF << modes.at(i) << layers;
-        m_doc.addOrderByType(modes.at(i), layers);
-    }
+	// TODO: from profile...
+	//const QStringList layers = {"road", "poi"};
+	//TR_INF << layers << modes;
+	for (int i = 0; i < modes.size(); ++i)
+	{
+		//TR_INF << modes.at(i) << layers;
+		m_doc.addOrderByType(modes.at(i), layers);
+	}
 }
 
 void TrMapView::initObjects(uint64_t ctrl)
 {
-    m_doc.init(m_zoom_ref, ctrl);
+	m_doc.init(m_zoom_ref, ctrl);
 }
 
 void TrMapView::setLoadedFlag(bool loaded)
 {
-    m_doc.m_is_loaded = true;
+	m_doc.m_is_loaded = true;
 }
 
 void TrMapView::paint(QPainter *p)
 {
-    if(m_doc.m_is_loaded)
-    {
-        p->setRenderHint(QPainter::Antialiasing);
-        m_doc.draw(m_zoom_ref, p, 0);
-    }
-    else
-    {
-        p->setPen(Qt::blue);
-        p->setFont(QFont("Arial", 30));
-        p->drawText(rect(), Qt::AlignCenter, "Load a OSM Document");
-    }
+	if(m_doc.m_is_loaded)
+	{
+		p->setRenderHint(QPainter::Antialiasing);
+		m_doc.draw(m_zoom_ref, p, 0);
+	}
+	else
+	{
+		p->setPen(Qt::blue);
+		p->setFont(QFont("Arial", 30));
+		p->drawText(rect(), Qt::AlignCenter, "Load a OSM Document");
+	}
 }
 
 /*void TrMapView::paintSvg(QSvgGenerator & generator)
 {
-    QPainter painter;
-    painter.begin(&generator);
-    m_doc.draw(m_zoom_ref, &painter, 0);
-    painter.end();
+	QPainter painter;
+	painter.begin(&generator);
+	m_doc.draw(m_zoom_ref, &painter, 0);
+	painter.end();
 }*/
 
 void TrMapView::recalcExtRect()
 {
-    TR_MSG << QString::number(m_doc.getSurroundRectVal(0),'f', 2) <<
-              QString::number(m_doc.getSurroundRectVal(1),'f', 2) <<
-              QString::number(m_doc.getSurroundRectVal(2),'f', 2) <<
-              QString::number(m_doc.getSurroundRectVal(3),'f', 2); // << "edit_objects" << m_layerMap.size();
+	TR_MSG << QString::number(m_doc.getSurroundRectVal(0),'f', 2) <<
+		QString::number(m_doc.getSurroundRectVal(1),'f', 2) <<
+		QString::number(m_doc.getSurroundRectVal(2),'f', 2) <<
+		QString::number(m_doc.getSurroundRectVal(3),'f', 2); // << "edit_objects" << m_layerMap.size();
 
-    TR_MSG << "m_base.setSurroundingRect";
-    m_doc.setSurroundingRect();
+	TR_MSG << "m_base.setSurroundingRect";
+	m_doc.setSurroundingRect();
 
-    m_zoom_ref.setVisibleWorld(m_doc.getSurroundRectVal(0), m_doc.getSurroundRectVal(1),
-                               m_doc.getSurroundRectVal(2), m_doc.getSurroundRectVal(3));
-    m_zoom_ref.zoom2Rect();
-    update();
-    TR_MSG << m_doc.getSurroundRectVal(0) << m_doc.getSurroundRectVal(1) <<
-              m_doc.getSurroundRectVal(2) << m_doc.getSurroundRectVal(3);
+	m_zoom_ref.setVisibleWorld(m_doc.getSurroundRectVal(0), m_doc.getSurroundRectVal(1),
+	m_doc.getSurroundRectVal(2), m_doc.getSurroundRectVal(3));
+	m_zoom_ref.zoom2Rect();
+	update();
+	TR_MSG << m_doc.getSurroundRectVal(0) << m_doc.getSurroundRectVal(1) <<
+		m_doc.getSurroundRectVal(2) << m_doc.getSurroundRectVal(3);
 }
 
 void TrMapView::resetZoom()
 {
-    m_zoom_ref.setVisibleWorld(m_doc.getSurroundRectVal(0),
-                               m_doc.getSurroundRectVal(1),
-                               m_doc.getSurroundRectVal(2),
-                               m_doc.getSurroundRectVal(3));
-    m_zoom_ref.zoom2Rect();
-    update();
+	m_zoom_ref.setVisibleWorld(m_doc.getSurroundRectVal(0),
+		m_doc.getSurroundRectVal(1),
+		m_doc.getSurroundRectVal(2),
+		m_doc.getSurroundRectVal(3));
+	m_zoom_ref.zoom2Rect();
+	update();
 }
 
 void TrMapView::zoomChange(bool dir)
 {
-    QPoint pt;
-    pt.setX(static_cast <int>((width()/2.0)));
-    pt.setY(static_cast <int>((height()/2.0)));
-    if(dir)
-        zoomChange(0.8, pt, 0);
-    else
-        zoomChange(1.2, pt, 0);
+	QPoint pt;
+	pt.setX(static_cast <int>((width()/2.0)));
+	pt.setY(static_cast <int>((height()/2.0)));
+	if(dir)
+		zoomChange(0.8, pt, 0);
+	else
+		zoomChange(1.2, pt, 0);
 }
 
 void TrMapView::zoomChange(double value, const QPoint pt, int limit)
 {
-    emit sendMessage("coor", 0);
-    m_zoom_ref.setScreenDimension(width(), height());
-    m_zoom_ref.moveToPoint(pt.x(), pt.y(), value);
+	emit sendMessage("coor", 0);
+	m_zoom_ref.setScreenDimension(width(), height());
+	m_zoom_ref.moveToPoint(pt.x(), pt.y(), value);
 
-    update();
+	update();
 }
 
 void TrMapView::resizeEvent(QResizeEvent *)
 {
-    m_zoom_ref.setScreenDimension(width(), height());
-    m_zoom_ref.zoom2Rect();
+	m_zoom_ref.setScreenDimension(width(), height());
+	m_zoom_ref.zoom2Rect();
 }
 
+TrPoint TrMapView::getWorldPoint(const QPoint & pt)
+{
+	TrPoint wpt;
+
+	wpt.x = TR_POINT_V(pt.x());
+	wpt.y = TR_POINT_V(pt.y());
+	m_zoom_ref.getPoint(&wpt.x, &wpt.y);
+
+	return wpt;
+}
 
 bool TrMapView::notifyCoor(const QPoint pt, int mode, Qt::MouseButton button)
 {
-    if(!m_doc.m_is_loaded)
-        return false;
+	return false;
+}
 
-    TrPoint dpt;
-    TrPoint dpt1;
-    dpt.x = TR_POINT_V(pt.x());
-    dpt.y = TR_POINT_V(pt.y());
-    m_zoom_ref.getPoint(&dpt.x, &dpt.y);
+bool TrMapView::notifyPress(const QPoint pt, Qt::MouseButton button)
+{
+	if(!m_doc.m_is_loaded)
+		return false;
+	TrPoint dpt = getWorldPoint(pt);
+	m_move_pressed = button;
+	emit sendMessage("coor: lon " + TR_COOR_VAL(dpt.x) + "; lat " + TR_COOR_VAL(dpt.y), 0);
+	return true;
+}
 
-    switch(mode)
-    {
-    case MOUSE_MODE_PRESS:
-        m_move_pressed = button;
-        emit sendMessage("coor: lon " + TR_COOR_VAL(dpt.x) + "; lat " + TR_COOR_VAL(dpt.y), 0);
-        break;
+bool TrMapView::notifyMove(const QPoint pt, Qt::MouseButton button)
+{
+	if(!m_doc.m_is_loaded)
+		return false;
+	TrPoint dpt1;
+	TrPoint dpt = getWorldPoint(pt);
+	dpt1 = dpt;
+	m_zoom_ref.getPoint(&dpt1.x, &dpt1.y);
+	if(m_move_pressed == 0)
+		emit sendMessage("coor: lon " + TR_COOR_VAL(dpt1.x) + "; lat " + TR_COOR_VAL(dpt1.y), 0);
+	if(m_select_box.isRubber())
+	{
+		TrPoint spt;
 
-    case MOUSE_MODE_MOVE:
-        dpt1 = dpt;
-        m_zoom_ref.getPoint(&dpt1.x, &dpt1.y);
-        if(m_move_pressed == 0)
-                emit sendMessage("coor: lon " + TR_COOR_VAL(dpt1.x) + "; lat " + TR_COOR_VAL(dpt1.y), 0);
+		QPoint qpt = m_select_box.getStart();
+		spt.x = qpt.x();
+		spt.y = qpt.y();
+		m_zoom_ref.getPoint(&spt.x, &spt.y);
 
-        if(m_select_box.isRubber())
-        {
-                TrPoint spt;
+		m_zoom_ref.getPoint(&dpt.x, &dpt.y);
+		emit sendMessage("move coor: " + TR_COOR(spt) + " - " + TR_COOR(dpt), 0);
+	}
+	else
+	{
+		if(m_move_pressed)
+		{
+			QPoint diff = m_select_box.diff();
+			//TR_MSG << diff.x() << " | " << diff.y();
+			m_zoom_ref.setMove(diff.x(), diff.y());
+		}
+	}
+	return true;
+}
 
-                QPoint qpt = m_select_box.getStart();
-                spt.x = qpt.x();
-                spt.y = qpt.y();
-                m_zoom_ref.getPoint(&spt.x, &spt.y);
-
-                m_zoom_ref.getPoint(&dpt.x, &dpt.y);
-                emit sendMessage("move coor: " + TR_COOR(spt) + " - " + TR_COOR(dpt), 0);
-        }
-        else
-        {
-                if(m_move_pressed)
-                {
-                        QPoint diff = m_select_box.diff();
-                        //TR_MSG << diff.x() << " | " << diff.y();
-                        m_zoom_ref.setMove(diff.x(), diff.y());
-                }
-        }
-        break;
-
-    case MOUSE_MODE_RELEASE:
-        m_move_pressed = Qt::NoButton;  // TODO: check the default, was '0'
-        if(m_select_box.isRubber())
-        {
-                m_select_box.setZoomRect(m_zoom_ref);
-                m_select_box.setHide();
-        }
-        else
-        {
-                m_zoom_ref.setMove(0,0);
-                m_zoom_ref.moveToPoint(static_cast <int>((width()/2.0)) - (pt.x() - m_select_box.getStart().x()),
-                        static_cast <int>((height()/2.0)) + (pt.y() - m_select_box.getStart().y()));
-                m_zoom_ref.zoom2Rect();
-        }
-        break;
-
-    default:
-        break;
-    }
-    return true;
+bool TrMapView::notifyRelease(const QPoint pt, Qt::MouseButton button)
+{
+	if(!m_doc.m_is_loaded)
+		return false;
+	m_move_pressed = Qt::NoButton;  // TODO: check the default, was '0'
+	if(m_select_box.isRubber())
+	{
+		m_select_box.setZoomRect(m_zoom_ref);
+		m_select_box.setHide();
+	}
+	else
+	{
+		m_zoom_ref.setMove(0,0);
+		m_zoom_ref.moveToPoint(static_cast <int>((width()/2.0)) - (pt.x() - m_select_box.getStart().x()),
+		static_cast <int>((height()/2.0)) + (pt.y() - m_select_box.getStart().y()));
+		m_zoom_ref.zoom2Rect();
+	}
+	return false;
 }
 
 bool TrMapView::notifyClick(const QPoint, int mode, Qt::MouseButton button)
 {
-    return false;
+	return false;
 }
 
 bool TrMapView::notifyWheel(const QPoint, int a, int b)
 {
-    return false;
+	return false;
 }
 
 bool TrMapView::notifyRectSelect(const QRect &r, Qt::MouseButton button)
 {
-    return false;
+	return false;
 }
