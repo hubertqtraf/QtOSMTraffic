@@ -84,6 +84,13 @@ MainWindow::MainWindow(QWidget *parent)
     connect(m_net_option, SIGNAL(selectModeChanged(uint64_t)), this, SLOT(on_updateNetOptions(uint64_t)));
     ui->menuSettings->addAction(m_net_dock->toggleViewAction());
 
+    m_node_dock = new QDockWidget(tr("Node"), this);
+    m_node_option = new TrNodeDock(this);
+    m_node_dock->setWidget(m_node_option);
+    addDockWidget(Qt::RightDockWidgetArea, m_node_dock);
+    ui->menuSettings->addAction(m_node_dock->toggleViewAction());
+    m_map_view->setElementDock(m_node_option, 1);
+
     m_map_view->setFont(&m_font);
 
     window()->setWindowTitle("OSM Traffic: " + m_map_view->getDocument().getFileName());

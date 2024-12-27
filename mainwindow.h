@@ -28,6 +28,7 @@
 #include "trdispoptiondialog.h"
 #include "trmapview.h"
 #include "trnetdock.h"
+#include "trnodedock.h"
 #include "fileoptions.h"
 #include "about.h"
 
@@ -98,6 +99,8 @@ private:
 
     TrNetDock * m_net_option;
     QDockWidget * m_net_dock;
+    TrNodeDock * m_node_option;
+    QDockWidget * m_node_dock;
 
     QFont m_font;
 

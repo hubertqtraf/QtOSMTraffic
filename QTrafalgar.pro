@@ -64,7 +64,8 @@ SOURCES += \
     trafalgar/tr_zoom_map.cpp \
     trdispoptiondialog.cpp \
     trmapview.cpp \
-    trnetdock.cpp
+    trnetdock.cpp \
+    trnodedock.cpp
 
 HEADERS += \
     about.h \
@@ -112,7 +113,8 @@ HEADERS += \
     trafalgar/tr_zoom_map.h \
     trdispoptiondialog.h \
     trmapview.h \
-    trnetdock.h
+    trnetdock.h \
+    trnodedock.h
 
 FORMS += \
     about.ui \
@@ -120,7 +122,8 @@ FORMS += \
     mainwindow.ui \
     profiledialog.ui \
     trdispoptiondialog.ui \
-    trnetdock.ui 
+    trnetdock.ui  \
+    trnodedock.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
