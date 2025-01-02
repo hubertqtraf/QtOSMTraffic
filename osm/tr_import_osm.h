@@ -80,20 +80,22 @@ private:
 	QVector<TrOsmLink *> stream_raw_link_list;
 	QMap<uint64_t, PolyNode> stream_poly_nodes;
 
-    size_t m_waySize;	//osm2_world.info.way.count
+	size_t m_waySize;	//osm2_world.info.way.count
 	Way_t * m_ways;
 
-    size_t m_nodeSize;
+	size_t m_nodeSize;
 	// Node + POI
 	Point_t * m_nodes;
 
 	TrMapList * m_poi_map;
-	QVector<TrMapFace *> face_list;
+	QVector<TrMapFace *> m_face_list;
 
 	void appendPoi(void * world, const Point_t & point);
-    uint16_t setTrainType(TrOsmLink * link, uint64_t ttype);
+	uint16_t setTrainType(TrOsmLink * link, uint64_t ttype);
 	uint16_t setWaterType(TrOsmLink * link, uint64_t ttype);
-
+#ifdef OSM_C_FILTER
+	void createRelFace(Rel_t &relation, Way_t *ways, uint64_t n_way);
+#endif
 protected:
 
 public:
@@ -101,7 +103,7 @@ public:
 
 	virtual ~TrImportOsm();
 
-    bool read(const QString & filename, TrMapList & name_list, uint8_t mode = 0);
+	bool read(const QString & filename, TrMapList & name_list, uint8_t mode = 0);
 	//int64_t osmWaySize();
 
 	//void appendLinkOsm(TrOsmLink * link, QVector<TrOsmLink *> * raw_list);
@@ -120,10 +122,6 @@ public:
 	int checkDir(const Way_t & way1, const Way_t & way2);
 	bool appendFacePoint(uint64_t id, TrMapFace & face);
 	bool appendFacePoints(const Way_t & way, TrMapFace & face, bool dir);
-
-#ifdef OSM_C_FILTER
-	void createRelFace(Rel_t & relation, Way_t * ways, uint64_t n_way);
-#endif
 
 	bool createFaceList(TrMapList * osm_list, QString name);
 

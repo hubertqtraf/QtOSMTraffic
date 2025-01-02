@@ -35,6 +35,7 @@
    Boston, MA 02110-1301, USA. */
 
 
+#include "osm_load_rel.h"
 
 #include "tr_import_osm_stream.h"
 
@@ -173,6 +174,60 @@ QMap<uint64_t, Point_t> & TrImportOsmStream::getNodeMap()
 QVector<Rel_t> & TrImportOsmStream::getRelationList()
 {
 	return m_rellist;
+}
+
+bool TrImportOsmStream::appendFacePoint(uint64_t id, TrMapFace & face)
+{
+	TrPoint pt;
+
+	if(!m_nodelist.contains(id))
+		return false;
+	//int nd_id = findNode(m_nodes, m_nodeSize, id);
+	//if(nd_id < 0)
+	//	return false;
+	pt.x = (m_nodelist[id].x/100.0);
+	pt.y = (m_nodelist[id].y/100.0);
+
+	face.appendPolyPoint(pt);
+	return true;
+}
+
+
+bool TrImportOsmStream::setRel2Face(Rel_t & rel, QVector<TrMapFace *> & face_list)
+{
+	for(uint32_t i = 0; i< rel.r_count; i++)
+	{
+		if(rel.members[i].flags & REL_MEM_ROLE_OUT)
+		{
+			if(m_waylist.contains(rel.members[i].id))
+			{
+				//TR_INF << rel.members[i].id;
+				Way_t way = m_waylist[rel.members[i].id];
+				if(way.nd_id[0] == way.nd_id[way.n_nd_id -1])
+				{
+					TrMapFace * face = new TrMapFace;
+					face->appendPolygon(0);
+					for(int j = 0; j<way.n_nd_id; j++)
+					{
+						appendFacePoint(way.nd_id[j], *face);
+					}
+					face->setType(rel.flags >> 16);
+					face->setDrawType(rel.flags | 0x4000);
+					face_list.append(face);
+					//TR_INF << way.nd_id[0] << way.nd_id[way.n_nd_id -1] << *face;
+				}
+			}
+		}
+	}
+	return true;
+}
+
+void TrImportOsmStream::createRelFaces(QVector<TrMapFace *> & face_list)
+{
+	for (int i = 0; i<m_rellist.size(); i++)
+	{
+		setRel2Face(m_rellist[i], face_list); //Rel_t
+	}
 }
 
 bool TrImportOsmStream::init(const TrZoomMap& zoom, uint64_t contr, TrGeoObject* obj)
@@ -495,11 +550,11 @@ void TrImportOsmStream::closeWay(QMap<QString, name_set> & name_map, uint64_t & 
 	if(!way.lanes)
 		way.lanes = 1;
 
-    way.nd_id = (uint64_t*)malloc(sizeof(uint64_t) * m_way_reflist.size());
+	way.nd_id = (uint64_t*)malloc(sizeof(uint64_t) * m_way_reflist.size());
 	memset(way.nd_id, 0x00, sizeof(uint64_t) * m_way_reflist.size());
-    for(int64_t i = 0; i<m_way_reflist.size(); i++)
+	for(int64_t i = 0; i<m_way_reflist.size(); i++)
 	{
-        way.nd_id[i] = m_way_reflist[i];
+		way.nd_id[i] = m_way_reflist[i];
 	}
 	way.n_nd_id = m_way_reflist.size();
 	//memcpy(act_way->nd_id, world->tmp_id_buf,
@@ -524,14 +579,14 @@ void TrImportOsmStream::closeWay(QMap<QString, name_set> & name_map, uint64_t & 
 void TrImportOsmStream::closeOsm(World_t & world)
 {
 #ifdef OSM_C_FILTER
-    world.info.way.count = static_cast<uint64_t>(m_waylist.size());
+	world.info.way.count = static_cast<uint64_t>(m_waylist.size());
 	if((world.ways = (Way_t *)malloc(sizeof(Way_t) * world.info.way.count)) == nullptr)
 	{
 		return;
 	}
 	memset(world.ways, 0x00, sizeof(Way_t) * world.info.way.count);
 #else
-    world.way_count = static_cast<uint64_t>(m_waylist.size());
+	world.way_count = static_cast<uint64_t>(m_waylist.size());
 	if((world.ways = (Way_t *)malloc(sizeof(Way_t) * world.way_count)) == nullptr)
 	{
 		return;
@@ -555,14 +610,14 @@ void TrImportOsmStream::closeOsm(World_t & world)
 		index++;
 	}
 #ifdef OSM_C_FILTER
-    world.info.node.count = static_cast<uint64_t>(m_nodelist.size());
+	world.info.node.count = static_cast<uint64_t>(m_nodelist.size());
 	if((world.nodes = (Point_t *)malloc(sizeof(Point_t) * world.info.node.count)) == nullptr)
 	{
 		return;
 	}
 	memset(world.nodes, 0x00, sizeof(Point_t) * world.info.node.count);
 #else
-    world.node_count = static_cast<uint64_t>(m_nodelist.size());
+	world.node_count = static_cast<uint64_t>(m_nodelist.size());
 	if((world.nodes = (Point_t *)malloc(sizeof(Point_t) * world.node_count)) == nullptr)
 	{
 		return;
@@ -596,7 +651,7 @@ void TrImportOsmStream::addRelation(const Relation & rel)
 {
 	Rel_t crel;
 	crel.flags = rel.m_flags;
-    crel.r_count = static_cast<uint>(rel.m_members.size());
+	crel.r_count = static_cast<uint>(rel.m_members.size());
 	crel.id = 0;
 	if((crel.members = (RelMember_t *)malloc(sizeof(RelMember_t) * crel.r_count)) == nullptr)
 		return;

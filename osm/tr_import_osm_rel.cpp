@@ -180,7 +180,7 @@ void TrImportOsmRel::readRelation(const QXmlStreamAttributes &attributes, Relati
 
 	rel.m_members.clear();
 	m_tags.clear();
-	int64_t id = attributes.value("id").toULongLong(&ok);
+	int64_t id = attributes.value("id").toLongLong(&ok);
 	if(ok)
 	{
 		m_id = id;
@@ -212,7 +212,7 @@ void TrImportOsmRel::readMember(const QXmlStreamAttributes &attributes, Relation
 	if(role == "inner")
 		member.flags |= REL_MEM_ROLE_IN;
 	//type='way' ref='25505835' role
-	//TR_INF << type << id << role;
+	//TR_INF << type << member.id << role;
 	rel.m_members.append(member);
 }
 
@@ -436,23 +436,25 @@ uint64_t TrImportOsmRel::getBuildingClass(const QString & value)
 		return (BUILDING_SERVICE | FLAG_FEATURE_AERA);
 	if(value == "service")
 		return (BUILDING_SERVICE | FLAG_FEATURE_AERA);
-    if(value == "chalet")
-    {
-        return (BUILDING_HOUSE | FLAG_FEATURE_AERA);
-    }
-    if(value == "sports_hall")
-    {
-        return (BUILDING_PUBLIC | FLAG_FEATURE_AERA);
-    }
-    if(value == "clinic")
-    {
-        return (BUILDING_PUBLIC | FLAG_FEATURE_AERA);
-    }
-    if(value == "water_tower")
-    {
-        return (BUILDING_SERVICE | FLAG_FEATURE_AERA);
-    }
-    return (0x0007 | FLAG_FEATURE_AERA);
+	if(value == "church")	// 'amenity' v='place_of_worship'
+		return (BUILDING_PUBLIC | FLAG_FEATURE_AERA);
+	if(value == "chalet")
+	{
+		return (BUILDING_HOUSE | FLAG_FEATURE_AERA);
+	}
+	if(value == "sports_hall")
+	{
+		return (BUILDING_PUBLIC | FLAG_FEATURE_AERA);
+	}
+	if(value == "clinic")
+	{
+		return (BUILDING_PUBLIC | FLAG_FEATURE_AERA);
+	}
+	if(value == "water_tower")
+	{
+		return (BUILDING_SERVICE | FLAG_FEATURE_AERA);
+	}
+	return (0x0007 | FLAG_FEATURE_AERA);
 }
 
 // TODO:

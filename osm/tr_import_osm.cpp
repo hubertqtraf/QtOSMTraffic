@@ -189,12 +189,14 @@ bool TrImportOsm::read(const QString & filename, TrMapList & name_list, uint8_t 
 		m_nodeSize = osm2_world.node_count;
 #endif
 		m_nodes = osm2_world.nodes;
+#ifdef OSM_C_FILTER
 		for (int i = 0; i<ios.getRelationList().size(); i++)
 		{
-#ifdef TESTX
 			createRelFace(ios.getRelationList()[i], osm2_world.ways, osm2_world.info.way.count);
-#endif
 		}
+#else
+		ios.createRelFaces(m_face_list);
+#endif
 		//return true;
 	}
 	else
@@ -289,7 +291,7 @@ bool TrImportOsm::read(const QString & filename, TrMapList & name_list, uint8_t 
 
 			if(id < 0)
 			{
-                printf("findNode: cannot find %llu %i %i %i\n",
+				printf("findNode: cannot find %lu %i %i %i\n",
 					osm2_world.ways[i].nd_id[j], id, i, j);
 				add_it = false;
 			}
@@ -423,7 +425,7 @@ bool TrImportOsm::appendFacePoint(uint64_t id, TrMapFace & face)
 {
 	TrPoint pt;
 
-    int nd_id = findNode(m_nodes, static_cast<int>(m_nodeSize), id);
+	int nd_id = findNode(m_nodes, static_cast<int>(m_nodeSize), id);
 	if(nd_id < 0)
 		return false;
 	pt.x = (m_nodes[nd_id].x/100.0);
@@ -567,7 +569,7 @@ bool TrImportOsm::createFaceList(TrMapList * osm_list, QString name)
 		return false;
 	}
 
-    TrMapFace * face = nullptr;
+	TrMapFace * face = nullptr;
 
 	if(name == "nature")
 		type = TYPE_NATURAL;    // 0x00000005
@@ -605,17 +607,17 @@ bool TrImportOsm::createFaceList(TrMapList * osm_list, QString name)
 			}
 		}
 	}
-	for (int i = 0; i < face_list.size(); ++i)
+	for (int i = 0; i < m_face_list.size(); ++i)
 	{
-		uint64_t f_class = face_list[i]->getType();
-		//TR_INF << HEX << face_list[i]->getType() << face_list[i]->getFaceClass() << TYPE_NATURAL;
+		uint64_t f_class = m_face_list[i]->getType();
+		//TR_INF << name << HEX << (f_class << 16)  << m_face_list[i]->getDrawType();
 		if((name == "nature") && ((f_class << 16) & TYPE_NATURAL))
-			osm_list->appendObject(face_list[i]);
+			osm_list->appendObject(m_face_list[i]);
 		if((name == "landuse") && ((f_class << 16) & TYPE_LANDUSE))
-			osm_list->appendObject(face_list[i]);
+			osm_list->appendObject(m_face_list[i]);
 		if((name == "building") && ((f_class << 16) & TYPE_BUILDING))
-			osm_list->appendObject(face_list[i]);
-		//face_list[i]->setFaceClass(1);
+			osm_list->appendObject(m_face_list[i]);
+		//m_face_list[i]->setFaceClass(1);
 	}
 	return true;
 }

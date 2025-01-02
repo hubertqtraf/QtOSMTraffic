@@ -39,6 +39,7 @@
 #define TR_OSM_STREAM_H
 
 #include <tr_geo_object.h>
+#include <tr_map_face.h>
 
 #include <QtCore/qvector.h>
 
@@ -81,6 +82,9 @@ private:
 	uint64_t parkingRes(const QString & value, uint64_t & code);
 	uint64_t getParking();
 
+	bool setRel2Face(Rel_t & rel, QVector<TrMapFace *> & face_list);
+	bool appendFacePoint(uint64_t id, TrMapFace & face);
+
 public:
 	TrImportOsmStream(const QString & name);
 	TrImportOsmStream();
@@ -93,10 +97,12 @@ public:
 	QMap<uint64_t, Point_t> & getNodeMap();
 	QVector<Rel_t> & getRelationList();
 
+	void createRelFaces(QVector<TrMapFace *> & face_list);
+
 	virtual bool init(const TrZoomMap& zoom, uint64_t contr, TrGeoObject* obj);
 	virtual bool setSurroundingRect();
 
-    QString errorString() const;
+	QString errorString() const;
 };
 
 #endif
