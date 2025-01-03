@@ -37,10 +37,11 @@ private:
     TrDocument m_doc;
     TrZoomMap m_zoom_ref;
     Qt::MouseButton m_move_pressed;
-    void paint(QPainter * p);
+    TrGeoObject * m_selected;
 
+    void paint(QPainter * p);
     TrPoint getWorldPoint(const QPoint & pt);
-	TrGeoObject * selectObject(const TrPoint & pt, uint64_t & pos, uint64_t flag);
+    TrGeoObject * selectObject(const TrPoint & pt, uint64_t & pos, uint64_t flag);
 
     TrNodeDock * m_dockNode;
 

@@ -223,6 +223,10 @@ void TrGeoPoint::drawText(const TrZoomMap & zoom_ref, QPainter * p, const QStrin
 
 void TrGeoPoint::drawElement(const TrZoomMap & zoom_ref, QPainter * p, uint8_t mode)
 {
+	if(this->checkMask(TR_MASK_SELECTED) == TR_MASK_SELECTED)
+	{
+		drawSelect(zoom_ref, p, 0);
+	}
 	if(!(s_mask & TR_MASK_SHOW_POINTS))
 		return;
 

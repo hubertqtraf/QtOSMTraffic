@@ -28,8 +28,9 @@
 
 TrMapView::TrMapView(QWidget *parent)
 	: TrCanvas(parent)
-    , m_move_pressed(Qt::NoButton)  // TODO: check the default, was '0'
-    , m_dockNode(nullptr)
+	, m_move_pressed(Qt::NoButton)  // TODO: check the default, was '0'
+	, m_selected(nullptr)
+	, m_dockNode(nullptr)
 {
 }
 
@@ -62,8 +63,8 @@ void TrMapView::setLoadedFlag(bool loaded)
 
 void TrMapView::setElementDock(QWidget * dock, int type)
 {
-    if(type == 1)
-       m_dockNode = dynamic_cast<TrNodeDock *>(dock);
+	if(type == 1)
+		m_dockNode = dynamic_cast<TrNodeDock *>(dock);
 }
 
 void TrMapView::paint(QPainter *p)
@@ -164,10 +165,10 @@ TrGeoObject * TrMapView::selectObject(const TrPoint & pt, uint64_t & pos, uint64
 	TrGeoObject * sobj = nullptr;
 
 	// layers are class net ('road', 'rail', 'stream') and class list ('poi')
-    //TR_INF << m_doc.getSelectionLayer();
+	//TR_INF << m_doc.getSelectionLayer();
 
 	// find net elements
-    TrMapNet * net = dynamic_cast<TrMapNet *>(m_doc.getLayerObjectByName("road"));
+	TrMapNet * net = dynamic_cast<TrMapNet *>(m_doc.getLayerObjectByName("road"));
 	if(net == nullptr)
 		return sobj;
 
@@ -175,17 +176,8 @@ TrGeoObject * TrMapView::selectObject(const TrPoint & pt, uint64_t & pos, uint64
 	if(list == nullptr)
 		return sobj;
 
-	TR_INF << "list";
-	if(pos != TR_NO_VALUE)
-		pos = net->findSelect(m_zoom_ref, pt, pos, flag);
-	else
-		pos = net->findSelect(m_zoom_ref, pt, TR_NO_VALUE, flag);
+	pos = net->findSelect(m_zoom_ref, pt, TR_NO_VALUE, flag);
 
-	if(pos == TR_NO_VALUE)
-	{
-		//TR_MSG << "start again...";
-		pos = net->findSelect(m_zoom_ref, pt, pos, flag);
-	}
 	if(pos == TR_NO_VALUE)
 	{
 		//TR_MSG << "no result";
@@ -193,14 +185,6 @@ TrGeoObject * TrMapView::selectObject(const TrPoint & pt, uint64_t & pos, uint64
 	else
 	{
 		sobj = list->getObject(pos);
-	}
-	if(sobj != nullptr)
-	{
-		TrMapNode *m_point = dynamic_cast<TrMapNode *>(sobj);
-		{
-			if(m_point != nullptr)
-				TR_INF << *m_point;
-		}
 	}
 	return sobj;
 }
@@ -275,15 +259,31 @@ bool TrMapView::notifyClick(const QPoint qpt, int mode, Qt::MouseButton button)
 	TrPoint pt = getWorldPoint(qpt);
         uint64_t pos = TR_NO_VALUE;
 
+	if(m_selected != nullptr)
+	{
+		m_selected->removeMask(TR_MASK_SELECTED);
+		m_selected = nullptr;
+	}
 	TrGeoObject * pobj = selectObject(pt, pos, TR_MASK_SELECT_POINT);
-    if((pobj != nullptr) && (m_dockNode != nullptr))
-    {
-        TrGeoPoint * node = dynamic_cast<TrGeoPoint *>(pobj);
-        {
-            m_dockNode->setData(node);
-        }
-    }
-    return false;
+	if((pobj != nullptr) && (m_dockNode != nullptr))
+	{
+		TrGeoPoint * node = dynamic_cast<TrGeoPoint *>(pobj);
+		{
+			if(node != nullptr)
+			{
+				pobj->setMask(TR_MASK_SELECTED);
+				m_selected = pobj;
+				m_dockNode->setData(node);
+			}
+		}
+	}
+	else
+	{
+		if(m_dockNode != nullptr)
+			m_dockNode->setData(nullptr);
+	}
+	update();
+	return false;
 }
 
 bool TrMapView::notifyWheel(const QPoint, int a, int b)
