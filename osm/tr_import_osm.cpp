@@ -820,11 +820,11 @@ bool TrImportOsm::cutLink(TrOsmLink * olink, uint64_t * id,
 		{
 			addNodeObj(node_map, raw->at(i), pt.x, pt.y);
 
-            if(poly != nullptr)
+			if(poly != nullptr)
 			{
 				prim_id = primive_map->objCountMap() + 1;
 				primive_map->appendObject(poly, prim_id);
-                poly = nullptr;
+				poly = nullptr;
 			}
 
 			if(fwd)
@@ -877,12 +877,12 @@ bool TrImportOsm::cutLink(TrOsmLink * olink, uint64_t * id,
 		}
 	}
 
-    if(poly != nullptr)
+	if(poly != nullptr)
 	{
 		// TODO: check the polygon...
 		prim_id = primive_map->objCountMap() + 1;
 		primive_map->appendObject(poly, prim_id);
-        poly = nullptr;
+		poly = nullptr;
 	}
 
 	if(fwd)

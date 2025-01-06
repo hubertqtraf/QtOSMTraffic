@@ -88,22 +88,22 @@ void TrMapFace::setLayerShowMask(uint64_t mask)
 
 bool TrMapFace::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject * base)
 {
-    if(base == nullptr)
-        return false;
-    TrMapList * list = dynamic_cast<TrMapList *>(base);
-    if(list == nullptr)
-        return false;
-    uint16_t type = (getType() & 0x00ff);
-    QPen * pen = list->getObjectPen(type);//type & 0x001f);
-    if(pen != nullptr)
-    {
-        setActivePen(pen);
-    }
-    else
-    {
-        //TR_WRN << "pen " << type << " is not in the list" << m_objPenMap.size();
-    }
-    return true;
+	if(base == nullptr)
+		return false;
+	TrMapList * list = dynamic_cast<TrMapList *>(base);
+	if(list == nullptr)
+		return false;
+	uint16_t type = (getType() & 0x00ff);
+	QPen * pen = list->getObjectPen(type);//type & 0x001f);
+	if(pen != nullptr)
+	{
+		setActivePen(pen);
+	}
+	else
+	{
+		//TR_WRN << "pen " << type << " is not in the list" << m_objPenMap.size();
+	}
+	return true;
 }
 
 void TrMapFace::setActiveBrush(QBrush * brush)

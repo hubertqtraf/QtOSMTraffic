@@ -260,7 +260,7 @@ bool TrImportOsmRel::handleMultiPoly(QMap<uint64_t, Way_t> & waylist, Relation &
 {
 	uint64_t type = 0;
 
-	//TR_INF << m_tags << HEX << TYPE_BUILDING;
+	rel.m_flags = 0;
 	if(m_tags.contains("building"))
 	{
 		type = getBuildingClass(m_tags["building"]);
@@ -288,7 +288,7 @@ bool TrImportOsmRel::handleMultiPoly(QMap<uint64_t, Way_t> & waylist, Relation &
 		{
 			if(waylist.contains(rel.m_members[i].id))
 			{
-                //TR_INF << HEX << rel.m_flags << waylist[rel.m_members[i].id].type;
+				//TR_INF << HEX << rel.m_flags << waylist[rel.m_members[i].id].type;
 				waylist[rel.m_members[i].id].type = rel.m_flags;
 				if(rel.m_members[i].flags & REL_MEM_ROLE_IN)
 				{
@@ -374,7 +374,7 @@ uint64_t TrImportOsmRel::getBuildingClass(const QString & value)
 		return (BUILDING_SERVICE | FLAG_FEATURE_AERA);
 	if(value == "kiosk")
 		return (BUILDING_PUBLIC | FLAG_FEATURE_AERA);
-	if(value == "church")
+	if(value == "church")	// 'amenity' v='place_of_worship'
 		return (BUILDING_REL | FLAG_FEATURE_AERA);
 	if(value == "chapel")
 		return (BUILDING_REL | FLAG_FEATURE_AERA);
@@ -402,17 +402,17 @@ uint64_t TrImportOsmRel::getBuildingClass(const QString & value)
 		return (BUILDING_HOUSE | FLAG_FEATURE_AERA);
 	if(value == "stable")
 		return (BUILDING_HOUSE | FLAG_FEATURE_AERA);
-    if(value == "allotment_house")
-        return (BUILDING_HOUSE | FLAG_FEATURE_AERA);
-    if(value == "hut")
-        return (BUILDING_HOUSE | FLAG_FEATURE_AERA);
-    if(value == "sports_centre")
-        return (BUILDING_SERVICE | FLAG_FEATURE_AERA);
-    if(value == "greenhouse")
-    {
-        return (BUILDING_INDUST | FLAG_FEATURE_AERA);
-    }
-    if(value == "garage")
+	if(value == "allotment_house")
+		return (BUILDING_HOUSE | FLAG_FEATURE_AERA);
+	if(value == "hut")
+		return (BUILDING_HOUSE | FLAG_FEATURE_AERA);
+	if(value == "sports_centre")
+		return (BUILDING_SERVICE | FLAG_FEATURE_AERA);
+	if(value == "greenhouse")
+	{
+		return (BUILDING_INDUST | FLAG_FEATURE_AERA);
+	}
+	if(value == "garage")
 		return (BUILDING_CAR | FLAG_FEATURE_AERA);
 	if(value == "garages")
 		return (BUILDING_CAR | FLAG_FEATURE_AERA);
@@ -436,8 +436,6 @@ uint64_t TrImportOsmRel::getBuildingClass(const QString & value)
 		return (BUILDING_SERVICE | FLAG_FEATURE_AERA);
 	if(value == "service")
 		return (BUILDING_SERVICE | FLAG_FEATURE_AERA);
-	if(value == "church")	// 'amenity' v='place_of_worship'
-		return (BUILDING_PUBLIC | FLAG_FEATURE_AERA);
 	if(value == "chalet")
 	{
 		return (BUILDING_HOUSE | FLAG_FEATURE_AERA);
