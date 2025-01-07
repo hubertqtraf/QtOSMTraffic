@@ -64,6 +64,7 @@
 #define BASE_GROUP_CHECK      0x0000000000004000
 
 #ifdef OSM_C_FILTER
+#include "osm_load.h"
 int count_outer(Rel_t * relation);
 #endif
 

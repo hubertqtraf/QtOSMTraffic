@@ -48,48 +48,47 @@
 #include "tr_import_osm.h"
 
 #include <QtCore/qfile.h>
-#include <QDebug>
+//#include <QDebug>
 #include <tr_map_face.h>
 #include <tr_map_net.h>
 
 #ifndef OSM_C_FILTER
 int inline findNode(Point_t * nodes, int n_node, uint64_t idx)
 {
-        int pos1 = 0;
-        int pos2 = n_node-1;
-        int d;
+	int pos1 = 0;
+	int pos2 = n_node-1;
+	int d;
 
-        uint64_t id = idx;
+	uint64_t id = idx;
 
-        if((id > nodes[n_node-1].id) || (id < nodes[0].id))
-                return -1;
+	if((id > nodes[n_node-1].id) || (id < nodes[0].id))
+		return -1;
 
-        while(nodes[pos2].id != id)
-        {
-                if(nodes[pos1].id == id)
-                        return pos1;
+	while(nodes[pos2].id != id)
+	{
+		if(nodes[pos1].id == id)
+			return pos1;
 
-                d = ((pos2-pos1) >> 1);
+		d = ((pos2-pos1) >> 1);
 
-                if(d == 0)
-                        return -1;
+		if(d == 0)
+			return -1;
 
-                if(id < nodes[pos1+d].id)
-                        pos2 -= d;
-                else
-                        pos1 += d;
-        }
-        return pos2;
+		if(id < nodes[pos1+d].id)
+			pos2 -= d;
+		else
+			pos1 += d;
+	}
+	return pos2;
 }
 #endif
-
 
 TrImportOsm::TrImportOsm()
 	: m_waySize(0)
 	, m_ways(nullptr)
 	, m_nodeSize(0)
 	, m_nodes(nullptr)
-    , m_poi_map(nullptr)
+	, m_poi_map(nullptr)
 {
 }
 
@@ -114,8 +113,8 @@ uint16_t TrImportOsm::setTrainType(TrOsmLink * link, uint64_t ttype)
 	if(type >= 8)
 	{
 		type -= 7;
-        return static_cast <uint16_t>(type);
-    }
+		return static_cast <uint16_t>(type);
+	}
 	return 7;
 }
 
@@ -133,7 +132,7 @@ uint16_t TrImportOsm::setWaterType(TrOsmLink * link, uint64_t ttype)
 
 void TrImportOsm::appendPoi(void * world, const Point_t & point)
 {
-    World_t * osm2_world = static_cast<World_t *>(world);
+	World_t * osm2_world = static_cast<World_t *>(world);
 
 	if(point.pt_type)
 	{
@@ -151,8 +150,8 @@ void TrImportOsm::appendPoi(void * world, const Point_t & point)
 	}
 	else
 	{
-        //TR_MSG << "no type info" << point.id << " " <<
-        //	osm2_world->m_point_name_map[point.id].toLocal8Bit().constData();
+		//TR_MSG << "no type info" << point.id << " " <<
+		//	osm2_world->m_point_name_map[point.id].toLocal8Bit().constData();
 	}
 }
 
@@ -189,14 +188,9 @@ bool TrImportOsm::read(const QString & filename, TrMapList & name_list, uint8_t 
 		m_nodeSize = osm2_world.node_count;
 #endif
 		m_nodes = osm2_world.nodes;
-#ifdef OSM_C_FILTER
-		for (int i = 0; i<ios.getRelationList().size(); i++)
-		{
-			createRelFace(ios.getRelationList()[i], osm2_world.ways, osm2_world.info.way.count);
-		}
-#else
+
 		ios.createRelFaces(m_face_list);
-#endif
+
 		//return true;
 	}
 	else
@@ -384,7 +378,7 @@ bool TrImportOsm::read(const QString & filename, TrMapList & name_list, uint8_t 
 
 bool TrImportOsm::createNet(TrMapNet * osm_net, QString name)
 {
-    if(osm_net == nullptr)
+	if(osm_net == nullptr)
 	{
 		TR_WRN << "NULL Pointer at " << name;
 		return false;
@@ -538,9 +532,10 @@ void TrImportOsm::createRelFace(Rel_t & relation, Way_t * ways, uint64_t n_way)
 		{
 			if(face != nullptr)
 			{
-				face->setClass(relation.flags >> 16);
-				face->setDrawType(relation.flags | 0x4000);
-				face_list.append(face);
+				uint64_t type = (relation.flags & 0x000000f000000000) >> 24;
+				face->setType((relation.flags & 0x00000000000000ff) | type);
+				face->setDrawType(type & 0xf000);
+				m_face_list.append(face);
 				idx1 = (-1);
 				idx2 = (-1);
 				first = true;
@@ -552,9 +547,10 @@ void TrImportOsm::createRelFace(Rel_t & relation, Way_t * ways, uint64_t n_way)
 	}
 	if(face != nullptr)
 	{
-		face->setFaceClass(relation.flags >> 16);
-		face->setType(relation.flags | 0x4000);
-		face_list.append(face);
+		uint64_t type = (relation.flags & 0x000000f000000000) >> 24;
+		face->setType((relation.flags & 0x00000000000000ff) | type);
+		face->setDrawType(type & 0xf000);
+		m_face_list.append(face);
 	}
 }
 #endif
@@ -592,7 +588,7 @@ bool TrImportOsm::createFaceList(TrMapList * osm_list, QString name)
 			//if((osm2_world.ways[i].type & 0x0F) > 3)
 			if(appendFacePoints(m_ways[i], *face, true))
 			{
-				uint64_t type = (m_ways[i].type & 0x000000f000000000) >> 24; //36;
+				uint64_t type = (m_ways[i].type & 0x000000f000000000) >> 24;
 				face->setType((m_ways[i].type & 0x00000000000000ff) | type);
 				face->setDrawType(type & 0xf000);
 				osm_list->appendObject(face);
@@ -610,7 +606,7 @@ bool TrImportOsm::createFaceList(TrMapList * osm_list, QString name)
 	for (int i = 0; i < m_face_list.size(); ++i)
 	{
 		uint64_t f_class = m_face_list[i]->getType();
-		//TR_INF << name << HEX << (f_class << 16)  << m_face_list[i]->getDrawType();
+		TR_INF << name << HEX << f_class << (f_class << 16)  << m_face_list[i]->getDrawType();
 		if((name == "nature") && ((f_class << 16) & TYPE_NATURAL))
 			osm_list->appendObject(m_face_list[i]);
 		if((name == "landuse") && ((f_class << 16) & TYPE_LANDUSE))
@@ -658,10 +654,10 @@ bool TrImportOsm::addRawNodes(QVector <uint64_t> * nodes, QMap<uint64_t, PolyNod
 	for(int i = 0; i < nodes->size(); ++i)
 	{
 		if(this->addNode(nodes->at(i), poly_nodes) == false)
-        {
-            //printf("TrImportOsm2::addRawNodes error\n");
-        }
-        this->addNode(nodes->at(i), poly_nodes);
+		{
+			//printf("TrImportOsm2::addRawNodes error\n");
+		}
+		this->addNode(nodes->at(i), poly_nodes);
 	}
 	for(int i = 0; i < (nodes->size()); ++i)
 	{
@@ -707,7 +703,7 @@ void TrImportOsm::addRawCoor(QVector <RawNode> * nodes, QMap<uint64_t, PolyNode>
 
 bool TrImportOsm::addNodeObj(TrMapList * node_map, int64_t id, double x, double y)
 {
-    if(node_map->getMapObject(id) == nullptr)
+	if(node_map->getMapObject(id) == nullptr)
 	{
 		TrMapNode * opt = new TrMapNode;
 
@@ -729,9 +725,9 @@ bool TrImportOsm::cutLink(TrOsmLink * olink, uint64_t * id,
 	QVector <uint64_t> * raw = olink->getRawNodes();
 	TrPoint pt;
 	int in_out_limit = 2;
-    TrGeoPolygon * poly = nullptr;
+	TrGeoPolygon * poly = nullptr;
 	int64_t i_idx = 0;
-    uint64_t prim_id = 0;
+	uint64_t prim_id = 0;
 
 	TrMapList * primive_map = osm_net->getNetList(TR_MASK_SELECT_POLY, false);
 	TrMapList * node_map = osm_net->getNetList(TR_MASK_SELECT_POINT, false);
@@ -915,15 +911,15 @@ bool TrImportOsm::finalizeNet(QVector<TrOsmLink *> raw_list, QMap<uint64_t,
 		cutLink(raw_list[i], &id, poly_nodes, osm_net, is_road);
 	}
 
-    //TR_MSG << raw_list.size();
+	//TR_MSG << raw_list.size();
 
 	TrMapList * primive_map = osm_net->getNetList(TR_MASK_SELECT_POLY, false);
 	TrMapList * link_list = osm_net->getNetList(TR_MASK_SELECT_LINK, false);
 
 	for (size_t i = 0; i < link_list->objCount(); ++i)
 	{
-        TrMapLink * link = dynamic_cast <TrMapLink*>(link_list->getVecObject(i));
-        if(link != nullptr)
+		TrMapLink * link = dynamic_cast <TrMapLink*>(link_list->getVecObject(i));
+		if(link != nullptr)
 		{
 			link->setPrimiveById(primive_map);
 		}

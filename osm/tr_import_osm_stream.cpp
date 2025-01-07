@@ -182,9 +182,6 @@ bool TrImportOsmStream::appendFacePoint(uint64_t id, TrMapFace & face)
 
 	if(!m_nodelist.contains(id))
 		return false;
-	//int nd_id = findNode(m_nodes, m_nodeSize, id);
-	//if(nd_id < 0)
-	//	return false;
 	pt.x = (m_nodelist[id].x/100.0);
 	pt.y = (m_nodelist[id].y/100.0);
 
@@ -197,7 +194,7 @@ bool TrImportOsmStream::setRel2Face(Rel_t & rel, QVector<TrMapFace *> & face_lis
 {
 	for(uint32_t i = 0; i< rel.r_count; i++)
 	{
-		if(rel.members[i].flags & REL_MEM_ROLE_OUT)
+		if(rel.members[i].flags & (REL_MEM_ROLE_OUT | REL_MEM_ROLE_IN))
 		{
 			if(m_waylist.contains(rel.members[i].id))
 			{
