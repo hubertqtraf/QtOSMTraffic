@@ -167,6 +167,17 @@ TrGeoObject * TrMapView::selectObject(const TrPoint & pt, uint64_t & pos, uint64
 	// layers are class net ('road', 'rail', 'stream') and class list ('poi')
 	//TR_INF << m_doc.getSelectionLayer();
 
+	TrMapList * obj_list = dynamic_cast<TrMapList *>(m_doc.getLayerObjectByName("poi"));
+	if(obj_list != nullptr)
+	{
+		pos = obj_list->findSelect(m_zoom_ref, pt, TR_NO_VALUE);
+		if(pos != TR_NO_VALUE)
+		{
+			sobj = obj_list->getObject(pos);
+			if(sobj != nullptr)
+				return sobj;
+		}
+	}
 	// find net elements
 	TrMapNet * net = dynamic_cast<TrMapNet *>(m_doc.getLayerObjectByName("road"));
 	if(net == nullptr)
@@ -257,7 +268,7 @@ bool TrMapView::notifyRelease(const QPoint pt, Qt::MouseButton button)
 bool TrMapView::notifyClick(const QPoint qpt, int mode, Qt::MouseButton button)
 {
 	TrPoint pt = getWorldPoint(qpt);
-        uint64_t pos = TR_NO_VALUE;
+	uint64_t pos = TR_NO_VALUE;
 
 	if(m_selected != nullptr)
 	{
@@ -267,13 +278,13 @@ bool TrMapView::notifyClick(const QPoint qpt, int mode, Qt::MouseButton button)
 	TrGeoObject * pobj = selectObject(pt, pos, TR_MASK_SELECT_POINT);
 	if((pobj != nullptr) && (m_dockNode != nullptr))
 	{
-		TrGeoPoint * node = dynamic_cast<TrGeoPoint *>(pobj);
+		TrGeoPoint * point = dynamic_cast<TrGeoPoint *>(pobj);
 		{
-			if(node != nullptr)
+			if(point != nullptr)
 			{
 				pobj->setMask(TR_MASK_SELECTED);
 				m_selected = pobj;
-				m_dockNode->setData(node);
+				m_dockNode->setData(point);
 			}
 		}
 	}

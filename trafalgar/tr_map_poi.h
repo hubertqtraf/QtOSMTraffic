@@ -126,6 +126,8 @@ public:
 
 	void setPoiName(const QString & name);
 
+	QString getPoiName();
+
 	virtual void setLayerShowMask(uint64_t mask);
 
 	bool init(const TrZoomMap & zoom_ref, uint64_t ctrl = 0, TrGeoObject * base = nullptr);

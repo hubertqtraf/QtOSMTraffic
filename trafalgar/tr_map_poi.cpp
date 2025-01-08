@@ -98,6 +98,12 @@ void TrMapPoi::setPoiName(const QString & name)
 	m_name = name;
 }
 
+QString TrMapPoi::getPoiName()
+{
+	return m_name;
+}
+
+
 void TrMapPoi::setLayerShowMask(uint64_t mask)
 {
 	//TR_MSG << HEX << mask;
@@ -226,17 +232,17 @@ void TrMapPoi::draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mode
 			TR_WRN << "peak " << m_geo_id << ": " << "no info, ignore";
 			return;
 		}
-        p->drawLine(static_cast <int>(screen.x-4),
-                    static_cast <int>(screen.y+6),
-                    static_cast <int>(screen.x),
-                    static_cast <int>(screen.y));
-        p->drawLine(static_cast <int>(screen.x+4),
-                    static_cast <int>(screen.y+6),
-                    static_cast <int>(screen.x),
-                    static_cast <int>(screen.y));
+		p->drawLine(static_cast <int>(screen.x-4),
+			static_cast <int>(screen.y+6),
+			static_cast <int>(screen.x),
+			static_cast <int>(screen.y));
+		p->drawLine(static_cast <int>(screen.x+4),
+			static_cast <int>(screen.y+6),
+			static_cast <int>(screen.x),
+			static_cast <int>(screen.y));
 		// TODO: check point draw...
 		if(TR_MASK_POINTS_NUM & s_mask)
-            p->drawStaticText(static_cast <int>(screen.x),
+			p->drawStaticText(static_cast <int>(screen.x),
                               static_cast <int>(screen.y+7), QStaticText(text));
 		return;
 	}
@@ -275,18 +281,18 @@ void TrMapPoi::draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mode
 	if(m_poi_flags & (TYPE_ROAD | TYPE_RAIL | TYPE_STREAM))
 	{
 		if((m_poi_flags & 0x000000000000000f) == 7)
-            p->drawEllipse(static_cast <int>(screen.x-3),
-                           static_cast <int>(screen.y-10), 6, 20);
+			p->drawEllipse(static_cast <int>(screen.x-3),
+				static_cast <int>(screen.y-10), 6, 20);
 		if((m_poi_flags & 0x000000000000000f) == 1)
 		{
-            p->drawLine(static_cast <int>(screen.x-4),
-                        static_cast <int>(screen.y-4),
-                        static_cast <int>(screen.x+4),
-                        static_cast <int>(screen.y+4));
-            p->drawLine(static_cast <int>(screen.x-4),
-                        static_cast <int>(screen.y+4),
-                        static_cast <int>(screen.x+4),
-                        static_cast <int>(screen.y-4));
+			p->drawLine(static_cast <int>(screen.x-4),
+				static_cast <int>(screen.y-4),
+				static_cast <int>(screen.x+4),
+				static_cast <int>(screen.y+4));
+			p->drawLine(static_cast <int>(screen.x-4),
+				static_cast <int>(screen.y+4),
+				static_cast <int>(screen.x+4),
+				static_cast <int>(screen.y-4));
 		}
 		// TODO: switch for station/bus stop
 	}
@@ -294,14 +300,14 @@ void TrMapPoi::draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mode
 	if(m_name.size())
 	{
 		if(m_poi_flags & TYPE_POI_N_TREE)
-            p->drawEllipse(static_cast <int>(screen.x-7),
-                           static_cast <int>(screen.y-6), 4, 12);
+			p->drawEllipse(static_cast <int>(screen.x-7),
+				static_cast <int>(screen.y-6), 4, 12);
 		else
-            p->drawEllipse(static_cast <int>(screen.x-3),
-                           static_cast <int>(screen.y-3), 6, 6);
+			p->drawEllipse(static_cast <int>(screen.x-3),
+				static_cast <int>(screen.y-3), 6, 6);
 		if((TR_MASK_POINTS_NUM & s_mask) && text)
-            p->drawStaticText(static_cast <int>(screen.x),
-                              static_cast <int>(screen.y), QStaticText(m_name));
+			p->drawStaticText(static_cast <int>(screen.x),
+				static_cast <int>(screen.y), QStaticText(m_name));
 	}
 }
 
