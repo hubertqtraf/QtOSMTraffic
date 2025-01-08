@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
+    <width>413</width>
     <height>300</height>
    </rect>
   </property>
@@ -27,7 +27,7 @@
        <item>
         <widget class="QLabel" name="label">
          <property name="text">
-          <string>QtOSMTraffic (C) 2024
+          <string>QtOSMTraffic (C) 2025
 
 Visualisation of OSM Data on base of a directed Graph. 
 Calculate the road dimensions using given width OSM data or estimated lane width and number of the lanes.

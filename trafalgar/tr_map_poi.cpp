@@ -12,7 +12,7 @@
  * system:	UNIX/LINUX
  * compiler:	gcc
  *
- * @author	Schmid Hubert (C)2023-2024
+ * @author	Schmid Hubert (C)2023-2025
  *
  * beginning:	03.2023
  *
@@ -43,6 +43,8 @@
 #include "tr_geo_point.h"
 #include "tr_map_poi.h"
 #include "tr_geo_poly.h"
+
+#include "tr_prof_class_def.h"
 
 #define SELECT_SIZE 6
 
@@ -213,8 +215,8 @@ void TrMapPoi::draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mode
 
 	if(m_poi_flags & TYPE_POI_P_ALPINE)
 	{
-        p->fillRect(static_cast <int>(screen.x-3),
-                    static_cast <int>(screen.y-6), 12, 6, QBrush(getActivePen()->color()));
+		p->fillRect(static_cast <int>(screen.x-3),
+			static_cast <int>(screen.y-6), 12, 6, QBrush(getActivePen()->color()));
 	}
 
 	p->setBrush(Qt::NoBrush);
@@ -248,14 +250,14 @@ void TrMapPoi::draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mode
 	}
 	if(m_poi_flags & TYPE_POI_P_PARKING)
 	{
-        p->fillRect(static_cast <int>(screen.x-5),
-                    static_cast <int>(screen.y-4), 10, 10, QBrush(getActivePen()->color()));
+		p->fillRect(static_cast <int>(screen.x-5),
+			static_cast <int>(screen.y-4), 10, 10, QBrush(getActivePen()->color()));
 		return;
 	}
 	if(m_poi_flags & TYPE_POI_P_FUEL)
 	{
-        p->fillRect(static_cast <int>(screen.x-3),
-                    static_cast <int>(screen.y-3), 4, 10, QBrush(getActivePen()->color()));
+		p->fillRect(static_cast <int>(screen.x-3),
+			static_cast <int>(screen.y-3), 4, 10, QBrush(getActivePen()->color()));
 		// TODO: switch the text -> option
 		//p->drawStaticText(screen.x+4, screen.y, QStaticText(m_name));
 		return;
@@ -353,11 +355,11 @@ uint64_t TrMapPoi::readXmlDescription(QXmlStreamReader & xml_in)
 {
 	uint64_t id = TR_NO_VALUE;
 
-	QStringRef name = readXmlHeader(xml_in);
+	QString name = readXmlHeader(xml_in);
 
 	while(!xml_in.atEnd())
 	{
-		QStringRef ref;
+		QString ref;
 
 		xml_in.readNext();
 		if(readDefStartElement(xml_in, ref))
@@ -386,10 +388,10 @@ uint64_t TrMapPoi::readXmlDescription(QXmlStreamReader & xml_in)
 		{
 			//TR_MSG << xml_in.name();
 
-			if(xml_in.name() == "geo_point")
+			if(xml_in.name().toString() == "geo_point")
 			{
 			}
-			if(xml_in.name() == getXmlName())
+			if(xml_in.name().toString() == getXmlName())
 			{
 				return id;
 			}

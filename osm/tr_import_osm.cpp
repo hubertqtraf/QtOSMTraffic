@@ -10,7 +10,7 @@
  *
  * beginning:	11.2012
  *
- * (C)		Schmid Hubert 2012-2022
+ * (C)		Schmid Hubert 2012-2025
  *
  * history:
  *
@@ -34,6 +34,7 @@
 
 #include "tr_map_node.h"
 #include "tr_map_poi.h"
+#include <tr_prof_class_def.h>
 
 #ifdef OSM_C_FILTER
 #include "osm_main.h"
