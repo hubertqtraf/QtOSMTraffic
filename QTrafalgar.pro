@@ -65,6 +65,7 @@ SOURCES += \
     trdispoptiondialog.cpp \
     trmapview.cpp \
     trnetdock.cpp \
+    trlinkdock.cpp \
     trnodedock.cpp
 
 HEADERS += \
@@ -114,6 +115,7 @@ HEADERS += \
     trdispoptiondialog.h \
     trmapview.h \
     trnetdock.h \
+    trlinkdock.h \
     trnodedock.h
 
 FORMS += \
@@ -123,6 +125,7 @@ FORMS += \
     profiledialog.ui \
     trdispoptiondialog.ui \
     trnetdock.ui  \
+    trlinkdock.ui \
     trnodedock.ui
 
 # Default rules for deployment.

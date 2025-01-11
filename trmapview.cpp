@@ -28,10 +28,17 @@
 
 TrMapView::TrMapView(QWidget *parent)
 	: TrCanvas(parent)
+	, m_pos_select(TR_NO_VALUE)
 	, m_move_pressed(Qt::NoButton)  // TODO: check the default, was '0'
 	, m_selected(nullptr)
+	, m_elementDock(nullptr)
 	, m_dockNode(nullptr)
+	, m_dockLink(nullptr)
 {
+	m_dockLink = new TrLinkDock(parent);
+	m_dockLink->setVisible(false);
+	m_dockNode = new TrNodeDock(parent);
+	m_dockNode->setVisible(false);
 }
 
 TrDocument &TrMapView::getDocument()
@@ -61,10 +68,9 @@ void TrMapView::setLoadedFlag(bool loaded)
 	m_doc.m_is_loaded = true;
 }
 
-void TrMapView::setElementDock(QWidget * dock, int type)
+void TrMapView::setElementDock(QDockWidget * dock)
 {
-	if(type == 1)
-		m_dockNode = dynamic_cast<TrNodeDock *>(dock);
+	m_elementDock = dock;
 }
 
 void TrMapView::paint(QPainter *p)
@@ -73,6 +79,11 @@ void TrMapView::paint(QPainter *p)
 	{
 		p->setRenderHint(QPainter::Antialiasing);
 		m_doc.draw(m_zoom_ref, p, 0);
+		if(m_selected != nullptr)
+		{
+			if(m_selected->checkMask(TR_MASK_SELECTED) == TR_MASK_SELECTED)
+				m_selected->drawSurroundingRect(m_zoom_ref, p, 0);
+		}
 	}
 	else
 	{
@@ -282,9 +293,11 @@ bool TrMapView::notifyClick(const QPoint qpt, int mode, Qt::MouseButton button)
 		{
 			if(point != nullptr)
 			{
+				m_elementDock->setWidget(m_dockNode);
 				pobj->setMask(TR_MASK_SELECTED);
 				m_selected = pobj;
 				m_dockNode->setData(point);
+				return(true);
 			}
 		}
 	}
@@ -293,6 +306,19 @@ bool TrMapView::notifyClick(const QPoint qpt, int mode, Qt::MouseButton button)
 		if(m_dockNode != nullptr)
 			m_dockNode->setData(nullptr);
 	}
+
+	pos = m_pos_select;
+	pobj = selectObject(pt, pos, TR_MASK_SELECT_LINK);
+	if(pobj != nullptr)
+	{
+		m_selected = pobj;
+		m_selected->setMask(TR_MASK_SELECTED);
+		m_elementDock->setWidget(m_dockLink);
+		m_dockLink->setData(pobj);
+		m_pos_select = pos;
+	}
+	m_dockLink->setData(pobj);
+
 	update();
 	return false;
 }

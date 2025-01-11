@@ -1,7 +1,7 @@
 /******************************************************************
  * project:	OSM Traffic
  *
- * (C)		Schmid Hubert 2024
+ * (C)		Schmid Hubert 2024-2025
  ******************************************************************/
 
 /*
@@ -84,12 +84,10 @@ MainWindow::MainWindow(QWidget *parent)
     connect(m_net_option, SIGNAL(selectModeChanged(uint64_t)), this, SLOT(on_updateNetOptions(uint64_t)));
     ui->menuSettings->addAction(m_net_dock->toggleViewAction());
 
-    m_node_dock = new QDockWidget(tr("Point"), this);
-    m_node_option = new TrNodeDock(this);
-    m_node_dock->setWidget(m_node_option);
-    addDockWidget(Qt::RightDockWidgetArea, m_node_dock);
-    ui->menuSettings->addAction(m_node_dock->toggleViewAction());
-    m_map_view->setElementDock(m_node_option, 1);
+    m_element_dock = new QDockWidget(tr("Element"), this);
+    m_map_view->setElementDock(m_element_dock);
+    addDockWidget(Qt::RightDockWidgetArea, m_element_dock);
+    ui->menuSettings->addAction(m_element_dock->toggleViewAction());
 
     m_map_view->setFont(&m_font);
 

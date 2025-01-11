@@ -20,47 +20,29 @@
  * <https://www.gnu.org/licenses/>.
  */
 
-#ifndef TRNETDOCK_H
-#define TRNETDOCK_H
+
+#ifndef TRLINKDOCK_H
+#define TRLINKDOCK_H
+
+#include <tr_map_link_road.h>
 
 #include <QWidget>
 
 namespace Ui {
-class TrNetDock;
+class TrLinkDock;
 }
 
-class TrNetDock : public QWidget
+class TrLinkDock : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit TrNetDock(QWidget *parent = nullptr);
-    ~TrNetDock();
+    explicit TrLinkDock(QWidget *parent = nullptr);
+    ~TrLinkDock();
 
-    uint64_t getNetFlags();
-
-private slots:
-    void on_double_2_clicked(bool checked);
-
-    void on_crossings_clicked(bool checked);
-
-    void on_nodes_clicked(bool checked);
-
-    void on_text_clicked(bool checked);
-
-    void on_parking_clicked(bool checked);
-
-    void on_rd_name_clicked(bool checked);
-
+    void setData(TrGeoObject *obj);
 private:
-    Ui::TrNetDock *ui;
-
-    void setFlag(int checked, uint64_t flag);
-
-    uint64_t m_flags;
-
-signals:
-    void selectModeChanged(uint64_t);
+    Ui::TrLinkDock *ui;
 };
 
-#endif // TRNETDOCK_H
+#endif // TRLINKDOCK_H

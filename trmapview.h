@@ -26,6 +26,7 @@
 #include "tr_canvas.h"
 #include "tr_document.h"
 #include "trnodedock.h"
+#include "trlinkdock.h"
 //#include <QSvgGenerator>
 #include <QDockWidget>
 #include <QWidget>
@@ -34,6 +35,8 @@ class TrMapView : public TrCanvas
 {
     Q_OBJECT
 private:
+    uint64_t m_pos_select;
+
     TrDocument m_doc;
     TrZoomMap m_zoom_ref;
     Qt::MouseButton m_move_pressed;
@@ -43,7 +46,9 @@ private:
     TrPoint getWorldPoint(const QPoint & pt);
     TrGeoObject * selectObject(const TrPoint & pt, uint64_t & pos, uint64_t flag);
 
+    QDockWidget * m_elementDock;
     TrNodeDock * m_dockNode;
+    TrLinkDock * m_dockLink;
 
 protected:
     void resizeEvent(QResizeEvent *);
@@ -57,7 +62,7 @@ public:
 
     void setLoadedFlag(bool loaded);
 
-    void setElementDock(QWidget *dock, int type);
+    void setElementDock(QDockWidget * dock);
 
     void recalcExtRect();
     void resetZoom();
