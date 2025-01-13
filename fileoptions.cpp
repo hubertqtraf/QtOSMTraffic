@@ -88,8 +88,8 @@ void FileOptions::on_setOsmDir_clicked()
 
 void FileOptions::on_setProfileDir_clicked()
 {
-    QString fileName = QFileDialog::getOpenFileName(this, "",
-                                         tr("Open Profile"), tr("Profile File (*.xml)"));
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Open Profile File"),
+                                         ui->profileDir->text(), tr("Profile File (*.xml)"));
     ui->profileDir->clear();
     ui->profileDir->insert(fileName);
 }
@@ -131,6 +131,7 @@ void FileOptions::on_buttonBox_accepted()
 {
     TrMapLinkRoad::ms_lane_width_p = ui->laneSpinBox->value();
     TrMapLinkRoad::ms_lane_width_n = 0-ui->laneSpinBox->value();
+    emit updateSettings();
 }
 
 void FileOptions::on_buttonBox_rejected()

@@ -48,6 +48,9 @@ public:
 
     void manageSettings(QSettings &settings, bool mode);
 
+signals:
+    void updateSettings();
+
 private slots:
     void on_setOsmDir_clicked();
 

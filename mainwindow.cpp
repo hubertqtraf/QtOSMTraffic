@@ -63,6 +63,7 @@ MainWindow::MainWindow(QWidget *parent)
     view->setWidgetResizable(true);
 
     m_file_options = new FileOptions(this);
+    connect(m_file_options, SIGNAL(updateSettings()), this, SLOT(on_updateFileOptions()));
     readSettings();
 
     m_map_view->getDocument().setFileName("unloaded.osm");
@@ -408,4 +409,20 @@ void MainWindow::on_actionDirectories_triggered()
         m_file_options = new FileOptions(this);
     }
     m_file_options->show();
+}
+
+void MainWindow::on_updateFileOptions()
+{
+    if(m_file_options != nullptr)
+    {
+        QSettings settings("trafalgar", "QTraf");
+        if(m_file_options != nullptr)
+            m_file_options->manageSettings(settings, false);
+        QString profile = m_file_options->getProfileFileName();
+        TR_INF << profile;
+        m_profile_dlg->read(profile);
+        on_updateWorld();
+        on_updateLayerView();
+        on_updateNetOptions(m_net_option->getNetFlags());
+    }
 }

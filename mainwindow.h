@@ -85,6 +85,8 @@ private slots:
 public slots:
     void on_updateNetOptions(uint64_t flags);
 
+    void on_updateFileOptions();
+
     void on_updateLayerView();
 
 private:
