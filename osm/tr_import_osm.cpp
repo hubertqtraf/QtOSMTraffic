@@ -568,7 +568,7 @@ bool TrImportOsm::createFaceList(TrMapList * osm_list, QString name)
 
 	TrMapFace * face = nullptr;
 
-	if(name == "nature")
+	if(name == "field")
 		type = TYPE_NATURAL;    // 0x00000005
 
 	if(name == "building")
@@ -608,7 +608,7 @@ bool TrImportOsm::createFaceList(TrMapList * osm_list, QString name)
 	{
 		uint64_t f_class = m_face_list[i]->getType();
 		TR_INF << name << HEX << f_class << (f_class << 16)  << m_face_list[i]->getDrawType();
-		if((name == "nature") && ((f_class << 16) & TYPE_NATURAL))
+		if((name == "field") && ((f_class << 16) & TYPE_NATURAL))
 			osm_list->appendObject(m_face_list[i]);
 		if((name == "landuse") && ((f_class << 16) & TYPE_LANDUSE))
 			osm_list->appendObject(m_face_list[i]);

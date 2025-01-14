@@ -13,7 +13,7 @@
  *
  * beginning:	1.2024
  *
- * @author	Schmid Hubert (C)2024-2024
+ * @author	Schmid Hubert (C)2024-2025
  *
  * history:
  *
@@ -309,7 +309,7 @@ void TrImportOsmStream::closeNode(QMap<QString, name_set> & name_map,
 	}
 	if(m_tags.contains("amenity"))
 	{
-		uint64_t code = TrImportOsmRel::getAmenityClass(m_tags["amenity"]);
+		uint64_t code = TrImportOsmRel::getAmenityClass(m_tags["amenity"], true);
 		if(code)
 		{
 			point.pt_type = code;
@@ -471,6 +471,16 @@ void TrImportOsmStream::closeWay(QMap<QString, name_set> & name_map, uint64_t & 
 		{
 			way.type = TYPE_NATURAL | code;
 		}
+	}
+
+	if(m_tags.contains("amenity"))
+	{
+		uint64_t code = TrImportOsmRel::getAmenityClass(m_tags["amenity"], false);
+		if(code)
+		{
+			way.type = TYPE_NATURAL | code;
+		}
+		//way.type = TYPE_NATURAL | 6 | FLAG_FEATURE_AERA;
 	}
 
 	if(m_tags.contains("waterway"))

@@ -10,7 +10,7 @@
  * system:	UNIX/LINUX
  * compiler:	gcc
  *
- * @author	Schmid Hubert (C)2023-2023
+ * @author	Schmid Hubert (C)2023-2025
  *
  * beginning:	04.2023
  *
@@ -77,6 +77,9 @@
 #define NATURAL_ICE         0x0006
 //<value name="wet" rgb="#2a4747" index="7" type="color"/>
 #define NATURAL_WET         0x0007
+#define FIELD_PARKING       0x0008
+#define FIELD_SCHOOL        0x0009
+#define FIELD_CYCLE         0x000a
 
 // <value rgb="#4a5051" type="color" index="0" name="default"/>
 #define WATER_COAST         0x0001

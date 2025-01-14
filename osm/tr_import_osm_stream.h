@@ -13,7 +13,7 @@
  *
  * beginning:	01.2024
  *
- * @author	Schmid Hubert (C)2024-2024
+ * @author	Schmid Hubert (C)2024-2025
  *
  * history:
  *

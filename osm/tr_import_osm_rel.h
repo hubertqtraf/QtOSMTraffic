@@ -13,7 +13,7 @@
  *
  * beginning:	02.2024
  *
- * @author	Schmid Hubert (C)2024-2024
+ * @author	Schmid Hubert (C)2024-2025
  *
  * history:
  *
@@ -52,11 +52,11 @@
 // TODO: use own class/module?
 struct Relation
 {
-    uint64_t m_flags;
+	uint64_t m_flags;
 	QVector<RelMember_t> m_members;
 
-    Relation();
-    friend QDebug operator<<(QDebug dbg, const Relation& member);
+	Relation();
+	friend QDebug operator<<(QDebug dbg, const Relation& member);
 
 	int isMultiPolyRing();
 	void resetPolyRing(QMap<uint64_t, Way_t> & waylist);
@@ -90,11 +90,11 @@ public:
 	static uint64_t getLanduseClass(const QString & value);
 	static uint64_t getNaturalClass(const QString & value);
 	static uint64_t getWaterWayClass(const QString & value);
-    static uint64_t getRailWayClass(const QString & value);
+	static uint64_t getRailWayClass(const QString & value);
 
 	static uint64_t getHighwayPointClass(const QString & value);
 	static uint64_t getRailwayPointClass(const QString & value);
-	static uint64_t getAmenityClass(const QString & value);
+	static uint64_t getAmenityClass(const QString & value, bool node);
 	static uint64_t getShopClass(const QString & value);
 };
 

@@ -13,7 +13,7 @@
  *
  * beginning:	2.2024
  *
- * @author	Schmid Hubert (C)2024-2024
+ * @author	Schmid Hubert (C)2024-2025
  *
  * history:
  *
@@ -513,7 +513,7 @@ uint64_t TrImportOsmRel::getRailwayPointClass(const QString & value)
 	return 0;
 }*/
 
-uint64_t TrImportOsmRel::getAmenityClass(const QString & value)
+uint64_t TrImportOsmRel::getAmenityClass(const QString & value, bool node)
 {
 	//TR_INF << value;
 	if(value == "bench")
@@ -527,9 +527,26 @@ uint64_t TrImportOsmRel::getAmenityClass(const QString & value)
 	if(value == "hunting_stand")
 		return (1);
 	if(value == "parking")
-		return (2 | FLAG_FEATURE_NODE | TYPE_ROAD);
+	{
+		if(node)
+			return (2 | FLAG_FEATURE_NODE | TYPE_ROAD);
+		else
+			return (FLAG_FEATURE_AERA | FIELD_PARKING);
+	}
+	if(value == "school")
+	{
+		if(node)
+			;
+		else
+			return (FLAG_FEATURE_AERA | FIELD_SCHOOL);
+	}
 	if(value == "bicycle_parking")
-		return (2 | FLAG_FEATURE_NODE | TYPE_ROAD);
+	{
+		if(node)
+			;
+		else
+			return (FLAG_FEATURE_AERA | FIELD_CYCLE);
+	}
 	if(value == "parking_entrance")
 		return (2 | FLAG_FEATURE_NODE | TYPE_ROAD);
 	if(value == "vending_machine")
@@ -643,6 +660,8 @@ uint64_t TrImportOsmRel::getNaturalClass(const QString & value)
 		return (NATURAL_WATER | FLAG_FEATURE_AERA);
 	if(value == "shingle")
 		return (NATURAL_WET | FLAG_FEATURE_AERA);
+	if(value == "scrub")
+		return (LANDUSE_GRASS | FLAG_FEATURE_AERA);
 
 	if(value == "tree")	// POI
 	{

@@ -12,7 +12,7 @@
  * system:	UNIX/LINUX
  * compiler:	gcc
  *
- * @author	Schmid Hubert (C)2009-2021
+ * @author	Schmid Hubert (C)2009-2025
  *
  * beginning:	06.2009
  *
@@ -158,7 +158,7 @@ void TrGeoPolygon::getScreenPoints(const TrZoomMap & zoom_ref, QPolygon & poly)
 		screen.x = m_base.pt[i*2];
 		screen.y = m_base.pt[(i*2)+1];
 		zoom_ref.setMovePoint(&screen.x,&screen.y);
-        poly.append(QPoint(static_cast<int>(screen.x), static_cast<int>(screen.y)));
+		poly.append(QPoint(static_cast<int>(screen.x), static_cast<int>(screen.y)));
 	}
 }
 
@@ -227,7 +227,7 @@ void TrGeoPolygon::draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char 
 
 	if(!m_geo_active_pen)
 	{
-        TR_MSG << "m_geo_active_pen is nullptr" << m_geo_active_pen;
+		TR_MSG << "m_geo_active_pen is nullptr" << m_geo_active_pen;
 		return;
 	}
 
@@ -253,7 +253,7 @@ void TrGeoPolygon::draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char 
 		poly.setPoint(i, screen.x, screen.y);
 
 		if(m_inst_mask & TR_MASK_SHOW_POINTS)
-            p->drawRect(static_cast<int>(screen.x-4), static_cast<int>(screen.y-4), 8, 8);
+			p->drawRect(static_cast<int>(screen.x-4), static_cast<int>(screen.y-4), 8, 8);
 	}
 
 	if(!poly.size())
@@ -320,8 +320,8 @@ void TrGeoPolygon::draw(const TrZoomMap & zoom_ref, QPainter * p, TrPoint from, 
 	screen.x = pt.x;
 	screen.y = pt.y;
 	zoom_ref.setMovePoint(&screen.x,&screen.y);
-    poly.setPoint(0, static_cast <int>(screen.x),
-                  static_cast <int>(screen.y));
+	poly.setPoint(0, static_cast <int>(screen.x),
+		static_cast <int>(screen.y));
 
 	for (unsigned int i = 0; i < m_base.n_pt; ++i)
 	{
@@ -329,11 +329,11 @@ void TrGeoPolygon::draw(const TrZoomMap & zoom_ref, QPainter * p, TrPoint from, 
 		screen.y = m_base.pt[(i*2)+1];
 		zoom_ref.setMovePoint(&screen.x,&screen.y);
 
-        poly.setPoint(i+1, static_cast <int>(screen.x), screen.y);
+		poly.setPoint(i+1, static_cast <int>(screen.x), screen.y);
 		// TODO: test
 		if(mode != 0x02)
-            p->drawRect(static_cast <int>(screen.x-4),
-                        static_cast <int>(screen.y-4), 8, 8);
+			p->drawRect(static_cast <int>(screen.x-4),
+				static_cast <int>(screen.y-4), 8, 8);
 	}
 	pt = to;
 	screen.x = pt.x;
