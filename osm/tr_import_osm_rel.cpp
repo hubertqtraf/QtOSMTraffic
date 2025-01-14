@@ -517,7 +517,12 @@ uint64_t TrImportOsmRel::getAmenityClass(const QString & value, bool node)
 {
 	//TR_INF << value;
 	if(value == "bench")
-		return (1);
+	{
+		if(node)
+			return 1;
+		else
+			return 0;
+	}
 	if(value == "waste_basket")
 		return (1);
 	if(value == "recycling")
@@ -578,7 +583,16 @@ uint64_t TrImportOsmRel::getAmenityClass(const QString & value, bool node)
 	if(value == "place_of_worship")
 		return (3 | FLAG_FEATURE_NODE | TYPE_PUBLIC);
 	if(value == "shelter")
-		return (4 | FLAG_FEATURE_NODE | TYPE_ROAD);
+	{
+		if(node)
+		{
+			return (4 | FLAG_FEATURE_NODE | TYPE_ROAD);
+		}
+		else
+		{
+			return (FLAG_FEATURE_AERA | BUILDING_SERVICE);
+		}
+	}
 	if(value == "fuel")
 		return (5 | FLAG_FEATURE_NODE | TYPE_ROAD);
 	if(value == "charging_station")
