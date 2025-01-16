@@ -68,6 +68,7 @@ typedef struct
 	uint32_t parking;
 	// width in [mm]
 	uint32_t width;
+	uint8_t placement;
 }Way_t;
 
 typedef struct

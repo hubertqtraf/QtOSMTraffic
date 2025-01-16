@@ -38,6 +38,7 @@
 TrOsmLink::TrOsmLink()
 	: m_osm_lanes(0x00000000)
 	, m_osm_parking(0x00000000)
+	, m_osm_placement(0x00)
 	, m_osm_sidewalk(0x00000000)
 	, m_osm_width(0x00000000)
 {
@@ -103,14 +104,24 @@ uint32_t TrOsmLink::getOsmParkingBwd() //Fwd()
 // change left and rigth for backward mode
 uint32_t TrOsmLink::getOsmParkingFwd() //Bwd()
 {
-    uint16_t p = static_cast<uint16_t>(m_osm_parking >> 12);
+	uint16_t p = static_cast<uint16_t>(m_osm_parking >> 12);
 
-    uint16_t change = static_cast<uint16_t>(((p & 0x000000ff) << 8));
+	uint16_t change = static_cast<uint16_t>(((p & 0x000000ff) << 8));
 	change |= ((p & 0x0000ff00) >> 8);
 
 	//if(m_osm_parking)
 	//	TR_INF <<  "BB" << HEX << change;
 	return change;
+}
+
+uint8_t TrOsmLink::getOsmPlacement()
+{
+	return m_osm_placement;
+}
+
+void TrOsmLink::setOsmPlacement(uint8_t placement)
+{
+	m_osm_placement = placement;
 }
 
 uint32_t TrOsmLink::getOsmSidewalk()
@@ -162,11 +173,13 @@ TrMapLink * TrOsmLink::cloneLink(bool fwd, bool sideway, bool is_road)
 	{
 		orig_rd->setLanes(getLanes());
 		if(!fwd)
-            orig_rd->setParking(static_cast<uint16_t>(getOsmParkingFwd()));
+			orig_rd->setParking(static_cast<uint16_t>(getOsmParkingFwd()));
 		else
-            orig_rd->setParking(static_cast<uint16_t>(getOsmParkingBwd()));
+			orig_rd->setParking(static_cast<uint16_t>(getOsmParkingBwd()));
 		if(getLanes() == 0)
 			orig_rd->setLanes(1);
+		//TR_INF << m_osm_placement;
+		orig_rd->setPlacement(m_osm_placement);
 	}
 
 	if((!getOneWay()) && (orig_rd != nullptr))
@@ -192,7 +205,7 @@ TrMapLink * TrOsmLink::cloneLink(bool fwd, bool sideway, bool is_road)
 				else
 				{
 					if(lane > 0)
-                        orig_rd->setLanes(static_cast<uint32_t>(lane));
+						orig_rd->setLanes(static_cast<uint32_t>(lane));
 					else
 						orig_rd->setLanes(getLanes());
 				}	
@@ -204,7 +217,7 @@ TrMapLink * TrOsmLink::cloneLink(bool fwd, bool sideway, bool is_road)
 				if(fwd)
 				{
 					if(lane > 0)
-                        orig_rd->setLanes(static_cast<uint32_t>(lane));
+						orig_rd->setLanes(static_cast<uint32_t>(lane));
 					else
 						orig_rd->setLanes(getLanes());
 				}

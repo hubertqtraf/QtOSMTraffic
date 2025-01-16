@@ -410,6 +410,7 @@ void TrImportOsmStream::closeWay(QMap<QString, name_set> & name_map, uint64_t & 
 	// lanes: lanes 7, lanesF << 16 lanesB << 24
 	way.parking = 0;
 	way.width = 0;
+	way.placement = 0;
 
 	// TODO: tmp...
 	//way.type = TYPE_ROAD | 1;
@@ -494,6 +495,12 @@ void TrImportOsmStream::closeWay(QMap<QString, name_set> & name_map, uint64_t & 
 		if(!((way.type >> 32) & 0x03))
 			way.type |= one;
 		//world_->way_flags |= one;
+	}
+
+	if(m_tags.contains("placement"))
+	{
+		way.placement = getPlacement(m_tags["placement"]);
+		//TR_INF << HEX << "Placement" << way.placement << m_tags["placement"] << way.type;
 	}
 
 	if(m_tags.contains("junction"))
@@ -615,6 +622,7 @@ void TrImportOsmStream::closeOsm(World_t & world)
 		world.ways[index].width = way.width;
 		world.ways[index].name_id = way.name_id;
 		world.ways[index].parking = way.parking;
+		world.ways[index].placement = way.placement;
 		index++;
 	}
 #ifdef OSM_C_FILTER
@@ -877,6 +885,24 @@ uint64_t TrImportOsmStream::parkingTest(const QString & part, const QString & va
 		ret |= FLAG_PARKING_R;
 	if(code & 0x0000000100000000)
 		ret |= FLAG_PARKING_L;
+	return ret;
+}
+
+uint64_t TrImportOsmStream::getPlacement(const QString & value)
+{
+	uint64_t ret = 0L;
+	QStringList plist = value.split(':');
+	if(plist.size() != 2)
+		return 0;
+	if(plist[0] == "right_of")
+		ret |= 0x01;
+	if(plist[0] == "left_of")
+		ret |= 0x02;
+	if(plist[0] == "middle_of")
+		ret |= 0x04;
+	uint8_t count = plist[1].toInt();
+	ret |= (count << 4);
+	// TODO: Placement?
 	return ret;
 }
 

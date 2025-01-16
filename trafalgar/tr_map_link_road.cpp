@@ -52,6 +52,7 @@ int TrMapLinkRoad::ms_lane_width_n = -3200;
 TrMapLinkRoad::TrMapLinkRoad()
 	: TrMapLink()
 	, m_lanes(1)
+	, m_placement(0)
 	, m_parking(nullptr)
 	, m_mm_calc_width(DEF_WITH_P)
 	, m_pt_from{0.0,0.0}
@@ -105,6 +106,16 @@ void TrMapLinkRoad::setLanes(uint32_t r_lanes)
 uint8_t TrMapLinkRoad::getLanes()
 {
 	return m_lanes;
+}
+
+void TrMapLinkRoad::setPlacement(uint8_t placement)
+{
+	m_placement = placement;
+}
+
+uint8_t TrMapLinkRoad::getPlacement()
+{
+	return m_placement;
 }
 
 void TrMapLinkRoad::setParking(uint16_t code)

@@ -528,7 +528,12 @@ uint64_t TrImportOsmRel::getAmenityClass(const QString & value, bool node)
 	if(value == "recycling")
 		return (1);
 	if(value == "fountain")
-		return (1);
+	{
+		if(node)	
+			return (1);
+		else
+			return (NATURAL_WATER | FLAG_FEATURE_AERA);
+	}
 	if(value == "hunting_stand")
 		return (1);
 	if(value == "parking")
@@ -594,7 +599,17 @@ uint64_t TrImportOsmRel::getAmenityClass(const QString & value, bool node)
 		}
 	}
 	if(value == "fuel")
-		return (5 | FLAG_FEATURE_NODE | TYPE_ROAD);
+	{
+		if(node)
+		{
+			return (5 | FLAG_FEATURE_NODE | TYPE_ROAD);
+		}
+		else
+		{
+			// TODO: new color
+			return (FLAG_FEATURE_AERA | FIELD_SCHOOL);
+		}
+	}
 	if(value == "charging_station")
 		return (6 | FLAG_FEATURE_NODE | TYPE_ROAD);
 	if(value == "taxi")

@@ -68,6 +68,8 @@ private:
 	// TODO: should be part of assembly
 	uint8_t m_lanes;
 
+	uint8_t m_placement;
+
 	// could be one lane or a list
 	TrGeoObject * m_parking;
 
@@ -113,6 +115,10 @@ public:
 	void setLanes(uint32_t lanes);
 
 	uint8_t getLanes();
+
+	void setPlacement(uint8_t placement);
+
+	uint8_t getPlacement();
 
 	void setParking(uint16_t park);
 

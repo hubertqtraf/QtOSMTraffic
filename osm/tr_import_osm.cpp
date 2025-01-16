@@ -331,6 +331,7 @@ bool TrImportOsm::read(const QString & filename, TrMapList & name_list, uint8_t 
 
 				// parking lanes
 				olink->setOsmParking(osm2_world.ways[i].parking);
+				olink->setOsmPlacement(osm2_world.ways[i].placement);
 
 				// TODO: set a flag for the SIDEWALK option?
 				if(osm2_world.ways[i].type & FLAG_SIDEWALK)

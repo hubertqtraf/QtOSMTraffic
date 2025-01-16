@@ -81,6 +81,7 @@ private:
 	uint64_t parkingTest(const QString & part, const QString & value, uint64_t & code);
 	uint64_t parkingRes(const QString & value, uint64_t & code);
 	uint64_t getParking();
+	uint64_t getPlacement(const QString & value);
 
 	bool setRel2Face(Rel_t & rel, QVector<TrMapFace *> & face_list);
 	bool appendFacePoint(uint64_t id, TrMapFace & face);
