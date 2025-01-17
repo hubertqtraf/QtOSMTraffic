@@ -49,6 +49,10 @@ void TrLinkDock::setData(TrGeoObject* obj)
         ui->lineEdit_Tail->setText("---");
         ui->spinBox_Class->setValue(1);
         ui->spinBox_Lanes->setValue(1);
+        ui->checkBox_Ramp->setCheckState(Qt::Unchecked);
+        ui->checkBox_Oneway->setCheckState(Qt::Unchecked);
+        ui->checkBox_Backward->setCheckState(Qt::Unchecked);
+        ui->lineEdit_Place->setText("---");
         return;
     }
     ui->label_type_2->setText("Link");
@@ -64,7 +68,28 @@ void TrLinkDock::setData(TrGeoObject* obj)
     	ui->lineEdit_Tail->setText(QString::number(link->getNodeToRef()->getGeoId()));
     }
     ui->spinBox_Class->setValue(link->getRdClass() & 0x0f);
+    if(link->getOneWay() & TR_LINK_DIR_ONEWAY)
+       ui->checkBox_Oneway->setCheckState(Qt::Checked);
+    else
+       ui->checkBox_Oneway->setCheckState(Qt::Unchecked);
+    if(link->getOneWay() & TR_LINK_DIR_BWD)
+       ui->checkBox_Backward->setCheckState(Qt::Checked);
+    else
+       ui->checkBox_Backward->setCheckState(Qt::Unchecked);
+
     TrMapLinkRoad * roadlink = dynamic_cast<TrMapLinkRoad *>(link);
     if(roadlink != nullptr)
+    {
     	ui->spinBox_Lanes->setValue(roadlink->getLanes());
-}
+        if(link->getRdClass() & TR_LINK_RAMP_FLAG)
+            ui->checkBox_Ramp->setCheckState(Qt::Checked);
+        else
+            ui->checkBox_Ramp->setCheckState(Qt::Unchecked);
+        if(roadlink->getPlacement())
+            ui->lineEdit_Place->setText("X");
+        else
+            ui->lineEdit_Place->setText("O");
+    }
+    else
+        ui->lineEdit_Place->setText("---");
+ }

@@ -175,6 +175,7 @@ TrGeoObject * TrMapView::selectObject(const TrPoint & pt, uint64_t & pos, uint64
 {
 	TrGeoObject * sobj = nullptr;
 
+	uint64_t link_pos = pos;
 	// layers are class net ('road', 'rail', 'stream') and class list ('poi')
 	//TR_INF << m_doc.getSelectionLayer();
 
@@ -198,13 +199,15 @@ TrGeoObject * TrMapView::selectObject(const TrPoint & pt, uint64_t & pos, uint64
 	if(list == nullptr)
 		return sobj;
 
-	pos = net->findSelect(m_zoom_ref, pt, TR_NO_VALUE, flag);
+	pos = link_pos;
+	pos = net->findSelect(m_zoom_ref, pt, pos, flag);
 
 	if(pos == TR_NO_VALUE)
 	{
+		pos = net->findSelect(m_zoom_ref, pt, pos, flag);
 		//TR_MSG << "no result";
 	}
-	else
+	if(pos != TR_NO_VALUE)
 	{
 		sobj = list->getObject(pos);
 	}

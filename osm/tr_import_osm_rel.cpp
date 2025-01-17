@@ -529,7 +529,7 @@ uint64_t TrImportOsmRel::getAmenityClass(const QString & value, bool node)
 		return (1);
 	if(value == "fountain")
 	{
-		if(node)	
+		if(node)
 			return (1);
 		else
 			return (NATURAL_WATER | FLAG_FEATURE_AERA);
@@ -711,15 +711,15 @@ uint64_t TrImportOsmRel::getWaterWayClass(const QString & value)
 
 uint64_t TrImportOsmRel::getRailWayClass(const QString & value)
 {
-    if(value == "rail")
-        return 0x0000000000000080;
-    if(value == "subway")
-        return 0x0000000000000090;
-    if(value == "light_rail")
-        return 0x00000000000000A0;
-    if(value == "tram")
-        return 0x00000000000000A0;
-    if(value == "narrow_gauge")
-        return 0x00000000000000B0;
-    return 0;
+	if(value == "rail")
+		return 0x0000000000000080;
+	if(value == "subway")
+		return 0x0000000000000090;
+	if(value == "light_rail")
+		return 0x00000000000000A0;
+	if(value == "tram")
+		return 0x00000000000000A0;
+	if(value == "narrow_gauge")
+		return 0x00000000000000B0;
+	return 0;
 }
