@@ -10,7 +10,7 @@
  *
  * beginning:	11.2016
  *
- * (C)		Schmid Hubert 2016-2021
+ * (C)		Schmid Hubert 2016-2025
  *
  * history:
  *
@@ -37,7 +37,8 @@
 #ifndef TR_OSM_LINK_H
 #define TR_OSM_LINK_H
 
-#include <QVector>
+#include <QtCore/qvector.h>
+
 #include <stdint.h>
 #include <tr_map_link.h>
 

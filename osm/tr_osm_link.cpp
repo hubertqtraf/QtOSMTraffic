@@ -10,7 +10,7 @@
  *
  * beginning:	11.2016
  *
- * (C)		Schmid Hubert 2016-2021
+ * (C)		Schmid Hubert 2016-2025
  *
  * history:
  *

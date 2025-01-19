@@ -526,7 +526,12 @@ uint64_t TrImportOsmRel::getAmenityClass(const QString & value, bool node)
 	if(value == "waste_basket")
 		return (1);
 	if(value == "recycling")
-		return (1);
+	{
+		if(node)
+			return (1);
+		else
+			return (FLAG_FEATURE_AERA | FIELD_SCHOOL);
+	}
 	if(value == "fountain")
 	{
 		if(node)
@@ -558,7 +563,12 @@ uint64_t TrImportOsmRel::getAmenityClass(const QString & value, bool node)
 			return (FLAG_FEATURE_AERA | FIELD_CYCLE);
 	}
 	if(value == "parking_entrance")
-		return (2 | FLAG_FEATURE_NODE | TYPE_ROAD);
+	{
+		if(node)
+			return (2 | FLAG_FEATURE_NODE | TYPE_ROAD);
+		//else
+			// TODO: 'road'->'service'?
+	}
 	if(value == "vending_machine")
 		return (2 | FLAG_FEATURE_NODE | TYPE_ROAD);
 	if(value == "restaurant")
@@ -611,9 +621,29 @@ uint64_t TrImportOsmRel::getAmenityClass(const QString & value, bool node)
 		}
 	}
 	if(value == "charging_station")
-		return (6 | FLAG_FEATURE_NODE | TYPE_ROAD);
+	{
+		if(node)
+		{
+			return (6 | FLAG_FEATURE_NODE | TYPE_ROAD);
+		}
+		else
+		{
+			// TODO: new color
+			return (FLAG_FEATURE_AERA | FIELD_CYCLE);
+		}
+	}
 	if(value == "taxi")
-		return (5 | FLAG_FEATURE_NODE | TYPE_ROAD);
+	{
+		if(node)
+		{
+			return (5 | FLAG_FEATURE_NODE | TYPE_ROAD);
+		}
+		else
+		{
+			// TODO: new color
+			return (FLAG_FEATURE_AERA | FIELD_CYCLE);
+		}
+	}
 	return 0;
 }
 
