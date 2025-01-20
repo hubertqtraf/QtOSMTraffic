@@ -12,7 +12,7 @@
  * system:	UNIX/LINUX
  * compiler:	gcc
  *
- * @author	Schmid Hubert (C)2015-2022
+ * @author	Schmid Hubert (C)2015-2025
  *
  * beginning:	06.2015
  *
@@ -1047,6 +1047,10 @@ void TrMapNode::draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mod
 	}
 	if(this->clip(zoom_ref))
                 return;
+
+	if(m_inst_mask & TR_MASK_SELECTED)
+		drawSelect(zoom_ref, p, mode);
+
 	int p_mode = 0;
 	if(m_dir_flags & TR_NODE_IS_SHADOW)
 		p_mode = 1;

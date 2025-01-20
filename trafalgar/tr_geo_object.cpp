@@ -12,7 +12,7 @@
  * system:	UNIX/LINUX
  * compiler:	gcc
  *
- * @author	Schmid Hubert (C)2009-2022
+ * @author	Schmid Hubert (C)2009-2025
  *
  * beginning:	04.2009
  *
@@ -162,7 +162,7 @@ void TrGeoObject::setNameList(TrGeoObject * list)
 {
 }
 
-void TrGeoObject::draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mode)
+void TrGeoObject::draw(const TrZoomMap & zoom_ref, QPainter * p, uint8_t mode)
 {
 }
 
@@ -190,7 +190,7 @@ uint64_t TrGeoObject::editElement(const TrZoomMap & zoom_ref, TrPoint & set, QVe
 	return TR_NO_VALUE;
 }
 
-void TrGeoObject::drawSelect(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mode)
+void TrGeoObject::drawSelect(const TrZoomMap & zoom_ref, QPainter * p, uint8_t mode)
 {
 }
 

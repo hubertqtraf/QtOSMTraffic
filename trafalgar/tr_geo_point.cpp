@@ -12,7 +12,7 @@
  * system:	UNIX/LINUX
  * compiler:	gcc
  *
- * @author	Schmid Hubert (C)2021-2023
+ * @author	Schmid Hubert (C)2021-2025
  *
  * beginning:	05.2021
  *
@@ -199,6 +199,8 @@ void TrGeoPoint::draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mo
 	}
 	p->setPen(*getActivePen());
 	// TODO: brush?
+	if(m_inst_mask & TR_MASK_SELECTED)
+		drawSelect(zoom_ref, p, mode);
 	drawElement(zoom_ref, p, 0x00);
 }
 
@@ -223,10 +225,10 @@ void TrGeoPoint::drawText(const TrZoomMap & zoom_ref, QPainter * p, const QStrin
 
 void TrGeoPoint::drawElement(const TrZoomMap & zoom_ref, QPainter * p, uint8_t mode)
 {
-	if(this->checkMask(TR_MASK_SELECTED) == TR_MASK_SELECTED)
+	/*if(this->checkMask(TR_MASK_SELECTED) == TR_MASK_SELECTED)
 	{
 		drawSelect(zoom_ref, p, 0);
-	}
+	}*/
 	if(!(s_mask & TR_MASK_SHOW_POINTS))
 		return;
 
@@ -237,29 +239,27 @@ void TrGeoPoint::drawElement(const TrZoomMap & zoom_ref, QPainter * p, uint8_t m
 
 	if(m_pt_ref != nullptr)
 	{
-        p->drawLine(static_cast <int>(screen.x-SELECT_SIZE),
-                    static_cast <int>(screen.y+SELECT_SIZE),
-                    static_cast <int>(screen.x+SELECT_SIZE),
-                    static_cast <int>(screen.y-SELECT_SIZE));
-        p->drawLine(static_cast <int>(screen.x+SELECT_SIZE),
-                    static_cast <int>(screen.y+SELECT_SIZE),
-                    static_cast <int>(screen.x-SELECT_SIZE),
-                    static_cast <int>(screen.y-SELECT_SIZE));
+		p->drawLine(static_cast <int>(screen.x-SELECT_SIZE),
+			static_cast <int>(screen.y+SELECT_SIZE),
+			static_cast <int>(screen.x+SELECT_SIZE),
+			static_cast <int>(screen.y-SELECT_SIZE));
+		p->drawLine(static_cast <int>(screen.x+SELECT_SIZE),
+			static_cast <int>(screen.y+SELECT_SIZE),
+			static_cast <int>(screen.x-SELECT_SIZE),
+			static_cast <int>(screen.y-SELECT_SIZE));
 	}
 	else
 	{
-        p->drawRect(static_cast <int>(screen.x-DRAW_SIZE),
-                    static_cast <int>(screen.y-DRAW_SIZE), DRAW_SIZE*2, DRAW_SIZE*2);
+		p->drawRect(static_cast <int>(screen.x-DRAW_SIZE),
+			static_cast <int>(screen.y-DRAW_SIZE), DRAW_SIZE*2, DRAW_SIZE*2);
 	}
 }
 
 // TODO: check hard coded values or move (gui?)
 void TrGeoPoint::drawSelect(const TrZoomMap & zoom_ref, QPainter * p, uint8_t mode)
 {
-	TrPoint screen;
+	TrPoint screen = getPoint();
 
-	screen.x = m_pt.x;
-	screen.y = m_pt.y;
 	zoom_ref.setMovePoint(&screen.x,&screen.y);
 
 	//zoom_ref.setPoint(&screen.x, &screen.y);
@@ -269,13 +269,13 @@ void TrGeoPoint::drawSelect(const TrZoomMap & zoom_ref, QPainter * p, uint8_t mo
 	p->setBrush(Qt::NoBrush);
 	if(mode)
 	{
-        p->drawEllipse(static_cast <int>(screen.x-7),
-                       static_cast <int>(screen.y-6), 12, 12);
+		p->drawEllipse(static_cast <int>(screen.x-7),
+			static_cast <int>(screen.y-6), 12, 12);
 	}
 	else
 	{
-        p->drawRect(static_cast <int>(screen.x-5),
-                    static_cast <int>(screen.y-5), 10, 10);
+		p->drawRect(static_cast <int>(screen.x-5),
+			static_cast <int>(screen.y-5), 10, 10);
 	}
 	// Default: CompositionMode_SourceOver
 	p->setCompositionMode(comp);

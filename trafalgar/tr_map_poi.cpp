@@ -204,11 +204,11 @@ void TrMapPoi::draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mode
 		//TR_WRN << "getActivePen() == nullptr";
 		return;
 	}
-	// TODO: brush?
-	TrPoint screen;
 
-	screen.x = m_pt.x;
-	screen.y = m_pt.y;
+	if(m_inst_mask & TR_MASK_SELECTED)
+		drawSelect(zoom_ref, p, mode);
+	// TODO: brush?
+	TrPoint screen = getPoint();
 	zoom_ref.setMovePoint(&screen.x,&screen.y);
 	bool text = true;
 	p->setPen(*getActivePen());
@@ -314,30 +314,19 @@ void TrMapPoi::draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mode
 }
 
 // TODO: check hard coded values or move (gui?)
-/*void TrMapPoint::drawSelect(const TrZoomMap & zoom_ref, QPainter * p, uint8_t mode)
+void TrMapPoi::drawSelect(const TrZoomMap & zoom_ref, QPainter * p, uint8_t mode)
 {
-	TrPoint screen;
-
-	screen.x = m_pt.x;
-	screen.y = m_pt.y;
+	TrPoint screen = getPoint();
 	zoom_ref.setMovePoint(&screen.x,&screen.y);
 
-	//zoom_ref.setPoint(&screen.x, &screen.y);
 	QPainter::CompositionMode comp = p->compositionMode();
 	p->setCompositionMode(QPainter::RasterOp_SourceXorDestination);
 	p->setPen(QColor(0xff, 0xff, 0xff));
 	p->setBrush(Qt::NoBrush);
-	if(mode)
-	{
-		p->drawEllipse(screen.x-7, screen.y-6, 12, 12);
-	}
-	else
-	{
-		p->drawRect(screen.x-5, screen.y-5, 10, 10);
-	}
+	p->drawEllipse(screen.x-7, screen.y-6, 12, 12);
 	// Default: CompositionMode_SourceOver
 	p->setCompositionMode(comp);
-}*/
+}
 
 bool TrMapPoi::setSurroundingRect()
 {

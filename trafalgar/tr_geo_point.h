@@ -12,7 +12,7 @@
  * system:	UNIX/LINUX
  * compiler:	gcc
  *
- * @author	Schmid Hubert (C)2021-2023
+ * @author	Schmid Hubert (C)2021-2025
  *
  * beginning:	05.2021
  *
@@ -109,7 +109,7 @@ public:
 
 	void drawElement(const TrZoomMap & zoom_ref, QPainter * p, uint8_t mode);
 
-	void drawSelect(const TrZoomMap & zoom_ref, QPainter * p, uint8_t mode = 0);
+	virtual void drawSelect(const TrZoomMap & zoom_ref, QPainter * p, uint8_t mode = 0);
 
 	static bool isCloseToPoint(const TrZoomMap & zoom_ref, const TrPoint & inside, const TrPoint & pos);
 

@@ -12,7 +12,7 @@
  * system:	UNIX/LINUX
  * compiler:	gcc
  *
- * @author	Schmid Hubert (C)2015-2022
+ * @author	Schmid Hubert (C)2015-2025
  *
  * beginning:	06.2015
  *
@@ -164,7 +164,7 @@ public:
 
 	virtual void draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mode = 0);
 
-	void drawSelect(const TrZoomMap & zoom_ref, QPainter * p, uint8_t mode = 0);
+	virtual void drawSelect(const TrZoomMap & zoom_ref, QPainter * p, uint8_t mode = 0);
 
 	bool setSurroundingRect();
 

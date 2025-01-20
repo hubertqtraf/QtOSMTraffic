@@ -79,6 +79,8 @@ public:
 
 	bool init(const TrZoomMap & zoom_ref, uint64_t ctrl = 0, TrGeoObject * base = nullptr);
 
+	virtual void drawSelect(const TrZoomMap & zoom_ref, QPainter * p, uint8_t mode);
+
 	virtual void draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mode = 0);
 
 	bool setSurroundingRect();

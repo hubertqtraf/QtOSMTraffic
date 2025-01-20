@@ -12,7 +12,7 @@
  * system:	UNIX/LINUX
  * compiler:	gcc
  *
- * @author	Schmid Hubert (C)2009-2022
+ * @author	Schmid Hubert (C)2009-2025
  *
  * beginning:	04.2009
  *
@@ -102,7 +102,6 @@ protected:
 	// TODO: back to protected?
 	//static uint64_t s_mask;
 
-	void drawSelect(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mode);
 	bool setPosition(double x, double y, int idx);
 	void createSelectPoints(int n);
 
@@ -156,7 +155,9 @@ public:
 
 	virtual void setNameList(TrGeoObject * list);
 
-	virtual void draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mode = 0);
+	virtual void drawSelect(const TrZoomMap & zoom_ref, QPainter * p, uint8_t mode = 0);
+
+	virtual void draw(const TrZoomMap & zoom_ref, QPainter * p, uint8_t mode = 0);
 
 	virtual void resize(const TrZoomMap & zoom_ref, int x, int y);
 
