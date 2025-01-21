@@ -14,7 +14,7 @@
  *
  * beginning:	11.2012
  *
- * @author	Schmid Hubert(C) 2012-2024
+ * @author	Schmid Hubert(C) 2012-2025
  *
  * history:
  *
@@ -732,7 +732,23 @@ void TrMapLink::getTwoLine(const TrZoomMap & zoom_ref, QPolygon & poly, TrPoint 
 		static_cast <int>(pt2.y));
 }
 
-void TrMapLink::draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mode)
+void TrMapLink::drawSelect(const TrZoomMap & zoom_ref, QPainter * p, uint8_t mode)
+{
+	TrGeoObject::drawSurroundingRect(zoom_ref, p, mode);
+	if((m_node_from == nullptr) || (m_node_to == nullptr))
+		return;
+	m_node_from->drawSelect(zoom_ref, p, 0);
+	m_node_to->drawSelect(zoom_ref, p, 1);
+	if(m_pline != nullptr)
+	{
+		// TODO: handling of 'TR_MASK_DRAW' flag is OK?
+		m_pline->setMask(TR_MASK_SHOW_POINTS | TR_MASK_DRAW);
+		m_pline->draw(zoom_ref, p, 0);
+		m_pline->removeMask(TR_MASK_SHOW_POINTS | TR_MASK_DRAW);
+	}
+}
+
+void TrMapLink::draw(const TrZoomMap & zoom_ref, QPainter * p, uint8_t mode)
 {
 	if(!(m_inst_mask & TR_MASK_DRAW))
 		return;
@@ -747,6 +763,8 @@ void TrMapLink::draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mod
 		TR_WRN << "no active_pen -> exiting!" << HEX << getType();
 		return;
 	}
+	if(m_inst_mask & TR_MASK_SELECTED)
+		drawSelect(zoom_ref, p, mode);
 
 	if(m_pline == nullptr)
 	{

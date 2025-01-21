@@ -13,7 +13,7 @@
  *
  * beginning:	11.2012
  *
- * @author	Schmid Hubert (C)2012-2021
+ * @author	Schmid Hubert (C)2012-2025
  *
  * history:
  *
@@ -301,7 +301,7 @@ void TrMapList::setActiveBrush(QBrush * brush)
 			}
 			else
 			{
-				TR_WRN << "pen " << type << " is not in the list" << m_objPenMap.size();
+				TR_WRN << "pen " << HEX << type << " is not in the list" << m_objPenMap.size();
 			}
 		}
 	}
@@ -509,7 +509,7 @@ bool TrMapList::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject * ba
 	return true;
 }
 
-void TrMapList::draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mode)
+void TrMapList::draw(const TrZoomMap & zoom_ref, QPainter * p, uint8_t mode)
 {
 	if(m_inst_mask & TR_MASK_DRAW)
 	{
@@ -519,7 +519,7 @@ void TrMapList::draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mod
 		}
 		for (int i = 0; i < obj_list.size(); ++i)
 		{
-            obj_list[i]->draw(zoom_ref, p, mode);
+			obj_list[i]->draw(zoom_ref, p, mode);
 		}
 	}
 }

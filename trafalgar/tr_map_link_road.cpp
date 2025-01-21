@@ -14,7 +14,7 @@
  *
  * beginning:	05.2024
  *
- * @author	Schmid Hubert(C) 2024-2024
+ * @author	Schmid Hubert(C) 2024-2025
  *
  * history:
  *
@@ -822,12 +822,20 @@ void TrMapLinkRoad::drawParLine(const TrZoomMap & zoom_ref, QPainter * p, unsign
 	}
 }
 
-void TrMapLinkRoad::draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mode)
+void TrMapLinkRoad::drawSelect(const TrZoomMap & zoom_ref, QPainter * p, uint8_t mode)
+{
+	TrMapLink::drawSelect(zoom_ref, p, mode);
+}
+
+void TrMapLinkRoad::draw(const TrZoomMap & zoom_ref, QPainter * p, uint8_t mode)
 {
 	if(!(m_inst_mask & TR_MASK_DRAW))
 		return;
 	if(this->clip(zoom_ref))
 		return;
+
+	if(m_inst_mask & TR_MASK_SELECTED)
+		drawSelect(zoom_ref, p, mode);
 
 	if(m_geo_active_pen == nullptr)
 	{

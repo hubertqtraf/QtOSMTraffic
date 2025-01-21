@@ -13,7 +13,7 @@
  *
  * beginning:	10.2019
  *
- * @author	Schmid Hubert (C)2019-2020
+ * @author	Schmid Hubert (C)2019-2025
  *
  * history:
  *
@@ -432,7 +432,7 @@ void TrStack::setSurroundingVecRect(const QVector<double> & rect)
 	updateSurroundRect(val, true);
 }
 
-void TrStack::draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mode)
+void TrStack::draw(const TrZoomMap & zoom_ref, QPainter * p, uint8_t mode)
 {
 	//TR_MSG << "mode: " << mode;
 	//printData();

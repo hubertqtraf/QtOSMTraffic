@@ -12,7 +12,7 @@
  * system:	UNIX/LINUX
  * compiler:	gcc
  *
- * @author	Schmid Hubert (C)2023-2023
+ * @author	Schmid Hubert (C)2023-2025
  *
  * beginning:	10.2023
  *
@@ -106,7 +106,7 @@ public:
 
 	bool isEvenPolygon(const TrZoomMap & zoom_ref, QList<TrGeoSegment> & seg_list, double ctrl);
 
-	virtual void draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mode = 0);
+	virtual void draw(const TrZoomMap & zoom_ref, QPainter * p, uint8_t mode = 0);
 #ifdef TR_SERIALIZATION
 	virtual bool exportGeoJson(QJsonObject & geojson, uint64_t mode);
 

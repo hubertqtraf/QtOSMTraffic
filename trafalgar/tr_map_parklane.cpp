@@ -12,7 +12,7 @@
  * system:	UNIX/LINUX
  * compiler:	gcc
  *
- * @author	Schmid Hubert (C)2024-2024
+ * @author	Schmid Hubert (C)2024-2025
  *
  * beginning:	12.2024
  *
@@ -169,7 +169,7 @@ bool TrMapParkLane::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject 
 	return true;
 }
 
-void TrMapParkLane::draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mode)
+void TrMapParkLane::draw(const TrZoomMap & zoom_ref, QPainter * p, uint8_t mode)
 {
 	if(m_ref == nullptr)
 		return;

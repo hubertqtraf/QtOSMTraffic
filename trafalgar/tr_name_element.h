@@ -13,7 +13,7 @@
  *
  * beginning:	03.2022
  *
- * @author	Schmid Hubert (C)2022 - 2023
+ * @author	Schmid Hubert (C)2022 - 2025
  *
  * history:
  *
@@ -60,7 +60,7 @@ public:
 
 	virtual bool init(const TrZoomMap & zoom_ref, uint64_t ctrl = 0, TrGeoObject * base = nullptr);
 
-    void drawOnPolygon(QPainter * p, const QPolygon &poly);
+	void drawOnPolygon(QPainter * p, const QPolygon &poly);
 
 	bool setName(const QString & name);
 

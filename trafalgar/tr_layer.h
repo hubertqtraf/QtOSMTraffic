@@ -13,7 +13,7 @@
  *
  * beginning:	10.2019
  *
- * @author	Schmid Hubert (C)2019-2020
+ * @author	Schmid Hubert (C)2019-2025
  *
  * history:
  *
@@ -56,7 +56,7 @@ public:
 	TrLayer();
 	virtual ~TrLayer();
 
-    friend QDebug operator<<(QDebug dbg, const TrLayer& layer);
+	friend QDebug operator<<(QDebug dbg, const TrLayer& layer);
 
 	// TODO: check fuction needed?
 	void clear();

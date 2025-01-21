@@ -13,7 +13,7 @@
  *
  * beginning:	10.2019
  *
- * (C)		Schmid Hubert (C)2019-2020
+ * (C)		Schmid Hubert (C)2019-2025
  *
  * history:
  *

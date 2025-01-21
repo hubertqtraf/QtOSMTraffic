@@ -13,7 +13,7 @@
  *
  * beginning:	11.2021
  *
- * @author	Schmid Hubert (C)2021-2021
+ * @author	Schmid Hubert (C)2021-2025
  *
  * history:
  *
@@ -74,7 +74,7 @@ public:
 
 	virtual void setNameList(TrGeoObject * list);
 
-	virtual void draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mode);
+	virtual void draw(const TrZoomMap & zoom_ref, QPainter * p, uint8_t mode);
 
 	bool setSurroundingRect();
 

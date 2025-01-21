@@ -14,7 +14,7 @@
  *
  * beginning:	05.2024
  *
- * @author	Schmid Hubert (C)2024-2024
+ * @author	Schmid Hubert (C)2024-2025
  *
  * history:
  *
@@ -142,7 +142,9 @@ public:
 
 	void initDoubleLineWidth(const TrZoomMap & zoom_ref);
 
-	virtual void draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mode = 0);
+	virtual void drawSelect(const TrZoomMap & zoom_ref, QPainter * p, uint8_t mode = 0);
+
+	virtual void draw(const TrZoomMap & zoom_ref, QPainter * p, uint8_t mode = 0);
 
 	bool setSurroundingRect();
 

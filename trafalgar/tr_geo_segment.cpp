@@ -12,7 +12,7 @@
  * system:	UNIX/LINUX
  * compiler:	gcc
  *
- * @author	Schmid Hubert (C)2023-2023
+ * @author	Schmid Hubert (C)2023-2025
  *
  * beginning:	10.2023
  *
@@ -342,7 +342,7 @@ bool TrGeoSegment::managePolygon(const TrZoomMap & zoom_ref, TrGeoPolygon & poly
 	return ret;
 }
 
-void TrGeoSegment::draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mode)
+void TrGeoSegment::draw(const TrZoomMap & zoom_ref, QPainter * p, uint8_t mode)
 {
 	if(!(m_inst_mask & TR_MASK_DRAW))
 	{

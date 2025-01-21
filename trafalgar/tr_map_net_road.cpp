@@ -13,7 +13,7 @@
  *
  * beginning:	11.2021
  *
- * @author	Schmid Hubert (C)2021-2021
+ * @author	Schmid Hubert (C)2021-2025
  *
  * history:
  *
@@ -134,7 +134,7 @@ bool TrMapNetRoad::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject *
 	return ret;
 }
 
-void TrMapNetRoad::draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mode)
+void TrMapNetRoad::draw(const TrZoomMap & zoom_ref, QPainter * p, uint8_t mode)
 {
 	TrMapNet::draw(zoom_ref, p, mode);
 }

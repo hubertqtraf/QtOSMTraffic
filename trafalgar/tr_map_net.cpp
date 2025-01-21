@@ -13,7 +13,7 @@
  *
  * beginning:	11.2012
  *
- * @author	Schmid Hubert (C)2012-2023
+ * @author	Schmid Hubert (C)2012-2025
  *
  * history:
  *
@@ -225,7 +225,7 @@ bool TrMapNet::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject * bas
 	return true;
 }
 
-void TrMapNet::draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mode)
+void TrMapNet::draw(const TrZoomMap & zoom_ref, QPainter * p, uint8_t mode)
 {
 	// draw raw or net_link_list
 

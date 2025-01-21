@@ -13,7 +13,7 @@
  *
  * beginning:	10.2019
  *
- * @author	Schmid Hubert (C)2019-2020
+ * @author	Schmid Hubert (C)2019-2025
  *
  * history:
  *
@@ -95,7 +95,7 @@ public:
 
 	void setSurroundingVecRect(const QVector<double> & rect);
 
-	virtual void draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mode = 0);
+	virtual void draw(const TrZoomMap & zoom_ref, QPainter * p, uint8_t mode = 0);
 #ifdef TR_SERIALIZATION
 	virtual void writeXmlDescription(QXmlStreamWriter & xml_out, uint64_t id);
 #endif
