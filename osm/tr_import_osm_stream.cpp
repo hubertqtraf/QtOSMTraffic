@@ -208,12 +208,19 @@ bool TrImportOsmStream::setRel2Face(Rel_t & rel, QVector<TrMapFace *> & face_lis
 					{
 						appendFacePoint(way.nd_id[j], *face);
 					}
-					uint64_t type = (rel.flags & 0x000000f000000000) >> 24;
-					face->setType((rel.flags & 0x00000000000000ff) | type);
-					face->setDrawType(type & 0xf000);
+					//                                   4000100103
+					uint64_t type = (rel.flags & 0x0000000000f00000) >> 12;
+					//TR_INF << "--> type: " << HEX << type << rel.flags << (rel.flags >> 24);
+					face->setType((rel.flags & 0x000000000000000f) | type);
+					face->setDrawType((rel.flags >> 24) | 0xf000);
+
 					face_list.append(face);
 					//TR_INF << way.nd_id[0] << way.nd_id[way.n_nd_id -1] << *face;
 				}
+			}
+			else
+			{
+				//TR_INF << rel.members[i].id << "not found";
 			}
 		}
 	}

@@ -71,6 +71,7 @@ private:
 
 	void closeRelation(QMap<uint64_t, Way_t> & waylist, Relation & rel);
 
+	bool setMemberData(QMap<uint64_t, Way_t> & waylist, Relation & rel, uint64_t type);
 	bool handleMultiPoly(QMap<uint64_t, Way_t> & waylist, Relation & rel);
 
 public:

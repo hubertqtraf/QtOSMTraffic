@@ -607,13 +607,14 @@ bool TrImportOsm::createFaceList(TrMapList * osm_list, QString name)
 	}
 	for (int i = 0; i < m_face_list.size(); ++i)
 	{
+		// TODO: 16 <> 12 -> fix the C-filter?
 		uint64_t f_class = m_face_list[i]->getType();
-		TR_INF << name << HEX << f_class << (f_class << 16)  << m_face_list[i]->getDrawType();
-		if((name == "field") && ((f_class << 16) & TYPE_NATURAL))
+		//TR_INF << name << HEX << f_class << (f_class << 12)  << m_face_list[i]->getDrawType();
+		if((name == "field") && ((f_class << 12) & TYPE_NATURAL))
 			osm_list->appendObject(m_face_list[i]);
-		if((name == "landuse") && ((f_class << 16) & TYPE_LANDUSE))
+		if((name == "landuse") && ((f_class << 12) & TYPE_LANDUSE))
 			osm_list->appendObject(m_face_list[i]);
-		if((name == "building") && ((f_class << 16) & TYPE_BUILDING))
+		if((name == "building") && ((f_class << 12) & TYPE_BUILDING))
 			osm_list->appendObject(m_face_list[i]);
 		//m_face_list[i]->setFaceClass(1);
 	}

@@ -190,8 +190,8 @@ typedef struct
 #ifdef OSM_C_FILTER
 	OsmInfo_t info;
 #else
-    size_t way_count;
-    size_t node_count;
+	size_t way_count;
+	size_t node_count;
 #endif
 
 	Point_t * points;

@@ -69,6 +69,7 @@ int Relation::isMultiPolyRing()
 	return count_out;
 }
 
+// TODO: FLAG_FEATURE_AERA flag was removed at other function -> remove?
 void Relation::resetPolyRing(QMap<uint64_t, Way_t> & waylist)
 {
 	if(!(m_flags & FLAG_MULTI_POLY))
@@ -78,8 +79,9 @@ void Relation::resetPolyRing(QMap<uint64_t, Way_t> & waylist)
 	{
 		if(waylist.contains(m_members[i].id))
 		{
-			if(m_members[i].flags & REL_MEM_ROLE_OUT)
-				waylist[m_members[i].id].type &= ~FLAG_FEATURE_AERA;
+			//waylist[m_members[i].id].type |= FLAG_FEATURE_AERA;
+			//if(m_members[i].flags & REL_MEM_ROLE_OUT)
+			//	waylist[m_members[i].id].type &= ~FLAG_FEATURE_AERA;
 		}
 	}
 }
@@ -212,7 +214,7 @@ void TrImportOsmRel::readMember(const QXmlStreamAttributes &attributes, Relation
 	if(role == "inner")
 		member.flags |= REL_MEM_ROLE_IN;
 	//type='way' ref='25505835' role
-	//TR_INF << type << member.id << role;
+	//TR_INF << type << member.id << role << HEX << member.flags;
 	rel.m_members.append(member);
 }
 
@@ -245,15 +247,45 @@ void TrImportOsmRel::closeRelation(QMap<uint64_t, Way_t> & waylist, Relation & r
 	if(rel.m_flags & FLAG_MULTI_POLY)
 	{
 		handleMultiPoly(waylist, rel);
+		rel.m_flags |= FLAG_MULTI_POLY;
 	}
 	if(rel.m_flags & FLAG_ROUTE)
 	{
 		// not now
 	}
-
+	//TR_INF << HEX << "ref flags: " << rel.m_flags;
 	// avoid tag double use
 	m_tags.clear();
 	//m_members.clear();
+}
+
+bool TrImportOsmRel::setMemberData(QMap<uint64_t, Way_t> & waylist, Relation & rel, uint64_t type)
+{
+	//TR_INF << "nnnn " << HEX << type;
+
+	if(!(rel.m_flags & type))
+		return false;
+	bool ret = true;
+	for (int i = 0; i < rel.m_members.size(); ++i)
+	{
+		if(!(waylist.contains(rel.m_members[i].id)))
+			ret = false;
+	}
+	if(ret == false)
+		return false;
+	for (int i = 0; i < rel.m_members.size(); ++i)
+	{
+		waylist[rel.m_members[i].id].type = rel.m_flags;
+		waylist[rel.m_members[i].id].type &= ~FLAG_FEATURE_AERA;
+		// TODO: check ROLE_IN, shift to other base layer?
+		/*if(rel.m_members[i].flags & REL_MEM_ROLE_IN)
+		{
+			waylist[rel.m_members[i].id].type &= 0xfffffffffffffff0;
+			waylist[rel.m_members[i].id].type |= 0x0000000000000005;
+		}*/
+		//heath
+	}
+	return true;
 }
 
 bool TrImportOsmRel::handleMultiPoly(QMap<uint64_t, Way_t> & waylist, Relation & rel)
@@ -281,39 +313,10 @@ bool TrImportOsmRel::handleMultiPoly(QMap<uint64_t, Way_t> & waylist, Relation &
 		type = getLanduseClass(m_tags["landuse"]);
 		rel.m_flags |= (TYPE_LANDUSE | type);
 	}
+	setMemberData(waylist, rel, TYPE_BUILDING);
+	setMemberData(waylist, rel, TYPE_NATURAL);
+	setMemberData(waylist, rel, TYPE_LANDUSE);
 	// TODO: remove this - do it this in "tr_import_osm" for both filters
-	for (int i = 0; i < rel.m_members.size(); ++i)
-	{
-		if(rel.m_flags & TYPE_BUILDING)
-		{
-			if(waylist.contains(rel.m_members[i].id))
-			{
-				//TR_INF << HEX << rel.m_flags << waylist[rel.m_members[i].id].type;
-				waylist[rel.m_members[i].id].type = rel.m_flags;
-				if(rel.m_members[i].flags & REL_MEM_ROLE_IN)
-				{
-					waylist[rel.m_members[i].id].type &= 0xfffffffffffffff0;
-					waylist[rel.m_members[i].id].type |= 0x0000000000000005;
-				}
-			}
-		}
-		if(rel.m_flags & TYPE_NATURAL)
-		{
-			if(waylist.contains(rel.m_members[i].id))
-			{
-				//TR_INF << rel.m_members[i].id;
-				waylist[rel.m_members[i].id].type = rel.m_flags;
-				if(rel.m_members[i].flags & REL_MEM_ROLE_IN)
-				{
-					uint64_t cl = waylist[rel.m_members[i].id].type & 0x000000000000000ff;
-					if(!cl)
-						cl = 0x0000000000000003;
-					waylist[rel.m_members[i].id].type &= 0xfffffffffffffff0;
-					waylist[rel.m_members[i].id].type |= cl;
-				}
-			}
-		}
-	}
 	return true;
 }
 
@@ -720,6 +723,8 @@ uint64_t TrImportOsmRel::getNaturalClass(const QString & value)
 	if(value == "shingle")
 		return (NATURAL_WET | FLAG_FEATURE_AERA);
 	if(value == "scrub")
+		return (LANDUSE_GRASS | FLAG_FEATURE_AERA);
+	if(value == "heath")
 		return (LANDUSE_GRASS | FLAG_FEATURE_AERA);
 
 	if(value == "tree")	// POI
