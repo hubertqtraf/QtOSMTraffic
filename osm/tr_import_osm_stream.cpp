@@ -189,9 +189,56 @@ bool TrImportOsmStream::appendFacePoint(uint64_t id, TrMapFace & face)
 	return true;
 }
 
+bool TrImportOsmStream::appendMultiWayPoint(Way_t & way, QVector<QVector<uint64_t>> & rings)
+{
+	if(!rings.size())
+	{
+		QVector<uint64_t> ring;
+		rings.append(ring);
+		// add points
+		for(int i = 0; i<way.n_nd_id; i++)
+			rings[0].append(way.nd_id[i]);
+		//TR_INF << "init W:" << way.nd_id[0] << way.nd_id[way.n_nd_id -1];
+		return false;
+	}
+	for(int i = 0; i<(rings.size()); i++)
+	{
+		if(rings[i].size() > 1)
+		{
+			uint64_t w_id_1 = way.nd_id[0];
+			uint64_t w_id_2 = way.nd_id[way.n_nd_id -1];
+			if(rings[i][rings[i].size()-1] == w_id_1)
+			{
+				if(rings[i][0] == w_id_1)
+				{
+					//TR_INF << "F: " << rings[i][0] << w_id_1;
+					return true;
+				}
+				for(int j = 0; j<way.n_nd_id; j++)
+					rings[i].append(way.nd_id[j]);
+			}
+			if(rings[i][0] == w_id_2)
+			{
+				if(rings[i][rings[i].size()-1] == w_id_2)
+				{
+					//TR_INF << "B: " << rings[i][rings[i].size()-1] << w_id_2;
+					return true;
+				}
+				for(int j = 1; j<way.n_nd_id; j++)
+				{
+					rings[i].insert(0, way.nd_id[way.n_nd_id - (j+1)]);
+				}
+			}
+			//TR_INF << "R:" << i << rings[i][0] << rings[i][rings[i].size()-1] << "W:" << w_id_1 << w_id_2;
+			// way first = ring first ... etc.
+		}
+	}
+	return false;
+}
 
 bool TrImportOsmStream::setRel2Face(Rel_t & rel, QVector<TrMapFace *> & face_list)
 {
+	QVector<QVector<uint64_t>> rings;
 	for(uint32_t i = 0; i< rel.r_count; i++)
 	{
 		if(rel.members[i].flags & (REL_MEM_ROLE_OUT | REL_MEM_ROLE_IN))
@@ -200,6 +247,7 @@ bool TrImportOsmStream::setRel2Face(Rel_t & rel, QVector<TrMapFace *> & face_lis
 			{
 				//TR_INF << rel.members[i].id;
 				Way_t way = m_waylist[rel.members[i].id];
+				// one way -> closed ring
 				if(way.nd_id[0] == way.nd_id[way.n_nd_id -1])
 				{
 					TrMapFace * face = new TrMapFace;
@@ -217,6 +265,11 @@ bool TrImportOsmStream::setRel2Face(Rel_t & rel, QVector<TrMapFace *> & face_lis
 					face_list.append(face);
 					//TR_INF << way.nd_id[0] << way.nd_id[way.n_nd_id -1] << *face;
 				}
+				// multi way ring
+				else
+				{
+					appendMultiWayPoint(way, rings);
+				}
 			}
 			else
 			{
@@ -224,6 +277,21 @@ bool TrImportOsmStream::setRel2Face(Rel_t & rel, QVector<TrMapFace *> & face_lis
 			}
 		}
 	}
+	for(int i = 0; i<rings.size(); i++)
+	{
+		//TR_INF << rings[i].size();
+		TrMapFace * face = new TrMapFace;
+		face->appendPolygon(0);
+		for(int j = 0; j<rings[i].size(); j++)
+		{
+			appendFacePoint(rings[i][j], *face);
+		}
+		uint64_t type = (rel.flags & 0x0000000000f00000) >> 12;
+		face->setType((rel.flags & 0x000000000000000f) | type);
+		face->setDrawType((rel.flags >> 24) | 0xf000);
+		face_list.append(face);
+	}
+	//TR_INF << rings.size();
 	return true;
 }
 

@@ -726,6 +726,10 @@ uint64_t TrImportOsmRel::getNaturalClass(const QString & value)
 		return (LANDUSE_GRASS | FLAG_FEATURE_AERA);
 	if(value == "heath")
 		return (LANDUSE_GRASS | FLAG_FEATURE_AERA);
+	if(value == "bare_rock")
+		return (NATURAL_ROCK | FLAG_FEATURE_AERA);
+	if(value == "scree")
+		return (NATURAL_WET | FLAG_FEATURE_AERA);
 
 	if(value == "tree")	// POI
 	{

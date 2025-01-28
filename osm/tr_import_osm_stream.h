@@ -85,6 +85,7 @@ private:
 
 	bool setRel2Face(Rel_t & rel, QVector<TrMapFace *> & face_list);
 	bool appendFacePoint(uint64_t id, TrMapFace & face);
+	bool appendMultiWayPoint(Way_t & way, QVector<QVector<uint64_t>> & rings);
 
 public:
 	TrImportOsmStream(const QString & name);
