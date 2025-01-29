@@ -190,7 +190,7 @@ bool TrImportOsm::read(const QString & filename, TrMapList & name_list, uint8_t 
 #endif
 		m_nodes = osm2_world.nodes;
 
-		ios.createRelFaces(m_face_list);
+		ios.createRelFaces(m_face_list, mode);
 
 		//return true;
 	}

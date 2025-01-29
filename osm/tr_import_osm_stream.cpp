@@ -45,6 +45,7 @@
 
 TrImportOsmStream::TrImportOsmStream(const QString & name)
 	: TrGeoObject()
+	, m_mode(0)
 	, m_id(0)
 	, m_point{0.0,0.0}
 {
@@ -53,6 +54,7 @@ TrImportOsmStream::TrImportOsmStream(const QString & name)
 
 TrImportOsmStream::TrImportOsmStream()
 	: TrGeoObject()
+	, m_mode(0)
 	, m_id(0)
 {
 }
@@ -106,7 +108,7 @@ bool TrImportOsmStream::osmRead(World_t & world)
 				{
 					// for "multipolygon" -> "face" object
 					//TR_INF << "MULTI_POLY: " << rel.isMultiPolyRing();
-					if(rel.isMultiPolyRing() > 1)
+					if(rel.isMultiPolyRing() > 0)
 					{
 						rel.resetPolyRing(m_waylist);
 						addRelation(rel);
@@ -238,6 +240,7 @@ bool TrImportOsmStream::appendMultiWayPoint(Way_t & way, QVector<QVector<uint64_
 
 bool TrImportOsmStream::setRel2Face(Rel_t & rel, QVector<TrMapFace *> & face_list)
 {
+	bool show = true;
 	QVector<QVector<uint64_t>> rings;
 	for(uint32_t i = 0; i< rel.r_count; i++)
 	{
@@ -245,7 +248,6 @@ bool TrImportOsmStream::setRel2Face(Rel_t & rel, QVector<TrMapFace *> & face_lis
 		{
 			if(m_waylist.contains(rel.members[i].id))
 			{
-				//TR_INF << rel.members[i].id;
 				Way_t way = m_waylist[rel.members[i].id];
 				// one way -> closed ring
 				if(way.nd_id[0] == way.nd_id[way.n_nd_id -1])
@@ -274,9 +276,12 @@ bool TrImportOsmStream::setRel2Face(Rel_t & rel, QVector<TrMapFace *> & face_lis
 			else
 			{
 				//TR_INF << rel.members[i].id << "not found";
+				show = false;
 			}
 		}
 	}
+	if((!show) && (m_mode & 0x01))
+		return false;
 	for(int i = 0; i<rings.size(); i++)
 	{
 		//TR_INF << rings[i].size();
@@ -295,8 +300,9 @@ bool TrImportOsmStream::setRel2Face(Rel_t & rel, QVector<TrMapFace *> & face_lis
 	return true;
 }
 
-void TrImportOsmStream::createRelFaces(QVector<TrMapFace *> & face_list)
+void TrImportOsmStream::createRelFaces(QVector<TrMapFace *> & face_list, uint8_t mode)
 {
+	m_mode = mode;
 	for (int i = 0; i<m_rellist.size(); i++)
 	{
 		setRel2Face(m_rellist[i], face_list); //Rel_t
@@ -538,6 +544,12 @@ void TrImportOsmStream::closeWay(QMap<QString, name_set> & name_map, uint64_t & 
 		{
 			way.type = TYPE_LANDUSE | code;
 		}
+	}
+
+	if(m_tags.contains("leisure"))
+	{
+		uint64_t code = TrImportOsmRel::getLeisureClass(m_tags["leisure"]);
+		way.type = code;
 	}
 
 	if(m_tags.contains("natural"))

@@ -51,6 +51,11 @@ bool FileOptions::getShiftOption()
     return (ui->shiftCheck->checkState() == Qt::Checked);
 }
 
+bool FileOptions::getRelationOption()
+{
+    return (ui->relCheck->checkState() == Qt::Unchecked);
+}
+
 int FileOptions::laneWith()
 {
     return ui->laneSpinBox->value();

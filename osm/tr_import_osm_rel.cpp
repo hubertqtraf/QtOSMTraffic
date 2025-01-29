@@ -708,6 +708,17 @@ uint64_t TrImportOsmRel::getLanduseClass(const QString & value)
 		return (LANDUSE_RESIDENTIAL | FLAG_FEATURE_AERA);
 	if(value == "construction")     // secondary layer?
 		return (LANDUSE_INDUSTRIAL | FLAG_FEATURE_AERA);
+	if(value == "cemetery")
+		return (LANDUSE_GARDEN | FLAG_FEATURE_AERA);
+	if(value == "allotments")
+		return (LANDUSE_GARDEN | FLAG_FEATURE_AERA);
+	return 0;
+}
+
+uint64_t TrImportOsmRel::getLeisureClass(const QString & value)
+{
+	if(value == "park")
+		return (TYPE_LANDUSE | LANDUSE_GARDEN | FLAG_FEATURE_AERA);
 	return 0;
 }
 

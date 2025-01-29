@@ -53,6 +53,7 @@
 class TrImportOsmStream : public TrGeoObject
 {
 private:
+	uint8_t m_mode;
 	QString m_filename;
 	//<tag k="highway" v="motorway"/>
 	QMap<QString, QString> m_tags;
@@ -99,7 +100,7 @@ public:
 	QMap<uint64_t, Point_t> & getNodeMap();
 	QVector<Rel_t> & getRelationList();
 
-	void createRelFaces(QVector<TrMapFace *> & face_list);
+	void createRelFaces(QVector<TrMapFace *> & face_list, uint8_t mode);
 
 	virtual bool init(const TrZoomMap& zoom, uint64_t contr, TrGeoObject* obj);
 	virtual bool setSurroundingRect();

@@ -295,7 +295,14 @@ void MainWindow::on_loadWorld(const QString & filename, int shift)
         TrGeoObject::s_mask |= TR_MASK_MOVE_LINE;
 
     TrImportOsm osm_filter;
-    if(osm_filter.read(filename, m_map_view->getDocument().getNameList(), 0) == false)
+
+    uint8_t mode = 0;
+    if(m_file_options != nullptr)
+    {
+        if(m_file_options->getRelationOption())
+            mode |= 0x01;
+    }
+    if(osm_filter.read(filename, m_map_view->getDocument().getNameList(), mode) == false)
     {
         QMessageBox msgBox;
         msgBox.setIcon(QMessageBox::Critical);

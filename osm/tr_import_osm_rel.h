@@ -89,6 +89,7 @@ public:
 	static uint64_t getBuildingClass(const QString & value);
 	static uint64_t getBarrierClass(const QString & value);
 	static uint64_t getLanduseClass(const QString & value);
+	static uint64_t getLeisureClass(const QString & value);
 	static uint64_t getNaturalClass(const QString & value);
 	static uint64_t getWaterWayClass(const QString & value);
 	static uint64_t getRailWayClass(const QString & value);

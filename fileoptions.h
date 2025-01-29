@@ -41,7 +41,7 @@ public:
     QString getOsmDir();
     QString getProfileFileName();
     bool getShiftOption();
-
+    bool getRelationOption();
     int laneWith();
     void setLaneWith(int width);
 
