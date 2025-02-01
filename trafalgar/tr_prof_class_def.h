@@ -59,8 +59,10 @@
 #define BUILDING_REL        0x0003
 #define BUILDING_SERVICE    0x0003
 #define BUILDING_MEDI       0x0003
-#define BUILDING_FARM       0x0008
+#define BUILDING_FARM       0x0005
 #define BUILDING_RUINS      0x0006
+#define BUILDING_POWER      0x0008
+
 
 // TODO: merge natural and landuse
 //<value name="coast" rgb="#16183f" index="1" type="color"/>

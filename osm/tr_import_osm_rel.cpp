@@ -722,6 +722,36 @@ uint64_t TrImportOsmRel::getLeisureClass(const QString & value)
 	return 0;
 }
 
+uint64_t TrImportOsmRel::getPowerClass(const QString & value)
+{
+	if(value == "generator")
+	{
+		return TYPE_BUILDING | BUILDING_POWER;
+	}
+	if(value == "tower")
+	{
+		return 0;
+	}
+	if(value == "pole")
+	{
+		return 0;
+	}
+	if(value == "substation")
+	{
+		return 0;
+	}
+	if(value == "transformer")
+	{
+		return 0;
+	}
+	if(value == "cable")
+	{
+		return 0;
+	}
+	//TR_INF << "P: " << value;
+	return 0;
+}
+
 uint64_t TrImportOsmRel::getNaturalClass(const QString & value)
 {
 	if(value == "wood")

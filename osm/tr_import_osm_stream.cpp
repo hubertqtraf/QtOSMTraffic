@@ -398,6 +398,15 @@ void TrImportOsmStream::closeNode(QMap<QString, name_set> & name_map,
 			//TR_INF << ">> amenity" << HEX << code << point.pt_type;
 		}
 	}
+	if(m_tags.contains("power"))
+	{
+		uint64_t code = TrImportOsmRel::getPowerClass(m_tags["power"]);
+		if(code)
+		{
+			point.pt_type = code;
+		}
+		//TR_INF << "node power" << code;
+	}
 	if(m_tags.contains("shop"))
 	{
 		uint64_t code = TrImportOsmRel::getShopClass(m_tags["shop"]);
@@ -552,6 +561,16 @@ void TrImportOsmStream::closeWay(QMap<QString, name_set> & name_map, uint64_t & 
 		way.type = code;
 	}
 
+	if(m_tags.contains("power"))
+	{
+		// TODO: create network...
+		// 'line' -> way
+		// 'portal' -> way (node?)
+
+		uint64_t code = TrImportOsmRel::getPowerClass(m_tags["power"]);
+		way.type = code | FLAG_FEATURE_AERA;
+	}
+
 	if(m_tags.contains("natural"))
 	{
 		uint64_t code = TrImportOsmRel::getNaturalClass(m_tags["natural"]);
@@ -631,14 +650,6 @@ void TrImportOsmStream::closeWay(QMap<QString, name_set> & name_map, uint64_t & 
 	if(m_tags.contains("name:en"))
 	{
 		//TR_INF << "E" << m_tags["name:en"];
-	}
-
-	if(m_tags.contains("power"))
-	{
-		//TR_INF << "P" << m_tags["power"];
-		// TODO: create network...
-		// 'line' -> way
-		// 'portal' -> way (node?)
 	}
 
 	// exp: <tag k='parking:left:orientation' v='parallel' />
@@ -987,7 +998,7 @@ uint64_t TrImportOsmStream::getPlacement(const QString & value)
 		ret |= 0x02;
 	if(plist[0] == "middle_of")
 		ret |= 0x04;
-	uint8_t count = plist[1].toInt();
+	uint8_t count = static_cast<uint8_t>(plist[1].toInt());
 	ret |= (count << 4);
 	// TODO: Placement?
 	return ret;

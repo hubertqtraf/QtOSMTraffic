@@ -179,8 +179,9 @@ bool TrMapPoi::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject * bas
 	if(m_poi_flags & (TYPE_BUILDING | TYPE_RESTRICT))
 		m_geo_active_pen = list->getObjectPen(4);
 
-	if(m_poi_flags & TYPE_POWER)
-		m_geo_active_pen = list->getObjectPen(5);
+	if(m_poi_flags & BUILDING_POWER)
+		//if(m_poi_flags & TYPE_POWER)
+		m_geo_active_pen = list->getObjectPen(8);
 
 	if(m_poi_flags & (TYPE_ROAD | TYPE_RAIL | TYPE_STREAM))
 		m_geo_active_pen = list->getObjectPen(6);
@@ -216,7 +217,7 @@ void TrMapPoi::draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mode
 	if(m_poi_flags & TYPE_POI_P_ALPINE)
 	{
 		p->fillRect(static_cast <int>(screen.x-3),
-			static_cast <int>(screen.y-6), 12, 6, QBrush(getActivePen()->color()));
+		static_cast <int>(screen.y-6), 12, 6, QBrush(getActivePen()->color()));
 	}
 
 	p->setBrush(Qt::NoBrush);
@@ -263,12 +264,15 @@ void TrMapPoi::draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mode
 		return;
 	}
 	// TODO: rework power, red rectangle looks bad...
-	/*if(m_poi_flags & TYPE_POWER)
+	if(((m_poi_flags & (TYPE_BUILDING | BUILDING_POWER)) == (TYPE_BUILDING | BUILDING_POWER)))
+	//if(m_poi_flags & TYPE_POWER)
 	{
 		// TODO: add more infomation before to draw
-		p->fillRect(screen.x-3, screen.y-15, 3, 15, QBrush(getActivePen()->color()));
+		p->fillRect(static_cast <int>(screen.x-3),
+			static_cast <int>(screen.y-15),
+			10, 15, QBrush(getActivePen()->color()));
 		return;
-	}*/
+	}
 
 	if(m_poi_flags & TYPE_PUBLIC)
 	{

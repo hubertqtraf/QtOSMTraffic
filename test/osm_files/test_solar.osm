@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- test square with 90° crossings -->
+<osm version="0.6" generator="Trafalgar">
+    <node id="27471287" version="1" lon="110.999" lat="48"/>
+    <node id="27471294" version="1" lon="111.001" lat="48"/>
+    <node id="27471295" version="1" lon="111.002" lat="48"/>
+    <node id="27471296" version="1" lon="111.002" lat="48.00067"/>
+    <node id="27471297" version="1" lon="111" lat="48"/>
+    <node id="27471298" version="1" lon="111" lat="48.00067"/>
+    <node id="27471299" version="1" lon="111.001" lat="48.00067"/>
+    <node id="28000000" version="1" lon="111.0005" lat="48.0005">
+    <tag k='generator:method' v='photovoltaic' />
+    <tag k='generator:output:electricity' v='yes' />
+    <tag k='generator:source' v='solar' />
+    <tag k='generator:type' v='solar_photovoltaic_panel' />
+    <tag k='power' v='generator' />
+    </node>
+    <way id="1" version="1">
+        <nd ref="27471287"/>
+        <nd ref="27471297"/>
+        <nd ref="27471298"/>
+        <nd ref="27471299"/>
+        <nd ref="27471294"/>
+        <tag k="highway" v="motorway"/>
+        <tag k="lanes" v="2"/>
+    </way>
+    <way id="3" version="1">
+        <nd ref="27471294"/>
+        <nd ref="27471295"/>
+        <tag k="highway" v="primary"/>
+        <tag k="lanes" v="4"/>
+    </way>
+</osm>
