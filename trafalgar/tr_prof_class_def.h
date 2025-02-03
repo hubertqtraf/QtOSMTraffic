@@ -40,59 +40,60 @@
 
 // local flags to define landuse (getLanduseClass)
 // definition: see XML file
-#define LANDUSE_INDUSTRIAL  0x0001
-#define LANDUSE_RESIDENTIAL 0x0002
-#define LANDUSE_MIXED       0x0007
-#define LANDUSE_GRASS       0x0003
-#define LANDUSE_BUSHES      0x000a
-#define LANDUSE_GARDEN      0x0005
-#define LANDUSE_WOOD        0x0004
-#define LANDUSE_WATER       0x0006
-#define LANDUSE_UNKLOWN     0x0008
+#define LANDUSE_INDUSTRIAL  0x0001U
+#define LANDUSE_RESIDENTIAL 0x0002U
+#define LANDUSE_MIXED       0x0007U
+#define LANDUSE_GRASS       0x0003U
+#define LANDUSE_BUSHES      0x000aU
+#define LANDUSE_GARDEN      0x0005U
+#define LANDUSE_WOOD        0x0004U
+#define LANDUSE_WATER       0x0006U
+#define LANDUSE_UNKLOWN     0x0008U
 
-#define BUILDING_HOUSE      0x0001
-#define BUILDING_APAR       0x0002
-#define BUILDING_INDUST     0x0004
-#define BUILDING_PUBLIC     0x0003
-#define BUILDING_LEARN      0x0003
-#define BUILDING_CAR        0x0003
-#define BUILDING_REL        0x0003
-#define BUILDING_SERVICE    0x0003
-#define BUILDING_MEDI       0x0003
-#define BUILDING_FARM       0x0005
-#define BUILDING_RUINS      0x0006
-#define BUILDING_POWER      0x0008
+#define BUILDING_HOUSE      0x0001U
+#define BUILDING_APAR       0x0002U
+#define BUILDING_INDUST     0x0004U
+#define BUILDING_PUBLIC     0x0003U
+#define BUILDING_LEARN      0x0003U
+#define BUILDING_CAR        0x0003U
+#define BUILDING_REL        0x0003U
+#define BUILDING_SERVICE    0x0003U
+#define BUILDING_MEDI       0x0003U
+#define BUILDING_FARM       0x0005U
+#define BUILDING_RUINS      0x0006U
+#define BUILDING_POWER      0x0008U
 
 
 // TODO: merge natural and landuse
 //<value name="coast" rgb="#16183f" index="1" type="color"/>
-#define NATURAL_COAST       0x0001
+#define NATURAL_COAST       0x0001U
 //<value name="water" rgb="#7c99a3" index="2" type="color"/>
-#define NATURAL_WATER       0x0002
+#define NATURAL_WATER       0x0002U
 //<value name="wood" rgb="#5f7c62" index="3" type="color"/>
-#define NATURAL_WOOD        0x0003
+#define NATURAL_WOOD        0x0003U
 //<value name="forest" rgb="#567d5d" index="4" type="color"/>
-#define NATURAL_FOREST      0x0004
+#define NATURAL_FOREST      0x0004U
 //<value name="rock" rgb="#737373" index="5" type="color"/>
-#define NATURAL_ROCK        0x0005
+#define NATURAL_ROCK        0x0005U
 //<value name="ice" rgb="#b3c8ff" index="6" type="color"/>
-#define NATURAL_ICE         0x0006
+#define NATURAL_ICE         0x0006U
 //<value name="wet" rgb="#2a4747" index="7" type="color"/>
-#define NATURAL_WET         0x0007
-#define FIELD_PARKING       0x0008
-#define FIELD_SCHOOL        0x0009
-#define FIELD_CYCLE         0x000a
+#define NATURAL_WET         0x0007U
+#define FIELD_PARKING       0x0008U
+#define FIELD_SCHOOL        0x0009U
+#define FIELD_CYCLE         0x000aU
+#define FIELD_TRAFFIC       0x000bU
 
 // <value rgb="#4a5051" type="color" index="0" name="default"/>
-#define WATER_COAST         0x0001
+#define WATER_COAST         0x0001U
 // <value rgb="#3c8990" type="color" index="1" name="coast"/>
-#define WATER_LAKE          0x0002
+#define WATER_LAKE          0x0002U
 // <value rgb="#2e9c8f" type="color" index="2" name="lake"/>
-#define WATER_RIVER         0x0003
+#define WATER_RIVER         0x0003U
 // <value rgb="#6262a6" type="color" index="3" name="river"/>
-#define WATER_STREAM        0x0004
+#define WATER_STREAM        0x0004U
 // <value rgb="#5c82a6" type="color" index="4" name="stream"/>
-#define WATER_CANAL         0x0005
+#define WATER_CANAL         0x0005U
 // <value rgb="#91a6a3" type="color" index="5" name="canal"/>
 
 /*

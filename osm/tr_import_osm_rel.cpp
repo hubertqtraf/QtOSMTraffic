@@ -533,14 +533,14 @@ uint64_t TrImportOsmRel::getAmenityClass(const QString & value, bool node)
 		if(node)
 			return (1);
 		else
-			return (FLAG_FEATURE_AERA | FIELD_SCHOOL);
+			return (TYPE_NATURAL | FLAG_FEATURE_AERA | FIELD_SCHOOL);
 	}
 	if(value == "fountain")
 	{
 		if(node)
 			return (1);
 		else
-			return (NATURAL_WATER | FLAG_FEATURE_AERA);
+			return (TYPE_NATURAL | NATURAL_WATER | FLAG_FEATURE_AERA);
 	}
 	if(value == "hunting_stand")
 		return (1);
@@ -549,21 +549,21 @@ uint64_t TrImportOsmRel::getAmenityClass(const QString & value, bool node)
 		if(node)
 			return (2 | FLAG_FEATURE_NODE | TYPE_ROAD);
 		else
-			return (FLAG_FEATURE_AERA | FIELD_PARKING);
+			return (TYPE_NATURAL | FLAG_FEATURE_AERA | FIELD_PARKING);
 	}
 	if(value == "school")
 	{
 		if(node)
 			;
 		else
-			return (FLAG_FEATURE_AERA | FIELD_SCHOOL);
+			return (TYPE_NATURAL | FLAG_FEATURE_AERA | FIELD_SCHOOL);
 	}
 	if(value == "bicycle_parking")
 	{
 		if(node)
 			;
 		else
-			return (FLAG_FEATURE_AERA | FIELD_CYCLE);
+			return (TYPE_NATURAL | FLAG_FEATURE_AERA | FIELD_CYCLE);
 	}
 	if(value == "parking_entrance")
 	{
@@ -599,7 +599,17 @@ uint64_t TrImportOsmRel::getAmenityClass(const QString & value, bool node)
 	if(value == "kindergarten")
 		return (6 | FLAG_FEATURE_NODE | TYPE_PUBLIC);
 	if(value == "place_of_worship")
-		return (3 | FLAG_FEATURE_NODE | TYPE_PUBLIC);
+	{
+		if(node)
+		{
+			return (3 | FLAG_FEATURE_NODE | TYPE_PUBLIC);
+		}
+		else
+		{
+			//church
+			return (TYPE_BUILDING | BUILDING_PUBLIC | FLAG_FEATURE_AERA);
+		}
+	}
 	if(value == "shelter")
 	{
 		if(node)
@@ -608,7 +618,7 @@ uint64_t TrImportOsmRel::getAmenityClass(const QString & value, bool node)
 		}
 		else
 		{
-			return (FLAG_FEATURE_AERA | BUILDING_SERVICE);
+			return (TYPE_BUILDING | FLAG_FEATURE_AERA | BUILDING_SERVICE);
 		}
 	}
 	if(value == "fuel")
@@ -620,7 +630,7 @@ uint64_t TrImportOsmRel::getAmenityClass(const QString & value, bool node)
 		else
 		{
 			// TODO: new color
-			return (FLAG_FEATURE_AERA | FIELD_SCHOOL);
+			return (TYPE_NATURAL | FLAG_FEATURE_AERA | FIELD_SCHOOL);
 		}
 	}
 	if(value == "charging_station")
@@ -632,7 +642,7 @@ uint64_t TrImportOsmRel::getAmenityClass(const QString & value, bool node)
 		else
 		{
 			// TODO: new color
-			return (FLAG_FEATURE_AERA | FIELD_CYCLE);
+			return (TYPE_NATURAL | FLAG_FEATURE_AERA | FIELD_CYCLE);
 		}
 	}
 	if(value == "taxi")
@@ -644,7 +654,7 @@ uint64_t TrImportOsmRel::getAmenityClass(const QString & value, bool node)
 		else
 		{
 			// TODO: new color
-			return (FLAG_FEATURE_AERA | FIELD_CYCLE);
+			return (TYPE_NATURAL | FLAG_FEATURE_AERA | FIELD_CYCLE);
 		}
 	}
 	return 0;

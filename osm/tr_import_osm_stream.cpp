@@ -513,6 +513,27 @@ void TrImportOsmStream::closeWay(QMap<QString, name_set> & name_map, uint64_t & 
 		{
 			way.type = TYPE_ROAD | code;
 		}
+		else
+		{
+			if(m_tags["area"] == "yes")
+			{
+				if(m_tags["highway"] == "pedestrian")
+					way.type = FLAG_FEATURE_AERA | FIELD_TRAFFIC | TYPE_NATURAL;
+				if(m_tags["highway"] == "bus_stop")
+					way.type = FLAG_FEATURE_AERA | FIELD_TRAFFIC | TYPE_NATURAL;
+				if(m_tags["highway"] == "elevator")
+					way.type = FLAG_FEATURE_AERA | FIELD_TRAFFIC | TYPE_NATURAL;
+				//<tag k='area' v='yes' />
+				// check 'area' tag
+				// bus_stop -> 'area'
+			}
+			else
+			{
+				if(m_tags["highway"] == "pedestrian")
+					way.type = 0x000000000000000E | TYPE_ROAD;
+			}
+
+		}
 		//TR_INF << HEX << code;
 	}
 
@@ -585,7 +606,8 @@ void TrImportOsmStream::closeWay(QMap<QString, name_set> & name_map, uint64_t & 
 		uint64_t code = TrImportOsmRel::getAmenityClass(m_tags["amenity"], false);
 		if(code)
 		{
-			way.type = TYPE_NATURAL | code;
+			//way.type = TYPE_NATURAL | code;
+			way.type = code;
 		}
 		//way.type = TYPE_NATURAL | 6 | FLAG_FEATURE_AERA;
 	}
@@ -806,8 +828,11 @@ uint64_t TrImportOsmStream::getClass(const QString & value)
 	if(value == "via_ferrata")
 		return 0x000000000000000D;
 
-	if(value == "pedestrian")
-		return 0x000000000000000E;
+	// TODO: check field vs. highway; -> check: k='area' v='yes' /> 
+	//if(value == "pedestrian")
+	//	return 0x0000000000000000;
+		//return FLAG_FEATURE_AERA | FIELD_SCHOOL | TYPE_NATURAL;
+		//return 0x000000000000000E;
 
 	if(value.endsWith("_link"))
 	{

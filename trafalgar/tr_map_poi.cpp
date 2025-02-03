@@ -268,8 +268,8 @@ void TrMapPoi::draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mode
 	//if(m_poi_flags & TYPE_POWER)
 	{
 		// TODO: add more infomation before to draw
-		p->fillRect(static_cast <int>(screen.x-3),
-			static_cast <int>(screen.y-15),
+		p->fillRect(static_cast <int>(screen.x-5),
+			static_cast <int>(screen.y-7),
 			10, 15, QBrush(getActivePen()->color()));
 		return;
 	}
