@@ -400,7 +400,7 @@ void TrImportOsmStream::closeNode(QMap<QString, name_set> & name_map,
 	}
 	if(m_tags.contains("power"))
 	{
-		uint64_t code = TrImportOsmRel::getPowerClass(m_tags["power"]);
+		uint64_t code = TrImportOsmRel::getPowerClass(m_tags["power"], true);
 		if(code)
 		{
 			point.pt_type = code;
@@ -588,7 +588,7 @@ void TrImportOsmStream::closeWay(QMap<QString, name_set> & name_map, uint64_t & 
 		// 'line' -> way
 		// 'portal' -> way (node?)
 
-		uint64_t code = TrImportOsmRel::getPowerClass(m_tags["power"]);
+		uint64_t code = TrImportOsmRel::getPowerClass(m_tags["power"], false);
 		way.type = code | FLAG_FEATURE_AERA;
 	}
 

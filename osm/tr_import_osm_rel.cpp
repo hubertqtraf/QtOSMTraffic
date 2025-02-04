@@ -657,6 +657,13 @@ uint64_t TrImportOsmRel::getAmenityClass(const QString & value, bool node)
 			return (TYPE_NATURAL | FLAG_FEATURE_AERA | FIELD_CYCLE);
 		}
 	}
+	if(value == "pitch")
+	{
+		if(!node)
+		{
+			return (TYPE_NATURAL | FLAG_FEATURE_AERA | NATURAL_WET);
+		}
+	}
 	return 0;
 }
 
@@ -729,10 +736,14 @@ uint64_t TrImportOsmRel::getLeisureClass(const QString & value)
 {
 	if(value == "park")
 		return (TYPE_LANDUSE | LANDUSE_GARDEN | FLAG_FEATURE_AERA);
+	if(value == "pitch")
+		return (TYPE_NATURAL | FLAG_FEATURE_AERA | NATURAL_WET);
+	if(value == "sports_centre")
+		return (TYPE_BUILDING | BUILDING_PUBLIC | FLAG_FEATURE_AERA);
 	return 0;
 }
 
-uint64_t TrImportOsmRel::getPowerClass(const QString & value)
+uint64_t TrImportOsmRel::getPowerClass(const QString & value, bool node)
 {
 	if(value == "generator")
 	{
@@ -748,11 +759,17 @@ uint64_t TrImportOsmRel::getPowerClass(const QString & value)
 	}
 	if(value == "substation")
 	{
-		return 0;
+		// TODO: ignore value if it is a node
+		if(node)
+			return 0;
+		return TYPE_BUILDING | BUILDING_POWER;
 	}
 	if(value == "transformer")
 	{
-		return 0;
+		// TODO: ignore value if it is a node
+		if(node)
+			return 0;
+		return TYPE_BUILDING | BUILDING_POWER;
 	}
 	if(value == "cable")
 	{
