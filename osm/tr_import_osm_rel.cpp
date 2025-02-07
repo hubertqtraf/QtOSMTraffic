@@ -77,7 +77,7 @@ void Relation::resetPolyRing(QMap<uint64_t, Way_t> & waylist)
 
 	for (int i = 0; i < m_members.size(); ++i)
 	{
-		if(waylist.contains(m_members[i].id))
+		//if(waylist.contains(m_members[i].id))
 		{
 			//waylist[m_members[i].id].type |= FLAG_FEATURE_AERA;
 			//if(m_members[i].flags & REL_MEM_ROLE_OUT)
@@ -204,7 +204,7 @@ void TrImportOsmRel::readMember(const QXmlStreamAttributes &attributes, Relation
 	member.id = attributes.value("ref").toULongLong(&ok);
 	if(!ok)
 	{
-		member.id = -1;
+		member.id = 0;
 		return;
 	}
 
@@ -303,6 +303,11 @@ bool TrImportOsmRel::handleMultiPoly(QMap<uint64_t, Way_t> & waylist, Relation &
 		if(m_tags["highway"] == "pedestrian")
 			return false;
 	}
+	if(m_tags.contains("railway"))
+	{
+		if(m_tags["railway"] == "platform")
+			rel.m_flags |= (TYPE_BUILDING | FLAG_FEATURE_AERA | BUILDING_SERVICE);
+	}
 	if(m_tags.contains("natural"))
 	{
 		type = getNaturalClass(m_tags["natural"]);
@@ -313,6 +318,11 @@ bool TrImportOsmRel::handleMultiPoly(QMap<uint64_t, Way_t> & waylist, Relation &
 		type = getLanduseClass(m_tags["landuse"]);
 		rel.m_flags |= (TYPE_LANDUSE | type);
 	}
+	if(m_tags.contains("leisure"))
+	{
+		rel.m_flags |= TrImportOsmRel::getLeisureClass(m_tags["leisure"]);
+	}
+
 	setMemberData(waylist, rel, TYPE_BUILDING);
 	setMemberData(waylist, rel, TYPE_NATURAL);
 	setMemberData(waylist, rel, TYPE_LANDUSE);
@@ -740,6 +750,10 @@ uint64_t TrImportOsmRel::getLeisureClass(const QString & value)
 		return (TYPE_NATURAL | FLAG_FEATURE_AERA | NATURAL_WET);
 	if(value == "sports_centre")
 		return (TYPE_BUILDING | BUILDING_PUBLIC | FLAG_FEATURE_AERA);
+	if(value == "garden")
+		return (TYPE_NATURAL | FLAG_FEATURE_AERA | NATURAL_WET);
+	if(value == "track")
+		return (TYPE_ROAD | 15);
 	return 0;
 }
 
@@ -828,5 +842,8 @@ uint64_t TrImportOsmRel::getRailWayClass(const QString & value)
 		return 0x00000000000000A0;
 	if(value == "narrow_gauge")
 		return 0x00000000000000B0;
+	//<tag k='railway' v='platform' />
+	if(value == "platform")
+		return FLAG_FEATURE_AERA | FIELD_TRAFFIC | TYPE_NATURAL;
 	return 0;
 }

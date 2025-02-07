@@ -679,7 +679,7 @@ void TrImportOsmStream::closeWay(QMap<QString, name_set> & name_map, uint64_t & 
 	if(park_code)
 	{
 		//TR_INF << "PARK" << HEX << park_code << (park_code >> 20) << m_tags["name"];
-		way.parking = (park_code >> 20);
+		way.parking = static_cast<uint8_t>(park_code >> 20);
 	}
 	way.lanes = getLanes();
 	if(!way.lanes)
