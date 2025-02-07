@@ -51,6 +51,8 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+    void loadFile(const QString &file);
+
 private slots:
     void on_actionOpen_triggered();
 

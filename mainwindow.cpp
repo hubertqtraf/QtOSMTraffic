@@ -156,6 +156,15 @@ void MainWindow::readSettings()
         m_file_options->manageSettings(settings, true);
 }
 
+void MainWindow::loadFile(const QString & file)
+{
+    if(m_file_options == nullptr)
+    {
+        m_file_options = new FileOptions(this);
+    }
+    on_loadWorld(file, m_file_options->getShiftOption());
+}
+
 void MainWindow::on_actionOpen_triggered()
 {
     if(m_file_options == nullptr)
