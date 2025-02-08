@@ -436,7 +436,7 @@ void TrImportOsmStream::closeNode(QMap<QString, name_set> & name_map,
 			set.number = 1;
 			name_map[m_tags["name"]] = set;
 			// TODO: use of point.id -> crash!
-			point.id = act_id;
+			//point.id = act_id;
 			//TR_INF << "POI: " << point.id << m_tags["name"];
 			n_map[point.id] = m_tags["name"];
 			act_id++;
@@ -627,7 +627,7 @@ void TrImportOsmStream::closeWay(QMap<QString, name_set> & name_map, uint64_t & 
 
 	if(m_tags.contains("placement"))
 	{
-		way.placement = getPlacement(m_tags["placement"]);
+		way.placement = static_cast<uint8_t>(getPlacement(m_tags["placement"]));
 		//TR_INF << HEX << "Placement" << way.placement << m_tags["placement"] << way.type;
 	}
 
@@ -679,9 +679,9 @@ void TrImportOsmStream::closeWay(QMap<QString, name_set> & name_map, uint64_t & 
 	if(park_code)
 	{
 		//TR_INF << "PARK" << HEX << park_code << (park_code >> 20) << m_tags["name"];
-		way.parking = static_cast<uint8_t>(park_code >> 20);
+		way.parking = static_cast<uint32_t>(park_code >> 20);
 	}
-	way.lanes = getLanes();
+	way.lanes = static_cast<uint32_t>(getLanes());
 	if(!way.lanes)
 		way.lanes = 1;
 

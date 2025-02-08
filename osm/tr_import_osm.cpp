@@ -143,6 +143,7 @@ void TrImportOsm::appendPoi(void * world, const Point_t & point)
 		pt.x = (point.x)/100.0;
 		pt.y = (point.y)/100.0;
 		elem->setPoint(pt);
+		elem->setGeoId(point.id);
 		elem->setPoiName(osm2_world->m_point_name_map[point.id]);
 		elem->setPoiTypeFlags(point.pt_type);
 		elem->setPoiNumData(point.pt_data);
