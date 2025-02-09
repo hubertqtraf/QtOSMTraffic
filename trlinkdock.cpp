@@ -52,6 +52,7 @@ void TrLinkDock::setData(TrGeoObject* obj)
         ui->checkBox_Ramp->setCheckState(Qt::Unchecked);
         ui->checkBox_Oneway->setCheckState(Qt::Unchecked);
         ui->checkBox_Backward->setCheckState(Qt::Unchecked);
+        ui->lineEdit_Name->setText("---");
         ui->lineEdit_Place->setText("---");
         return;
     }
@@ -85,11 +86,9 @@ void TrLinkDock::setData(TrGeoObject* obj)
             ui->checkBox_Ramp->setCheckState(Qt::Checked);
         else
             ui->checkBox_Ramp->setCheckState(Qt::Unchecked);
-        if(roadlink->getPlacement())
-            ui->lineEdit_Place->setText("X");
-        else
-            ui->lineEdit_Place->setText("O");
+        ui->lineEdit_Place->setText(QString::number(roadlink->getPlacement(), 16));
     }
     else
         ui->lineEdit_Place->setText("---");
+    ui->lineEdit_Name->setText(link->getElementName());
  }

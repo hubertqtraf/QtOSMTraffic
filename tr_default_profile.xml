@@ -1,127 +1,127 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<trafalgar protocol="4.0" version="0.2" app="tr_view" doc="profile">
- <section name="base" index="1">
-  <value rgb="#f8f8f8" name="background" type="color" index="1000"/>
-  <value rgb="#258680" name="text" type="color" index="1002"/>
-  <value rgb="#ff5500" name="marker_1" type="color" index="1003"/>
-  <value rgb="#ff5500" name="marker_2" type="color" index="1004"/>
-  <value rgb="#258680" name="construction_1" type="color" index="1005"/>
-  <value rgb="#3fcabf" name="construction_2" type="color" index="1006"/>
-  <value rgb="#ba5eca" name="node_1" type="color" index="1020"/>
-  <value rgb="#6a9cca" name="node_2" type="color" index="1021"/>
+<trafalgar app="tr_view" protocol="4.0" doc="profile" version="0.2">
+ <section index="1" name="base">
+  <value rgb="#f8f8f8" type="color" index="1000" name="background"/>
+  <value rgb="#258680" type="color" index="1002" name="text"/>
+  <value rgb="#ff5500" type="color" index="1003" name="marker_1"/>
+  <value rgb="#ff5500" type="color" index="1004" name="marker_2"/>
+  <value rgb="#258680" type="color" index="1005" name="construction_1"/>
+  <value rgb="#3fcabf" type="color" index="1006" name="construction_2"/>
+  <value rgb="#ba5eca" type="color" index="1020" name="node_1"/>
+  <value rgb="#6a9cca" type="color" index="1021" name="node_2"/>
  </section>
  <section name="road">
-  <value rgb="#d58e00" name="motorway" type="color" index="1"/>
-  <value rgb="#ff4614" name="trunk" type="color" index="2"/>
-  <value rgb="#dc3232" name="primary" type="color" index="3"/>
-  <value rgb="#aa3c3e" name="secondary" type="color" index="4"/>
-  <value rgb="#1a1a0c" name="tertiary" type="color" index="5"/>
-  <value rgb="#6f6f6f" name="unclassified" type="color" index="6"/>
-  <value rgb="#8d8d8d" name="residential" type="color" index="7"/>
-  <value rgb="#4ca4c1" name="living_street" type="color" index="8"/>
-  <value rgb="#a8acac" name="service" type="color" index="9"/>
-  <value rgb="#ab9484" name="track" type="color" index="a"/>
-  <value rgb="#95c660" name="path" type="color" index="b"/>
-  <value rgb="#c0a6c7" name="cycleway" type="color" index="c"/>
-  <value rgb="#ffcd02" name="steps" type="color" index="d"/>
-  <value rgb="#5daa8e" name="pedestrian" type="color" index="e"/>
-  <value rgb="#70ac88" name="footway" type="color" index="f"/>
-  <value rgb="#cbcbcb" name="road" type="color" index="10"/>
-  <value rgb="#ca1747" name="parking_no" type="color" index="2001"/>
-  <value rgb="#30ca3d" name="parking_par" type="color" index="2002"/>
-  <value rgb="#5b61ca" name="parking_per" type="color" index="2003"/>
-  <value rgb="#b1ca41" name="parking_dia" type="color" index="2004"/>
+  <value rgb="#d58e00" type="color" index="1" name="motorway"/>
+  <value rgb="#ff4614" type="color" index="2" name="trunk"/>
+  <value rgb="#dc3232" type="color" index="3" name="primary"/>
+  <value rgb="#aa3c3e" type="color" index="4" name="secondary"/>
+  <value rgb="#1a1a0c" type="color" index="5" name="tertiary"/>
+  <value rgb="#6f6f6f" type="color" index="6" name="unclassified"/>
+  <value rgb="#8d8d8d" type="color" index="7" name="residential"/>
+  <value rgb="#4ca4c1" type="color" index="8" name="living_street"/>
+  <value rgb="#a8acac" type="color" index="9" name="service"/>
+  <value rgb="#ab9484" type="color" index="a" name="track"/>
+  <value rgb="#95c660" type="color" index="b" name="path"/>
+  <value rgb="#c0a6c7" type="color" index="c" name="cycleway"/>
+  <value rgb="#ffcd02" type="color" index="d" name="steps"/>
+  <value rgb="#5daa8e" type="color" index="e" name="pedestrian"/>
+  <value rgb="#a89fac" type="color" index="f" name="footway"/>
+  <value rgb="#cbcbcb" type="color" index="10" name="road"/>
+  <value rgb="#ca1747" type="color" index="2001" name="parking_no"/>
+  <value rgb="#30ca3d" type="color" index="2002" name="parking_par"/>
+  <value rgb="#5b61ca" type="color" index="2003" name="parking_per"/>
+  <value rgb="#b1ca41" type="color" index="2004" name="parking_dia"/>
  </section>
- <section name="rail" index="1">
-  <value rgb="#1a557c" name="train" type="color" index="1"/>
-  <value rgb="#7a6b69" name="sub" type="color" index="2"/>
-  <value rgb="#55525f" name="tram" type="color" index="3"/>
-  <value rgb="#6b7787" name="small" type="color" index="4"/>
-  <value rgb="#989898" name="cable" type="color" index="5"/>
-  <value rgb="#dcdcff" name="unused" type="color" index="6"/>
-  <value rgb="#b1d577" name="planned" type="color" index="7"/>
-  <value rgb="#7c7c7b" name="ab" type="color" index="8"/>
+ <section index="1" name="rail">
+  <value rgb="#1a557c" type="color" index="1" name="train"/>
+  <value rgb="#7a6b69" type="color" index="2" name="sub"/>
+  <value rgb="#55525f" type="color" index="3" name="tram"/>
+  <value rgb="#6b7787" type="color" index="4" name="small"/>
+  <value rgb="#989898" type="color" index="5" name="cable"/>
+  <value rgb="#dcdcff" type="color" index="6" name="unused"/>
+  <value rgb="#b1d577" type="color" index="7" name="planned"/>
+  <value rgb="#7c7c7b" type="color" index="8" name="ab"/>
  </section>
- <section name="building" index="1">
-  <value rgb="#d8d8d8" name="house" type="color" index="0"/>
-  <value rgb="#ddd6d5" name="house" type="color" index="1"/>
-  <value rgb="#d8d1d3" name="app" type="color" index="2"/>
-  <value rgb="#9bd0cdc7" name="com" type="color" index="3"/>
-  <value rgb="#d6d6d6" name="yes" type="color" index="4"/>
-  <value rgb="#50b1c5b4" name="inner" type="color" index="5"/>
-  <value rgb="#ffeb9b" name="ruin" type="color" index="6"/>
-  <value rgb="#64aa0000" name="test1" type="color" index="7"/>
-  <value rgb="#ff0000" name="power" type="color" index="8"/>
-  <value rgb="#c800ff" name="test3" type="color" index="9"/>
-  <value rgb="#c800ff" name="test4" type="color" index="a"/>
-  <value rgb="#c800ff" name="test5" type="color" index="b"/>
-  <value rgb="#c800ff" name="test6" type="color" index="c"/>
-  <value rgb="#c800ff" name="test7" type="color" index="d"/>
-  <value rgb="#c800ff" name="test8" type="color" index="e"/>
-  <value rgb="#c800ff" name="test9" type="color" index="f"/>
+ <section index="1" name="building">
+  <value rgb="#d8d8d8" type="color" index="0" name="house"/>
+  <value rgb="#ddd6d5" type="color" index="1" name="house"/>
+  <value rgb="#d8d1d3" type="color" index="2" name="app"/>
+  <value rgb="#9bd0cdc7" type="color" index="3" name="com"/>
+  <value rgb="#d6d6d6" type="color" index="4" name="yes"/>
+  <value rgb="#50b1c5b4" type="color" index="5" name="inner"/>
+  <value rgb="#ffeb9b" type="color" index="6" name="ruin"/>
+  <value rgb="#64aa0000" type="color" index="7" name="test1"/>
+  <value rgb="#ff0000" type="color" index="8" name="power"/>
+  <value rgb="#c800ff" type="color" index="9" name="test3"/>
+  <value rgb="#c800ff" type="color" index="a" name="test4"/>
+  <value rgb="#c800ff" type="color" index="b" name="test5"/>
+  <value rgb="#c800ff" type="color" index="c" name="test6"/>
+  <value rgb="#c800ff" type="color" index="d" name="test7"/>
+  <value rgb="#c800ff" type="color" index="e" name="test8"/>
+  <value rgb="#c800ff" type="color" index="f" name="test9"/>
  </section>
- <section name="landuse" index="1">
-  <value rgb="#646f6f6f" name="default" type="color" index="0"/>
-  <value rgb="#64c6c6c6" name="industry" type="color" index="1"/>
-  <value rgb="#32efc7bd" name="residential" type="color" index="2"/>
-  <value rgb="#64c3e5c1" name="grass" type="color" index="3"/>
-  <value rgb="#c8a0d8aa" name="forest" type="color" index="4"/>
-  <value rgb="#64a7c1ad" name="garden" type="color" index="5"/>
-  <value rgb="#8dbae5" name="basin" type="color" index="6"/>
-  <value rgb="#64eee9cf" name="mixed" type="color" index="7"/>
-  <value rgb="#d8d8d8" name="unknown" type="color" index="8"/>
-  <value rgb="#c2e5de" name="bushes" type="color" index="a"/>
-  <value rgb="#ff0000" name="test" type="color" index="b"/>
+ <section index="1" name="landuse">
+  <value rgb="#646f6f6f" type="color" index="0" name="default"/>
+  <value rgb="#64c6c6c6" type="color" index="1" name="industry"/>
+  <value rgb="#32efc7bd" type="color" index="2" name="residential"/>
+  <value rgb="#64c3e5c1" type="color" index="3" name="grass"/>
+  <value rgb="#c8a0d8aa" type="color" index="4" name="forest"/>
+  <value rgb="#64a7c1ad" type="color" index="5" name="garden"/>
+  <value rgb="#8dbae5" type="color" index="6" name="basin"/>
+  <value rgb="#64eee9cf" type="color" index="7" name="mixed"/>
+  <value rgb="#d8d8d8" type="color" index="8" name="unknown"/>
+  <value rgb="#c2e5de" type="color" index="a" name="bushes"/>
+  <value rgb="#ff0000" type="color" index="b" name="test"/>
  </section>
- <section name="field" index="1">
-  <value rgb="#064400" name="default" type="color" index="0"/>
-  <value rgb="#16183f" name="coast" type="color" index="1"/>
-  <value rgb="#6445b9d0" name="water" type="color" index="2"/>
-  <value rgb="#6471be7c" name="wood" type="color" index="3"/>
-  <value rgb="#6497ac7e" name="forest" type="color" index="4"/>
-  <value rgb="#dadada" name="rock" type="color" index="5"/>
-  <value rgb="#b3c8ff" name="ice" type="color" index="6"/>
-  <value rgb="#6487883a" name="wet" type="color" index="7"/>
-  <value rgb="#64515151" name="parking" type="color" index="8"/>
-  <value rgb="#509d8633" name="school" type="color" index="9"/>
-  <value rgb="#78ffb787" name="cycle" type="color" index="a"/>
-  <value rgb="#9bad97c3" name="traffic" type="color" index="b"/>
-  <value rgb="#87883a" name="test" type="color" index="c"/>
+ <section index="1" name="field">
+  <value rgb="#064400" type="color" index="0" name="default"/>
+  <value rgb="#16183f" type="color" index="1" name="coast"/>
+  <value rgb="#6445b9d0" type="color" index="2" name="water"/>
+  <value rgb="#6471be7c" type="color" index="3" name="wood"/>
+  <value rgb="#6497ac7e" type="color" index="4" name="forest"/>
+  <value rgb="#dadada" type="color" index="5" name="rock"/>
+  <value rgb="#b3c8ff" type="color" index="6" name="ice"/>
+  <value rgb="#6487883a" type="color" index="7" name="wet"/>
+  <value rgb="#64515151" type="color" index="8" name="parking"/>
+  <value rgb="#509d8633" type="color" index="9" name="school"/>
+  <value rgb="#78ffb787" type="color" index="a" name="cycle"/>
+  <value rgb="#9bad97c3" type="color" index="b" name="traffic"/>
+  <value rgb="#87883a" type="color" index="c" name="test"/>
  </section>
- <section name="stream" index="1">
-  <value rgb="#3a53ec" name="default" type="color" index="0"/>
-  <value rgb="#519394" name="coast" type="color" index="1"/>
-  <value rgb="#aaaaff" name="lake" type="color" index="2"/>
-  <value rgb="#0000ff" name="river" type="color" index="3"/>
-  <value rgb="#7d91ff" name="stream" type="color" index="4"/>
-  <value rgb="#00aaff" name="canal" type="color" index="5"/>
+ <section index="1" name="stream">
+  <value rgb="#3a53ec" type="color" index="0" name="default"/>
+  <value rgb="#519394" type="color" index="1" name="coast"/>
+  <value rgb="#aaaaff" type="color" index="2" name="lake"/>
+  <value rgb="#0000ff" type="color" index="3" name="river"/>
+  <value rgb="#7d91ff" type="color" index="4" name="stream"/>
+  <value rgb="#00aaff" type="color" index="5" name="canal"/>
  </section>
- <section name="poi" index="1">
-  <value rgb="#ff0000" name="default" type="color" index="0"/>
-  <value rgb="#000000" name="admin" type="color" index="1"/>
-  <value rgb="#007878" name="public" type="color" index="2"/>
-  <value rgb="#006100" name="nature" type="color" index="3"/>
-  <value rgb="#845841" name="building" type="color" index="4"/>
-  <value rgb="#f34e31" name="power" type="color" index="5"/>
-  <value rgb="#c28100" name="staion" type="color" index="6"/>
-  <value rgb="#f34e31" name="alpine" type="color" index="7"/>
-  <value rgb="#220067" name="power" type="color" index="8"/>
-  <value rgb="#f34e31" name="test1" type="color" index="a"/>
-  <value rgb="#f34e31" name="test2" type="color" index="b"/>
+ <section index="1" name="poi">
+  <value rgb="#ff0000" type="color" index="0" name="default"/>
+  <value rgb="#000000" type="color" index="1" name="admin"/>
+  <value rgb="#007878" type="color" index="2" name="public"/>
+  <value rgb="#006100" type="color" index="3" name="nature"/>
+  <value rgb="#845841" type="color" index="4" name="building"/>
+  <value rgb="#f34e31" type="color" index="5" name="power"/>
+  <value rgb="#c28100" type="color" index="6" name="staion"/>
+  <value rgb="#f34e31" type="color" index="7" name="alpine"/>
+  <value rgb="#220067" type="color" index="8" name="power"/>
+  <value rgb="#f34e31" type="color" index="a" name="test1"/>
+  <value rgb="#f34e31" type="color" index="b" name="test2"/>
  </section>
- <section name="modes" index="1">
-  <value name="write" type="function" index="1"/>
-  <value name="resize" type="function" index="2"/>
-  <value name="draw" type="function" index="3"/>
+ <section index="1" name="modes">
+  <value type="function" index="1" name="write"/>
+  <value type="function" index="2" name="resize"/>
+  <value type="function" index="3" name="draw"/>
  </section>
- <section name="layer" index="1">
-  <value name="landuse" type="face" index="1"/>
-  <value name="field" type="face" index="2"/>
+ <section index="1" name="layer">
+  <value type="face" index="1" name="landuse"/>
+  <value type="face" index="2" name="field"/>
   <!--value index="2" name="nature" type="face"/-->
-  <value name="building" type="face" index="3"/>
-  <value name="road" type="roadnet" index="6"/>
-  <value name="rail" type="net" index="5"/>
-  <value name="stream" type="net" index="4"/>
-  <value name="poi" type="poi" index="7"/>
+  <value type="face" index="3" name="building"/>
+  <value type="roadnet" index="6" name="road"/>
+  <value type="net" index="5" name="rail"/>
+  <value type="net" index="4" name="stream"/>
+  <value type="poi" index="7" name="poi"/>
  </section>
 </trafalgar>
