@@ -48,6 +48,10 @@
 
 int TrMapLinkRoad::ms_lane_width_p = 3200;
 int TrMapLinkRoad::ms_lane_width_n = -3200;
+int TrMapLinkRoad::ms_pen_width = 3;
+int TrMapLinkRoad::ms_pen_center_width = 2;
+// TODO: or Qt::SolidLine as option?
+Qt::PenStyle TrMapLinkRoad::ms_pen_center_style = Qt::DashLine;
 
 TrMapLinkRoad::TrMapLinkRoad()
 	: TrMapLink()
@@ -453,7 +457,7 @@ bool TrMapLinkRoad::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject 
 	{
 		m_pen_para.setColor(m_geo_active_pen->color());
 		// TODO: '2' -> from static value?
-		m_pen_para.setWidth(2);
+		m_pen_para.setWidth(ms_pen_width);
 	}
 
 	if(ctrl & TR_INIT_GEOMETRY)
@@ -855,9 +859,15 @@ void TrMapLinkRoad::draw(const TrZoomMap & zoom_ref, QPainter * p, uint8_t mode)
 	if(m_pline == nullptr)
 	{
 		if(isAsDoubleLine() && (s_mask & TR_MASK_MORE_LINES ))
+		{
+			m_geo_active_pen->setWidth(ms_pen_center_width);
+			m_geo_active_pen->setStyle(ms_pen_center_style);
 			p->setPen(*m_geo_active_pen);
+		}
 		else
+		{
 			p->setPen(m_pen_para);
+		}
 		QPolygon poly(2);
 		getTwoLine(zoom_ref, poly, m_pt_from, m_pt_to);
 		p->drawPolyline(poly);

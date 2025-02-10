@@ -536,6 +536,10 @@ void TrImportOsmStream::closeWay(QMap<QString, name_set> & name_map, uint64_t & 
 		}
 		//TR_INF << HEX << code;
 	}
+	if(m_tags.contains("area:highway"))
+	{
+		way.type = FLAG_FEATURE_AERA | FIELD_AREA_ROAD | TYPE_NATURAL;
+	}
 
 	if(m_tags.contains("railway"))
 	{

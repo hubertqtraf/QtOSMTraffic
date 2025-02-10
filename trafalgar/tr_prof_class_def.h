@@ -83,6 +83,7 @@
 #define FIELD_SCHOOL        0x0009U
 #define FIELD_CYCLE         0x000aU
 #define FIELD_TRAFFIC       0x000bU
+#define FIELD_AREA_ROAD     0x000cU
 
 // <value rgb="#4a5051" type="color" index="0" name="default"/>
 #define WATER_COAST         0x0001U

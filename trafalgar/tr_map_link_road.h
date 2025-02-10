@@ -109,6 +109,9 @@ public:
 
 	static int ms_lane_width_p;
 	static int ms_lane_width_n;
+	static int ms_pen_width;
+	static int ms_pen_center_width;
+	static Qt::PenStyle ms_pen_center_style;
 
 	virtual QString getXmlName() const;
 
