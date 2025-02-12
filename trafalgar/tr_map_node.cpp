@@ -600,6 +600,9 @@ void TrMapNode::setCrossing(const TrZoomMap & zoom_ref, TrGeoObject * first_obj,
 	first_obj = first_link->getSegmentWithParm(first_segment, getGeoId(), false);
 	//TR_INF << "next";
 	next_obj = next_link->getSegmentWithParm(next_segment, getGeoId(), true);
+	if((first_segment.getLength(zoom_ref) < (first_link->getWidth()/1000.0)) &&
+		(next_segment.getLength(zoom_ref) < (next_link->getWidth()/1000.0)))
+		return;
 
 	if((first_obj == nullptr) || (next_obj == nullptr))
 		return;

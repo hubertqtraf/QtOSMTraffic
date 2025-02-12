@@ -163,6 +163,7 @@ void MainWindow::loadFile(const QString & file)
         m_file_options = new FileOptions(this);
     }
     on_loadWorld(file, m_file_options->getShiftOption());
+    m_map_view->update();
 }
 
 void MainWindow::on_actionOpen_triggered()
@@ -175,6 +176,7 @@ void MainWindow::on_actionOpen_triggered()
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open OSM File"),
               m_file_options->getOsmDir(), tr("OSM File (*.osm)"));
     on_loadWorld(fileName, m_file_options->getShiftOption());
+    m_map_view->update();
 }
 
 void MainWindow::on_actionPrint_triggered()
@@ -339,7 +341,6 @@ void MainWindow::on_loadWorld(const QString & filename, int shift)
 
     on_updateWorld();
     on_updateLayerView();
-    on_updateNetOptions(m_net_option->getNetFlags());
 
     m_map_view->recalcExtRect();
 
@@ -359,6 +360,8 @@ void MainWindow::on_loadWorld(const QString & filename, int shift)
 
     window()->setWindowTitle("OSM Traffic: " + m_map_view->getDocument().getFileName());
     m_map_view->setLoadedFlag(true);
+    on_updateNetOptions(0);
+    on_updateNetOptions(m_net_option->getNetFlags());
 
     unsetCursor();
 

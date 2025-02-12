@@ -154,7 +154,7 @@ uint16_t TrMapLinkRoad::getParking()
 	{
 		TrMapParkLane * park = dynamic_cast<TrMapParkLane *>(m_parking);
 		if(park != nullptr)
-			return park->getParking();
+			return static_cast<uint16_t>(park->getParking());
 	}
 	return 0;
 }
