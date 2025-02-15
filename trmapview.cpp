@@ -21,10 +21,13 @@
  */
 
 #include "trmapview.h"
+#include "tr_prof_class_def.h"
+
 
 #include <tr_map_net.h>
 
 #include <qpainter.h>
+#include <tr_map_poi.h>
 
 TrMapView::TrMapView(QWidget *parent)
 	: TrCanvas(parent)
@@ -34,6 +37,7 @@ TrMapView::TrMapView(QWidget *parent)
 	, m_elementDock(nullptr)
 	, m_dockNode(nullptr)
 	, m_dockLink(nullptr)
+	, m_solar(false)
 {
 	m_dockLink = new TrLinkDock(parent);
 	m_dockLink->setVisible(false);
@@ -56,6 +60,11 @@ void TrMapView::setSettingsData(QStringList modes, QStringList layers)
 		//TR_INF << modes.at(i) << layers;
 		m_doc.addOrderByType(modes.at(i), layers);
 	}
+}
+
+void TrMapView::setSolarOption(bool solar)
+{
+	m_solar = solar;
 }
 
 void TrMapView::initObjects(uint64_t ctrl)
@@ -84,6 +93,8 @@ void TrMapView::paint(QPainter *p)
 			if(m_selected->checkMask(TR_MASK_SELECTED) == TR_MASK_SELECTED)
 				m_selected->drawSurroundingRect(m_zoom_ref, p, 0);
 		}
+		if(m_solar && m_solarList.objCount())
+			m_solarList.draw(m_zoom_ref, p, 0);
 	}
 	else
 	{
@@ -283,6 +294,19 @@ bool TrMapView::notifyClick(const QPoint qpt, int mode, Qt::MouseButton button)
 {
 	TrPoint pt = getWorldPoint(qpt);
 	uint64_t pos = TR_NO_VALUE;
+
+	TrMapList * list = dynamic_cast<TrMapList *>(m_doc.getLayerObjectByName("poi"));
+
+	if(m_solar)
+	{
+		TrMapPoi * poi = new TrMapPoi;
+		poi->setPoint(pt);
+		poi->setPoiTypeFlags(TYPE_BUILDING | BUILDING_POWER);
+		poi->setPoiNumData(0);
+		poi->setSurroundingRect();
+		poi->init(m_zoom_ref, 0, list);
+		m_solarList.appendObject(poi);
+	}
 
 	if(m_selected != nullptr)
 	{

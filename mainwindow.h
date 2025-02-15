@@ -84,6 +84,8 @@ private slots:
 
     void on_actionDirectories_triggered();
 
+    void on_actionSolar_triggered();
+
 public slots:
     void on_updateNetOptions(uint64_t flags);
 

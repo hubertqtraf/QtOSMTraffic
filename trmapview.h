@@ -50,6 +50,9 @@ private:
     TrNodeDock * m_dockNode;
     TrLinkDock * m_dockLink;
 
+    TrMapList m_solarList;
+    bool m_solar;
+
 protected:
     void resizeEvent(QResizeEvent *);
 
@@ -78,6 +81,8 @@ public:
     bool notifyRectSelect(const QRect & r, Qt::MouseButton button);
 
     void setSettingsData(QStringList modes, QStringList layers);
+
+    void setSolarOption(bool solar);
 
     //void paintSvg(QSvgGenerator &generator);
 

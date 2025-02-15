@@ -445,3 +445,8 @@ void MainWindow::on_updateFileOptions()
         on_updateNetOptions(m_net_option->getNetFlags());
     }
 }
+
+void MainWindow::on_actionSolar_triggered()
+{
+    m_map_view->setSolarOption(ui->actionSolar->isChecked());
+}

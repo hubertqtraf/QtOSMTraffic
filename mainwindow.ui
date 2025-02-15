@@ -58,8 +58,15 @@
     <addaction name="actionZoon_in"/>
     <addaction name="actionZoom_out"/>
    </widget>
+   <widget class="QMenu" name="menuEdit">
+    <property name="title">
+     <string>Edit</string>
+    </property>
+    <addaction name="actionSolar"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuView"/>
+   <addaction name="menuEdit"/>
    <addaction name="menuSettings"/>
    <addaction name="menuAbout"/>
   </widget>
@@ -197,6 +204,14 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="actionSolar">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Solar</string>
    </property>
   </action>
  </widget>
