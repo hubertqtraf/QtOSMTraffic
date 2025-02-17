@@ -47,6 +47,7 @@
 
 #include "tr_defs.h"
 #include "tr_import_osm.h"
+#include "tr_osm_power.h"
 
 #include <QtCore/qfile.h>
 //#include <QDebug>
@@ -325,7 +326,7 @@ bool TrImportOsm::read(const QString & filename, TrMapList & name_list, uint8_t 
 				olink->setOsmLanes(osm2_world.ways[i].lanes);
 				olink->setLanes(osm2_world.ways[i].lanes);
 
-				olink->setWidth(osm2_world.ways[i].width);
+				olink->setWidth(static_cast<int32_t>(osm2_world.ways[i].width));
 				olink->setOsmWidth(osm2_world.ways[i].width);
 
 				olink->setNameId(osm2_world.ways[i].name_id);
@@ -378,6 +379,83 @@ bool TrImportOsm::read(const QString & filename, TrMapList & name_list, uint8_t 
 	return true;
 }
 
+//<osm version='0.6' generator='Trafalgar'>
+bool TrImportOsm::saveOverlay(const QString &filename, TrMapList &ol_list, uint8_t mode)
+{
+	QFile ol_file(filename);
+	tr_osm_power pow;
+	if (ol_file.open(QFile::WriteOnly | QFile::Text))
+	{
+		//tr_osm_power pow;
+		QXmlStreamWriter write(&ol_file);
+		write.setAutoFormatting(true);
+		write.writeStartDocument();
+		write.writeStartElement("osm");
+		write.writeAttribute("version", "0.6");
+		write.writeAttribute("generator", "Trafalgar");
+		for(size_t i = 0; i < ol_list.objCount(); i++)
+		{
+			TrMapPoi * poi = dynamic_cast<TrMapPoi *>(ol_list.getObject(i));
+			if(poi != nullptr)
+			{
+				TrPoint pt = poi->getPoint();
+				pow.setPoint(pt);
+				pow.writeXmlDescription(write, i + 1);
+			}
+		}
+		//pow.writeXmlDescription(write, 777);
+		write.writeEndElement();
+		write.writeEndDocument();
+		return true;
+	}
+	return false;
+}
+
+bool TrImportOsm::loadOverlay(const QString &filename, TrMapList &ol_list, uint8_t mode)
+{
+	QFile ol_file(filename);
+	tr_osm_power pow;
+	if (ol_file.open(QFile::ReadOnly | QFile::Text))
+	{
+		QXmlStreamReader xml(&ol_file);
+		TrMapPoi * poi = nullptr;
+		while (!xml.atEnd())
+		{
+			xml.readNext();
+			if(xml.isStartElement())
+			{
+				if(xml.name().toString() == "node")
+				{
+					TrPoint pt;
+					poi = new TrMapPoi;
+					QXmlStreamAttributes attr = xml.attributes();
+					pt.x = attr.value("", "lon").toDouble() * TR_COOR_FACTOR;
+					pt.y = attr.value("", "lat").toDouble() * TR_COOR_FACTOR;
+					poi->setPoint(pt);
+					poi->setPoiTypeFlags(TYPE_BUILDING | BUILDING_POWER);
+					poi->setPoiNumData(0);
+					poi->setSurroundingRect();
+				}
+			}
+			if(xml.isEndElement())
+			{
+				if(xml.name().toString() == "node")
+				{
+					if(poi != nullptr)
+					{
+						ol_list.appendObject(poi);
+					}
+					poi = nullptr;
+				}
+			}
+		}
+		if (xml.hasError())
+		{
+			// do error handling
+		}
+	}
+	return false;
+}
 
 bool TrImportOsm::createNet(TrMapNet * osm_net, QString name)
 {

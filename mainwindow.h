@@ -86,6 +86,10 @@ private slots:
 
     void on_actionSolar_triggered();
 
+    void on_actionload_overlay_triggered();
+
+    void on_actionsave_overlay_triggered();
+
 public slots:
     void on_updateNetOptions(uint64_t flags);
 

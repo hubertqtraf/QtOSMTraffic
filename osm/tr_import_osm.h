@@ -106,6 +106,9 @@ public:
 	bool read(const QString & filename, TrMapList & name_list, uint8_t mode = 0);
 	//int64_t osmWaySize();
 
+	bool loadOverlay(const QString & filename, TrMapList & ol_list, uint8_t mode = 0);
+	bool saveOverlay(const QString & filename, TrMapList & ol_list, uint8_t mode = 0);
+
 	//void appendLinkOsm(TrOsmLink * link, QVector<TrOsmLink *> * raw_list);
 	bool addRawNodes(QVector <uint64_t> * nodes, QMap<uint64_t, PolyNode> & poly_nodes, uint8_t dir);
 	void addRawCoor(QVector <RawNode> * nodes, QMap<uint64_t, PolyNode> & poly_nodes);

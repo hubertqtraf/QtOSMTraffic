@@ -450,3 +450,33 @@ void MainWindow::on_actionSolar_triggered()
 {
     m_map_view->setSolarOption(ui->actionSolar->isChecked());
 }
+
+void MainWindow::on_actionload_overlay_triggered()
+{
+    if(m_file_options == nullptr)
+    {
+        m_file_options = new FileOptions(this);
+    }
+    QString fileName = QFileDialog::getOpenFileName(this,
+        tr("Open Overlay"), m_file_options->getOsmDir(),
+        tr("OSM Files (*.osm *.OSM)"));
+    TrImportOsm osm_filter;
+    osm_filter.loadOverlay(fileName, m_map_view->getOverlayList(0), 0);
+    m_map_view->getOverlayList(1);
+}
+
+//<osm version='0.6' generator='JOSM'>
+void MainWindow::on_actionsave_overlay_triggered()
+{
+    //TrMapList list;
+    if(m_file_options == nullptr)
+    {
+        m_file_options = new FileOptions(this);
+    }
+    QString fileName = QFileDialog::getSaveFileName(this,
+        tr("Save Overlay"), m_file_options->getOsmDir(),
+        tr("OSM Files (*.osm *.OSM)"));
+    TrImportOsm osm_filter;
+    osm_filter.saveOverlay(fileName, m_map_view->getOverlayList(0), 0);
+    TR_INF << fileName;
+}

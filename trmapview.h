@@ -1,7 +1,7 @@
 /******************************************************************
  * project:	OSM Traffic
  *
- * (C)		Schmid Hubert 2024
+ * (C)		Schmid Hubert 2024 - 2025
  ******************************************************************/
 
 /*
@@ -83,6 +83,7 @@ public:
     void setSettingsData(QStringList modes, QStringList layers);
 
     void setSolarOption(bool solar);
+    TrMapList & getOverlayList(int mode);
 
     //void paintSvg(QSvgGenerator &generator);
 

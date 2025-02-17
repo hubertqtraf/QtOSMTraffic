@@ -38,6 +38,7 @@ SOURCES += \
     osm/tr_import_osm_rel.cpp \
     osm/tr_import_osm_stream.cpp \
     osm/tr_osm_link.cpp \
+    osm/tr_osm_power.cpp \
     profile.cpp \
     profiledialog.cpp \
     tr_canvas.cpp \
@@ -85,6 +86,7 @@ HEADERS += \
     osm/tr_import_osm_rel.h \
     osm/tr_import_osm_stream.h \
     osm/tr_osm_link.h \
+    osm/tr_osm_power.h \
     profile.h \
     profiledialog.h \
     tr_canvas.h \

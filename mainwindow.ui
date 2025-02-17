@@ -63,6 +63,8 @@
      <string>Edit</string>
     </property>
     <addaction name="actionSolar"/>
+    <addaction name="actionload_overlay"/>
+    <addaction name="actionsave_overlay"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuView"/>
@@ -212,6 +214,16 @@
    </property>
    <property name="text">
     <string>Solar</string>
+   </property>
+  </action>
+  <action name="actionload_overlay">
+   <property name="text">
+    <string>Load overlay</string>
+   </property>
+  </action>
+  <action name="actionsave_overlay">
+   <property name="text">
+    <string>Save overlay</string>
    </property>
   </action>
  </widget>

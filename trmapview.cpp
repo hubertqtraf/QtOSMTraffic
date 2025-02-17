@@ -1,7 +1,7 @@
 /******************************************************************
  * project:	OSM Traffic
  *
- * (C)		Schmid Hubert 2024
+ * (C)		Schmid Hubert 2024 - 2025
  ******************************************************************/
 
 /*
@@ -65,6 +65,16 @@ void TrMapView::setSettingsData(QStringList modes, QStringList layers)
 void TrMapView::setSolarOption(bool solar)
 {
 	m_solar = solar;
+}
+
+TrMapList & TrMapView::getOverlayList(int mode)
+{
+	if(mode)
+	{
+		TrMapList * list = dynamic_cast<TrMapList *>(m_doc.getLayerObjectByName("poi"));
+		m_solarList.init(m_zoom_ref, 0, list);
+	}
+	return m_solarList;
 }
 
 void TrMapView::initObjects(uint64_t ctrl)
