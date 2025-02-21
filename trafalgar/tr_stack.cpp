@@ -322,7 +322,7 @@ bool TrStack::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject * base
 		if(act != nullptr)
 		{
 			if(act->getElement() != nullptr)
-				act->getElement()->init(zoom_ref, ctrl);
+				act->getElement()->init(zoom_ref, ctrl, base);
 		}
 		++ii;
 	}

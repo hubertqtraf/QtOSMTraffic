@@ -502,7 +502,7 @@ bool TrMapList::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject * ba
 	}
 	for (int i = 0; i < obj_list.size(); ++i)
 	{
-        obj_list[i]->init(zoom_ref, ctrl, this);
+		obj_list[i]->init(zoom_ref, ctrl, base);
 	}
 	// TODO: rework remove?
 	setActiveBrush(nullptr);

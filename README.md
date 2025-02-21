@@ -41,19 +41,28 @@ I have complied the source code and test on the following systems:
 * Linux: SuSE, Fedora
 
 ####  Qt Version
-5.12 - 6.6
+5.12 - 6.8.2
 
 ####  Clone the source code
 ```sh
 $ git  clone  https://github.com/hubertqtraf/QtOSMTraffic.git
 ```
 
-####  Build
+####  Build (cmd, Linux)
 
 ```sh  
 $ cd QtOSMTraffic
 $ qmake
 $ make
+```
+if 'qmake' is not found, select the Qt Version (Qt6 or Qt5):
+
+```sh
+$ /usr/lib64/qt6/bin/qmake
+```
+or
+```sh
+$ /usr/lib64/qt5/bin/qmake
 ```
 
 ###  Quick Run on Windows, Mac, and Linux  with  Qt  Creator
