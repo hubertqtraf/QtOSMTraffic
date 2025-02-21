@@ -20,6 +20,7 @@ DEFINES += TEST
 
 QMAKE_CXXFLAGS_WARN_ON += -Wno-unused-parameter
 
+INCLUDEPATH += ./UI
 INCLUDEPATH += ./geo
 INCLUDEPATH += ./osm
 INCLUDEPATH += ./trafalgar
