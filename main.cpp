@@ -20,7 +20,7 @@
  * <https://www.gnu.org/licenses/>.
  */
 
-#include "mainwindow.h"
+#include "UI/mainwindow.h"
 
 #include <QApplication>
 #include <QCommandLineParser>

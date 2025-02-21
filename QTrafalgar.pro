@@ -25,26 +25,26 @@ INCLUDEPATH += ./osm
 INCLUDEPATH += ./trafalgar
 
 SOURCES += \
-    about.cpp \
-    fileoptions.cpp \
+    UI/about.cpp \
+    UI/fileoptions.cpp \
     geo/geo_base.cpp \
     geo/geo_globe.cpp \
     geo/geo_lin.cpp \
     geo/geo_poly.cpp \
     geo/geo_ref.cpp \
     main.cpp \
-    mainwindow.cpp \
+    UI/mainwindow.cpp \
     osm/tr_import_osm.cpp \
     osm/tr_import_osm_rel.cpp \
     osm/tr_import_osm_stream.cpp \
     osm/tr_osm_link.cpp \
-    profile.cpp \
-    profiledialog.cpp \
-    tr_canvas.cpp \
-    tr_document.cpp \
-    tr_select_box.cpp \
-    tr_set_item.cpp \
-    tr_set_model.cpp \
+    UI/profile.cpp \
+    UI/profiledialog.cpp \
+    UI/tr_canvas.cpp \
+    UI/tr_document.cpp \
+    UI/tr_select_box.cpp \
+    UI/tr_set_item.cpp \
+    UI/tr_set_model.cpp \
     trafalgar/tr_geo_object.cpp \
     trafalgar/tr_geo_point.cpp \
     trafalgar/tr_geo_poly.cpp \
@@ -62,22 +62,22 @@ SOURCES += \
     trafalgar/tr_name_element.cpp \
     trafalgar/tr_stack.cpp \
     trafalgar/tr_zoom_map.cpp \
-    trdispoptiondialog.cpp \
-    trmapview.cpp \
-    trnetdock.cpp \
-    trlinkdock.cpp \
-    trnodedock.cpp
+    UI/trdispoptiondialog.cpp \
+    UI/trmapview.cpp \
+    UI/trnetdock.cpp \
+    UI/trlinkdock.cpp \
+    UI/trnodedock.cpp
 
 HEADERS += \
-    about.h \
-    fileoptions.h \
+    UI/about.h \
+    UI/fileoptions.h \
     geo/geo_base.h \
     geo/geo_errno.h \
     geo/geo_globe.h \
     geo/geo_lin.h \
     geo/geo_poly.h \
     geo/geo_ref.h \
-    mainwindow.h \
+    UI/mainwindow.h \
     osm/osm_load.h \
     osm/osm_load_rel.h \
     osm/osm_types.h \
@@ -85,13 +85,13 @@ HEADERS += \
     osm/tr_import_osm_rel.h \
     osm/tr_import_osm_stream.h \
     osm/tr_osm_link.h \
-    profile.h \
-    profiledialog.h \
-    tr_canvas.h \
-    tr_document.h \
-    tr_select_box.h \
-    tr_set_item.h \
-    tr_set_model.h \
+    UI/profile.h \
+    UI/profiledialog.h \
+    UI/tr_canvas.h \
+    UI/tr_document.h \
+    UI/tr_select_box.h \
+    UI/tr_set_item.h \
+    UI/tr_set_model.h \
     trafalgar/tr_defs.h \
     trafalgar/tr_geo_object.h \
     trafalgar/tr_geo_point.h \
@@ -112,21 +112,21 @@ HEADERS += \
     trafalgar/tr_prof_class_def.h \
     trafalgar/tr_stack.h \
     trafalgar/tr_zoom_map.h \
-    trdispoptiondialog.h \
-    trmapview.h \
-    trnetdock.h \
-    trlinkdock.h \
-    trnodedock.h
+    UI/trdispoptiondialog.h \
+    UI/trmapview.h \
+    UI/trnetdock.h \
+    UI/trlinkdock.h \
+    UI/trnodedock.h
 
 FORMS += \
-    about.ui \
-    fileoptions.ui \
-    mainwindow.ui \
-    profiledialog.ui \
-    trdispoptiondialog.ui \
-    trnetdock.ui  \
-    trlinkdock.ui \
-    trnodedock.ui
+    UI/about.ui \
+    UI/fileoptions.ui \
+    UI/mainwindow.ui \
+    UI/profiledialog.ui \
+    UI/trdispoptiondialog.ui \
+    UI/trnetdock.ui  \
+    UI/trlinkdock.ui \
+    UI/trnodedock.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

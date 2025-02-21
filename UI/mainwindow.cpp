@@ -24,7 +24,7 @@
 
 #include <tr_map_list.h>
 #include <tr_map_net_road.h>
-#include <tr_document.h>
+#include <UI/tr_document.h>
 #include <QPrintDialog>
 
 #include "tr_import_osm.h"
