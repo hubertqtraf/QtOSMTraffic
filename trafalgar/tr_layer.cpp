@@ -51,8 +51,6 @@ TrLayer::TrLayer()
 
 TrLayer::~TrLayer()
 {
-	TR_MSG;
-
 	if(m_element != nullptr)
 		delete m_element;
 }

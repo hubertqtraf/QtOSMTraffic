@@ -58,8 +58,6 @@ TrMapNet::TrMapNet()
 
 TrMapNet::~TrMapNet()
 {
-	TR_MSG;
-
 	manageList(&m_link_list, LIST_DELETE, "map_link");
 	manageList(&m_node_map, LIST_DELETE, "geo_point");
 	manageList(&m_primive_map, LIST_DELETE, "geo_primive");

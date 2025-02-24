@@ -30,6 +30,7 @@
 //#include <QSvgGenerator>
 #include <QDockWidget>
 #include <QWidget>
+#include <tr_map_poi.h>
 
 class TrMapView : public TrCanvas
 {
@@ -45,6 +46,8 @@ private:
     void paint(QPainter * p);
     TrPoint getWorldPoint(const QPoint & pt);
     TrGeoObject * selectObject(const TrPoint & pt, uint64_t & pos, uint64_t flag);
+
+    TrMapPoi *selectOverlayObj(const TrPoint &pt, uint64_t &pos, uint64_t flag);
 
     QDockWidget * m_elementDock;
     TrNodeDock * m_dockNode;

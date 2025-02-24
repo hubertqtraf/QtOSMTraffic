@@ -192,6 +192,23 @@ bool TrMapView::notifyCoor(const QPoint pt, int mode, Qt::MouseButton button)
 	return false;
 }
 
+TrMapPoi * TrMapView::selectOverlayObj(const TrPoint & pt, uint64_t & pos, uint64_t flag)
+{
+	TrGeoObject * sobj = nullptr;
+
+	if(!m_solar)
+		return nullptr;
+	pos = m_solarList.findSelect(m_zoom_ref, pt, TR_NO_VALUE);
+	if(pos != TR_NO_VALUE)
+	{
+		sobj = m_solarList.getObject(pos);
+		if(sobj == nullptr)
+			return nullptr;
+		return dynamic_cast<TrMapPoi*>(sobj);
+	}
+	return nullptr;
+}
+
 TrGeoObject * TrMapView::selectObject(const TrPoint & pt, uint64_t & pos, uint64_t flag)
 {
 	TrGeoObject * sobj = nullptr;
@@ -234,7 +251,6 @@ TrGeoObject * TrMapView::selectObject(const TrPoint & pt, uint64_t & pos, uint64
 	}
 	return sobj;
 }
-
 
 bool TrMapView::notifyPress(const QPoint pt, Qt::MouseButton button)
 {
@@ -309,7 +325,14 @@ bool TrMapView::notifyClick(const QPoint qpt, int mode, Qt::MouseButton button)
 
 	if(m_solar)
 	{
-		TrMapPoi * poi = new TrMapPoi;
+		TrMapPoi * poi = nullptr;
+		if((poi = selectOverlayObj(pt, pos, TR_MASK_SELECT_POINT)) != nullptr)
+		{
+			m_solarList.deleteObject(pos);
+				update();
+			return false;
+		}
+		poi = new TrMapPoi;
 		poi->setPoint(pt);
 		poi->setPoiTypeFlags(TYPE_BUILDING | BUILDING_POWER);
 		poi->setPoiNumData(0);

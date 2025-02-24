@@ -176,9 +176,6 @@ void TrCanvas::addMenuEntrys(QMenu * add_to, unsigned char type)
 
 void TrCanvas::mousePressEvent(QMouseEvent * m)
 {
-	TR_MSG << "mousePressEvent";
-
-	//area_moved = false;
 	switch(m->button())
 	{
 	case Qt::LeftButton:
