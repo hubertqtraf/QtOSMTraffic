@@ -44,439 +44,439 @@
 //#include <QSvgGenerator>
 
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
-    , m_profile_dlg(nullptr)
-    , m_file_options(nullptr)
-    , m_disp_option(nullptr)
-    , m_about(nullptr)
-    , m_net_option(nullptr)
-    , m_net_dock(nullptr)
+	: QMainWindow(parent)
+	, ui(new Ui::MainWindow)
+	, m_profile_dlg(nullptr)
+	, m_file_options(nullptr)
+	, m_disp_option(nullptr)
+	, m_about(nullptr)
+	, m_net_option(nullptr)
+	, m_net_dock(nullptr)
 {
-    ui->setupUi(this);
+	ui->setupUi(this);
 
-    view = new QScrollArea(this);
-    setCentralWidget(view);
-    m_map_view = new TrMapView(view);
+	view = new QScrollArea(this);
+	setCentralWidget(view);
+	m_map_view = new TrMapView(view);
 
-    view->setWidget(m_map_view);
-    view->setWidgetResizable(true);
+	view->setWidget(m_map_view);
+	view->setWidgetResizable(true);
 
-    m_file_options = new FileOptions(this);
-    connect(m_file_options, SIGNAL(updateSettings()), this, SLOT(on_updateFileOptions()));
-    readSettings();
+	m_file_options = new FileOptions(this);
+	connect(m_file_options, SIGNAL(updateSettings()), this, SLOT(on_updateFileOptions()));
+	readSettings();
 
-    m_map_view->getDocument().setFileName("unloaded.osm");
-    m_profile_dlg = new ProfileDialog(this);
-    QString profile = m_file_options->getProfileFileName();
-    TR_INF << profile;
-    m_profile_dlg->read(profile);
-    connect(m_profile_dlg, &ProfileDialog::accepted, this,  &MainWindow::on_updateWorld);
+	m_map_view->getDocument().setFileName("unloaded.osm");
+	m_profile_dlg = new ProfileDialog(this);
+	QString profile = m_file_options->getProfileFileName();
+	TR_INF << profile;
+	m_profile_dlg->read(profile);
+	connect(m_profile_dlg, &ProfileDialog::accepted, this,  &MainWindow::on_updateWorld);
 
-    m_map_view->getDocument().addLayerType(m_profile_dlg->getElemStringList("modes"));
+	m_map_view->getDocument().addLayerType(m_profile_dlg->getElemStringList("modes"));
 
-    QObject::connect(m_map_view, SIGNAL(sendMessage(const QString &, int)), statusBar(),
-                            SLOT(showMessage(const QString &, int)));
+	QObject::connect(m_map_view, SIGNAL(sendMessage(const QString &, int)), statusBar(),
+					 SLOT(showMessage(const QString &, int)));
 
-    m_net_dock = new QDockWidget(tr("Networks"), this);
-    m_net_option = new TrNetDock(this);
-    m_net_dock->setWidget(m_net_option);
-    addDockWidget(Qt::RightDockWidgetArea, m_net_dock);
-    connect(m_net_option, SIGNAL(selectModeChanged(uint64_t)), this, SLOT(on_updateNetOptions(uint64_t)));
-    ui->menuSettings->addAction(m_net_dock->toggleViewAction());
+	m_net_dock = new QDockWidget(tr("Networks"), this);
+	m_net_option = new TrNetDock(this);
+	m_net_dock->setWidget(m_net_option);
+	addDockWidget(Qt::RightDockWidgetArea, m_net_dock);
+	connect(m_net_option, SIGNAL(selectModeChanged(uint64_t)), this, SLOT(on_updateNetOptions(uint64_t)));
+	ui->menuSettings->addAction(m_net_dock->toggleViewAction());
 
-    m_element_dock = new QDockWidget(tr("Element"), this);
-    m_map_view->setElementDock(m_element_dock);
-    addDockWidget(Qt::RightDockWidgetArea, m_element_dock);
-    ui->menuSettings->addAction(m_element_dock->toggleViewAction());
+	m_element_dock = new QDockWidget(tr("Element"), this);
+	m_map_view->setElementDock(m_element_dock);
+	addDockWidget(Qt::RightDockWidgetArea, m_element_dock);
+	ui->menuSettings->addAction(m_element_dock->toggleViewAction());
 
-    m_map_view->setFont(&m_font);
+	m_map_view->setFont(&m_font);
 
-    window()->setWindowTitle("OSM Traffic: " + m_map_view->getDocument().getFileName());
+	window()->setWindowTitle("OSM Traffic: " + m_map_view->getDocument().getFileName());
 }
 
 MainWindow::~MainWindow()
 {
-    delete ui;
+	delete ui;
 }
 
 void MainWindow::createRoadNetObjects(const QStringList & list, TrImportOsm & filter)
 {
-    for(int i = 0; i < list.size(); i++)
-    {
-        TrMapNet * road_net = new TrMapNetRoad();
-        filter.createNet(road_net, list[i]);
-        m_map_view->getDocument().addMapLayerObjectByName(list[i], road_net);
-    }
+	for(int i = 0; i < list.size(); i++)
+	{
+		TrMapNet * road_net = new TrMapNetRoad();
+		filter.createNet(road_net, list[i]);
+		m_map_view->getDocument().addMapLayerObjectByName(list[i], road_net);
+	}
 }
 
 void MainWindow::createNetObjects(const QStringList & list, TrImportOsm & filter)
 {
-    for(int i = 0; i < list.size(); i++)
-    {
-        TrMapNet * net = new TrMapNet();
-        filter.createNet(net, list[i]);
-        m_map_view->getDocument().addMapLayerObjectByName(list[i], net);
-    }
+	for(int i = 0; i < list.size(); i++)
+	{
+		TrMapNet * net = new TrMapNet();
+		filter.createNet(net, list[i]);
+		m_map_view->getDocument().addMapLayerObjectByName(list[i], net);
+	}
 }
 
 void MainWindow::createFaceObjects(const QStringList & list, TrImportOsm & filter)
 {
-    for(int i = 0; i < list.size(); i++)
-    {
-        TrMapList * tr_list = new TrMapList();
-        if(filter.createFaceList(tr_list, list[i]))
-            m_map_view->getDocument().addMapLayerObjectByName(list[i], tr_list);
-    }
+	for(int i = 0; i < list.size(); i++)
+	{
+		TrMapList * tr_list = new TrMapList();
+		if(filter.createFaceList(tr_list, list[i]))
+			m_map_view->getDocument().addMapLayerObjectByName(list[i], tr_list);
+	}
 }
 
 void MainWindow::writeSettings()
 {
-    QSettings settings("trafalgar", "QTraf");
+	QSettings settings("trafalgar", "QTraf");
 
-    settings.beginGroup("MainWindow");
-    settings.setValue("size", size());
-    settings.setValue("pos", pos());
-    settings.setValue("font", m_font.toString());
-    settings.endGroup();
-    if(m_file_options != nullptr)
-        m_file_options->manageSettings(settings, false);
+	settings.beginGroup("MainWindow");
+	settings.setValue("size", size());
+	settings.setValue("pos", pos());
+	settings.setValue("font", m_font.toString());
+	settings.endGroup();
+	if(m_file_options != nullptr)
+		m_file_options->manageSettings(settings, false);
 }
 
 void MainWindow::readSettings()
 {
-    QSettings settings("trafalgar", "QTraf");
+	QSettings settings("trafalgar", "QTraf");
 
-    settings.beginGroup("MainWindow");
-    resize(settings.value("size", QSize(400, 400)).toSize());
-    move(settings.value("pos", QPoint(200, 200)).toPoint());
-    m_font.fromString(settings.value("font").toString());
-    settings.endGroup();
-    if(m_file_options != nullptr)
-        m_file_options->manageSettings(settings, true);
+	settings.beginGroup("MainWindow");
+	resize(settings.value("size", QSize(400, 400)).toSize());
+	move(settings.value("pos", QPoint(200, 200)).toPoint());
+	m_font.fromString(settings.value("font").toString());
+	settings.endGroup();
+	if(m_file_options != nullptr)
+		m_file_options->manageSettings(settings, true);
 }
 
 void MainWindow::loadFile(const QString & file)
 {
-    if(m_file_options == nullptr)
-    {
-        m_file_options = new FileOptions(this);
-    }
-    on_loadWorld(file, m_file_options->getShiftOption());
-    m_map_view->update();
+	if(m_file_options == nullptr)
+	{
+		m_file_options = new FileOptions(this);
+	}
+	on_loadWorld(file, m_file_options->getShiftOption());
+	m_map_view->update();
 }
 
 void MainWindow::on_actionOpen_triggered()
 {
-    if(m_file_options == nullptr)
-    {
-        m_file_options = new FileOptions(this);
-    }
-    TR_INF << m_file_options->getOsmDir();
-    QString fileName = QFileDialog::getOpenFileName(this, tr("Open OSM File"),
-              m_file_options->getOsmDir(), tr("OSM File (*.osm)"));
-    on_loadWorld(fileName, m_file_options->getShiftOption());
-    m_map_view->update();
+	if(m_file_options == nullptr)
+	{
+		m_file_options = new FileOptions(this);
+	}
+	TR_INF << m_file_options->getOsmDir();
+	QString fileName = QFileDialog::getOpenFileName(this, tr("Open OSM File"),
+													m_file_options->getOsmDir(), tr("OSM File (*.osm)"));
+	on_loadWorld(fileName, m_file_options->getShiftOption());
+	m_map_view->update();
 }
 
 void MainWindow::on_actionPrint_triggered()
 {
-    QPrinter printer(QPrinter::HighResolution);
-    printer.setCreator("Me");
-    printer.setDocName("Test");
-    QPrintDialog printDialog(&printer, this);
-    if(printDialog.exec() == QDialog::Accepted)
-    {
-        QPainter painter;
+	QPrinter printer(QPrinter::HighResolution);
+	printer.setCreator("Me");
+	printer.setDocName("Test");
+	QPrintDialog printDialog(&printer, this);
+	if(printDialog.exec() == QDialog::Accepted)
+	{
+		QPainter painter;
 
-        painter.begin(&printer);
-        painter.setRenderHint(QPainter::Antialiasing);
-        TR_INF << "DPI: " << printer.resolution();
-        QRect printer_rec = printer.pageLayout().fullRectPixels(printer.resolution());
-        double xscale = printer_rec.width() / double(m_map_view->width());
-        double yscale = printer_rec.height() / double(m_map_view->height());
-        double scale = qMin(xscale, yscale);
-        painter.translate(printer_rec.x() + printer_rec.width()/2,
-                        printer_rec.y() + printer_rec.height()/2);
-        painter.scale(scale, scale);
-        painter.translate(-m_map_view->width()/2, -m_map_view->height()/2);
+		painter.begin(&printer);
+		painter.setRenderHint(QPainter::Antialiasing);
+		TR_INF << "DPI: " << printer.resolution();
+		QRect printer_rec = printer.pageLayout().fullRectPixels(printer.resolution());
+		double xscale = printer_rec.width() / double(m_map_view->width());
+		double yscale = printer_rec.height() / double(m_map_view->height());
+		double scale = qMin(xscale, yscale);
+		painter.translate(printer_rec.x() + printer_rec.width()/2,
+						  printer_rec.y() + printer_rec.height()/2);
+		painter.scale(scale, scale);
+		painter.translate(-m_map_view->width()/2, -m_map_view->height()/2);
 
-        m_map_view->render(&painter);
-        painter.end();
-    }
+		m_map_view->render(&painter);
+		painter.end();
+	}
 }
 
 void MainWindow::on_actionSVG_triggered()
 {
-    // TODO: file dialog
-    /*QString path = "test.svg";
+	// TODO: file dialog
+	/*QString path = "test.svg";
 
-    QSvgGenerator generator;
-    generator.setFileName(path);
-    generator.setSize(QSize(width(), height()));
-    generator.setViewBox(QRect(0, 0, width(), height()));
-    generator.setTitle(tr("SVG Generator Trafgar Drawing"));
-    generator.setDescription(tr("An SVG drawing created by the Qt SVG Generator"));
-    m_map_view->paintSvg(generator);*/
+	QSvgGenerator generator;
+	generator.setFileName(path);
+	generator.setSize(QSize(width(), height()));
+	generator.setViewBox(QRect(0, 0, width(), height()));
+	generator.setTitle(tr("SVG Generator Trafgar Drawing"));
+	generator.setDescription(tr("An SVG drawing created by the Qt SVG Generator"));
+	m_map_view->paintSvg(generator);*/
 }
 
 void MainWindow::on_actionReset_triggered()
 {
-    m_map_view->resetZoom();
+	m_map_view->resetZoom();
 }
 
 void MainWindow::on_actionZoon_in_triggered()
 {
-    m_map_view->zoomChange(true);
+	m_map_view->zoomChange(true);
 }
 
 void MainWindow::on_actionZoom_out_triggered()
 {
-    m_map_view->zoomChange(false);
+	m_map_view->zoomChange(false);
 }
 
 void MainWindow::on_actionExit_triggered()
 {
-    writeSettings();
-    QApplication::quit();
+	writeSettings();
+	QApplication::quit();
 }
 
 void MainWindow::on_actionAboutQt_triggered()
 {
-    QApplication::aboutQt();
+	QApplication::aboutQt();
 }
 
 void MainWindow::on_actionAbout_triggered()
 {
-    if(!m_about)
-    {
-         m_about = new About(this);
-    }
-    m_about->show();
+	if(!m_about)
+	{
+		m_about = new About(this);
+	}
+	m_about->show();
 }
 
 void MainWindow::on_actionConfigure_triggered()
 {
-    if(m_profile_dlg)
-    {
-        m_profile_dlg->show();
-        QStringList list = m_profile_dlg->getElemStringList("modes");
-        TR_INF << list;
-        m_map_view->update();
-    }
+	if(m_profile_dlg)
+	{
+		m_profile_dlg->show();
+		QStringList list = m_profile_dlg->getElemStringList("modes");
+		TR_INF << list;
+		m_map_view->update();
+	}
 }
 
 void MainWindow::on_actionFonts_triggered()
 {
-    bool ok;
+	bool ok;
 
-    QString f = m_font.toString();
-    if(f.size())
-        m_font = QFontDialog::getFont(&ok, QFont(f, m_font.pointSize()), this);
-    else
-        m_font = QFontDialog::getFont(&ok, QFont("Helvetica [Cronyx]", 10), this);
-    if(ok)
-    {
-        TR_INF << m_font.key();
-        if(m_map_view != nullptr)
-        {
-            m_map_view->setFont(&m_font);
-            m_map_view->update();
-        }
-    }
-    else
-    {
-        // set the default (Helvetica [Cronyx])
-    }
+	QString f = m_font.toString();
+	if(f.size())
+		m_font = QFontDialog::getFont(&ok, QFont(f, m_font.pointSize()), this);
+	else
+		m_font = QFontDialog::getFont(&ok, QFont("Helvetica [Cronyx]", 10), this);
+	if(ok)
+	{
+		TR_INF << m_font.key();
+		if(m_map_view != nullptr)
+		{
+			m_map_view->setFont(&m_font);
+			m_map_view->update();
+		}
+	}
+	else
+	{
+		// set the default (Helvetica [Cronyx])
+	}
 }
 
 void MainWindow::on_loadWorld(const QString & filename, int shift)
 {
-    if(m_file_options == nullptr)
-        return;
+	if(m_file_options == nullptr)
+		return;
 
-    setCursor(Qt::WaitCursor);
-    if(m_map_view->getDocument().m_is_loaded)
-    {
-        // TODO: check if file name is same -> Dialog box?
-        m_map_view->getDocument().clean();
-        m_map_view->getDocument().addLayerType(m_profile_dlg->getElemStringList("modes"));
-    }
-    if(shift != 0)
-        TrGeoObject::s_mask |= TR_MASK_MOVE_LINE;
+	setCursor(Qt::WaitCursor);
+	if(m_map_view->getDocument().m_is_loaded)
+	{
+		// TODO: check if file name is same -> Dialog box?
+		m_map_view->getDocument().clean();
+		m_map_view->getDocument().addLayerType(m_profile_dlg->getElemStringList("modes"));
+	}
+	if(shift != 0)
+		TrGeoObject::s_mask |= TR_MASK_MOVE_LINE;
 
-    TrImportOsm osm_filter;
+	TrImportOsm osm_filter;
 
-    uint8_t mode = 0;
-    if(m_file_options != nullptr)
-    {
-        if(m_file_options->getRelationOption())
-            mode |= 0x01;
-    }
-    if(osm_filter.read(filename, m_map_view->getDocument().getNameList(), mode) == false)
-    {
-        QMessageBox msgBox;
-        msgBox.setIcon(QMessageBox::Critical);
-        msgBox.setText("Document Error");
-        msgBox.exec();
-        unsetCursor();
-        return;
-    }
+	uint8_t mode = 0;
+	if(m_file_options != nullptr)
+	{
+		if(m_file_options->getRelationOption())
+			mode |= 0x01;
+	}
+	if(osm_filter.read(filename, m_map_view->getDocument().getNameList(), mode) == false)
+	{
+		QMessageBox msgBox;
+		msgBox.setIcon(QMessageBox::Critical);
+		msgBox.setText("Document Error");
+		msgBox.exec();
+		unsetCursor();
+		return;
+	}
 
-    QStringList rlist = m_profile_dlg->getElemStringList("layer", "roadnet");
-    QStringList llist = m_profile_dlg->getElemStringList("layer", "net");
-    createRoadNetObjects(rlist, osm_filter);
-    createNetObjects(llist, osm_filter);
-    QStringList flist = m_profile_dlg->getElemStringList("layer", "face");
-    createFaceObjects(flist, osm_filter);
-    m_map_view->getDocument().setFileName(filename);
+	QStringList rlist = m_profile_dlg->getElemStringList("layer", "roadnet");
+	QStringList llist = m_profile_dlg->getElemStringList("layer", "net");
+	createRoadNetObjects(rlist, osm_filter);
+	createNetObjects(llist, osm_filter);
+	QStringList flist = m_profile_dlg->getElemStringList("layer", "face");
+	createFaceObjects(flist, osm_filter);
+	m_map_view->getDocument().setFileName(filename);
 
-    m_map_view->getDocument().m_is_loaded = true;
+	m_map_view->getDocument().m_is_loaded = true;
 
-    TrMapList * poi_map = osm_filter.createPoiMap("poi");
-    if(poi_map != nullptr)
-        m_map_view->getDocument().addMapLayerObjectByName("poi", poi_map);
-    m_map_view->setSettingsData(m_profile_dlg->getElemStringList("modes"),
-                                m_profile_dlg->getElemStringList("layer"));
+	TrMapList * poi_map = osm_filter.createPoiMap("poi");
+	if(poi_map != nullptr)
+		m_map_view->getDocument().addMapLayerObjectByName("poi", poi_map);
+	m_map_view->setSettingsData(m_profile_dlg->getElemStringList("modes"),
+								m_profile_dlg->getElemStringList("layer"));
 
-    on_updateWorld();
-    on_updateLayerView();
+	on_updateWorld();
+	on_updateLayerView();
 
-    m_map_view->recalcExtRect();
+	m_map_view->recalcExtRect();
 
-    // view option dialog
-    if(m_disp_option == nullptr)
-    {
-        m_disp_option = new TrDispOptionDialog(this);
-        connect(m_disp_option, &TrDispOptionDialog::accepted, this,  &MainWindow::on_updateLayerView);
-    }
-    QStringList alist = m_profile_dlg->getElemStringList("layer");
-    m_disp_option->setLayerList(alist, m_map_view->getDocument().getLayerNames());
-    for (int i = 0; i < m_disp_option->getViewList().size(); ++i)
-    {
-        m_disp_option->setLayerItemList(m_disp_option->getViewList()[i],
-            m_profile_dlg->getElemStringList(m_disp_option->getViewList()[i]));
-    }
+	// view option dialog
+	if(m_disp_option == nullptr)
+	{
+		m_disp_option = new TrDispOptionDialog(this);
+		connect(m_disp_option, &TrDispOptionDialog::accepted, this,  &MainWindow::on_updateLayerView);
+	}
+	QStringList alist = m_profile_dlg->getElemStringList("layer");
+	m_disp_option->setLayerList(alist, m_map_view->getDocument().getLayerNames());
+	for (int i = 0; i < m_disp_option->getViewList().size(); ++i)
+	{
+		m_disp_option->setLayerItemList(m_disp_option->getViewList()[i],
+										m_profile_dlg->getElemStringList(m_disp_option->getViewList()[i]));
+	}
 
-    window()->setWindowTitle("OSM Traffic: " + m_map_view->getDocument().getFileName());
-    m_map_view->setLoadedFlag(true);
-    on_updateNetOptions(0);
-    on_updateNetOptions(m_net_option->getNetFlags());
+	window()->setWindowTitle("OSM Traffic: " + m_map_view->getDocument().getFileName());
+	m_map_view->setLoadedFlag(true);
+	on_updateNetOptions(0);
+	on_updateNetOptions(m_net_option->getNetFlags());
 
-    unsetCursor();
+	unsetCursor();
 
 }
 
 void MainWindow::on_updateWorld()
 {
-    QStringList llist = m_profile_dlg->getElemStringList("layer");
-    ProfileDialog::TrMapCol b_map = m_profile_dlg->getElemColorMap("base");
-    TR_INF << "all layers: " << llist;
+	QStringList llist = m_profile_dlg->getElemStringList("layer");
+	ProfileDialog::TrMapCol b_map = m_profile_dlg->getElemColorMap("base");
+	TR_INF << "all layers: " << llist;
 
-    for(int i = 0; i < llist.size(); i++)
-    {
-        TrGeoObject * obj = m_map_view->getDocument().getLayerObjectByName(llist[i]);
-        if(obj != nullptr)
-        {
-            ProfileDialog::TrMapCol c_map = m_profile_dlg->getElemColorMap(llist[i]);
-            obj->setColorGroup(llist[i], c_map);
-            obj->setColorGroup("base", b_map);
-        }
-    }
-    m_map_view->setBackgroundColor(b_map);
-    m_map_view->initObjects(TR_INIT_COLORS);
+	for(int i = 0; i < llist.size(); i++)
+	{
+		TrGeoObject * obj = m_map_view->getDocument().getLayerObjectByName(llist[i]);
+		if(obj != nullptr)
+		{
+			ProfileDialog::TrMapCol c_map = m_profile_dlg->getElemColorMap(llist[i]);
+			obj->setColorGroup(llist[i], c_map);
+			obj->setColorGroup("base", b_map);
+		}
+	}
+	m_map_view->setBackgroundColor(b_map);
+	m_map_view->initObjects(TR_INIT_COLORS);
 
-    m_map_view->update();
+	m_map_view->update();
 }
 
 void MainWindow::on_updateLayerView()
 {
-    QMap<QString, uint64_t> layers;
+	QMap<QString, uint64_t> layers;
 
-    if(m_disp_option != nullptr)
-    {
-        m_disp_option->getLayerMasks(layers);
-        QStringList list = m_disp_option->getLayerActList();
-        TR_INF << m_disp_option->getLayerActList();
-        // this will show the layers on given string list
-        m_map_view->getDocument().setFunctionOrder(list, "draw");
-    }
-    m_map_view->getDocument().setLayerItemData(layers);
+	if(m_disp_option != nullptr)
+	{
+		m_disp_option->getLayerMasks(layers);
+		QStringList list = m_disp_option->getLayerActList();
+		TR_INF << m_disp_option->getLayerActList();
+		// this will show the layers on given string list
+		m_map_view->getDocument().setFunctionOrder(list, "draw");
+	}
+	m_map_view->getDocument().setLayerItemData(layers);
 }
 
 void MainWindow::on_updateNetOptions(uint64_t flags)
 {
-    TrGeoObject::setGlobelFlags(flags);
-    m_map_view->getDocument().setMask(flags);
-    m_map_view->initObjects(TR_INIT_GEOMETRY);
-    m_map_view->update();
+	TrGeoObject::setGlobelFlags(flags);
+	m_map_view->getDocument().setMask(flags);
+	m_map_view->initObjects(TR_INIT_GEOMETRY);
+	m_map_view->update();
 }
 
 void MainWindow::on_actionOptions_triggered()
 {
-    if(m_disp_option == nullptr)
-    {
-        m_disp_option = new TrDispOptionDialog(this);
-    }
-    m_disp_option->show();
+	if(m_disp_option == nullptr)
+	{
+		m_disp_option = new TrDispOptionDialog(this);
+	}
+	m_disp_option->show();
 }
 
 void MainWindow::on_actionDirectories_triggered()
 {
-    if(m_file_options == nullptr)
-    {
-        m_file_options = new FileOptions(this);
-    }
-    m_file_options->show();
+	if(m_file_options == nullptr)
+	{
+		m_file_options = new FileOptions(this);
+	}
+	m_file_options->show();
 }
 
 void MainWindow::on_updateFileOptions()
 {
-    if(m_file_options != nullptr)
-    {
-        QSettings settings("trafalgar", "QTraf");
-        if(m_file_options != nullptr)
-            m_file_options->manageSettings(settings, false);
-        QString profile = m_file_options->getProfileFileName();
-        TR_INF << profile;
-        m_profile_dlg->read(profile);
-        on_updateWorld();
-        on_updateLayerView();
-        on_updateNetOptions(m_net_option->getNetFlags());
-    }
+	if(m_file_options != nullptr)
+	{
+		QSettings settings("trafalgar", "QTraf");
+		if(m_file_options != nullptr)
+			m_file_options->manageSettings(settings, false);
+		QString profile = m_file_options->getProfileFileName();
+		TR_INF << profile;
+		m_profile_dlg->read(profile);
+		on_updateWorld();
+		on_updateLayerView();
+		on_updateNetOptions(m_net_option->getNetFlags());
+	}
 }
 
 void MainWindow::on_actionSolar_triggered()
 {
-    m_map_view->setSolarOption(ui->actionSolar->isChecked());
+	m_map_view->setSolarOption(ui->actionSolar->isChecked());
 }
 
 void MainWindow::on_actionload_overlay_triggered()
 {
-    if(m_file_options == nullptr)
-    {
-        m_file_options = new FileOptions(this);
-    }
-    QString fileName = QFileDialog::getOpenFileName(this,
-        tr("Open Overlay"), m_file_options->getOsmDir(),
-        tr("OSM Files (*.osm *.OSM)"));
-    TrImportOsm osm_filter;
-    osm_filter.loadOverlay(fileName, m_map_view->getOverlayList(0), 0);
-    m_map_view->getOverlayList(1);
+	if(m_file_options == nullptr)
+	{
+		m_file_options = new FileOptions(this);
+	}
+	QString fileName = QFileDialog::getOpenFileName(this,
+													tr("Open Overlay"), m_file_options->getOsmDir(),
+													tr("OSM Files (*.osm *.OSM)"));
+	TrImportOsm osm_filter;
+	osm_filter.loadOverlay(fileName, m_map_view->getOverlayList(0), 0);
+	m_map_view->getOverlayList(1);
 }
 
 //<osm version='0.6' generator='JOSM'>
 void MainWindow::on_actionsave_overlay_triggered()
 {
-    //TrMapList list;
-    if(m_file_options == nullptr)
-    {
-        m_file_options = new FileOptions(this);
-    }
-    QString fileName = QFileDialog::getSaveFileName(this,
-        tr("Save Overlay"), m_file_options->getOsmDir(),
-        tr("OSM Files (*.osm *.OSM)"));
-    TrImportOsm osm_filter;
-    osm_filter.saveOverlay(fileName, m_map_view->getOverlayList(0), 0);
-    TR_INF << fileName;
+	//TrMapList list;
+	if(m_file_options == nullptr)
+	{
+		m_file_options = new FileOptions(this);
+	}
+	QString fileName = QFileDialog::getSaveFileName(this,
+													tr("Save Overlay"), m_file_options->getOsmDir(),
+													tr("OSM Files (*.osm *.OSM)"));
+	TrImportOsm osm_filter;
+	osm_filter.saveOverlay(fileName, m_map_view->getOverlayList(0), 0);
+	TR_INF << fileName;
 }
