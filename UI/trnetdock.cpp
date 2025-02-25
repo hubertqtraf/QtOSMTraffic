@@ -26,62 +26,62 @@
 #include <tr_defs.h>
 
 TrNetDock::TrNetDock(QWidget *parent)
-    : QWidget(parent)
-    , ui(new Ui::TrNetDock)
-    , m_flags(0)
+	: QWidget(parent)
+	, ui(new Ui::TrNetDock)
+	, m_flags(0)
 {
-    ui->setupUi(this);
+	ui->setupUi(this);
 }
 
 TrNetDock::~TrNetDock()
 {
-    delete ui;
+	delete ui;
 }
 
 void TrNetDock::setFlag(int checked, uint64_t flag)
 {
-    if(checked)
-    {
-        m_flags |= flag;
-    }
-    else
-    {
-        m_flags &= ~flag;
-    }
-    emit selectModeChanged(m_flags);
+	if(checked)
+	{
+		m_flags |= flag;
+	}
+	else
+	{
+		m_flags &= ~flag;
+	}
+	emit selectModeChanged(m_flags);
 }
 
 void TrNetDock::on_double_2_clicked(bool checked)
 {
-    setFlag(checked, TR_MASK_MORE_LINES);
+	setFlag(checked, TR_MASK_MORE_LINES);
 }
 
 void TrNetDock::on_crossings_clicked(bool checked)
 {
-    setFlag(checked, TR_MASK_SET_RAMPS);
+	setFlag(checked, TR_MASK_SET_RAMPS);
 }
 
 void TrNetDock::on_nodes_clicked(bool checked)
 {
-    setFlag(checked, TR_MASK_SHOW_POINTS);
+	setFlag(checked, TR_MASK_SHOW_POINTS);
 }
 
 void TrNetDock::on_text_clicked(bool checked)
 {
-    setFlag(checked, TR_MASK_POINTS_NUM);
+	setFlag(checked, TR_MASK_POINTS_NUM);
 }
 
 void TrNetDock::on_parking_clicked(bool checked)
 {
-    setFlag(checked, TR_MASK_SHOW_PARKING);
+	setFlag(checked, TR_MASK_SHOW_PARKING);
 }
 
 void TrNetDock::on_rd_name_clicked(bool checked)
 {
-    setFlag(checked, TR_MASK_SHOW_ROADNAME);
+	setFlag(checked, TR_MASK_SHOW_ROADNAME);
 }
 
 uint64_t TrNetDock::getNetFlags()
 {
-    return m_flags;
+	return m_flags;
 }

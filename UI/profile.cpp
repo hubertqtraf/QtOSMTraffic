@@ -27,122 +27,121 @@
 #include <tr_defs.h>
 
 Profile::Profile(QObject *parent)
-    : QAbstractItemModel(parent)
-    , rootItem(nullptr)
+	: QAbstractItemModel(parent)
+	, rootItem(nullptr)
 {
 }
 
 bool Profile::setDataByFile(const QString & fname)
 {
-        QFile file;
-        TR_INF << "profile: " << fname;
-        file.setFileName(fname);
-        if(!file.exists())
-                return false;
+	QFile file;
+	TR_INF << "profile: " << fname;
+	file.setFileName(fname);
+	if(!file.exists())
+		return false;
 
-        file.open(QIODevice::ReadOnly);
+	file.open(QIODevice::ReadOnly);
 
-        domDocument.setContent(&file);
-        rootItem = new TrSetItem(domDocument, 0);
-        file.close();
-        return true;
+	domDocument.setContent(&file);
+	rootItem = new TrSetItem(domDocument, 0);
+	file.close();
+	return true;
 }
 
 
 QVariant Profile::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    // FIXME: Implement me!
-    if(orientation == Qt::Horizontal && role == Qt::DisplayRole)
-    {
-        switch (section)
-        {
-        case 0:
-            return tr("Item");
+	// FIXME: Implement me!
+	if(orientation == Qt::Horizontal && role == Qt::DisplayRole)
+	{
+		switch (section)
+		{
+		case 0:
+			return tr("Item");
 
-        case 1:
-            return tr("Name");
+		case 1:
+			return tr("Name");
 
-        case 2:
-            return tr("Value");
+		case 2:
+			return tr("Value");
 
-        default:
-            return QVariant();
-        }
-    }
-    return QVariant();
-
+		default:
+			return QVariant();
+		}
+	}
+	return QVariant();
 }
 
 QModelIndex Profile::index(int row, int column, const QModelIndex &parent) const
 {
-    if(!hasIndex(row, column, parent))
-            return QModelIndex();
+	if(!hasIndex(row, column, parent))
+		return QModelIndex();
 
-    TrSetItem *parentItem;
+	TrSetItem *parentItem;
 
-    if(!parent.isValid())
-            parentItem = rootItem;
-    else
-            parentItem = static_cast<TrSetItem*>(parent.internalPointer());
+	if(!parent.isValid())
+		parentItem = rootItem;
+	else
+		parentItem = static_cast<TrSetItem*>(parent.internalPointer());
 
-    TrSetItem *childItem = parentItem->child(row);
-    if(childItem)
-            return createIndex(row, column, childItem);
-    else
-            return QModelIndex();
+	TrSetItem *childItem = parentItem->child(row);
+	if(childItem)
+		return createIndex(row, column, childItem);
+	else
+		return QModelIndex();
 }
 
 QModelIndex Profile::parent(const QModelIndex &index) const
 {
-    if(!index.isValid())
-            return QModelIndex();
+	if(!index.isValid())
+		return QModelIndex();
 
-    TrSetItem *childItem = static_cast<TrSetItem*>(index.internalPointer());
-    TrSetItem *parentItem = childItem->parent();
+	TrSetItem *childItem = static_cast<TrSetItem*>(index.internalPointer());
+	TrSetItem *parentItem = childItem->parent();
 
-    if(!parentItem || parentItem == rootItem)
-            return QModelIndex();
+	if(!parentItem || parentItem == rootItem)
+		return QModelIndex();
 
-    return createIndex(parentItem->row(), 0, parentItem);
+	return createIndex(parentItem->row(), 0, parentItem);
 }
 
 int Profile::rowCount(const QModelIndex &parent) const
 {
-    if (!parent.isValid())
-        return 0;
-    if(parent.column() > 0)
-            return 0;
+	if (!parent.isValid())
+		return 0;
+	if(parent.column() > 0)
+		return 0;
 
-    TrSetItem *parentItem;
+	TrSetItem *parentItem;
 
-    if(!parent.isValid())
-            parentItem = rootItem;
-    else
-            parentItem = static_cast<TrSetItem*>(parent.internalPointer());
+	if(!parent.isValid())
+		parentItem = rootItem;
+	else
+		parentItem = static_cast<TrSetItem*>(parent.internalPointer());
 
-    return parentItem->node().childNodes().count();
+	return parentItem->node().childNodes().count();
 }
 
 int Profile::columnCount(const QModelIndex &parent) const
 {
-    if (!parent.isValid())
-    {
-        TR_INF << "PRARENT!!!!";
-        return 3;
-    }
-    return 3;
+	if (!parent.isValid())
+	{
+		TR_INF << "PRARENT!!!!";
+		return 3;
+	}
+	return 3;
 }
 
 QVariant Profile::data(const QModelIndex &index, int role) const
 {
-    if (!index.isValid())
-        return QVariant();
+	if (!index.isValid())
+		return QVariant();
 
-    return QVariant();
+	return QVariant();
 }
 
 QDomDocument & Profile::getDocument()
 {
-    return domDocument;
+	return domDocument;
 }
 

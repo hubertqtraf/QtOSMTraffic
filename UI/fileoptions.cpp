@@ -29,117 +29,117 @@
 #include <QFileDialog>
 
 FileOptions::FileOptions(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::FileOptions)
+	QDialog(parent),
+	ui(new Ui::FileOptions)
 {
-    ui->setupUi(this);
-    ui->laneSpinBox->setValue(TrMapLinkRoad::ms_lane_width_p);
+	ui->setupUi(this);
+	ui->laneSpinBox->setValue(TrMapLinkRoad::ms_lane_width_p);
 }
 
 FileOptions::~FileOptions()
 {
-    delete ui;
+	delete ui;
 }
 
 QString FileOptions::getOsmDir()
 {
-    return ui->osmDir->text();
+	return ui->osmDir->text();
 }
 
 bool FileOptions::getShiftOption()
 {
-    return (ui->shiftCheck->checkState() == Qt::Checked);
+	return (ui->shiftCheck->checkState() == Qt::Checked);
 }
 
 bool FileOptions::getRelationOption()
 {
-    return (ui->relCheck->checkState() == Qt::Unchecked);
+	return (ui->relCheck->checkState() == Qt::Unchecked);
 }
 
 int FileOptions::laneWith()
 {
-    return ui->laneSpinBox->value();
+	return ui->laneSpinBox->value();
 }
 
 void FileOptions::setLaneWith(int width)
 {
-     ui->laneSpinBox->setValue(TrMapLinkRoad::ms_lane_width_p);
+	ui->laneSpinBox->setValue(TrMapLinkRoad::ms_lane_width_p);
 }
 
 QString FileOptions::getProfileFileName()
 {
-    return ui->profileDir->text();
+	return ui->profileDir->text();
 }
 
 void FileOptions::on_setOsmDir_clicked()
 {
-    QFileDialog dialog;
+	QFileDialog dialog;
 #if QT_VERSION < 0x060000
-    dialog.setFileMode(QFileDialog::DirectoryOnly);
-    dialog.setOption(QFileDialog::ShowDirsOnly, true);
+	dialog.setFileMode(QFileDialog::DirectoryOnly);
+	dialog.setOption(QFileDialog::ShowDirsOnly, true);
 #else
-    dialog.setFileMode(QFileDialog::Directory);
-    //dialog.setOption(QFileDialog::ShowDirsOnly, true);
+	dialog.setFileMode(QFileDialog::Directory);
+	//dialog.setOption(QFileDialog::ShowDirsOnly, true);
 #endif
-    QString oldPath = ui->osmDir->text();
-    if(!oldPath.size())
-        oldPath = ".";
-    TR_INF << oldPath;
-    dialog.setDirectory(oldPath);
-    dialog.exec();
-    ui->osmDir->clear();
-    ui->osmDir->insert(dialog.directory().path());
+	QString oldPath = ui->osmDir->text();
+	if(!oldPath.size())
+		oldPath = ".";
+	TR_INF << oldPath;
+	dialog.setDirectory(oldPath);
+	dialog.exec();
+	ui->osmDir->clear();
+	ui->osmDir->insert(dialog.directory().path());
 }
 
 void FileOptions::on_setProfileDir_clicked()
 {
-    QString fileName = QFileDialog::getOpenFileName(this, tr("Open Profile File"),
-                                         ui->profileDir->text(), tr("Profile File (*.xml)"));
-    ui->profileDir->clear();
-    ui->profileDir->insert(fileName);
+	QString fileName = QFileDialog::getOpenFileName(this, tr("Open Profile File"),
+				ui->profileDir->text(), tr("Profile File (*.xml)"));
+	ui->profileDir->clear();
+	ui->profileDir->insert(fileName);
 }
 
 void FileOptions::manageSettings(QSettings & settings, bool mode)
 {
-    settings.beginGroup("Files");
-    if(mode)        // read
-    {
-        ui->osmDir->setText(settings.value("OSM").toString());
-        ui->profileDir->setText(settings.value("Profile").toString());
-        if(settings.value("Shift").toInt())
-        {
-            ui->shiftCheck->setCheckState(Qt::Checked);
-        }
-        else
-        {
-            ui->shiftCheck->setCheckState(Qt::Unchecked);
-        }
-    }
-    else            // write
-    {
-        //TR_INF << "write" << this->getWorldLayer() << this->getSelect();
-        settings.setValue("OSM", ui->osmDir->text());
-        settings.setValue("Profile", ui->profileDir->text());
-        if(ui->shiftCheck->checkState() == Qt::Checked)
-        {
-            settings.setValue("Shift", 2);
-        }
-        else
-        {
-            settings.setValue("Shift", 0);
-        }
-    }
-    settings.endGroup();
+	settings.beginGroup("Files");
+	if(mode)        // read
+	{
+		ui->osmDir->setText(settings.value("OSM").toString());
+		ui->profileDir->setText(settings.value("Profile").toString());
+		if(settings.value("Shift").toInt())
+		{
+			ui->shiftCheck->setCheckState(Qt::Checked);
+		}
+		else
+		{
+			ui->shiftCheck->setCheckState(Qt::Unchecked);
+		}
+	}
+	else            // write
+	{
+		//TR_INF << "write" << this->getWorldLayer() << this->getSelect();
+		settings.setValue("OSM", ui->osmDir->text());
+		settings.setValue("Profile", ui->profileDir->text());
+		if(ui->shiftCheck->checkState() == Qt::Checked)
+		{
+			settings.setValue("Shift", 2);
+		}
+		else
+		{
+			settings.setValue("Shift", 0);
+		}
+	}
+	settings.endGroup();
 }
 
 void FileOptions::on_buttonBox_accepted()
 {
-    TrMapLinkRoad::ms_lane_width_p = ui->laneSpinBox->value();
-    TrMapLinkRoad::ms_lane_width_n = 0-ui->laneSpinBox->value();
-    emit updateSettings();
+	TrMapLinkRoad::ms_lane_width_p = ui->laneSpinBox->value();
+	TrMapLinkRoad::ms_lane_width_n = 0-ui->laneSpinBox->value();
+	emit updateSettings();
 }
 
 void FileOptions::on_buttonBox_rejected()
 {
-    ui->laneSpinBox->setValue(TrMapLinkRoad::ms_lane_width_p);
+	ui->laneSpinBox->setValue(TrMapLinkRoad::ms_lane_width_p);
 }

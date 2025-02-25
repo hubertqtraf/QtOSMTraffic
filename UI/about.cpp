@@ -28,21 +28,21 @@
 #include <qfile.h>
 
 About::About(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::About)
+	QDialog(parent),
+	ui(new Ui::About)
 {
-    ui->setupUi(this);
-    QString path = QString(__FILE__);
-    path.replace("about.cpp", "LICENSE");
-    QFile file(path);
-    if(!file.open(QFile::ReadOnly))
-            return;
-    QByteArray data=file.readAll();
-    ui->textEdit->setPlainText(data);
-    file.close();
+	ui->setupUi(this);
+	QString path = QString(__FILE__);
+	path.replace("about.cpp", "LICENSE");
+	QFile file(path);
+	if(!file.open(QFile::ReadOnly))
+		return;
+	QByteArray data=file.readAll();
+	ui->textEdit->setPlainText(data);
+	file.close();
 }
 
 About::~About()
 {
-    delete ui;
+	delete ui;
 }
