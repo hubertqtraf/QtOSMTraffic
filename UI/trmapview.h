@@ -33,56 +33,56 @@
 
 class TrMapView : public TrCanvas
 {
-    Q_OBJECT
+	Q_OBJECT
 private:
-    uint64_t m_pos_select;
+	uint64_t m_pos_select;
 
-    TrDocument m_doc;
-    TrZoomMap m_zoom_ref;
-    Qt::MouseButton m_move_pressed;
-    TrGeoObject * m_selected;
+	TrDocument m_doc;
+	TrZoomMap m_zoom_ref;
+	Qt::MouseButton m_move_pressed;
+	TrGeoObject * m_selected;
 
-    void paint(QPainter * p);
-    TrPoint getWorldPoint(const QPoint & pt);
-    TrGeoObject * selectObject(const TrPoint & pt, uint64_t & pos, uint64_t flag);
+	void paint(QPainter * p);
+	TrPoint getWorldPoint(const QPoint & pt);
+	TrGeoObject * selectObject(const TrPoint & pt, uint64_t & pos, uint64_t flag);
 
-    QDockWidget * m_elementDock;
-    TrNodeDock * m_dockNode;
-    TrLinkDock * m_dockLink;
+	QDockWidget * m_elementDock;
+	TrNodeDock * m_dockNode;
+	TrLinkDock * m_dockLink;
 
 protected:
-    void resizeEvent(QResizeEvent *);
+	void resizeEvent(QResizeEvent *);
 
 public:
-    TrMapView(QWidget *parent);
+	TrMapView(QWidget *parent);
 
-    TrDocument & getDocument();
+	TrDocument & getDocument();
 
-    void initObjects(uint64_t ctrl);
+	void initObjects(uint64_t ctrl);
 
-    void setLoadedFlag(bool loaded);
+	void setLoadedFlag(bool loaded);
 
-    void setElementDock(QDockWidget * dock);
+	void setElementDock(QDockWidget * dock);
 
-    void recalcExtRect();
-    void resetZoom();
-    void zoomChange(double value, const QPoint pt, int limit);
-    void zoomChange(bool dir);
+	void recalcExtRect();
+	void resetZoom();
+	void zoomChange(double value, const QPoint pt, int limit);
+	void zoomChange(bool dir);
 
-    bool notifyCoor(const QPoint pt, int mode, Qt::MouseButton button);
-    bool notifyPress(const QPoint pt, Qt::MouseButton button);
-    bool notifyMove(const QPoint pt, Qt::MouseButton button);
-    bool notifyRelease(const QPoint pt, Qt::MouseButton button);
-    bool notifyClick(const QPoint,  int mode, Qt::MouseButton button);
-    bool notifyWheel(const QPoint, int a, int b);
-    bool notifyRectSelect(const QRect & r, Qt::MouseButton button);
+	bool notifyCoor(const QPoint pt, int mode, Qt::MouseButton button);
+	bool notifyPress(const QPoint pt, Qt::MouseButton button);
+	bool notifyMove(const QPoint pt, Qt::MouseButton button);
+	bool notifyRelease(const QPoint pt, Qt::MouseButton button);
+	bool notifyClick(const QPoint,  int mode, Qt::MouseButton button);
+	bool notifyWheel(const QPoint, int a, int b);
+	bool notifyRectSelect(const QRect & r, Qt::MouseButton button);
 
-    void setSettingsData(QStringList modes, QStringList layers);
+	void setSettingsData(QStringList modes, QStringList layers);
 
-    //void paintSvg(QSvgGenerator &generator);
+	//void paintSvg(QSvgGenerator &generator);
 
 signals:
-    void sendMessage(const QString, int);
+	void sendMessage(const QString, int);
 };
 
 #endif // TRMAPVIEW_H

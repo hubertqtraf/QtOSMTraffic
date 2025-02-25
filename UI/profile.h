@@ -33,31 +33,31 @@
 
 class Profile : public QAbstractItemModel
 {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    explicit Profile(QObject *parent = nullptr);
+	explicit Profile(QObject *parent = nullptr);
 
-    bool setDataByFile(const QString &fname);
+	bool setDataByFile(const QString &fname);
 
-    // Header:
-    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
+	// Header:
+	QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
-    // Basic functionality:
-    QModelIndex index(int row, int column,
-                      const QModelIndex &parent = QModelIndex()) const override;
-    QModelIndex parent(const QModelIndex &index) const override;
+	// Basic functionality:
+	QModelIndex index(int row, int column,
+		const QModelIndex &parent = QModelIndex()) const override;
+	QModelIndex parent(const QModelIndex &index) const override;
 
-    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
-    int columnCount(const QModelIndex &parent = QModelIndex()) const override;
+	int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+	int columnCount(const QModelIndex &parent = QModelIndex()) const override;
 
-    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+	QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
-    QDomDocument &getDocument();
+	QDomDocument &getDocument();
 
 private:
-    QDomDocument domDocument;
-    TrSetItem *rootItem;
+	QDomDocument domDocument;
+	TrSetItem *rootItem;
 };
 
 #endif // PROFILE_H

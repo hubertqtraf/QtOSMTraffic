@@ -32,36 +32,36 @@ class FileOptions;
 
 class FileOptions : public QDialog
 {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    explicit FileOptions(QWidget *parent = nullptr);
-    ~FileOptions();
+	explicit FileOptions(QWidget *parent = nullptr);
+	~FileOptions();
 
-    QString getOsmDir();
-    QString getProfileFileName();
-    bool getShiftOption();
-    bool getRelationOption();
-    int laneWith();
-    void setLaneWith(int width);
+	QString getOsmDir();
+	QString getProfileFileName();
+	bool getShiftOption();
+	bool getRelationOption();
+	int laneWith();
+	void setLaneWith(int width);
 
 
-    void manageSettings(QSettings &settings, bool mode);
+	void manageSettings(QSettings &settings, bool mode);
 
 signals:
-    void updateSettings();
+	void updateSettings();
 
 private slots:
-    void on_setOsmDir_clicked();
+	void on_setOsmDir_clicked();
 
-    void on_setProfileDir_clicked();
+	void on_setProfileDir_clicked();
 
-    void on_buttonBox_accepted();
+	void on_buttonBox_accepted();
 
-    void on_buttonBox_rejected();
+	void on_buttonBox_rejected();
 
 private:
-    Ui::FileOptions *ui;
+	Ui::FileOptions *ui;
 };
 
 #endif // FILEOPTIONS_H

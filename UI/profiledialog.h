@@ -38,33 +38,33 @@ class ProfileDialog;
 
 class ProfileDialog : public QDialog
 {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    typedef QMap<int, QString> TrMapString;
-    typedef QMap<int, QColor> TrMapCol;
+	typedef QMap<int, QString> TrMapString;
+	typedef QMap<int, QColor> TrMapCol;
 
-    explicit ProfileDialog(QWidget *parent = nullptr);
-    ~ProfileDialog();
+	explicit ProfileDialog(QWidget *parent = nullptr);
+	~ProfileDialog();
 
-    void read(QString &filename);
+	void read(QString &filename);
 
-    QStringList getElemStringList(const QString &sec_name, const QString &filter = "");
-    ProfileDialog::TrMapCol getElemColorMap(const QString &sec_name);
+	QStringList getElemStringList(const QString &sec_name, const QString &filter = "");
+	ProfileDialog::TrMapCol getElemColorMap(const QString &sec_name);
 
 private slots:
-    //void on_treeView_doubleClicked(const QModelIndex &index);
+	//void on_treeView_doubleClicked(const QModelIndex &index);
 
-    void on_buttonBox_clicked(QAbstractButton *button);
+	void on_buttonBox_clicked(QAbstractButton *button);
 
 private:
-    Ui::ProfileDialog *ui;
-    TrSetModel * m_profile;
-    QDataWidgetMapper * m_mapper;
-    QString m_filename;
+	Ui::ProfileDialog *ui;
+	TrSetModel * m_profile;
+	QDataWidgetMapper * m_mapper;
+	QString m_filename;
 
-    bool getElementList(const QString &sec_name, QMap<int, QString> &string_map, TrMapCol & col_map, const QString &filter);
-    bool readSection(QDomNode &n, QMap<int, QString> &string_map, TrMapCol & col_map, const QString &filter);
+	bool getElementList(const QString &sec_name, QMap<int, QString> &string_map, TrMapCol & col_map, const QString &filter);
+	bool readSection(QDomNode &n, QMap<int, QString> &string_map, TrMapCol & col_map, const QString &filter);
 };
 
 #endif // PROFILEDIALOG_H

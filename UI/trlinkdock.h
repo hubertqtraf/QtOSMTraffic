@@ -34,15 +34,15 @@ class TrLinkDock;
 
 class TrLinkDock : public QWidget
 {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    explicit TrLinkDock(QWidget *parent = nullptr);
-    ~TrLinkDock();
+	explicit TrLinkDock(QWidget *parent = nullptr);
+	~TrLinkDock();
 
-    void setData(TrGeoObject *obj);
+	void setData(TrGeoObject *obj);
 private:
-    Ui::TrLinkDock *ui;
+	Ui::TrLinkDock *ui;
 };
 
 #endif // TRLINKDOCK_H

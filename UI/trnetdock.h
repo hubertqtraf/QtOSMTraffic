@@ -31,36 +31,36 @@ class TrNetDock;
 
 class TrNetDock : public QWidget
 {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    explicit TrNetDock(QWidget *parent = nullptr);
-    ~TrNetDock();
+	explicit TrNetDock(QWidget *parent = nullptr);
+	~TrNetDock();
 
-    uint64_t getNetFlags();
+	uint64_t getNetFlags();
 
 private slots:
-    void on_double_2_clicked(bool checked);
+	void on_double_2_clicked(bool checked);
 
-    void on_crossings_clicked(bool checked);
+	void on_crossings_clicked(bool checked);
 
-    void on_nodes_clicked(bool checked);
+	void on_nodes_clicked(bool checked);
 
-    void on_text_clicked(bool checked);
+	void on_text_clicked(bool checked);
 
-    void on_parking_clicked(bool checked);
+	void on_parking_clicked(bool checked);
 
-    void on_rd_name_clicked(bool checked);
+	void on_rd_name_clicked(bool checked);
 
 private:
-    Ui::TrNetDock *ui;
+	Ui::TrNetDock *ui;
 
-    void setFlag(int checked, uint64_t flag);
+	void setFlag(int checked, uint64_t flag);
 
-    uint64_t m_flags;
+	uint64_t m_flags;
 
 signals:
-    void selectModeChanged(uint64_t);
+	void selectModeChanged(uint64_t);
 };
 
 #endif // TRNETDOCK_H

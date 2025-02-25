@@ -45,74 +45,74 @@ QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow
 {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
+	MainWindow(QWidget *parent = nullptr);
+	~MainWindow();
 
-    void loadFile(const QString &file);
+	void loadFile(const QString &file);
 
 private slots:
-    void on_actionOpen_triggered();
+	void on_actionOpen_triggered();
 
-    void on_actionExit_triggered();
+	void on_actionExit_triggered();
 
-    void on_actionPrint_triggered();
+	void on_actionPrint_triggered();
 
-    void on_actionSVG_triggered();
+	void on_actionSVG_triggered();
 
-    void on_actionReset_triggered();
+	void on_actionReset_triggered();
 
-    void on_actionZoon_in_triggered();
+	void on_actionZoon_in_triggered();
 
-    void on_actionZoom_out_triggered();
+	void on_actionZoom_out_triggered();
 
-    void on_actionAboutQt_triggered();
+	void on_actionAboutQt_triggered();
 
-    void on_actionAbout_triggered();
+	void on_actionAbout_triggered();
 
-    void on_actionConfigure_triggered();
+	void on_actionConfigure_triggered();
 
-    void on_actionFonts_triggered();
+	void on_actionFonts_triggered();
 
-    void on_loadWorld(const QString &filename, int shift);
+	void on_loadWorld(const QString &filename, int shift);
 
-    void on_updateWorld();
+	void on_updateWorld();
 
-    void on_actionOptions_triggered();
+	void on_actionOptions_triggered();
 
-    void on_actionDirectories_triggered();
+	void on_actionDirectories_triggered();
 
 public slots:
-    void on_updateNetOptions(uint64_t flags);
+	void on_updateNetOptions(uint64_t flags);
 
-    void on_updateFileOptions();
+	void on_updateFileOptions();
 
-    void on_updateLayerView();
+	void on_updateLayerView();
 
 private:
-    Ui::MainWindow *ui;
+	Ui::MainWindow *ui;
 
-    QScrollArea * view;
-    TrMapView * m_map_view;
+	QScrollArea * view;
+	TrMapView * m_map_view;
 
-    ProfileDialog * m_profile_dlg;
-    FileOptions * m_file_options;
-    TrDispOptionDialog * m_disp_option;
-    About * m_about;
+	ProfileDialog * m_profile_dlg;
+	FileOptions * m_file_options;
+	TrDispOptionDialog * m_disp_option;
+	About * m_about;
 
-    TrNetDock * m_net_option;
-    QDockWidget * m_net_dock;
-    QDockWidget * m_element_dock;
+	TrNetDock * m_net_option;
+	QDockWidget * m_net_dock;
+	QDockWidget * m_element_dock;
 
-    QFont m_font;
+	QFont m_font;
 
-    void createNetObjects(const QStringList &list, TrImportOsm &filter);
-    void createRoadNetObjects(const QStringList &list, TrImportOsm &filter);
-    void createFaceObjects(const QStringList &list, TrImportOsm &filter);
+	void createNetObjects(const QStringList &list, TrImportOsm &filter);
+	void createRoadNetObjects(const QStringList &list, TrImportOsm &filter);
+	void createFaceObjects(const QStringList &list, TrImportOsm &filter);
 
-    void writeSettings();
-    void readSettings();
+	void writeSettings();
+	void readSettings();
 };
 #endif // MAINWINDOW_H

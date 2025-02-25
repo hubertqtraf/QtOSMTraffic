@@ -32,33 +32,33 @@ class TrDispOptionDialog;
 
 class TrDispOptionDialog : public QDialog
 {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    explicit TrDispOptionDialog(QWidget *parent = nullptr);
-    ~TrDispOptionDialog();
+	explicit TrDispOptionDialog(QWidget *parent = nullptr);
+	~TrDispOptionDialog();
 
-    void setLayerList(const QStringList &profile, const QStringList &doc);
-    void setLayerItemList(const QString &layer, const QStringList &items);
+	void setLayerList(const QStringList &profile, const QStringList &doc);
+	void setLayerItemList(const QString &layer, const QStringList &items);
 
-    const QStringList &getViewList() const;
+	const QStringList &getViewList() const;
 
-    QTableWidget *getTable(const QString &tab_name);
-    uint64_t initFlags(QTableWidget *table);
-    void getLayerMasks(QMap<QString, uint64_t> &layers);
-    uint64_t getLayerMask();
-    const QStringList getLayerActList();
+	QTableWidget *getTable(const QString &tab_name);
+	uint64_t initFlags(QTableWidget *table);
+	void getLayerMasks(QMap<QString, uint64_t> &layers);
+	uint64_t getLayerMask();
+	const QStringList getLayerActList();
 
 private slots:
-    void on_tableWidget_cellDoubleClicked(int row, int column);
+	void on_tableWidget_cellDoubleClicked(int row, int column);
 
 private:
-    Ui::TrDispOptionDialog *ui;
-    QTableWidget * m_world_table;
+	Ui::TrDispOptionDialog *ui;
+	QTableWidget * m_world_table;
 
-    QStringList m_checkedLayerList;
-    void createLayerTab(const QString &tab_name);
-    void addCheckLine(QTableWidget * table, const QString &name, Qt::CheckState mode, int row);
+	QStringList m_checkedLayerList;
+	void createLayerTab(const QString &tab_name);
+	void addCheckLine(QTableWidget * table, const QString &name, Qt::CheckState mode, int row);
 };
 
 #endif // TRDISPOPTIONDIALOG_H
