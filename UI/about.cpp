@@ -33,7 +33,11 @@ About::About(QWidget *parent) :
 {
 	ui->setupUi(this);
 	QString path = QString(__FILE__);
-	path.replace("about.cpp", "LICENSE");
+#ifdef __WIN32__
+	path.replace("UI\\about.cpp", "LICENSE");
+#else
+	path.replace("UI/about.cpp", "LICENSE");
+#endif
 	QFile file(path);
 	if(!file.open(QFile::ReadOnly))
 		return;

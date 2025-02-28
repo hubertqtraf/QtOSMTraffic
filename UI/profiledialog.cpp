@@ -46,7 +46,11 @@ void ProfileDialog::read(QString & filename)
 	{
 		//TODO:  __FILE__ macro at release mode?
 		QString path = QString(__FILE__);
-		filename = path.replace("profiledialog.cpp", "tr_default_profile.xml");
+#ifdef __WIN32__
+		filename = path.replace("UI\\profiledialog.cpp", "tr_default_profile.xml");
+#else
+		filename = path.replace("UI/profiledialog.cpp", "tr_default_profile.xml");
+#endif
 	}
 	if(m_profile->setDataByFile(filename))
 	{
