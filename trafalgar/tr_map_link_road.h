@@ -44,9 +44,9 @@
 #define DEF_WITH_P   500
 #define DEF_WITH_M  -500
 
-#include "tr_defs.h"
+#include <tr_defs.h>
 
-#include "tr_geo_poly.h"
+#include <tr_geo_poly.h>
 #include "tr_geo_segment.h"
 #include "tr_map_node.h"
 
@@ -55,9 +55,9 @@
 #endif
 #include "tr_map_link.h"
 
-#include "tr_map_list.h"
+#include <tr_map_list.h>
 
-#include "tr_map_parklane.h"
+#include <tr_map_parklane.h>
 
 class TrMapLinkRoad : public TrMapLink
 {

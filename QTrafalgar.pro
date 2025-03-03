@@ -60,6 +60,7 @@ SOURCES += \
     trafalgar/tr_map_node.cpp \
     trafalgar/tr_map_parklane.cpp \
     trafalgar/tr_map_poi.cpp \
+    trafalgar/tr_map_transverse.cpp \
     trafalgar/tr_name_element.cpp \
     trafalgar/tr_stack.cpp \
     trafalgar/tr_zoom_map.cpp \
@@ -108,6 +109,7 @@ HEADERS += \
     trafalgar/tr_map_node.h \
     trafalgar/tr_map_parklane.h \
     trafalgar/tr_map_poi.h \
+    trafalgar/tr_map_transverse.h \
     trafalgar/tr_name_element.h \
     trafalgar/tr_point.h \
     trafalgar/tr_prof_class_def.h \
