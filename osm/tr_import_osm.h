@@ -10,7 +10,7 @@
  *
  * beginning:	11.2012
  *
- * (C)		Schmid Hubert 2012-2022
+ * (C)		Schmid Hubert 2012-2025
  *
  * history:
  *
@@ -35,11 +35,11 @@
 #ifndef TR_IMPORT_OSM_H 
 #define TR_IMPORT_OSM_H 
 
-#include <QMap>
-#include <QObject>
+#include <QtCore/qmap.h>
+#include <QtCore/qobject.h>
 
 #include <tr_map_list.h>
-#ifdef TESTX
+#ifdef OSM_C_FILTER
 #include "Itr_import_layer.h"
 #endif
 
@@ -66,8 +66,11 @@ typedef struct
 	uint8_t flags;
 }PolyNode;
 
-
+#ifdef OSM_C_FILTER
+class TrImportOsm : public QObject, public ITrImportLayer
+#else
 class TrImportOsm : public QObject
+#endif
 {
 	Q_OBJECT
 private:
