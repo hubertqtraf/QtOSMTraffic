@@ -143,9 +143,9 @@ bool TrMapPoi::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject * bas
 	//	return false;
 
 	// just a test - name should be not a text
-	if(m_name.size() > 50)
+	if(m_name.size() > 80)
 	{
-		TR_MSG << m_name.size() << " - "  << m_name;
+		TR_MSG << "long POI name: " << m_name.size() << " - "  << m_name;
 		return false;
 	}
 

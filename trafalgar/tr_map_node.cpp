@@ -154,7 +154,7 @@ bool TrMapNode::removeConnection(TrGeoObject * obj, bool dir, bool mode)
 		}
 		m_vec_out.remove(idx);
 	}
-        return true;
+	return true;
 }
 
 TrGeoObject * TrMapNode::getConLink(int pos, bool dir, double & ang)
@@ -181,7 +181,7 @@ uint8_t TrMapNode::getIn(bool filter) const
 		}
 		return n;
 	}
-    return static_cast <uint8_t>(m_vec_in.size());
+	return static_cast <uint8_t>(m_vec_in.size());
 }
 
 uint8_t TrMapNode::getOut(bool filter) const
@@ -196,7 +196,7 @@ uint8_t TrMapNode::getOut(bool filter) const
 		}
 		return n;
 	}
-    return static_cast <uint8_t>(m_vec_out.size());
+	return static_cast <uint8_t>(m_vec_out.size());
 }
 
 QVector<TrConnectionMember> & TrMapNode::getConVec(bool dir)
