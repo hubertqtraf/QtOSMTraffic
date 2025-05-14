@@ -601,7 +601,7 @@ void TrImportOsmStream::closeWay(QMap<QString, name_set> & name_map, uint64_t & 
 		uint64_t code = TrImportOsmRel::getNaturalClass(m_tags["natural"]);
 		if(code)
 		{
-			way.type = TYPE_NATURAL | code;
+			way.type = code; //TYPE_NATURAL | code;
 		}
 	}
 

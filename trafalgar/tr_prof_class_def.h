@@ -42,13 +42,15 @@
 // definition: see XML file
 #define LANDUSE_INDUSTRIAL  0x0001U
 #define LANDUSE_RESIDENTIAL 0x0002U
-#define LANDUSE_MIXED       0x0007U
 #define LANDUSE_GRASS       0x0003U
-#define LANDUSE_BUSHES      0x000aU
-#define LANDUSE_GARDEN      0x0005U
 #define LANDUSE_WOOD        0x0004U
+#define LANDUSE_GARDEN      0x0005U
 #define LANDUSE_WATER       0x0006U
+#define LANDUSE_MIXED       0x0007U
 #define LANDUSE_UNKLOWN     0x0008U
+#define LANDUSE_BUSHES      0x000aU
+#define LANDUSE_COAST       0x000bU
+
 
 #define BUILDING_HOUSE      0x0001U
 #define BUILDING_APAR       0x0002U

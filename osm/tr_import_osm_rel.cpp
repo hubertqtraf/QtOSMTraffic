@@ -311,7 +311,7 @@ bool TrImportOsmRel::handleMultiPoly(QMap<uint64_t, Way_t> & waylist, Relation &
 	if(m_tags.contains("natural"))
 	{
 		type = getNaturalClass(m_tags["natural"]);
-		rel.m_flags |= (TYPE_NATURAL | type);
+		rel.m_flags |= type;
 	}
 	if(m_tags.contains("landuse"))
 	{
@@ -797,26 +797,29 @@ uint64_t TrImportOsmRel::getNaturalClass(const QString & value)
 {
 	if(value == "wood")
 		//return (NATURAL_FOREST | FLAG_FEATURE_AERA);
-		return (LANDUSE_WOOD  | FLAG_FEATURE_AERA);
+		return (TYPE_NATURAL | LANDUSE_WOOD  | FLAG_FEATURE_AERA);
 	if(value == "grassland")
-		return (LANDUSE_GRASS | FLAG_FEATURE_AERA);
+		return (TYPE_NATURAL | LANDUSE_GRASS | FLAG_FEATURE_AERA);
 	if(value == "water")
-		return (NATURAL_WATER | FLAG_FEATURE_AERA);
+		return (TYPE_NATURAL | NATURAL_WATER | FLAG_FEATURE_AERA);
 	if(value == "shingle")
-		return (NATURAL_WET | FLAG_FEATURE_AERA);
+		return (TYPE_NATURAL | NATURAL_WET | FLAG_FEATURE_AERA);
 	if(value == "scrub")
-		return (LANDUSE_GRASS | FLAG_FEATURE_AERA);
+		return (TYPE_NATURAL | LANDUSE_GRASS | FLAG_FEATURE_AERA);
 	if(value == "heath")
-		return (LANDUSE_GRASS | FLAG_FEATURE_AERA);
+		return (TYPE_NATURAL | LANDUSE_GRASS | FLAG_FEATURE_AERA);
 	if(value == "bare_rock")
-		return (NATURAL_ROCK | FLAG_FEATURE_AERA);
+		return (TYPE_NATURAL | NATURAL_ROCK | FLAG_FEATURE_AERA);
 	if(value == "scree")
-		return (NATURAL_WET | FLAG_FEATURE_AERA);
-
+		return (TYPE_NATURAL | NATURAL_WET | FLAG_FEATURE_AERA);
+	if(value == "coastline")
+	{
+		return (TYPE_LANDUSE | LANDUSE_COAST);
+	}
 	if(value == "tree")	// POI
 	{
 		//TR_INF << "-----tree------";
-		return (8 | FLAG_FEATURE_NODE | TYPE_POI_N_TREE | TYPE_NATURAL);
+		return (8 | TYPE_NATURAL | FLAG_FEATURE_NODE | TYPE_POI_N_TREE);
 	}
 	return 0;
 }
