@@ -812,6 +812,10 @@ uint64_t TrImportOsmRel::getNaturalClass(const QString & value)
 		return (TYPE_NATURAL | NATURAL_ROCK | FLAG_FEATURE_AERA);
 	if(value == "scree")
 		return (TYPE_NATURAL | NATURAL_WET | FLAG_FEATURE_AERA);
+	if(value == "shrubbery")
+		return (TYPE_NATURAL | NATURAL_WET | FLAG_FEATURE_AERA);
+	if(value == "sinkhole")
+		return (TYPE_NATURAL | NATURAL_WATER | FLAG_FEATURE_AERA);
 	if(value == "coastline")
 	{
 		return (TYPE_LANDUSE | LANDUSE_COAST);
