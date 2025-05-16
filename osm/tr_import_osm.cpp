@@ -436,9 +436,9 @@ bool TrImportOsm::appendFacePoints(const Way_t & way, TrMapFace & face, bool dir
 {
 	if(dir)
 	{
-		for(int i= (way.n_nd_id -1); i ; i--)
+		for(int i= (way.n_nd_id); i ; i--)
 		{
-			if(!appendFacePoint(way.nd_id[i], face))
+			if(!appendFacePoint(way.nd_id[i-1], face))
 				return false;
 		}
 	}
@@ -589,7 +589,7 @@ bool TrImportOsm::createFaceList(TrMapList * osm_list, QString name)
 			face = new TrMapFace();
 			face->appendPolygon(0x00);
 			//if((osm2_world.ways[i].type & 0x0F) > 3)
-			if(appendFacePoints(m_ways[i], *face, true))
+			if(appendFacePoints(m_ways[i], *face, false))
 			{
 				uint64_t type = (m_ways[i].type & 0x000000f000000000) >> 24;
 				face->setType((m_ways[i].type & 0x00000000000000ff) | type);
