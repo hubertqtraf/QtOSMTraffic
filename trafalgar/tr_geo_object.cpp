@@ -298,6 +298,11 @@ void TrGeoObject::setActBrush(QBrush * brush)	// Default of virtual
 {
 }
 
+uint8_t TrGeoObject::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * other, TrGeoObject * node)
+{
+	return 0xff;
+}
+
 uint16_t TrGeoObject::getType() const
 {
 	return m_flags & 0x000000000000ffff;

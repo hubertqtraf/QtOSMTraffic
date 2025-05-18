@@ -180,6 +180,8 @@ public:
 	// TODO: rework
 	virtual uint16_t getType() const;
 
+	virtual uint8_t handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * other, TrGeoObject * node);
+
 	virtual void setType(uint16_t);
 
 	virtual void setLayerShowMask(uint64_t mask);

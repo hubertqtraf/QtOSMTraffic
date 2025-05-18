@@ -372,12 +372,15 @@ bool TrMapNode::setCrossingByAngle(const TrZoomMap & zoom_ref, bool type)
 			next_obj = test_obj;
 			if(last_obj == nullptr)
 				last_obj = next_obj;
-			if(idx >= 0)
-				setCrossing(zoom_ref, first_obj, next_obj);
+			if((idx >= 0) && (first_obj != nullptr))
+				first_obj->handleCrossing(zoom_ref, next_obj, this);
+				//setCrossing(zoom_ref, first_obj, next_obj);
 			first_obj = next_obj;
 		}
 	}while(idx >= 0);
-	setCrossing(zoom_ref, first_obj, last_obj);
+	if(first_obj != nullptr)
+		first_obj->handleCrossing(zoom_ref, last_obj, this);
+	//setCrossing(zoom_ref, first_obj, last_obj);
 
 	return true;
 }
@@ -579,87 +582,13 @@ TrGeoObject * TrMapNode::getNextOutElement(double angle)
 	return nullptr;
 }
 
+// TODO: move to link -> road-link
 void TrMapNode::setCrossing(const TrZoomMap & zoom_ref, TrGeoObject * first_obj, TrGeoObject * next_obj)
 {
 	if((first_obj == nullptr) || (next_obj == nullptr))
 		return;
-	TrMapLink * first_link = dynamic_cast<TrMapLink *>(first_obj);
-	TrMapLink * next_link = dynamic_cast<TrMapLink *>(next_obj);
 
-	if((first_link == nullptr) || (next_link == nullptr))
-	{
-		TR_WRN << "class missmatch";
-		return;
-	}
-
-	TrGeoSegment first_segment;
-	TrGeoSegment next_segment;
-	TrPoint cross_pt;
-
-	//TR_INF << "first";
-	first_obj = first_link->getSegmentWithParm(first_segment, getGeoId(), false);
-	//TR_INF << "next";
-	next_obj = next_link->getSegmentWithParm(next_segment, getGeoId(), true);
-	if((first_segment.getLength(zoom_ref) < (first_link->getWidth()/1000.0)) &&
-		(next_segment.getLength(zoom_ref) < (next_link->getWidth()/1000.0)))
-		return;
-
-	if((first_obj == nullptr) || (next_obj == nullptr))
-		return;
-
-	first_link = dynamic_cast<TrMapLink *>(first_obj);
-	next_link = dynamic_cast<TrMapLink *>(next_obj);
-
-	if((first_link == nullptr) || (next_link == nullptr))
-		return;
-
-	int code = first_segment.getAngleCode(zoom_ref, next_segment);
-	if(code)
-	{
-		if(code < 0)
-			TR_ERR << "unable to set the angle" << code;
-		//TR_INF << "crossing angle code:" << code;
-		return;
-	}
-	first_segment.getCrossPoint(zoom_ref, cross_pt, next_segment);
-
-	if(first_link->getOneWay() & TR_LINK_DIR_ONEWAY)
-	{
-		if(first_link->getNodeToRef() == this)
-		{
-			first_link->setParPoint(false, cross_pt);
-		}
-		else
-		{
-			first_link->setCrossingPoint(cross_pt, true);
-		}
-	}
-	else
-	{
-		if(first_link->getOneWay() & TR_LINK_DIR_BWD)
-			first_link->setParPoint(true, cross_pt);
-		else
-			first_link->setParPoint(false, cross_pt);
-	}
-	if(next_link->getOneWay() & TR_LINK_DIR_ONEWAY)
-	{
-		if(next_link->getNodeToRef() == this)
-		{
-			next_link->setCrossingPoint(cross_pt, false);
-		}
-		else
-		{
-			next_link->setParPoint(true, cross_pt);
-		}
-	}
-	else
-	{
-		if(next_link->getOneWay() & TR_LINK_DIR_BWD)
-			next_link->setParPoint(false, cross_pt);
-		else
-			next_link->setParPoint(true, cross_pt);
-	}
-	//TR_INF << *first_link << *next_link;
+	first_obj->handleCrossing(zoom_ref, next_obj, this);
 }
 
 void TrMapNode::initConnections(const TrZoomMap & zoom_ref, QVector<TrConnectionMember> & vec,

@@ -453,6 +453,11 @@ bool TrMapLink::initSecs(const TrZoomMap & zoom_ref, TrMapList * pr_list, TrMapL
 	return false;
 }
 
+uint8_t TrMapLink::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * other, TrGeoObject * node)
+{
+	return 0xff;
+}
+
 TrGeoObject * TrMapLink::getSegmentWithParm(TrGeoSegment & segment, int64_t nd_id, bool dir)
 {
 	TR_WRN << "do not use";

@@ -636,6 +636,95 @@ void TrMapLinkRoad::initDoubleLine(const TrZoomMap & zoom_ref, QVector<TrPoint> 
 	}
 }
 
+uint8_t TrMapLinkRoad::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * other, TrGeoObject * node)
+{
+	TrMapNode * n = dynamic_cast<TrMapNode *>(node);
+	if(n == nullptr)
+		return 0xef;
+
+	TrMapLink * next_link = dynamic_cast<TrMapLink *>(other);
+	if(next_link == nullptr)
+	{
+		return 0xef;
+	}
+	//TR_INF << *this << *next_link;
+
+	TrGeoSegment first_segment;
+	TrGeoSegment next_segment;
+	TrPoint cross_pt;
+
+	TrGeoObject * first_obj = getSegmentWithParm(first_segment, n->getGeoId(), false);
+        TrGeoObject * next_obj = next_link->getSegmentWithParm(next_segment, n->getGeoId(), true);
+
+	/*if(first_obj != this)
+		return 1;
+	if(next_obj != next_link)
+		return 1;*/
+
+	if((first_segment.getLength(zoom_ref) < (getWidth()/1000.0)) &&
+		(next_segment.getLength(zoom_ref) < (next_link->getWidth()/1000.0)))
+                return 1;
+
+	if((first_obj == nullptr) || (next_obj == nullptr))
+		return 1;
+
+	TrMapLink * first_link = dynamic_cast<TrMapLink *>(first_obj);
+	next_link = dynamic_cast<TrMapLink *>(next_obj);
+
+	if((first_link == nullptr) || (next_link == nullptr))
+		return 1;
+
+	int code = first_segment.getAngleCode(zoom_ref, next_segment);
+	if(code)
+	{
+		if(code < 0)
+			TR_ERR << "unable to set the angle" << code;
+		//TR_INF << "crossing angle code:" << code;
+		return 1;
+	}
+	first_segment.getCrossPoint(zoom_ref, cross_pt, next_segment);
+
+	if(first_link->getOneWay() & TR_LINK_DIR_ONEWAY)
+	{
+		if(first_link->getNodeToRef() == node)
+		{
+			first_link->setParPoint(false, cross_pt);
+		}
+		else
+		{
+			first_link->setCrossingPoint(cross_pt, true);
+		}
+	}
+	else
+	{
+		if(first_link->getOneWay() & TR_LINK_DIR_BWD)
+			first_link->setParPoint(true, cross_pt);
+		else
+			first_link->setParPoint(false, cross_pt);
+	}
+	if(next_link->getOneWay() & TR_LINK_DIR_ONEWAY)
+	{
+		if(next_link->getNodeToRef() == node)
+		{
+			next_link->setCrossingPoint(cross_pt, false);
+		}
+		else
+		{
+			next_link->setParPoint(true, cross_pt);
+		}
+	}
+	else
+	{
+		if(next_link->getOneWay() & TR_LINK_DIR_BWD)
+			next_link->setParPoint(false, cross_pt);
+		else
+			next_link->setParPoint(true, cross_pt);
+	}
+
+
+	return 0;
+}
+
 TrGeoObject * TrMapLinkRoad::getSegmentWithParm(TrGeoSegment & segment, int64_t nd_id, bool dir)
 {
 	if(!(isAsDoubleLine()))
