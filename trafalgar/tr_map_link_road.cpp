@@ -647,7 +647,12 @@ uint8_t TrMapLinkRoad::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * 
 	{
 		return 0xef;
 	}
-	//TR_INF << *this << *next_link;
+	//TR_INF << "A" << *this << *next_link;
+
+	if((getType() & 0x00ff) >= 9)
+		return 2;
+	if((next_link->getType() & 0x00ff) >= 9)
+		return 3;
 
 	TrGeoSegment first_segment;
 	TrGeoSegment next_segment;
@@ -670,6 +675,11 @@ uint8_t TrMapLinkRoad::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * 
 
 	TrMapLink * first_link = dynamic_cast<TrMapLink *>(first_obj);
 	next_link = dynamic_cast<TrMapLink *>(next_obj);
+
+	//TR_INF << "B" << first_link->getWidth() << next_link->getWidth() << *first_link << *next_link;
+	int w_diff = abs(first_link->getWidth() - next_link->getWidth());
+	if(w_diff > 1000)
+		return 5;
 
 	if((first_link == nullptr) || (next_link == nullptr))
 		return 1;
