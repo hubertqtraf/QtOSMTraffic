@@ -458,12 +458,6 @@ uint8_t TrMapLink::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * othe
 	return 0xff;
 }
 
-TrGeoObject * TrMapLink::getSegmentWithParm(TrGeoSegment & segment, int64_t nd_id, bool dir)
-{
-	TR_WRN << "do not use";
-	return nullptr;
-}
-
 // TODO: to check the length
 // virtual -> road link
 double TrMapLink::getLength(const TrZoomMap & zoom_ref)

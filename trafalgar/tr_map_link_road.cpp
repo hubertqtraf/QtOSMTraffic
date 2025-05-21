@@ -642,7 +642,7 @@ uint8_t TrMapLinkRoad::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * 
 	if(n == nullptr)
 		return 0xef;
 
-	TrMapLink * next_link = dynamic_cast<TrMapLink *>(other);
+	TrMapLinkRoad * next_link = dynamic_cast<TrMapLinkRoad *>(other);
 	if(next_link == nullptr)
 	{
 		return 0xef;
@@ -650,16 +650,18 @@ uint8_t TrMapLinkRoad::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * 
 	//TR_INF << "A" << *this << *next_link;
 
 	if((getType() & 0x00ff) >= 9)
+	{
 		return 2;
-	if((next_link->getType() & 0x00ff) >= 9)
-		return 3;
+	}
+	//if((next_link->getType() & 0x00ff) >= 9)
+	//	return 3;
 
 	TrGeoSegment first_segment;
 	TrGeoSegment next_segment;
 	TrPoint cross_pt;
 
 	TrGeoObject * first_obj = getSegmentWithParm(first_segment, n->getGeoId(), false);
-        TrGeoObject * next_obj = next_link->getSegmentWithParm(next_segment, n->getGeoId(), true);
+	TrGeoObject * next_obj = next_link->getSegmentWithParm(next_segment, n->getGeoId(), true);
 
 	/*if(first_obj != this)
 		return 1;
@@ -673,13 +675,12 @@ uint8_t TrMapLinkRoad::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * 
 	if((first_obj == nullptr) || (next_obj == nullptr))
 		return 1;
 
-	TrMapLink * first_link = dynamic_cast<TrMapLink *>(first_obj);
-	next_link = dynamic_cast<TrMapLink *>(next_obj);
+	TrMapLinkRoad * first_link = dynamic_cast<TrMapLinkRoad *>(first_obj);
+	next_link = dynamic_cast<TrMapLinkRoad *>(next_obj);
 
-	//TR_INF << "B" << first_link->getWidth() << next_link->getWidth() << *first_link << *next_link;
-	int w_diff = abs(first_link->getWidth() - next_link->getWidth());
-	if(w_diff > 1000)
-		return 5;
+	//int w_diff = abs(first_link->getWidth() - next_link->getWidth());
+	//if(w_diff > 1000)
+	//	return 5;
 
 	if((first_link == nullptr) || (next_link == nullptr))
 		return 1;
@@ -691,6 +692,17 @@ uint8_t TrMapLinkRoad::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * 
 			TR_ERR << "unable to set the angle" << code;
 		//TR_INF << "crossing angle code:" << code;
 		return 1;
+	}
+
+	// on oneways: two links from one node, check the angle
+	if(getNodeTo() == next_link->getNodeTo())
+	{
+		double a_diff = fabs(first_segment.getAngle(zoom_ref) - next_segment.getAngle(zoom_ref));
+		if(a_diff < 0.8) // ca. 45°
+		{
+			//TR_INF << "A: " << first_segment.getAngle(zoom_ref) << next_segment.getAngle(zoom_ref) << a_diff;
+			return 8;
+		}
 	}
 	first_segment.getCrossPoint(zoom_ref, cross_pt, next_segment);
 

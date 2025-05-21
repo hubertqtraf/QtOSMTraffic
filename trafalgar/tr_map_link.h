@@ -178,8 +178,6 @@ public:
 	// TODO: rework, only for edge...
 	virtual bool initSecs(const TrZoomMap & zoom_ref, TrMapList * pr_list, TrMapList & nd_list);
 
-	virtual TrGeoObject * getSegmentWithParm(TrGeoSegment & segment, int64_t nd_id, bool dir);
-
 	// TODO: virtual - needed?
 	virtual void initDoubleLine(const TrZoomMap & zoom_ref, QVector<TrPoint> &m_par_line, int32_t width);
 
