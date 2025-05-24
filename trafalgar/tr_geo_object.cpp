@@ -41,6 +41,8 @@
 
 #include <QtCore/qdebug.h>
 
+#include <math.h>
+
 uint64_t TrGeoObject::s_mask = 0;
 
 TrGeoObject::TrGeoObject() 
@@ -177,8 +179,25 @@ bool TrGeoObject::setPosition(double x, double y, int idx)
 
 uint64_t TrGeoObject::findSelect(const TrZoomMap & zoom_ref, const TrPoint & inside, uint64_t pos)
 {
-	if((surroundingRect[0] < inside.x) && (surroundingRect[2] > inside.x) &&
-			(surroundingRect[1] < inside.y) && (surroundingRect[3] > inside.y))
+	double rect[4];
+	rect[0] = surroundingRect[0];
+	rect[1] = surroundingRect[1];
+	rect[2] = surroundingRect[2];
+	rect[3] = surroundingRect[3];
+
+	if(fabs(rect[0] - rect[2]) < 1.0)
+	{
+		rect[0] -= 0.5;
+		rect[2] += 0.5;
+	}
+	if(fabs(rect[1] - rect[3]) < 1.0)
+	{
+		rect[1] -= 0.5;
+		rect[3] += 0.5;
+	}
+
+	if((rect[0] < inside.x) && (rect[2] > inside.x) &&
+			(rect[1] < inside.y) && (rect[3] > inside.y))
 	{
 		return 0;
 	}
