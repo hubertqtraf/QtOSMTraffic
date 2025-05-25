@@ -24,9 +24,10 @@
 #include "trlinkdock.h"
 #include "ui_trlinkdock.h"
 
-TrLinkDock::TrLinkDock(QWidget *parent) :
-	QWidget(parent),
-	ui(new Ui::TrLinkDock)
+TrLinkDock::TrLinkDock(QWidget *parent)
+	: QWidget(parent)
+	, ui(new Ui::TrLinkDock)
+	, m_link(nullptr)
 {
 	ui->setupUi(this);
 }
@@ -39,9 +40,6 @@ TrLinkDock::~TrLinkDock()
 void TrLinkDock::setData(TrGeoObject* obj)
 {
 	if(obj == nullptr)
-		return;
-	TrMapLink * link = dynamic_cast<TrMapLink *>(obj);
-	if(link == nullptr)
 	{
 		ui->label_type_2->setText("---");
 		ui->lineEdit_ID->setText("---");
@@ -56,6 +54,9 @@ void TrLinkDock::setData(TrGeoObject* obj)
 		ui->lineEdit_Place->setText("---");
 		return;
 	}
+	TrMapLink * link = dynamic_cast<TrMapLink *>(obj);
+	if(link == nullptr)
+		return;
 	ui->label_type_2->setText("Link");
 	ui->lineEdit_ID->setText(QString::number(link->getGeoId()));
 	if((link->getNodeFromRef() == nullptr) || (link->getNodeToRef() == nullptr))
@@ -87,8 +88,19 @@ void TrLinkDock::setData(TrGeoObject* obj)
 		else
 			ui->checkBox_Ramp->setCheckState(Qt::Unchecked);
 		ui->lineEdit_Place->setText(QString::number(roadlink->getPlacement(), 16));
+		m_link = roadlink;
 	}
 	else
 		ui->lineEdit_Place->setText("---");
 	ui->lineEdit_Name->setText(link->getElementName());
+}
+
+void TrLinkDock::on_spinBox_Lanes_valueChanged(int lanes)
+{
+	if(m_link == nullptr)
+		return;
+	if(m_link->getLanes() != lanes)
+	{
+		m_link->setLanes(lanes);
+	}
 }

@@ -41,8 +41,12 @@ public:
 	~TrLinkDock();
 
 	void setData(TrGeoObject *obj);
+private slots:
+	void on_spinBox_Lanes_valueChanged(int arg1);
+
 private:
 	Ui::TrLinkDock *ui;
+	TrMapLinkRoad * m_link;
 };
 
 #endif // TRLINKDOCK_H

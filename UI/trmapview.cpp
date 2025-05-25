@@ -308,6 +308,8 @@ bool TrMapView::notifyClick(const QPoint qpt, int mode, Qt::MouseButton button)
 	{
 		if(m_dockNode != nullptr)
 			m_dockNode->setData(nullptr);
+		if(m_dockLink != nullptr)
+			m_dockLink->setData(nullptr);
 	}
 
 	pos = m_pos_select;
