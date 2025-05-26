@@ -71,8 +71,8 @@
   <value index="7" name="mixed" rgb="#64eee9cf" type="color"/>
   <value index="8" name="unknown" rgb="#d8d8d8" type="color"/>
   <value index="a" name="bushes" rgb="#c2e5de" type="color"/>
-  <value index="b" name="coast" rgb="#ff0000" type="color"/>
-  <value index="c" name="test" rgb="#ff0000" type="color"/>
+  <value index="b" name="coast" rgb="#0000ff" type="color"/>
+  <value index="c" name="test" rgb="#0000ff" type="color"/>
  </section>
  <section index="1" name="field">
   <value index="0" name="default" rgb="#064400" type="color"/>

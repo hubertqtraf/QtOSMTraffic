@@ -35,8 +35,14 @@ TrMapView::TrMapView(QWidget *parent)
 	, m_dockNode(nullptr)
 	, m_dockLink(nullptr)
 {
-	m_dockLink = new TrLinkDock(parent);
-	m_dockLink->setVisible(false);
+	m_dockLink = new TrLinkDock(m_elementDock);
+	m_linkScrollArea = new QScrollArea(m_elementDock);
+	m_linkScrollArea->setWidget(m_dockLink);
+	m_linkScrollArea->setGeometry(m_dockLink->geometry());
+	m_linkScrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+
+	//m_dockLink->setVisible(false);
+	m_linkScrollArea->setVisible(false);
 	m_dockNode = new TrNodeDock(parent);
 	m_dockNode->setVisible(false);
 }
@@ -318,7 +324,7 @@ bool TrMapView::notifyClick(const QPoint qpt, int mode, Qt::MouseButton button)
 	{
 		m_selected = pobj;
 		m_selected->setMask(TR_MASK_SELECTED);
-		m_elementDock->setWidget(m_dockLink);
+		m_elementDock->setWidget(m_linkScrollArea);
 		m_dockLink->setData(pobj);
 		m_pos_select = pos;
 	}

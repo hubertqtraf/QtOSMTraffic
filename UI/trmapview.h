@@ -30,6 +30,8 @@
 //#include <QSvgGenerator>
 #include <QDockWidget>
 #include <QWidget>
+#include <QScrollArea>
+
 
 class TrMapView : public TrCanvas
 {
@@ -48,6 +50,7 @@ private:
 
 	QDockWidget * m_elementDock;
 	TrNodeDock * m_dockNode;
+	QScrollArea * m_linkScrollArea;
 	TrLinkDock * m_dockLink;
 
 protected:
