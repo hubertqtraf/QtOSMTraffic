@@ -24,11 +24,17 @@
 #include "trlinkdock.h"
 #include "ui_trlinkdock.h"
 
+#include <QScrollArea>
+
 TrLinkDock::TrLinkDock(QWidget *parent)
 	: QWidget(parent)
 	, ui(new Ui::TrLinkDock)
 	, m_link(nullptr)
 {
+	/*QScrollArea *linkScroll = new QScrollArea;
+	QWidget * area = new QWidget(this);
+	linkScroll->setWidget(area);
+	ui->setupUi(area);*/
 	ui->setupUi(this);
 }
 
@@ -51,6 +57,7 @@ void TrLinkDock::setData(TrGeoObject* obj)
 		ui->checkBox_Oneway->setCheckState(Qt::Unchecked);
 		ui->checkBox_Backward->setCheckState(Qt::Unchecked);
 		ui->lineEdit_Name->setText("---");
+		ui->lineEdit_Park->setText("---");
 		ui->lineEdit_Place->setText("---");
 		return;
 	}
@@ -88,10 +95,14 @@ void TrLinkDock::setData(TrGeoObject* obj)
 		else
 			ui->checkBox_Ramp->setCheckState(Qt::Unchecked);
 		ui->lineEdit_Place->setText(QString::number(roadlink->getPlacement(), 16));
+		ui->lineEdit_Park->setText(QString::number(roadlink->getParking(), 16));
 		m_link = roadlink;
 	}
 	else
-		ui->lineEdit_Place->setText("---");
+	{
+		ui->lineEdit_Park->setText("===");
+		ui->lineEdit_Place->setText("===");
+	}
 	ui->lineEdit_Name->setText(link->getElementName());
 }
 
