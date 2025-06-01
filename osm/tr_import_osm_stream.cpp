@@ -682,8 +682,7 @@ void TrImportOsmStream::closeWay(QMap<QString, name_set> & name_map, uint64_t & 
 	uint64_t park_code = getParking();
 	if(park_code)
 	{
-		//TR_INF << "PARK" << HEX << park_code << (park_code >> 20) << m_tags["name"];
-		way.parking = static_cast<uint32_t>(park_code >> 20);
+		way.parking = park_code;
 	}
 	way.lanes = static_cast<uint32_t>(getLanes());
 	if(!way.lanes)
@@ -929,92 +928,6 @@ uint64_t TrImportOsmStream::getLanes()
 	return ret;
 }
 
-bool TrImportOsmStream::parkingMode(const QString & part, uint64_t & code)
-{
-	//TR_INF << part;
-	if(part == "both")
-	{
-		code |= 0x0000000000000001;
-		code |= 0x0000000100000000;
-		return true;
-	}
-	if(part == "left")
-	{
-		code |= 0x0000000100000000;
-		return true;
-	}
-	if(part == "right")
-	{
-		code |= 0x0000000000000001;
-		return true;
-	}
-	return false;
-}
-
-uint64_t TrImportOsmStream::parkingRes(const QString & value, uint64_t & code)
-{
-	uint64_t ret = 0;
-	if(value == "no")
-	{
-		if(code & 0x0000000000000001)
-			ret |= V_PARK_NO_R;
-		if(code & 0x0000000100000000)
-			ret |= V_PARK_NO_L;
-	}
-	if(value == "no_parking")
-	{
-		if(code & 0x0000000000000001)
-			ret |= V_PARK_NO_R;
-		if(code & 0x0000000100000000)
-			ret |= V_PARK_NO_L;
-	}
-	if(value == "no_stopping")
-	{
-		if(code & 0x0000000000000001)
-			ret |= V_PARK_NO_R;
-		if(code & 0x0000000100000000)
-			ret |= V_PARK_NO_L;
-	}
-	return ret;
-}
-
-uint64_t TrImportOsmStream::parkingTest(const QString & part, const QString & value, uint64_t & code)
-{
-	uint64_t ret = 0;
-
-	if(part != "orientation")
-		return ret;
-
-	if(value == "parallel")
-	{
-		if(code & 0x0000000000000001)
-			ret |= V_PARK_PARALLEL_R;
-		if(code & 0x0000000100000000)
-			ret |= V_PARK_PARALLEL_L;
-	}
-	if(value == "diagonal")
-	{
-		if(code & 0x0000000000000001)
-			ret |= V_PARK_DIAGONAL_R;
-		if(code & 0x0000000100000000)
-			ret |= V_PARK_DIAGONAL_L;
-	}
-	if(value == "perpendicular")
-	{
-		if(code & 0x0000000000000001)
-			ret |= V_PARK_PERPENDI_R;
-		if(code & 0x0000000100000000)
-			ret |= V_PARK_PERPENDI_L;
-	}
-	if(!ret)
-		return ret;
-	if(code & 0x0000000000000001)
-		ret |= FLAG_PARKING_R;
-	if(code & 0x0000000100000000)
-		ret |= FLAG_PARKING_L;
-	return ret;
-}
-
 uint64_t TrImportOsmStream::getPlacement(const QString & value)
 {
 	uint64_t ret = 0L;
@@ -1033,13 +946,108 @@ uint64_t TrImportOsmStream::getPlacement(const QString & value)
 	return ret;
 }
 
+
+bool TrImportOsmStream::parkingMode(const QString & part, uint64_t & code)
+{
+	//TR_INF << part;
+	if(part == "both")
+	{
+		code |= PARK_CODE_R; //0x0000000000000001;
+		code |= PARK_CODE_L; //0x0000000100000000;
+		//TR_INF << "B " << part << HEX << code;
+		return true;
+	}
+	if(part == "left")
+	{
+		code |= PARK_CODE_L; //0x0000000100000000;
+		//TR_INF << "L " << part << HEX << code;
+		return true;
+	}
+	if(part == "right")
+	{
+		code |= PARK_CODE_R; //0x0000000000000001;
+		return true;
+	}
+	TR_INF << "===" << part << HEX << code;
+	return false;
+}
+
+uint64_t TrImportOsmStream::parkingRes(const QString & value, uint64_t & code)
+{
+	uint64_t ret = 0;
+	uint64_t mode = 0;
+
+	if(value == "no")
+	{
+		mode |= V_PARK_NO;
+	}
+	if(value == "no_parking")
+	{
+		mode |= V_PARK_NO;
+	}
+	if(value == "no_stopping")
+	{
+		mode |= V_PARK_NO_STOP;
+	}
+	if(code & PARK_CODE_L)
+	{
+		ret |= (mode << 32);
+	}
+	if(code & PARK_CODE_R)
+	{
+		ret |= mode;
+	}
+	return ret;
+}
+
+uint64_t TrImportOsmStream::parkingOrientation(const QString & value, uint64_t & code)
+{
+	uint64_t mode = 0;
+	uint64_t ret = 0;
+
+	if(value == "parallel")
+	{
+		mode |= V_PARK_PARALLEL;
+	}
+	if(value == "diagonal")
+	{
+		mode |= V_PARK_DIAGONAL;
+	}
+	if(value == "perpendicular")
+	{
+		mode |= V_PARK_PERPENDI;
+	}
+	if(code & PARK_CODE_L)
+	{
+		ret |= (mode << 32);
+	}
+	if(code & PARK_CODE_R)
+	{
+		ret |= mode;
+	}
+
+	/*if(!ret)
+		return ret;
+	if(code & 0x0000000000000001)
+		ret |= FLAG_PARKING_R;
+	if(code & 0x0000000100000000)
+		ret |= FLAG_PARKING_L;*/
+	return ret;
+}
+
+
 // act_way->parking = (world->way_parking >> 20);
 // exp: <tag k='parking:left:orientation' v='parallel' />
+
+// TODO: parking:left lane
+// parking:left:orientation
+
 uint64_t TrImportOsmStream::getParking()
 {
 	QMapIterator<QString, QString> i(m_tags);
 	uint64_t ret = 0;
 	uint64_t mode = 0;
+
 	while (i.hasNext())
 	{
 		i.next();
@@ -1056,18 +1064,31 @@ uint64_t TrImportOsmStream::getParking()
 						if(plist[2] == "restriction")
 						{
 							ret |= parkingRes(i.value(), mode);
+							ret |= mode;
 						}
-						ret |= parkingTest(plist[2], i.value(), mode);
+						if(plist[2] == "orientation")
+						{
+							ret |= parkingOrientation(i.value(), mode);
+							ret |= mode;
+							//TR_INF << "oooo> " << HEX << mode;
+						}
 					}
 					else
 					{
 						// "no", "no_parking", "no_stopping"
 						if(i.value().startsWith("no"))
 						{
-							if(mode & 0x0000000000000001)
-								ret |= V_PARK_NO_R;
-							if(mode & 0x0000000100000000)
-								ret |= V_PARK_NO_L;
+							if(mode & PARK_CODE_R)
+								ret |= V_PARK_NO;
+							if(mode & PARK_CODE_L)
+								ret |= (V_PARK_NO << 32);
+						}
+						if(i.value() == "separate")
+						{
+							if(mode & PARK_CODE_R)
+								ret |= V_PARK_SEPARATE;
+							if(mode & PARK_CODE_L)
+								ret |= (V_PARK_SEPARATE << 32);
 						}
 					}
 				}
@@ -1075,7 +1096,6 @@ uint64_t TrImportOsmStream::getParking()
 				{
 				}
 			}
-			//TR_INF << plist << i.value() << HEX << mode << ret;
 		}
 	}
 	return ret;

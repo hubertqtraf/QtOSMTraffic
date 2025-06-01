@@ -123,9 +123,9 @@ public:
 
 	uint8_t getPlacement();
 
-	void setParking(uint16_t park);
+	void setParking(uint64_t park);
 
-	uint16_t getParking();
+	uint64_t getParking();
 
 	int32_t getRoadWidth();
 

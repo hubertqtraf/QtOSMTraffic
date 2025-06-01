@@ -48,7 +48,7 @@ class TrOsmLink : public TrMapLinkRoad
 {
 private:
 	uint32_t m_osm_lanes;
-	uint32_t m_osm_parking;
+	uint64_t m_osm_parking;
 	uint8_t m_osm_placement;
 	uint32_t m_osm_sidewalk;
 
@@ -75,11 +75,11 @@ public:
 
 	uint32_t getOsmLanesBwd();
 
-	void setOsmParking(uint32_t park);
+	void setOsmParking(uint64_t park);
 
-	uint32_t getOsmParkingFwd();
+	uint64_t getOsmParkingFwd();
 
-	uint32_t getOsmParkingBwd();
+	uint64_t getOsmParkingBwd();
 
 	void setOsmPlacement(uint8_t placement);
 

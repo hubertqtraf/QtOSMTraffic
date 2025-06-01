@@ -65,7 +65,7 @@ typedef struct
 	// data: class 0x001f , dir << 9 (0-2) 
 	uint32_t lanes;
 	// lanes: lanes 7, lanesF << 16 lanesB << 24
-	uint32_t parking;
+	uint64_t parking;
 	// width in [mm]
 	uint32_t width;
 	uint8_t placement;

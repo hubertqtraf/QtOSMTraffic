@@ -48,6 +48,8 @@
 
 int TrMapLinkRoad::ms_lane_width_p = 3200;
 int TrMapLinkRoad::ms_lane_width_n = -3200;
+//int TrMapLinkRoad::ms_lane_width_p = -3200;
+//int TrMapLinkRoad::ms_lane_width_n = 3200;
 int TrMapLinkRoad::ms_pen_width = 3;
 int TrMapLinkRoad::ms_pen_center_width = 2;
 // TODO: or Qt::SolidLine as option?
@@ -122,7 +124,7 @@ uint8_t TrMapLinkRoad::getPlacement()
 	return m_placement;
 }
 
-void TrMapLinkRoad::setParking(uint16_t code)
+void TrMapLinkRoad::setParking(uint64_t code)
 {
 	if(code && (m_parking == nullptr))
 	{
@@ -148,13 +150,13 @@ int32_t TrMapLinkRoad::getRoadWidth()
 	return w;
 }
 
-uint16_t TrMapLinkRoad::getParking()
+uint64_t TrMapLinkRoad::getParking()
 {
 	if(m_parking != nullptr)
 	{
 		TrMapParkLane * park = dynamic_cast<TrMapParkLane *>(m_parking);
 		if(park != nullptr)
-			return static_cast<uint16_t>(park->getParking());
+			return static_cast<uint64_t>(park->getParking());
 	}
 	return 0;
 }

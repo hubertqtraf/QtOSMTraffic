@@ -40,6 +40,7 @@
 
 #include <tr_geo_object.h>
 #include <tr_map_face.h>
+#include <tr_map_parklane.h>
 
 #include <QtCore/qvector.h>
 
@@ -79,7 +80,7 @@ private:
 	uint64_t getDir(const QString & value);
 	uint64_t getLanes();
 	bool parkingMode(const QString & part, uint64_t & code);
-	uint64_t parkingTest(const QString & part, const QString & value, uint64_t & code);
+	uint64_t parkingOrientation(const QString & value, uint64_t & code);
 	uint64_t parkingRes(const QString & value, uint64_t & code);
 	uint64_t getParking();
 	uint64_t getPlacement(const QString & value);

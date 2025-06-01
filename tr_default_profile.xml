@@ -31,6 +31,7 @@
   <value index="2002" name="parking_par" rgb="#30ca3d" type="color"/>
   <value index="2003" name="parking_per" rgb="#5b61ca" type="color"/>
   <value index="2004" name="parking_dia" rgb="#b1ca41" type="color"/>
+  <value index="2005" name="parking_sep" rgb="#888888" type="color"/>
  </section>
  <section index="1" name="rail">
   <value index="1" name="train" rgb="#1a557c" type="color"/>

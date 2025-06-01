@@ -70,40 +70,35 @@ uint64_t TrMapParkLane::getParking()
 
 void TrMapParkLane::setParking(uint64_t code)
 {
-	//TR_INF << HEX << code;
 	m_parking = code;
 }
 
 QPen * TrMapParkLane::setParkingSidePen(uint16_t type, TrGeoObject * base)
 {
-	// V_PARK_PARALLEL_L  0x0000000100000000
-	// V_PARK_DIAGONAL_L  0x0000000200000000
-	// V_PARK_PERPENDI_L  0x0000000400000000
-	// FLAG_PARKING       0x0000000000100000
-	// V_PARK_PARALLEL_R  0x0000010000000000
-	// V_PARK_DIAGONAL_R  0x0000020000000000
-	// V_PARK_PERPENDI_R  0x0000040000000000
-
-	// FLAG_PARKING_R     0x0000000000200000
-	// FLAG_PARKING_L     0x0000000000400000
-	// FLAG_PARKING_B     0x0000000000800000
-	//                           102006
-
 
 	QPen * ret = nullptr;
+
+	//if((type & 0x0001) != 0x0001)
+	//	return ret;
+
+	type &= 0xfffe;
 
 	TrMapList * list = dynamic_cast<TrMapList *>(base);
 	if(list == nullptr)
 		return ret;
 
-        if(type & 0x0001)       // parking_par
-                ret = list->getObjectPen(0x2002);
-        if(type & 0x0002)       // parking_dia
-                ret = list->getObjectPen(0x2004);
-        if(type & 0x0004)       // parking_per
-                ret = list->getObjectPen(0x2003);
-        if(type & 0x0030)       // parking_no
-                ret = list->getObjectPen(0x2001);
+	if((type & 0x00f0) == V_PARK_PARALLEL)
+		ret = list->getObjectPen(0x2002);
+	if((type & 0x00f0) == V_PARK_DIAGONAL)
+		ret = list->getObjectPen(0x2004);
+	if((type & 0x00f0) == V_PARK_PERPENDI)
+		ret = list->getObjectPen(0x2003);
+	if((type & 0x00f0) == V_PARK_SEPARATE)
+		ret = list->getObjectPen(0x2005);
+	if((type & 0x000e) & V_PARK_NO)
+		ret = list->getObjectPen(0x2001);
+	if((type & 0x000e) & V_PARK_NO_STOP)
+		ret = list->getObjectPen(0x2001);
 
 	if(ret != nullptr)
 	{
@@ -115,15 +110,17 @@ QPen * TrMapParkLane::setParkingSidePen(uint16_t type, TrGeoObject * base)
 
 int32_t TrMapParkLane::setParkingWidth(uint16_t type)
 {
-	if(type & 0x0001)	// parking_par
+	if((type & 0x00f0) == V_PARK_PARALLEL)
 		return 1500;
-	if(type & 0x0002)	// parking_dia
+	if((type & 0x00f0) == V_PARK_DIAGONAL)
 		return 3000;
-	if(type & 0x0004)	// parking_per
+	if((type & 0x00f0) == V_PARK_PERPENDI)
 		return 5000;
+	if((type & 0x00f0) == V_PARK_SEPARATE)
+		return 4000;
 	if(type & 0x0030)	// parking_no
 		return 500;
-	return 0;
+	return 777;
 }
 
 
@@ -142,13 +139,17 @@ bool TrMapParkLane::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject 
 	if(m_ref == nullptr)
 		return false;
 	TrMapLinkRoad * link = dynamic_cast<TrMapLinkRoad *>(m_ref);
+	if(link == nullptr)
+		return false;
+	//if(link->getNodeFrom() == 9400840110)
 
 	if(ctrl & TR_INIT_COLORS)
 	{
-		m_pen_park = setParkingSidePen(m_parking >> 8, base);
+		//TR_INF << HEX << ((m_parking >> (4+32)) & 0x000000000000000fU) + 0x2000 << m_parking;
+		m_pen_park = setParkingSidePen((m_parking & 0x00000000000000ffU), base);
 		if(link->getOneWay() & TR_LINK_DIR_ONEWAY)
 		{
-			m_pen_park_left = setParkingSidePen(m_parking & 0x00ff, base);
+			m_pen_park_left = setParkingSidePen((m_parking >> 32) & 0x00000000000000ffU, base);
 		}
 	}
 	if(ctrl & TR_INIT_GEOMETRY)
@@ -158,10 +159,13 @@ bool TrMapParkLane::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject 
 			if(link != nullptr)
 			{
 				//int cl = link->getRdClass();
-				int32_t w = getWith(m_parking >> 8);
+				int32_t w = getWith(m_parking & 0x00000000000000ffU); //m_parking >> 8);
+				//int32_t
+				//w = 2000;
 				if(w)
 					link->initDoubleLine(zoom_ref, m_par_line, w);
-				w = -setParkingWidth(m_parking & 0x00ff);
+				w = -setParkingWidth(2); //m_parking & 0x00ff);
+				//w = -2000;
 				link->initDoubleLine(zoom_ref, m_par_left_line, w);
 			}
 		}
@@ -177,7 +181,8 @@ void TrMapParkLane::draw(const TrZoomMap & zoom_ref, QPainter * p, uint8_t mode)
 	if(link == nullptr)
 		return;
 	QVector<QPointF> pointPairs;
-	if((m_parking & 0xff00) && (s_mask & TR_MASK_SHOW_PARKING) && (m_pen_park != nullptr))
+
+	if(/*(m_parking & 0xff00) &&*/ (s_mask & TR_MASK_SHOW_PARKING))
 	{
 		for(int i = 0; i<m_par_line.size(); i++)
 		{
@@ -188,7 +193,7 @@ void TrMapParkLane::draw(const TrZoomMap & zoom_ref, QPainter * p, uint8_t mode)
 			ptf.setY(screenx.y);
 			pointPairs.append(ptf);
 		}
-		if(pointPairs.size() > 1)
+		if((pointPairs.size() > 1) && (m_pen_park != nullptr))
 		{
 			p->setPen(*m_pen_park);
 			p->drawPolyline(pointPairs);

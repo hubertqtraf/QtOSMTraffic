@@ -41,6 +41,17 @@
 
 #include "tr_geo_object.h"
 
+#define PARK_CODE_R         0x0000000000000001U
+#define PARK_CODE_L         0x0000000100000000U
+
+#define V_PARK_NO           0x0000000000000002U
+#define V_PARK_NO_STOP      0x0000000000000004U
+
+#define V_PARK_PARALLEL     0x0000000000000010U
+#define V_PARK_DIAGONAL     0x0000000000000020U
+#define V_PARK_PERPENDI     0x0000000000000040U
+#define V_PARK_SEPARATE     0x0000000000000080U
+
 class TrMapParkLane : public TrGeoObject
 {
 public:
