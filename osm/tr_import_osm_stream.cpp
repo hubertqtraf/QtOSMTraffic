@@ -949,26 +949,22 @@ uint64_t TrImportOsmStream::getPlacement(const QString & value)
 
 bool TrImportOsmStream::parkingMode(const QString & part, uint64_t & code)
 {
-	//TR_INF << part;
 	if(part == "both")
 	{
 		code |= PARK_CODE_R; //0x0000000000000001;
 		code |= PARK_CODE_L; //0x0000000100000000;
-		//TR_INF << "B " << part << HEX << code;
 		return true;
 	}
 	if(part == "left")
 	{
-		code |= PARK_CODE_L; //0x0000000100000000;
-		//TR_INF << "L " << part << HEX << code;
+		code |= PARK_CODE_L;
 		return true;
 	}
 	if(part == "right")
 	{
-		code |= PARK_CODE_R; //0x0000000000000001;
+		code |= PARK_CODE_R;
 		return true;
 	}
-	TR_INF << "===" << part << HEX << code;
 	return false;
 }
 
@@ -1059,6 +1055,7 @@ uint64_t TrImportOsmStream::getParking()
 				mode = 0;
 				if(parkingMode(plist[1], mode))
 				{
+					ret |= mode;
 					if(plist.size() > 2)
 					{
 						if(plist[2] == "restriction")
@@ -1081,14 +1078,14 @@ uint64_t TrImportOsmStream::getParking()
 							if(mode & PARK_CODE_R)
 								ret |= V_PARK_NO;
 							if(mode & PARK_CODE_L)
-								ret |= (V_PARK_NO << 32);
+								ret |= (static_cast<uint64_t>(V_PARK_NO) << 32);
 						}
 						if(i.value() == "separate")
 						{
 							if(mode & PARK_CODE_R)
 								ret |= V_PARK_SEPARATE;
 							if(mode & PARK_CODE_L)
-								ret |= (V_PARK_SEPARATE << 32);
+								ret |= (static_cast<uint64_t>(V_PARK_SEPARATE) << 32);
 						}
 					}
 				}
