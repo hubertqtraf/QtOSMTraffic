@@ -118,9 +118,11 @@ int32_t TrMapParkLane::setParkingWidth(uint16_t type)
 		return 5000;
 	if((type & 0x00f0) == V_PARK_SEPARATE)
 		return 4000;
-	if(type & 0x0030)	// parking_no
+	if((type & 0x000e) & V_PARK_NO)
 		return 500;
-	return 777;
+	if((type & 0x000e) & V_PARK_NO_STOP)
+		return 500;
+	return 7777;
 }
 
 
@@ -145,7 +147,6 @@ bool TrMapParkLane::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject 
 
 	if(ctrl & TR_INIT_COLORS)
 	{
-		//TR_INF << HEX << ((m_parking >> (4+32)) & 0x000000000000000fU) + 0x2000 << m_parking;
 		m_pen_park = setParkingSidePen((m_parking & 0x00000000000000ffU), base);
 		if(link->getOneWay() & TR_LINK_DIR_ONEWAY)
 		{
@@ -158,15 +159,14 @@ bool TrMapParkLane::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject 
 		{
 			if(link != nullptr)
 			{
-				//int cl = link->getRdClass();
-				int32_t w = getWith(m_parking & 0x00000000000000ffU); //m_parking >> 8);
-				//int32_t
-				//w = 2000;
+				int32_t w = getWith(m_parking & 0x00000000000000ffU);
 				if(w)
 					link->initDoubleLine(zoom_ref, m_par_line, w);
-				w = -setParkingWidth(2); //m_parking & 0x00ff);
-				//w = -2000;
-				link->initDoubleLine(zoom_ref, m_par_left_line, w);
+				if(m_pen_park_left != nullptr)
+				{
+					w = -setParkingWidth((m_parking >> 32) & 0x00000000000000ff);
+					link->initDoubleLine(zoom_ref, m_par_left_line, w);
+				}
 			}
 		}
 	}
