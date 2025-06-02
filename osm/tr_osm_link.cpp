@@ -89,32 +89,6 @@ uint32_t TrOsmLink::getOsmLanesBwd()
 void TrOsmLink::setOsmParking(uint64_t park)
 {
 	m_osm_parking = park;
-
-	//TR_MSG << "F" << HEX << getOsmParkingFwd();
-	//TR_MSG << "B" << HEX << getOsmParkingBwd();
-}
-
-uint64_t TrOsmLink::getOsmParkingBwd() //Fwd()
-{
-	return (m_osm_parking >> 32);
-}
-
-// change left and rigth for backward mode
-uint64_t TrOsmLink::getOsmParkingFwd() //Bwd()
-{
-	/*uint16_t p = static_cast<uint16_t>(m_osm_parking >> 12);
-
-	uint16_t change = static_cast<uint16_t>(((p & 0x000000ff) << 8));
-	change |= ((p & 0x0000ff00) >> 8);*/
-
-	//if(m_osm_parking)
-	//	TR_INF <<  "BB" << HEX << change;
-	//return change;
-	// TODO
-	if(m_osm_parking)
-		return m_osm_parking;
-	else
-		return 0;
 }
 
 uint8_t TrOsmLink::getOsmPlacement()
@@ -178,11 +152,14 @@ TrMapLink * TrOsmLink::cloneLink(bool fwd, bool sideway, bool is_road)
 		//if(!fwd)
 		if(fwd)
 		{
-			orig_rd->setParking(static_cast<uint64_t>(getOsmParkingFwd()));
+			if(getOneWay())
+				orig_rd->setParking(m_osm_parking);
+			else
+				orig_rd->setParking(m_osm_parking & 0x00000000ffffffff);
 		}
 		else
 		{
-			orig_rd->setParking(static_cast<uint64_t>(getOsmParkingBwd()));
+			orig_rd->setParking(m_osm_parking >> 32);
 		}
 		if(getLanes() == 0)
 			orig_rd->setLanes(1);

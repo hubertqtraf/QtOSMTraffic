@@ -77,10 +77,6 @@ public:
 
 	void setOsmParking(uint64_t park);
 
-	uint64_t getOsmParkingFwd();
-
-	uint64_t getOsmParkingBwd();
-
 	void setOsmPlacement(uint8_t placement);
 
 	uint8_t getOsmPlacement();
