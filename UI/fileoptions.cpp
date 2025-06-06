@@ -134,8 +134,16 @@ void FileOptions::manageSettings(QSettings & settings, bool mode)
 
 void FileOptions::on_buttonBox_accepted()
 {
-	TrMapLinkRoad::ms_lane_width_p = ui->laneSpinBox->value();
-	TrMapLinkRoad::ms_lane_width_n = 0-ui->laneSpinBox->value();
+	if(ui->checkLeft->checkState() == Qt::Checked)
+	{
+		TrMapLinkRoad::ms_lane_width_p = 0-ui->laneSpinBox->value();
+		TrMapLinkRoad::ms_lane_width_n = ui->laneSpinBox->value();
+	}
+	else
+	{
+		TrMapLinkRoad::ms_lane_width_p = ui->laneSpinBox->value();
+		TrMapLinkRoad::ms_lane_width_n = 0-ui->laneSpinBox->value();
+	}
 	emit updateSettings();
 }
 
