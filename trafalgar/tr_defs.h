@@ -62,6 +62,7 @@
 #define TR_MASK_SHOW_CONSTRUCT 0x0000000800000000U
 #define TR_MASK_MOVE_LINE      0x0000001000000000U
 #define TR_MASK_SHOW_ROADNAME  0x0000002000000000U
+#define TR_MASK_LEFT_DRIVE     0x0000004000000000U
 
 // log defines
 // how to redirect qDebug ... stackoverflow ... done :-)

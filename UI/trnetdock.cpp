@@ -81,6 +81,11 @@ void TrNetDock::on_rd_name_clicked(bool checked)
 	setFlag(checked, TR_MASK_SHOW_ROADNAME);
 }
 
+void TrNetDock::on_leftDrive_clicked(bool checked)
+{
+	setFlag(checked, TR_MASK_LEFT_DRIVE);
+}
+
 uint64_t TrNetDock::getNetFlags()
 {
 	return m_flags;

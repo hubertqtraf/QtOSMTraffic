@@ -406,6 +406,10 @@ void MainWindow::on_updateLayerView()
 void MainWindow::on_updateNetOptions(uint64_t flags)
 {
 	TrGeoObject::setGlobelFlags(flags);
+	if(m_file_options != nullptr)
+	{
+		m_file_options->useOptions(flags);
+	}
 	m_map_view->getDocument().setMask(flags);
 	m_map_view->initObjects(TR_INIT_GEOMETRY);
 	m_map_view->update();
@@ -435,9 +439,12 @@ void MainWindow::on_updateFileOptions()
 	{
 		QSettings settings("trafalgar", "QTraf");
 		if(m_file_options != nullptr)
+		{
 			m_file_options->manageSettings(settings, false);
+			m_file_options->useOptions(m_net_option->getNetFlags());
+		}
 		QString profile = m_file_options->getProfileFileName();
-		TR_INF << profile;
+		TR_MSG << profile;
 		m_profile_dlg->read(profile);
 		on_updateWorld();
 		on_updateLayerView();

@@ -44,9 +44,8 @@ public:
 	bool getRelationOption();
 	int laneWith();
 	void setLaneWith(int width);
-
-
 	void manageSettings(QSettings &settings, bool mode);
+	void useOptions(uint64_t opt);
 
 signals:
 	void updateSettings();

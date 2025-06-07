@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>500</width>
-    <height>292</height>
+    <height>306</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,20 +18,16 @@
     <layout class="QGridLayout" name="gridLayout_3">
      <item row="0" column="0">
       <layout class="QGridLayout" name="gridLayout_2">
-       <item row="7" column="1">
-        <widget class="QPushButton" name="setProfileDir">
+       <item row="7" column="0">
+        <widget class="QLineEdit" name="profileDir"/>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLineEdit" name="osmDir"/>
+       </item>
+       <item row="1" column="1">
+        <widget class="QPushButton" name="setOsmDir">
          <property name="text">
           <string>Select</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QCheckBox" name="shiftCheck">
-         <property name="text">
-          <string>Shift</string>
-         </property>
-         <property name="checked">
-          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -39,6 +35,13 @@
         <widget class="QLabel" name="label_2">
          <property name="text">
           <string>Profile file</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="1">
+        <widget class="QPushButton" name="setProfileDir">
+         <property name="text">
+          <string>Select</string>
          </property>
         </widget>
        </item>
@@ -52,17 +55,13 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="1">
-        <widget class="QPushButton" name="setOsmDir">
+       <item row="2" column="0">
+        <widget class="QCheckBox" name="shiftCheck">
          <property name="text">
-          <string>Select</string>
+          <string>Shift</string>
          </property>
-        </widget>
-       </item>
-       <item row="4" column="0">
-        <widget class="QLabel" name="label_3">
-         <property name="text">
-          <string>Lane width [mm]</string>
+         <property name="checked">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -80,19 +79,10 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="0">
-        <widget class="QLineEdit" name="osmDir"/>
-       </item>
-       <item row="7" column="0">
-        <widget class="QLineEdit" name="profileDir"/>
-       </item>
-       <item row="8" column="0">
-        <widget class="QCheckBox" name="checkLeft">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
+       <item row="4" column="0">
+        <widget class="QLabel" name="label_3">
          <property name="text">
-          <string>Left driving</string>
+          <string>Lane width [mm]</string>
          </property>
         </widget>
        </item>
