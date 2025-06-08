@@ -81,6 +81,7 @@
 // this flags are for the init function
 #define TR_INIT_COLORS		0x0000000000000100U
 #define TR_INIT_GEOMETRY	0x0000000000001000U
+#define TR_INIT_LEFT		0x0000000000002000U
 
 // TODO: replace 'init' to this?
 // demandElement->updateGeometry();

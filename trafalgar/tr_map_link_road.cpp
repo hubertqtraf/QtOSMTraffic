@@ -828,8 +828,18 @@ bool TrMapLinkRoad::setRamp(const TrZoomMap & zoom_ref, bool dir)
 
 	double ang1 = 10.0;
 	double ang2 = 10.0;
-	TrMapLinkRoad * link1 = dynamic_cast<TrMapLinkRoad *>(nd->getElement(0, dir, ang1));
-	TrMapLinkRoad * link2 = dynamic_cast<TrMapLinkRoad *>(nd->getElement(1, dir, ang2));
+	TrMapLinkRoad * link1 = nullptr;
+	TrMapLinkRoad * link2 = nullptr;
+	if(s_mask & TR_MASK_LEFT_DRIVE)
+	{
+		link2 = dynamic_cast<TrMapLinkRoad *>(nd->getElement(0, dir, ang1));
+		link1 = dynamic_cast<TrMapLinkRoad *>(nd->getElement(1, dir, ang2));
+	}
+	else
+	{
+		link1 = dynamic_cast<TrMapLinkRoad *>(nd->getElement(0, dir, ang1));
+		link2 = dynamic_cast<TrMapLinkRoad *>(nd->getElement(1, dir, ang2));
+	}
 
 	if((link1 == nullptr) || (link2 == nullptr))
 	{
