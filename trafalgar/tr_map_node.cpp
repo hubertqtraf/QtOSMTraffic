@@ -49,6 +49,8 @@
 // TODO only once used, change?
 //#include "tr_map_link_road.h"
 
+#define TR2PI (M_PI * 2)
+
 TrConnectionMember::TrConnectionMember()
 	: m_dir{10.0}
 	, tr_obj{nullptr}
@@ -353,13 +355,17 @@ bool TrMapNode::setCrossingByAngle(const TrZoomMap & zoom_ref, bool type)
 	TrGeoObject * last_obj = nullptr;
 	TrGeoObject * test_obj = nullptr;
 	double ang = -0.0001;
+	if(s_mask & TR_MASK_LEFT_DRIVE)
+	{
+		ang = 0.0001;
+	}
 	int idx = -1;
+	int test = 0;
 	do
 	{
 		bool dir = true;
-		idx = getDirNextAngleIndex(ang, dir);
+		idx = getDirNextAngleIndex(ang, dir, ((s_mask & TR_MASK_LEFT_DRIVE) == TR_MASK_LEFT_DRIVE));
 
-		//TR_INF << idx << getDeg(ang) << dir;
 		if(idx >= 0)
 		{
 			if(dir)
@@ -367,20 +373,22 @@ bool TrMapNode::setCrossingByAngle(const TrZoomMap & zoom_ref, bool type)
 			else
 				test_obj = m_vec_out[idx].tr_obj;
 		}
-		if(((test_obj->getType() & 0x000f) <= 9) || type)
+		if(test_obj != nullptr)
 		{
-			next_obj = test_obj;
-			if(last_obj == nullptr)
-				last_obj = next_obj;
-			if((idx >= 0) && (first_obj != nullptr))
-				first_obj->handleCrossing(zoom_ref, next_obj, this);
-				//setCrossing(zoom_ref, first_obj, next_obj);
-			first_obj = next_obj;
+			if(((test_obj->getType() & 0x000f) <= 9) || type)
+			{
+				next_obj = test_obj;
+				if(last_obj == nullptr)
+					last_obj = next_obj;
+				if((idx >= 0) && (first_obj != nullptr))
+					first_obj->handleCrossing(zoom_ref, next_obj, this);
+				first_obj = next_obj;
+			}
 		}
-	}while(idx >= 0);
+		test++;
+	}while((idx >= 0) && (test < 10));
 	if(first_obj != nullptr)
 		first_obj->handleCrossing(zoom_ref, last_obj, this);
-	//setCrossing(zoom_ref, first_obj, last_obj);
 
 	return true;
 }
@@ -641,27 +649,55 @@ bool TrMapNode::setConnectionAngles(const TrZoomMap & zoom_ref, bool dir)
 	}
 }
 
-int TrMapNode::getDirNextAngleIndex(double & angle, bool & dir)
+int TrMapNode::getDirNextAngleIndex(double & angle, bool & dir, bool left)
 {
 	double act_ang_in = 10.0;
 	double act_ang_out = 10.0;
+
+	if(left)
+	{
+		act_ang_in = -10.0;
+		act_ang_out = -10.0;
+	}
 	int idx_in = -1;
 	int idx_out = -1;
 
 	for (int i = 0; i < m_vec_in.size(); ++i)
 	{
-		if((m_vec_in[i].m_dir > angle) && (m_vec_in[i].m_dir <= act_ang_in))
+		if(left)
 		{
-			act_ang_in = m_vec_in[i].m_dir;
-			idx_in = i;
+			if(((m_vec_in[i].m_dir-TR2PI) < angle) && ((m_vec_in[i].m_dir-TR2PI) > act_ang_in))
+			{
+				act_ang_in = m_vec_in[i].m_dir-TR2PI;
+				idx_in = i;
+			}
+		}
+		else
+		{
+			if((m_vec_in[i].m_dir > angle) && (m_vec_in[i].m_dir <= act_ang_in))
+			{
+				act_ang_in = m_vec_in[i].m_dir;
+				idx_in = i;
+			}
 		}
 	}
 	for (int i = 0; i < m_vec_out.size(); ++i)
 	{
-		if((m_vec_out[i].m_dir > angle) && (m_vec_out[i].m_dir <= act_ang_out))
+		if(left)
 		{
-			act_ang_out = m_vec_out[i].m_dir;
-			idx_out = i;
+			if(((m_vec_out[i].m_dir-TR2PI) < angle) && ((m_vec_out[i].m_dir-TR2PI) > act_ang_out))
+			{
+				act_ang_out = (m_vec_out[i].m_dir - TR2PI);
+				idx_out = i;
+			}
+		}
+		else
+		{
+			if((m_vec_out[i].m_dir > angle) && (m_vec_out[i].m_dir <= act_ang_out))
+			{
+				act_ang_out = m_vec_out[i].m_dir;
+				idx_out = i;
+			}
 		}
 	}
 	if(act_ang_in > act_ang_out)

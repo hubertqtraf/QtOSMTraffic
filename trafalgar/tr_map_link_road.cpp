@@ -184,7 +184,7 @@ TrPoint TrMapLinkRoad::getCrossingPoint(bool dir)
 
 bool TrMapLinkRoad::getSegment(TrGeoSegment & seg, bool dir, bool par)
 {
-	if(par)
+	if(par) 	// if segment on a parallel line
 	{
 		if(m_par_line.size() < 2)
 		{

@@ -84,7 +84,7 @@ private:
 	bool setDirectionAngles(const TrZoomMap & zoom_ref, QVector<TrConnectionMember> & vec, bool dir);
 	int getDirNextAngle(TrConnectionMember & member, QVector<TrConnectionMember> & vec, bool dir);
 	//
-	int getDirNextAngleIndex(double & angle, bool & dir);
+	int getDirNextAngleIndex(double & angle, bool & dir, bool left);
 	void setCrossing(const TrZoomMap & zoom_ref, TrGeoObject * first_obj, TrGeoObject * next_obj);
 
 	void initConnections(const TrZoomMap & zoom_ref, QVector<TrConnectionMember> & vec,

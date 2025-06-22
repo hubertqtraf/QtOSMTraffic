@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- test square with 90° crossings -->
+<osm version="0.6" generator="Trafalgar">
+    <node id="27471287" version="1" lon="110.999" lat="48"/>
+    <node id="27471294" version="1" lon="111.001" lat="48"/>
+    <node id="27471295" version="1" lon="111.002" lat="48"/>
+    <node id="27471296" version="1" lon="111.002" lat="48.00067"/>
+    <node id="27471297" version="1" lon="111" lat="48"/>
+    <node id="27471298" version="1" lon="111" lat="48.00067"/>
+    <node id="27471299" version="1" lon="111.001" lat="48.00067"/>
+    <node id="27471300" version="1" lon="111.002" lat="48.00067"/>
+    <way id="1" version="1">
+        <nd ref="27471287"/>
+        <nd ref="27471297"/>
+        <nd ref="27471298"/>
+        <nd ref="27471299"/>
+        <nd ref="27471294"/>
+        <tag k="highway" v="motorway"/>
+        <tag k="lanes" v="2"/>
+    </way>
+    <way id="2" version="1">
+        <nd ref="27471294"/>
+        <nd ref="27471295"/>
+        <tag k="highway" v="primary"/>
+        <tag k="lanes" v="4"/>
+    </way>
+    <way id="3" version="1">
+        <nd ref="27471294"/>
+        <nd ref="27471300"/>
+        <tag k="highway" v="trunk"/>
+        <tag k="lanes" v="6"/>
+        <tag k="oneway" v="0"/>
+    </way>
+</osm>
