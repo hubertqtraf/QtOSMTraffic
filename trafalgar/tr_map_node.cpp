@@ -666,9 +666,10 @@ int TrMapNode::getDirNextAngleIndex(double & angle, bool & dir, bool left)
 	{
 		if(left)
 		{
-			if(((m_vec_in[i].m_dir-TR2PI) < angle) && ((m_vec_in[i].m_dir-TR2PI) > act_ang_in))
+			double a2 = m_vec_in[i].m_dir-TR2PI;
+			if((a2 < angle) && (a2 > act_ang_in))
 			{
-				act_ang_in = m_vec_in[i].m_dir-TR2PI;
+				act_ang_in = a2;
 				idx_in = i;
 			}
 		}
@@ -685,9 +686,10 @@ int TrMapNode::getDirNextAngleIndex(double & angle, bool & dir, bool left)
 	{
 		if(left)
 		{
-			if(((m_vec_out[i].m_dir-TR2PI) < angle) && ((m_vec_out[i].m_dir-TR2PI) > act_ang_out))
+			double a2 = m_vec_out[i].m_dir-TR2PI;
+			if((a2 < angle) && (a2 > act_ang_out))
 			{
-				act_ang_out = (m_vec_out[i].m_dir - TR2PI);
+				act_ang_out = a2;
 				idx_out = i;
 			}
 		}
@@ -700,7 +702,10 @@ int TrMapNode::getDirNextAngleIndex(double & angle, bool & dir, bool left)
 			}
 		}
 	}
-	if(act_ang_in > act_ang_out)
+	bool check_dir = (act_ang_in > act_ang_out);
+	if(left)
+		check_dir = (act_ang_in < act_ang_out);
+	if(check_dir)
 	{
 		angle = act_ang_out;
 		dir = false;
@@ -1074,4 +1079,3 @@ void TrMapNode::writeXmlDescription(QXmlStreamWriter & xml_out, uint64_t id)
 		TR_INF << "TR_NODE_IS_SHADOW";
 }
 #endif
-
