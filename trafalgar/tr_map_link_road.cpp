@@ -706,6 +706,10 @@ uint8_t TrMapLinkRoad::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * 
 			return 8;
 		}
 	}
+	// TODO: create a rule for small links
+	if((first_segment.getLength(zoom_ref) < 5.0) || (next_segment.getLength(zoom_ref) < 5.0))
+		return 9;
+
 	first_segment.getCrossPoint(zoom_ref, cross_pt, next_segment);
 
 	if(first_link->getOneWay() & TR_LINK_DIR_ONEWAY)
