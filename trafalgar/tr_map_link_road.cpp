@@ -706,6 +706,19 @@ uint8_t TrMapLinkRoad::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * 
 			return 8;
 		}
 	}
+	// TODO: create a rule for angle and lanes
+	int lane_diff = abs(next_link->getLanes() - first_link->getLanes());
+	if(lane_diff)
+	{
+		double ang_diff = fabs(next_segment.getAngle(zoom_ref) - first_segment.getAngle(zoom_ref));
+		if(ang_diff > (M_PI * 2))
+			ang_diff += (M_PI * 2);
+		if(ang_diff < 0.50)
+		{
+			//TR_INF << ang_diff;
+			return 10;
+		}
+	}
 	// TODO: create a rule for small links
 	if((first_segment.getLength(zoom_ref) < 5.0) || (next_segment.getLength(zoom_ref) < 5.0))
 		return 9;
