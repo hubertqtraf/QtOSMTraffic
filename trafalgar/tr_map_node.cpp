@@ -270,6 +270,7 @@ int TrMapNode::getShiftPoint(const TrZoomMap & zoom_ref)
 {
 	for (TrConnectionMember item : m_vec_out)
 	{
+		//TR_INF << item.m_dir;
 		TrMapLink * next_link = dynamic_cast<TrMapLink *>(item.tr_obj);
 		if(next_link != nullptr)
 		{
@@ -381,14 +382,14 @@ bool TrMapNode::setCrossingByAngle(const TrZoomMap & zoom_ref, bool type)
 				if(last_obj == nullptr)
 					last_obj = next_obj;
 				if((idx >= 0) && (first_obj != nullptr))
-					first_obj->handleCrossing(zoom_ref, next_obj, this);
+					first_obj->handleCrossing(zoom_ref, next_obj, this, 0);
 				first_obj = next_obj;
 			}
 		}
 		test++;
 	}while((idx >= 0) && (test < 10));
 	if(first_obj != nullptr)
-		first_obj->handleCrossing(zoom_ref, last_obj, this);
+		first_obj->handleCrossing(zoom_ref, last_obj, this, 0);
 
 	return true;
 }
@@ -422,18 +423,17 @@ bool TrMapNode::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject * ba
 		}
 	}
 
+	// find the shift point
+	if((ctrl & 0xff) == 30)
+	{
+		//getShiftPoint(zoom_ref);
+	}
+
 	if((ctrl & 0xff) == 33)
 	{
 		// code to set the angles
 		setConnectionAngles(zoom_ref, TR_NODE_OUT);
 		setConnectionAngles(zoom_ref, TR_NODE_IN);
-	}
-
-	// find the shift point
-	if((ctrl & 0xff) == 44)
-	{
-		//TODO: shift...
-		//getShiftPoint(zoom_ref);
 	}
 
 	if((ctrl & 0xff) == 21)
@@ -596,7 +596,7 @@ void TrMapNode::setCrossing(const TrZoomMap & zoom_ref, TrGeoObject * first_obj,
 	if((first_obj == nullptr) || (next_obj == nullptr))
 		return;
 
-	first_obj->handleCrossing(zoom_ref, next_obj, this);
+	first_obj->handleCrossing(zoom_ref, next_obj, this, 0);
 }
 
 void TrMapNode::initConnections(const TrZoomMap & zoom_ref, QVector<TrConnectionMember> & vec,

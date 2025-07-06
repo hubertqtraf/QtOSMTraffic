@@ -190,7 +190,7 @@ public:
 
 	bool setSurroundingRect();
 
-	virtual uint8_t handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * other, TrGeoObject * node);
+	virtual uint8_t handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * other, TrGeoObject * node, uint8_t mode);
 
 	TrGeoObject * manageGap(const TrZoomMap & zoom_ref, uint8_t mode, const TrPoint & pt, TrGeoObject * obj = nullptr);
 

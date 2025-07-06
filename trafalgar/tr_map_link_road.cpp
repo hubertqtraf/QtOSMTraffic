@@ -638,7 +638,7 @@ void TrMapLinkRoad::initDoubleLine(const TrZoomMap & zoom_ref, QVector<TrPoint> 
 	}
 }
 
-uint8_t TrMapLinkRoad::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * other, TrGeoObject * node)
+uint8_t TrMapLinkRoad::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * other, TrGeoObject * node, uint8_t mode)
 {
 	TrMapNode * n = dynamic_cast<TrMapNode *>(node);
 	if(n == nullptr)

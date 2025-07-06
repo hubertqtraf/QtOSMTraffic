@@ -453,7 +453,7 @@ bool TrMapLink::initSecs(const TrZoomMap & zoom_ref, TrMapList * pr_list, TrMapL
 	return false;
 }
 
-uint8_t TrMapLink::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * other, TrGeoObject * node)
+uint8_t TrMapLink::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * other, TrGeoObject * node, uint8_t mode)
 {
 	return 0xff;
 }

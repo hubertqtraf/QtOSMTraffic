@@ -181,7 +181,7 @@ public:
 	// TODO: rework
 	virtual uint16_t getType() const;
 
-	virtual uint8_t handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * other, TrGeoObject * node);
+	virtual uint8_t handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * other, TrGeoObject * node, uint8_t mode);
 
 	virtual void setType(uint16_t);
 
