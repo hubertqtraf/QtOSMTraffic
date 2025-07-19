@@ -463,7 +463,7 @@ void TrMapNet::setMask(uint64_t bit_mask)
 	m_inst_mask |= bit_mask;
 
 	// TODO: s_mast vs. m_inst_mask!!!
-	if((m_name == "rail") || (m_name == "stream"))
+	if((m_name == "rail") || (m_name == "stream") || (m_name == "power"))
 	{
 		// the 'more lines' option is not suitable on 'rail' or 'stream' type
 		m_inst_mask &= ~(TR_MASK_MORE_LINES);

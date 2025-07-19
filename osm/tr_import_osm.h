@@ -83,6 +83,9 @@ private:
 	QVector<TrOsmLink *> stream_raw_link_list;
 	QMap<uint64_t, PolyNode> stream_poly_nodes;
 
+	QVector<TrOsmLink *> power_raw_link_list;
+	QMap<uint64_t, PolyNode> power_poly_nodes;
+
 	size_t m_waySize;	//osm2_world.info.way.count
 	Way_t * m_ways;
 

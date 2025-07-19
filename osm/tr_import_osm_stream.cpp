@@ -544,11 +544,16 @@ void TrImportOsmStream::closeWay(QMap<QString, name_set> & name_map, uint64_t & 
 	if(m_tags.contains("railway"))
 	{
 		uint64_t code = TrImportOsmRel::getRailWayClass(m_tags["railway"]);
-		//TR_INF << "## railway ##" << m_tags["railway"] << HEX << code;
 		if(code)
 		{
 			way.type = TYPE_RAIL | code;
 		}
+	}
+
+	if(m_tags.contains("power"))
+	{
+		uint64_t code = TrImportOsmRel::getPowerClass(m_tags["power"], false);
+		way.type = code;
 	}
 
 	if(m_tags.contains("barrier"))
@@ -584,16 +589,6 @@ void TrImportOsmStream::closeWay(QMap<QString, name_set> & name_map, uint64_t & 
 	{
 		uint64_t code = TrImportOsmRel::getLeisureClass(m_tags["leisure"]);
 		way.type = code;
-	}
-
-	if(m_tags.contains("power"))
-	{
-		// TODO: create network...
-		// 'line' -> way
-		// 'portal' -> way (node?)
-
-		uint64_t code = TrImportOsmRel::getPowerClass(m_tags["power"], false);
-		way.type = code | FLAG_FEATURE_AERA;
 	}
 
 	if(m_tags.contains("natural"))

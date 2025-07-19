@@ -365,6 +365,17 @@ bool TrImportOsm::read(const QString & filename, TrMapList & name_list, uint8_t 
 					addRawCoor(&osm_nodes, stream_poly_nodes);
 				break;
 
+			case TYPE_POWER:
+				osm2_world.ways[i].type |= 0x80;
+				// TODO: rework 'setRdClass'
+				//olink->setRdClass(setWaterType(olink, osm2_world.ways[i].type));
+				olink->setRdClass(1);
+				olink->setNameId(static_cast<uint32_t>(osm2_world.ways[i].name_id));
+				power_raw_link_list.append(olink);
+				if(addRawNodes(olink->getRawNodes(), power_poly_nodes, olink->getOneWay()) == true)
+					addRawCoor(&osm_nodes, power_poly_nodes);
+				break;
+
 			default:
 				delete olink;
 				break;
@@ -412,6 +423,14 @@ bool TrImportOsm::createNet(TrMapNet * osm_net, QString name)
 		if(finalizeNet(stream_raw_link_list, stream_poly_nodes, "net", osm_net, false) == false)
 		{
 			TR_ERR << "read (stream)";
+			return false;
+		}
+	}
+	if(name == "power")
+	{
+		if(finalizeNet(power_raw_link_list, power_poly_nodes, "net", osm_net, false) == false)
+		{
+			TR_ERR << "read (power)";
 			return false;
 		}
 	}

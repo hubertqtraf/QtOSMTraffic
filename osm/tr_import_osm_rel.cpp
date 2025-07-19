@@ -761,7 +761,7 @@ uint64_t TrImportOsmRel::getPowerClass(const QString & value, bool node)
 {
 	if(value == "generator")
 	{
-		return TYPE_BUILDING | BUILDING_POWER;
+		return TYPE_BUILDING | BUILDING_POWER | FLAG_FEATURE_AERA;
 	}
 	if(value == "tower")
 	{
@@ -776,18 +776,27 @@ uint64_t TrImportOsmRel::getPowerClass(const QString & value, bool node)
 		// TODO: ignore value if it is a node
 		if(node)
 			return 0;
-		return TYPE_BUILDING | BUILDING_POWER;
+		return TYPE_BUILDING | BUILDING_POWER | FLAG_FEATURE_AERA;
 	}
 	if(value == "transformer")
 	{
 		// TODO: ignore value if it is a node
 		if(node)
 			return 0;
-		return TYPE_BUILDING | BUILDING_POWER;
+		return TYPE_BUILDING | BUILDING_POWER | FLAG_FEATURE_AERA;
 	}
+	// TODO: set sub class
 	if(value == "cable")
 	{
-		return 0;
+		return TYPE_POWER;
+	}
+	if(value == "line")
+	{
+		return TYPE_POWER;
+	}
+	if(value == "minor_line")
+	{
+		return TYPE_POWER;
 	}
 	//TR_INF << "P: " << value;
 	return 0;

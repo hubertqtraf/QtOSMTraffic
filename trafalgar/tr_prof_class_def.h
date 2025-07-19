@@ -108,9 +108,12 @@
 #define TYPE_ROAD           0x0000000000010000U
 #define TYPE_RAIL           0x0000000000020000U
 #define TYPE_STREAM         0x0000000000040000U
+#define TYPE_POWER          0x0000000000080000U
+
 // https://wiki.openstreetmap.org/wiki/DE:Key:aerialway
 // aerialway -> drag_lift/cable_car/gondola etc. / goods
-#define TYPE_LIFT           0x0000000000080000U
+//#define TYPE_LIFT           0x0000000000080000U
+#define TYPE_LIFT           0x0000000004000000U
 #define TYPE_BUILDING       0x0000000000100000U
 #define TYPE_LANDUSE        0x0000000000200000U
 #define TYPE_NATURAL        0x0000000000400000U
@@ -122,7 +125,7 @@
 #define TYPE_RESTRICT       0x0000000001000000U
 #define TYPE_ADMIN          0x0000000002000000U
 
-#define TYPE_POWER          0x0000000004000000U
+//#define TYPE_POWER          0x0000000004000000U
 
 // use  only 'act_world->node_flags'!
 #define TYPE_PT_NAME        0x0000000000001000U
