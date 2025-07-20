@@ -175,6 +175,8 @@ void MainWindow::on_actionOpen_triggered()
 	TR_INF << m_file_options->getOsmDir();
 	QString fileName = QFileDialog::getOpenFileName(this, tr("Open OSM File"),
 							m_file_options->getOsmDir(), tr("OSM File (*.osm)"));
+	if(fileName.isEmpty())
+		return;
 	on_loadWorld(fileName, m_file_options->getShiftOption());
 	m_map_view->update();
 }
