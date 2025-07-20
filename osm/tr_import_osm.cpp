@@ -348,28 +348,26 @@ bool TrImportOsm::read(const QString & filename, TrMapList & name_list, uint8_t 
 				olink->setRdClass(setTrainType(olink, osm2_world.ways[i].type));
 				// TODO: set the name of the train connection?
 				olink->setNameId(static_cast<uint32_t>(osm2_world.ways[i].name_id));
-
 				rail_raw_link_list.append(olink);
 				if(addRawNodes(olink->getRawNodes(), rail_poly_nodes, olink->getOneWay()) == true)
 					addRawCoor(&osm_nodes, rail_poly_nodes);
 				break;
 
 			case TYPE_STREAM:
-				//TR_MSG << "stream";
+				// TODO: remove 'setWaterType' -> see TYPE_POWER
 				olink->setRdClass(setWaterType(olink, osm2_world.ways[i].type));
 				// TODO: set the name of the river?
 				olink->setNameId(static_cast<uint32_t>(osm2_world.ways[i].name_id));
 				stream_raw_link_list.append(olink);
-
 				if(addRawNodes(olink->getRawNodes(), stream_poly_nodes, olink->getOneWay()) == true)
 					addRawCoor(&osm_nodes, stream_poly_nodes);
 				break;
 
 			case TYPE_POWER:
-				osm2_world.ways[i].type |= 0x80;
-				// TODO: rework 'setRdClass'
-				//olink->setRdClass(setWaterType(olink, osm2_world.ways[i].type));
-				olink->setRdClass(1);
+				{
+					uint16_t p_class = osm2_world.ways[i].type & 0x00000000000000ff;
+					olink->setRdClass(p_class);
+				}
 				olink->setNameId(static_cast<uint32_t>(osm2_world.ways[i].name_id));
 				power_raw_link_list.append(olink);
 				if(addRawNodes(olink->getRawNodes(), power_poly_nodes, olink->getOneWay()) == true)

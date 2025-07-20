@@ -785,18 +785,17 @@ uint64_t TrImportOsmRel::getPowerClass(const QString & value, bool node)
 			return 0;
 		return TYPE_BUILDING | BUILDING_POWER | FLAG_FEATURE_AERA;
 	}
-	// TODO: set sub class
 	if(value == "cable")
 	{
-		return TYPE_POWER;
+		return TYPE_POWER | POWER_CABLE;
 	}
 	if(value == "line")
 	{
-		return TYPE_POWER;
+		return TYPE_POWER | POWER_LINE;
 	}
 	if(value == "minor_line")
 	{
-		return TYPE_POWER;
+		return TYPE_POWER | POWER_LINE_MINOR;
 	}
 	//TR_INF << "P: " << value;
 	return 0;

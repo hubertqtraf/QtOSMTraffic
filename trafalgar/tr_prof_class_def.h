@@ -65,6 +65,9 @@
 #define BUILDING_RUINS      0x0006U
 #define BUILDING_POWER      0x0008U
 
+#define POWER_LINE          0x0001U
+#define POWER_LINE_MINOR    0x0002U
+#define POWER_CABLE         0x0003U
 
 // TODO: merge natural and landuse
 //<value name="coast" rgb="#16183f" index="1" type="color"/>

@@ -99,12 +99,12 @@
   <value index="5" name="canal" rgb="#00aaff" type="color"/>
  </section>
  <section index="1" name="power">
-  <value index="0" name="default" rgb="#3a53ec" type="color"/>
-  <value index="1" name="x1" rgb="#519394" type="color"/>
-  <value index="2" name="x2" rgb="#aaaaff" type="color"/>
-  <value index="3" name="x3" rgb="#0000ff" type="color"/>
-  <value index="4" name="x4" rgb="#7d91ff" type="color"/>
-  <value index="5" name="x5" rgb="#00aaff" type="color"/>
+  <value index="0" name="default" rgb="#ff0000" type="color"/>
+  <value index="1" name="line" rgb="#ff00ff" type="color"/>
+  <value index="2" name="line_minor" rgb="#ffaa00" type="color"/>
+  <value index="3" name="cable" rgb="#ff557f" type="color"/>
+  <value index="4" name="test" rgb="#7d91ff" type="color"/>
+  <value index="5" name="test" rgb="#00aaff" type="color"/>
  </section>
  <section index="1" name="poi">
   <value index="0" name="default" rgb="#ff0000" type="color"/>

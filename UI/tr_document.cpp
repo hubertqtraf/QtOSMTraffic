@@ -47,24 +47,24 @@ TrDocument::TrDocument(const QString & name, QObject * parent)
 	, m_name("")
 	, m_fname(name)
 	, m_is_dirty(false)
-    , m_is_loaded(false)
+	, m_is_loaded(false)
 {
 	// TODO check
 	m_name = QString("world");
 	// TODO: add to layer?
-    m_name_map.setObjClass("name");
+	m_name_map.setObjClass("name");
 }
 
 TrDocument::TrDocument(QObject *parent)
-    : QObject(parent)
-    , TrGeoObject()
-    , m_name("")
-    , m_fname("")
-    , m_is_dirty(false)
-    , m_is_loaded(false)
+	: QObject(parent)
+	, TrGeoObject()
+	, m_name("")
+	, m_fname("")
+	, m_is_dirty(false)
+	, m_is_loaded(false)
 {
-    m_name = QString("world");
-    m_name_map.setObjClass("name");
+	m_name = QString("world");
+	m_name_map.setObjClass("name");
 }
 
 TrDocument::~TrDocument()
@@ -73,12 +73,12 @@ TrDocument::~TrDocument()
 
 void TrDocument::clean()
 {
-    m_name = "";
-    m_fname = "";
-    m_map_stack.clear("");
-    resetNameList();
-    m_is_loaded = false;
-    surroundingRect[0] = surroundingRect[1] = surroundingRect[2] = surroundingRect[3] = 0.0;
+	m_name = "";
+	m_fname = "";
+	m_map_stack.clear("");
+	resetNameList();
+	m_is_loaded = false;
+	surroundingRect[0] = surroundingRect[1] = surroundingRect[2] = surroundingRect[3] = 0.0;
 }
 
 QString TrDocument::getName() const
@@ -371,7 +371,7 @@ uint64_t TrDocument::readXmlDescription(QXmlStreamReader & xml_in)
 						if(net->readXmlDescription(xml_in) != 0)
 						{
 							TR_ERR << "XML error";
-                            return TR_NO_VALUE;
+							return TR_NO_VALUE;
 						}
 						else
 						{
