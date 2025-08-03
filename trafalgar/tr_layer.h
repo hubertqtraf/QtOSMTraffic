@@ -74,7 +74,7 @@ public:
 	virtual bool setSurroundingRect();
 
 #ifdef TR_SERIALIZATION
-	void writeXmlDescription(QXmlStreamWriter & xml_out, int64_t id);
+	virtual void writeXmlDescription(QXmlStreamWriter & xml_out, uint64_t id);
 #endif
 };
 

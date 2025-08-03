@@ -112,7 +112,7 @@ bool TrLayer::setSurroundingRect()
 }
 
 #ifdef TR_SERIALIZATION
-void TrLayer::writeXmlDescription(QXmlStreamWriter & xml_out, int64_t id)
+void TrLayer::writeXmlDescription(QXmlStreamWriter & xml_out, uint64_t id)
 {
 	TR_MSG << "name or NULL: " << m_element->getName();
 
