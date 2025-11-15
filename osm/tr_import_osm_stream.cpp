@@ -613,7 +613,11 @@ void TrImportOsmStream::closeWay(QMap<QString, name_set> & name_map, uint64_t & 
 
 	if(m_tags.contains("waterway"))
 	{
-		//TR_INF << m_tags["waterway"];
+		uint64_t code = TrImportOsmRel::getWaterWayClass(m_tags["waterway"]);
+		if(code)
+		{
+			way.type = code;
+		}
 	}
 
 	if(m_tags.contains("oneway"))

@@ -839,9 +839,13 @@ uint64_t TrImportOsmRel::getNaturalClass(const QString & value)
 uint64_t TrImportOsmRel::getWaterWayClass(const QString & value)
 {
 	if(value == "river")
-		return (WATER_RIVER | FLAG_FEATURE_AERA);
+		return (WATER_RIVER | TYPE_STREAM);
 	if(value == "stream")
-		return (WATER_STREAM | FLAG_FEATURE_AERA); //FLAG_FEATURE_WAY);
+		return (WATER_STREAM | TYPE_STREAM);
+	if(value == "canal")
+		return (WATER_CANAL | TYPE_STREAM);
+	//if(value == "lake")
+	//	return (WATER_LAKE | FLAG_FEATURE_AERA | TYPE_STREAM);
 	return 0;
 }
 
