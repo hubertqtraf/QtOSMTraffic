@@ -165,6 +165,7 @@ bool TrImportOsmStream::osmRead(World_t & world)
 		return false;
 	}
 	this->setSurroundingRect();
+	file.close();
 	return true;
 }
 
