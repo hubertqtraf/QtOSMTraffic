@@ -27,6 +27,7 @@
 #include "tr_document.h"
 #include "trnodedock.h"
 #include "trlinkdock.h"
+#include "tr_progess_thread.h"
 //#include <QSvgGenerator>
 #include <QDockWidget>
 #include <QWidget>
@@ -43,6 +44,7 @@ private:
 	TrZoomMap m_zoom_ref;
 	Qt::MouseButton m_move_pressed;
 	TrGeoObject * m_selected;
+	QMap<QString, QStringList> m_list;
 
 	void paint(QPainter * p);
 	TrPoint getWorldPoint(const QPoint & pt);
@@ -53,11 +55,14 @@ private:
 	QScrollArea * m_linkScrollArea;
 	TrLinkDock * m_dockLink;
 
+	TrProgress * m_fileProgress;
+
 protected:
 	void resizeEvent(QResizeEvent *);
 
 public:
 	TrMapView(QWidget *parent);
+	~TrMapView();
 
 	TrDocument & getDocument();
 
@@ -84,8 +89,16 @@ public:
 
 	//void paintSvg(QSvgGenerator &generator);
 
+	void loadDocByThread(const QString & filename, int type, QProgressBar * bar);
+
+	void addList(const QStringList &list, const QString &name);
+
+public slots:
+	void on_handleResults(const TrGeoObject **obj);
+
 signals:
 	void sendMessage(const QString, int);
+	void loadResult(const TrGeoObject **obj);
 };
 
 #endif // TRMAPVIEW_H

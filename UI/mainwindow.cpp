@@ -55,9 +55,14 @@ MainWindow::MainWindow(QWidget *parent)
 {
 	ui->setupUi(this);
 
+	m_progress = new QProgressBar();
+	statusBar()->addPermanentWidget(m_progress);
+
 	view = new QScrollArea(this);
 	setCentralWidget(view);
 	m_map_view = new TrMapView(view);
+	connect(m_map_view, SIGNAL(loadResult(const TrGeoObject **)),
+		this, SLOT(on_handleResults(const TrGeoObject ** )));
 
 	view->setWidget(m_map_view);
 	view->setWidgetResizable(true);
@@ -100,6 +105,7 @@ MainWindow::~MainWindow()
 	delete ui;
 }
 
+// to remove
 void MainWindow::createRoadNetObjects(const QStringList & list, TrImportOsm & filter)
 {
 	for(int i = 0; i < list.size(); i++)
@@ -110,6 +116,7 @@ void MainWindow::createRoadNetObjects(const QStringList & list, TrImportOsm & fi
 	}
 }
 
+// to remove
 void MainWindow::createNetObjects(const QStringList & list, TrImportOsm & filter)
 {
 	for(int i = 0; i < list.size(); i++)
@@ -120,6 +127,7 @@ void MainWindow::createNetObjects(const QStringList & list, TrImportOsm & filter
 	}
 }
 
+// to remove...
 void MainWindow::createFaceObjects(const QStringList & list, TrImportOsm & filter)
 {
 	for(int i = 0; i < list.size(); i++)
@@ -154,6 +162,40 @@ void MainWindow::readSettings()
 	settings.endGroup();
 	if(m_file_options != nullptr)
 		m_file_options->manageSettings(settings, true);
+}
+
+void MainWindow::on_handleResults(const TrGeoObject **obj)
+{
+	m_map_view->setSettingsData(m_profile_dlg->getElemStringList("modes"),
+		m_profile_dlg->getElemStringList("layer"));
+
+	on_updateWorld();
+	on_updateLayerView();
+
+	m_map_view->recalcExtRect();
+
+	// view option dialog
+	if(m_disp_option == nullptr)
+	{
+		m_disp_option = new TrDispOptionDialog(this);
+		connect(m_disp_option, &TrDispOptionDialog::accepted, this,  &MainWindow::on_updateLayerView);
+	}
+	QStringList alist = m_profile_dlg->getElemStringList("layer");
+	m_disp_option->setLayerList(alist, m_map_view->getDocument().getLayerNames());
+	for (int i = 0; i < m_disp_option->getViewList().size(); ++i)
+	{
+		m_disp_option->setLayerItemList(m_disp_option->getViewList()[i],
+		m_profile_dlg->getElemStringList(m_disp_option->getViewList()[i]));
+	}
+
+	window()->setWindowTitle("OSM Traffic: " + m_map_view->getDocument().getFileName());
+	m_map_view->setLoadedFlag(true);
+	on_updateNetOptions(0);
+	on_updateNetOptions(m_net_option->getNetFlags());
+
+	unsetCursor();
+
+	m_progress->setValue(0);
 }
 
 void MainWindow::loadFile(const QString & file)
@@ -298,14 +340,23 @@ void MainWindow::on_loadWorld(const QString & filename, int shift)
 		return;
 
 	setCursor(Qt::WaitCursor);
+
 	if(m_map_view->getDocument().m_is_loaded)
 	{
 		// TODO: check if file name is same -> Dialog box?
 		m_map_view->getDocument().clean();
 		m_map_view->getDocument().addLayerType(m_profile_dlg->getElemStringList("modes"));
 	}
+
 	if(shift != 0)
 		TrGeoObject::s_mask |= TR_MASK_MOVE_LINE;
+
+	/*m_map_view->addList(m_profile_dlg->getElemStringList("layer", "roadnet"), "roadnet");
+	m_map_view->addList(m_profile_dlg->getElemStringList("layer", "net"), "net");
+	m_map_view->addList(m_profile_dlg->getElemStringList("layer", "face"), "face");
+
+	m_map_view->loadDocByThread(filename, 0, m_progress);
+	return;*/
 
 	TrImportOsm osm_filter;
 
@@ -357,7 +408,7 @@ void MainWindow::on_loadWorld(const QString & filename, int shift)
 	for (int i = 0; i < m_disp_option->getViewList().size(); ++i)
 	{
 		m_disp_option->setLayerItemList(m_disp_option->getViewList()[i],
-										m_profile_dlg->getElemStringList(m_disp_option->getViewList()[i]));
+                        m_profile_dlg->getElemStringList(m_disp_option->getViewList()[i]));
 	}
 
 	window()->setWindowTitle("OSM Traffic: " + m_map_view->getDocument().getFileName());

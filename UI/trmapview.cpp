@@ -34,6 +34,8 @@ TrMapView::TrMapView(QWidget *parent)
 	, m_elementDock(nullptr)
 	, m_dockNode(nullptr)
 	, m_dockLink(nullptr)
+	, m_fileProgress(nullptr)
+
 {
 	m_dockLink = new TrLinkDock(m_elementDock);
 	m_linkScrollArea = new QScrollArea(m_elementDock);
@@ -45,6 +47,17 @@ TrMapView::TrMapView(QWidget *parent)
 	m_linkScrollArea->setVisible(false);
 	m_dockNode = new TrNodeDock(parent);
 	m_dockNode->setVisible(false);
+
+	//m_fileProgress = new TrProgress();
+}
+
+TrMapView::~TrMapView()
+{
+	if(m_fileProgress != nullptr)
+	{
+		m_fileProgress->quit();
+		m_fileProgress->wait();
+	}
 }
 
 TrDocument &TrMapView::getDocument()
@@ -342,4 +355,46 @@ bool TrMapView::notifyWheel(const QPoint, int a, int b)
 bool TrMapView::notifyRectSelect(const QRect &r, Qt::MouseButton button)
 {
 	return false;
+}
+
+void TrMapView::addList(const QStringList & list, const QString & name)
+{
+	m_list[name] = list;
+}
+
+void TrMapView::loadDocByThread(const QString & filename, int type, QProgressBar *bar)
+{
+	if(bar == nullptr)
+		return;
+
+	//TrGeoObject * obj = m_map_view->getLayerByName("world");
+
+	m_fileProgress = new TrProgress();
+	m_fileProgress->setProgressBar(bar);
+	m_fileProgress->setDocument(&m_doc, type, 0);
+	m_fileProgress->addList(m_list);
+	m_fileProgress->start();
+
+	m_doc.setFileName(filename);
+
+	TR_INF << "aaaaaa";
+	connect(m_fileProgress, SIGNAL(resultReady(const TrGeoObject **)),
+		this, SLOT(on_handleResults(const TrGeoObject ** )));
+	connect(m_fileProgress, SIGNAL(finished()), m_fileProgress, SLOT(deleteLater()));
+	bar->setRange(0,100);
+	bar->setValue(2);
+	//connect(&m_doc, SIGNAL(valueChanged(int)), bar, SLOT(setValue(int)));
+
+	if(m_doc.m_is_loaded)
+	{
+		// TODO: check if file name is same -> Dialog box?
+		m_doc.clean();
+		//m_doc.addLayerType(m_profile_dlg->getElemStringList("modes"));
+	}
+}
+
+
+void TrMapView::on_handleResults(const TrGeoObject **obj)
+{
+	emit loadResult(obj);
 }

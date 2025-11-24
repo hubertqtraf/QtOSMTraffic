@@ -28,6 +28,7 @@ INCLUDEPATH += ./trafalgar
 SOURCES += \
     UI/about.cpp \
     UI/fileoptions.cpp \
+    UI/tr_progess_thread.cpp \
     geo/geo_base.cpp \
     geo/geo_globe.cpp \
     geo/geo_lin.cpp \
@@ -73,6 +74,7 @@ SOURCES += \
 HEADERS += \
     UI/about.h \
     UI/fileoptions.h \
+    UI/tr_progess_thread.h \
     geo/geo_base.h \
     geo/geo_errno.h \
     geo/geo_globe.h \

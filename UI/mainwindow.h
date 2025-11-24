@@ -28,13 +28,12 @@
 #include "trdispoptiondialog.h"
 #include "trmapview.h"
 #include "trnetdock.h"
-#include "trnodedock.h"
-#include "trlinkdock.h"
 #include "fileoptions.h"
 #include "about.h"
 
 #include <QMainWindow>
 #include <QScrollArea>
+#include <qprogressbar.h>
 #include <tr_import_osm.h>
 
 #define DEF_MASK TR_MASK_SELECT_LINK|TR_MASK_CLASS_FILTER|0x0000000000090000
@@ -91,8 +90,13 @@ public slots:
 
 	void on_updateLayerView();
 
+	/** return from thread (loading the files) */
+	void on_handleResults(const TrGeoObject ** obj);
+
 private:
 	Ui::MainWindow *ui;
+
+	QProgressBar * m_progress;
 
 	QScrollArea * view;
 	TrMapView * m_map_view;
