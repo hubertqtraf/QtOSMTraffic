@@ -51,8 +51,10 @@
 
 #include "tr_import_osm_rel.h"
 
-class TrImportOsmStream : public TrGeoObject
+class TrImportOsmStream : public QObject, TrGeoObject
 {
+        Q_OBJECT
+
 private:
 	uint8_t m_mode;
 	QString m_filename;
@@ -107,6 +109,9 @@ public:
 	virtual bool setSurroundingRect();
 
 	QString errorString() const;
+
+signals:
+	void valueBarChanged(int val);
 };
 
 #endif

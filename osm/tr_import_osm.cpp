@@ -90,6 +90,7 @@ TrImportOsm::TrImportOsm()
 	, m_nodeSize(0)
 	, m_nodes(nullptr)
 	, m_poi_map(nullptr)
+	, m_progress(0)
 {
 }
 
@@ -166,7 +167,8 @@ bool TrImportOsm::read(const QString & filename, TrMapList & name_list, uint8_t 
 
 	TrOsmLink * olink = nullptr;
 
-	emit valueChanged(3);
+	m_progress = 3;
+	emit valueChanged(m_progress);
 
 	// POI - Point Of Interest
 	m_poi_map = new TrMapList();
@@ -178,11 +180,17 @@ bool TrImportOsm::read(const QString & filename, TrMapList & name_list, uint8_t 
 		TR_INF << "osm file: " << filename;
 
 		TrImportOsmStream ios(filename);
+		connect(&ios, SIGNAL(valueBarChanged(int)), this, SLOT(on_setBarValue(int)));
 		ios.osmRead(osm2_world);
+
+		m_progress += 40;
+
 		for (auto i = ios.getNodeMap().cbegin(), end = ios.getNodeMap().cend(); i != end; ++i)
 		{
 			appendPoi(&osm2_world, i.value());
 		}
+		m_progress += 5;
+		emit valueChanged(m_progress);
 		ios.setNodeIds(osm2_world);
 #ifdef OSM_C_FILTER
 		m_nodeSize = osm2_world.info.node.count;
@@ -208,6 +216,9 @@ bool TrImportOsm::read(const QString & filename, TrMapList & name_list, uint8_t 
 		}
 #endif
 	}
+
+	m_progress += 10;
+	emit valueChanged(m_progress);
 
 	QMap<QString, name_set>::const_iterator i = osm2_world.m_name_map.constBegin();
 	while (i != osm2_world.m_name_map.constEnd())
@@ -263,8 +274,6 @@ bool TrImportOsm::read(const QString & filename, TrMapList & name_list, uint8_t 
 	m_ways = osm2_world.ways;
 	m_nodes = osm2_world.nodes;
 
-	emit valueChanged(20);
-
 	unsigned int level = m_waySize/8;
 	unsigned int count = 1;
 
@@ -276,7 +285,7 @@ bool TrImportOsm::read(const QString & filename, TrMapList & name_list, uint8_t 
 
 		if(i == level * count)
 		{
-			emit valueChanged(20+(count * 8));
+			emit valueChanged(m_progress+(count * 3));
 			count++;
 		}
 
@@ -383,6 +392,7 @@ bool TrImportOsm::read(const QString & filename, TrMapList & name_list, uint8_t 
 		else
 			delete olink;
 	}
+	m_progress += 25;
 	emit valueChanged(100);
 	return true;
 }
@@ -640,10 +650,14 @@ bool TrImportOsm::createFaceList(TrMapList * osm_list, QString name)
 }
 
 
-
 TrMapList * TrImportOsm::createPoiMap(QString name)
 {
 	return m_poi_map;
+}
+
+void TrImportOsm::on_setBarValue(int val)
+{
+	emit valueChanged((val * 2) + m_progress);
 }
 
 

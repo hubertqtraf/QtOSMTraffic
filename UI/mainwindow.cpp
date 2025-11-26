@@ -351,14 +351,14 @@ void MainWindow::on_loadWorld(const QString & filename, int shift)
 	if(shift != 0)
 		TrGeoObject::s_mask |= TR_MASK_MOVE_LINE;
 
-	/*m_map_view->addList(m_profile_dlg->getElemStringList("layer", "roadnet"), "roadnet");
+	m_map_view->addList(m_profile_dlg->getElemStringList("layer", "roadnet"), "roadnet");
 	m_map_view->addList(m_profile_dlg->getElemStringList("layer", "net"), "net");
 	m_map_view->addList(m_profile_dlg->getElemStringList("layer", "face"), "face");
 
 	m_map_view->loadDocByThread(filename, 0, m_progress);
-	return;*/
+	return;
 
-	TrImportOsm osm_filter;
+	/*TrImportOsm osm_filter;
 
 	uint8_t mode = 0;
 	if(m_file_options != nullptr)
@@ -416,7 +416,7 @@ void MainWindow::on_loadWorld(const QString & filename, int shift)
 	on_updateNetOptions(0);
 	on_updateNetOptions(m_net_option->getNetFlags());
 
-	unsetCursor();
+	unsetCursor();*/
 }
 
 void MainWindow::on_updateWorld()

@@ -96,6 +96,8 @@ private:
 	TrMapList * m_poi_map;
 	QVector<TrMapFace *> m_face_list;
 
+	int m_progress;
+
 	void appendPoi(void * world, const Point_t & point);
 	uint16_t setTrainType(TrOsmLink * link, uint64_t ttype);
 	uint16_t setWaterType(TrOsmLink * link, uint64_t ttype);
@@ -132,6 +134,9 @@ public:
 	bool createFaceList(TrMapList * osm_list, QString name);
 
 	TrMapList * createPoiMap(QString name);
+
+public slots:
+	void on_setBarValue(int val);
 
 signals:
 	void valueChanged(int value);

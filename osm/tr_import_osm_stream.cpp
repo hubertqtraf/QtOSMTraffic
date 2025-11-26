@@ -44,7 +44,8 @@
 #include <QtCore/qfile.h>
 
 TrImportOsmStream::TrImportOsmStream(const QString & name)
-	: TrGeoObject()
+	: QObject()
+	, TrGeoObject()
 	, m_mode(0)
 	, m_id(0)
 	, m_point{0.0,0.0}
@@ -53,7 +54,8 @@ TrImportOsmStream::TrImportOsmStream(const QString & name)
 }
 
 TrImportOsmStream::TrImportOsmStream()
-	: TrGeoObject()
+	: QObject()
+	, TrGeoObject()
 	, m_mode(0)
 	, m_id(0)
 {
@@ -72,6 +74,9 @@ bool TrImportOsmStream::osmRead(World_t & world)
 		// TODO: cleanup
 		return false;
 	}
+
+	int size = file.size();
+	int val = 1;
 
 	QXmlStreamReader xml;
 
@@ -155,6 +160,17 @@ bool TrImportOsmStream::osmRead(World_t & world)
 			}
 			if(xml.name().toString() == "nd")
 			{
+			}
+			size -= 90;
+			if(size > 0)
+			{
+				int pos = (int)(20 * (1.0 - ((float)size/(float)file.size())));
+				if(pos > val)
+				{
+					val = pos;
+					emit valueBarChanged(pos);
+					//TR_INF << val << pos;
+				}
 			}
 		}
 	}

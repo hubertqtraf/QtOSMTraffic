@@ -377,7 +377,6 @@ void TrMapView::loadDocByThread(const QString & filename, int type, QProgressBar
 
 	m_doc.setFileName(filename);
 
-	TR_INF << "aaaaaa";
 	connect(m_fileProgress, SIGNAL(resultReady(const TrGeoObject **)),
 		this, SLOT(on_handleResults(const TrGeoObject ** )));
 	connect(m_fileProgress, SIGNAL(finished()), m_fileProgress, SLOT(deleteLater()));
