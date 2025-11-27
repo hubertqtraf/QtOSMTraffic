@@ -55,6 +55,32 @@ TrProgress::TrProgress(QObject *parent)
 {
 }
 
+void TrProgress::createObjects(const QStringList & list, TrImportOsm & filter, const QString & mode)
+{
+    for(int i = 0; i < list.size(); i++)
+    {
+        if(mode == "roadnet")
+        {
+            TrMapNet * road_net = new TrMapNetRoad();
+            filter.createNet(road_net, list[i]);
+            m_doc->addMapLayerObjectByName(list[i], road_net);
+        }
+        if(mode == "net")
+        {
+            TrMapNet * net = new TrMapNet();
+            filter.createNet(net, list[i]);
+            m_doc->addMapLayerObjectByName(list[i], net);
+        }
+        if(mode == "face")
+        {
+            TrMapList * tr_list = new TrMapList();
+            if(filter.createFaceList(tr_list, list[i]))
+                m_doc->addMapLayerObjectByName(list[i], tr_list);
+        }
+    }
+}
+
+
 void TrProgress::run()
 {
 	//usleep(100000);
@@ -74,27 +100,10 @@ void TrProgress::run()
 	}
 	TR_INF << "OK";
 
-	//QStringList rlist = m_profile_dlg->getElemStringList("layer", "roadnet");
-	//QStringList llist = m_profile_dlg->getElemStringList("layer", "net");
-	//QStringList flist = m_profile_dlg->getElemStringList("layer", "face");
-	for(int i = 0; i < m_list["roadnet"].size(); i++)
-	{
-		TrMapNet * road_net = new TrMapNetRoad();
-		osm_filter.createNet(road_net, m_list["roadnet"][i]);
-		m_doc->addMapLayerObjectByName(m_list["roadnet"][i], road_net);
-	}
-	for(int i = 0; i < m_list["net"].size(); i++)
-	{
-		TrMapNet * net = new TrMapNet();
-		osm_filter.createNet(net, m_list["net"][i]);
-		m_doc->addMapLayerObjectByName(m_list["net"][i], net);
-	}
-	for(int i = 0; i < m_list["face"].size(); i++)
-	{
-		TrMapList * tr_list = new TrMapList();
-		if(osm_filter.createFaceList(tr_list, m_list["face"][i]))
-			m_doc->addMapLayerObjectByName(m_list["face"][i], tr_list);
-	}
+	createObjects(m_list["roadnet"], osm_filter, "roadnet");
+	createObjects(m_list["net"], osm_filter, "net");
+	createObjects(m_list["face"], osm_filter, "face");
+
 	//m_map_view->getDocument().setFileName(filename);
 
 	TrMapList * poi_map = osm_filter.createPoiMap("poi");
@@ -128,49 +137,6 @@ void TrProgress::run()
 
 	emit resultReady(&m_world);
 }
-
-bool TrProgress::readDocument(TrDocument * doc)
-{
-	if(doc == nullptr)
-		return false;
-
-	/*QString error_code = TrCmdOpen::readDocument(doc);
-	if(error_code.size())
-	{
-		TR_ERR << error_code;
-		return false;
-	}*/
-	return true;
-}
-
-/*void TrProgress::createFaceObjects(const QStringList & list, ITrImportLayer * filter, TrDocument * doc)
-{
-	if((filter == nullptr) || (doc == nullptr))
-		return;
-	for(int i = 0; i < list.size(); i++)
-	{
-		TrMapList * tr_list = new TrMapList();
-		if(filter->createFaceList(tr_list, list[i]))
-			doc->addMapLayerObjectByName(list[i], tr_list);
-	}
-}
-
-//QStringList llist = m_profile_dlg->getElemStringList("layer", "net");
-void TrProgress::createNetObjects(const QStringList & list, ITrImportLayer * filter, TrDocument * doc)
-{
-	if((filter == nullptr) || (doc == nullptr))
-		return;
-	for(int i = 0; i < list.size(); i++)
-	{
-		TrMapNet * net = nullptr;
-		if(list[i] == "road")
-			net = new TrMapNetRoad();
-		else
-			net = new TrMapNet();
-		filter->createNet(net, list[i]);
-		doc->addMapLayerObjectByName(list[i], net);
-	}
-}*/
 
 TrGeoObject * TrProgress::importDoc(TrDocument * world)
 {

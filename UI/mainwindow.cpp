@@ -105,39 +105,6 @@ MainWindow::~MainWindow()
 	delete ui;
 }
 
-// to remove
-void MainWindow::createRoadNetObjects(const QStringList & list, TrImportOsm & filter)
-{
-	for(int i = 0; i < list.size(); i++)
-	{
-		TrMapNet * road_net = new TrMapNetRoad();
-		filter.createNet(road_net, list[i]);
-		m_map_view->getDocument().addMapLayerObjectByName(list[i], road_net);
-	}
-}
-
-// to remove
-void MainWindow::createNetObjects(const QStringList & list, TrImportOsm & filter)
-{
-	for(int i = 0; i < list.size(); i++)
-	{
-		TrMapNet * net = new TrMapNet();
-		filter.createNet(net, list[i]);
-		m_map_view->getDocument().addMapLayerObjectByName(list[i], net);
-	}
-}
-
-// to remove...
-void MainWindow::createFaceObjects(const QStringList & list, TrImportOsm & filter)
-{
-	for(int i = 0; i < list.size(); i++)
-	{
-		TrMapList * tr_list = new TrMapList();
-		if(filter.createFaceList(tr_list, list[i]))
-			m_map_view->getDocument().addMapLayerObjectByName(list[i], tr_list);
-	}
-}
-
 void MainWindow::writeSettings()
 {
 	QSettings settings("trafalgar", "QTraf");

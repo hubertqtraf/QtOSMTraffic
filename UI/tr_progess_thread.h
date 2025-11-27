@@ -62,14 +62,13 @@ private:
 	// overriding the QThread's run() method
 	void run();
 
+	void createObjects(const QStringList & list, TrImportOsm &filter, const QString & mode);
+
 	TrGeoObject * loadDoc(TrDocument * world);
-	bool readDocument(TrDocument * doc);
 	TrGeoObject * importDoc(TrDocument * world);
 	// TODO: option, save the file in thread, was removed because there is duplicated code
 
 	bool saveList(QString filename, QVector<TrGeoObject *> edit_objects);
-	//void createNetObjects(const QStringList & list, ITrImportLayer * filter, TrDocument * doc);
-	//void createFaceObjects(const QStringList & list, ITrImportLayer * filter, TrDocument * doc);
 
 signals:
 	void resultReady(const TrGeoObject ** result);

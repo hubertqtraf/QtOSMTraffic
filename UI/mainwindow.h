@@ -24,7 +24,6 @@
 #define MAINWINDOW_H
 
 #include "profiledialog.h"
-#include "tr_document.h"
 #include "trdispoptiondialog.h"
 #include "trmapview.h"
 #include "trnetdock.h"
@@ -111,10 +110,6 @@ private:
 	QDockWidget * m_element_dock;
 
 	QFont m_font;
-
-	void createNetObjects(const QStringList &list, TrImportOsm &filter);
-	void createRoadNetObjects(const QStringList &list, TrImportOsm &filter);
-	void createFaceObjects(const QStringList &list, TrImportOsm &filter);
 
 	void writeSettings();
 	void readSettings();
