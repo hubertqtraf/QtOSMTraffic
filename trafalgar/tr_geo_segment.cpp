@@ -200,31 +200,33 @@ double TrGeoSegment::getAngle(const TrZoomMap & zoom_ref) const
 	return 100.0;
 }
 
-int TrGeoSegment::getAngleCode(const TrZoomMap & zoom_ref, const TrGeoSegment& other)
+int TrGeoSegment::getAngleCode(const TrZoomMap & zoom_ref, const TrGeoSegment &other)
 {
 	double ang1 = getAngle(zoom_ref);
 	double ang2 = other.getAngle(zoom_ref);
-	double diff = abs(ang1 - ang2);
-
-	if((ang1 > 99.0) || (ang2 > 99.0))
-		return -2;
-
+	double level = 0.2;
 	int err_code = zoom_ref.getErrorCode();
+
 	if(err_code)
 	{
 		TR_ERR << err_code << *this;
 		return -1;
 	}
-	if(diff < 0.1)
+	if((ang1 > 99.0) || (ang2 > 99.0))
+		return -2;
+
+	double diff = abs(ang1 - ang2);
+	if(diff > M_PI)
 	{
-		//TR_INF << "code: 1 " << ang1 << ang2 << "diff" << diff;
+		diff = abs(diff - (M_PI * 2.0));
+	}
+	if(diff < level)
+	{
 		return 1;
 	}
 	diff = abs(diff - M_PI);
-
-	if(diff < 0.3)
+	if(diff < level)
 	{
-		//TR_WRN << "code: 2 " << ang1 << ang2 << "diff" << diff;
 		return 2;
 	}
 	return 0;
