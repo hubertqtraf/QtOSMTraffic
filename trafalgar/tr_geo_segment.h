@@ -97,6 +97,8 @@ public:
 
 	double getAngle(const TrZoomMap & zoom_ref) const;
 
+	void doReverse();
+
 	int getAngleCode(const TrZoomMap & zoom_ref, const TrGeoSegment& other);
 
 	void getSegList(QList<TrGeoSegment> & seg_list, TrGeoPolygon & poly);
@@ -118,6 +120,7 @@ public:
 
 	virtual void writeXmlDescription(QXmlStreamWriter & xml_out, uint64_t id);
 #endif
+
 };
 
 #endif // TR_GEO_SEGMENT_H

@@ -455,7 +455,8 @@ bool TrMapNode::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject * ba
 		//TR_INF << "in out" << getIn(false) << getOut(false);
 		if((getIn(false) <= 1) && (getOut(false) <= 1))
 		{
-			return true;
+			// TODO: check the 'return true'
+			// one to one with lane number change seems to be OK
 		}
 		// TODO: one to one double dir -> more checking...
 		if((getIn(false) == 2) && (getOut(false) == 2))
