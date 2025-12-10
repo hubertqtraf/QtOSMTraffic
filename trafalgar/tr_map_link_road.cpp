@@ -649,6 +649,112 @@ uint8_t TrMapLinkRoad::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * 
 	{
 		return 0xef;
 	}
+
+	TrGeoSegment first_segment;
+	TrGeoSegment next_segment;
+	TrPoint cross_pt;
+
+	TrGeoObject * first_obj = getSegmentWithParm(first_segment, n->getGeoId(), false);
+	TrGeoObject * next_obj = next_link->getSegmentWithParm(next_segment, n->getGeoId(), true);
+
+	if((first_obj == nullptr) || (next_obj == nullptr))
+		return 1;
+
+	TrMapLinkRoad * first_link = dynamic_cast<TrMapLinkRoad *>(first_obj);
+	next_link = dynamic_cast<TrMapLinkRoad *>(next_obj);
+
+	if((first_obj == nullptr) || (next_obj == nullptr))
+		return 1;
+
+	//int lane_diff = abs(next_link->getLanes() - first_link->getLanes());
+
+	if(getOneWay() & TR_LINK_DIR_BWD)
+	{
+		first_segment.doReverse();
+	}
+	if(next_link->getOneWay() & TR_LINK_DIR_BWD)
+	{
+		next_segment.doReverse();
+	}
+
+	// create the crossing point
+	first_segment.getCrossPoint(zoom_ref, cross_pt, next_segment);
+
+	int code = first_segment.getAngleCode(zoom_ref, next_segment);
+	if(code)
+	{
+		if(code < 0)
+		{
+			return code;
+		}
+		// backward angle
+		if(code == 2)
+			return code;
+
+		// not 90°
+		if(code != 3)
+		{
+			// TODO: create a rule for small links
+			if((first_segment.getLength(zoom_ref) < 5.0) || (next_segment.getLength(zoom_ref) < 5.0))
+			{
+				return 5;
+			}
+			// overwrite the cossing point
+			cross_pt = first_segment.getFirstPoint();
+		}
+	}
+
+	if(first_link->getOneWay() & TR_LINK_DIR_ONEWAY)
+	{
+		if(first_link->getNodeToRef() == node)
+		{
+			first_link->setParPoint(false, cross_pt);
+		}
+		else
+		{
+			first_link->setCrossingPoint(cross_pt, true);
+		}
+	}
+	else
+	{
+		if(first_link->getOneWay() & TR_LINK_DIR_BWD)
+			first_link->setParPoint(true, cross_pt);
+		else
+			first_link->setParPoint(false, cross_pt);
+	}
+	if(next_link->getOneWay() & TR_LINK_DIR_ONEWAY)
+	{
+		if(next_link->getNodeToRef() == node)
+		{
+			next_link->setCrossingPoint(cross_pt, false);
+		}
+		else
+		{
+			next_link->setParPoint(true, cross_pt);
+		}
+	}
+	else
+	{
+		if(next_link->getOneWay() & TR_LINK_DIR_BWD)
+			next_link->setParPoint(false, cross_pt);
+		else
+			next_link->setParPoint(true, cross_pt);
+	}
+	return 0;
+}
+
+// TODO: remove
+uint8_t TrMapLinkRoad::handleCrossing2(const TrZoomMap & zoom_ref, TrGeoObject * other, TrGeoObject * node, uint8_t mode)
+{
+	TrMapNode * n = dynamic_cast<TrMapNode *>(node);
+	if(n == nullptr)
+		return 0xef;
+
+	TrMapLinkRoad * next_link = dynamic_cast<TrMapLinkRoad *>(other);
+	if(next_link == nullptr)
+	{
+		return 0xef;
+	}
 	//TR_INF << "A" << *this << *next_link;
 
 	if((getType() & 0x00ff) >= 9)
@@ -672,7 +778,7 @@ uint8_t TrMapLinkRoad::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * 
 
 	if((first_segment.getLength(zoom_ref) < (getWidth()/1000.0)) &&
 		(next_segment.getLength(zoom_ref) < (next_link->getWidth()/1000.0)))
-                return 1;
+		return 1;
 
 	if((first_obj == nullptr) || (next_obj == nullptr))
 		return 1;
