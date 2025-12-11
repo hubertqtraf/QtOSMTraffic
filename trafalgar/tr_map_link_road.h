@@ -159,7 +159,6 @@ public:
 	virtual bool setParPoint(bool first, TrPoint & pt);
 
 	virtual uint8_t handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * other, TrGeoObject * node, uint8_t mode);
-	virtual uint8_t handleCrossing2(const TrZoomMap & zoom_ref, TrGeoObject * other, TrGeoObject * node, uint8_t mode);
 
 #ifdef TR_SERIALIZATION
 	virtual uint64_t readXmlDescription(QXmlStreamReader & xml_in);
