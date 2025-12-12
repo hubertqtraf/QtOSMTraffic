@@ -424,12 +424,13 @@ bool TrMapNode::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject * ba
 	}
 
 	// find the shift point
-	if((ctrl & 0xff) == 30)
+	// TODO: to remove?
+	if((ctrl & 0xff) == 30) //TR_INIT_MV_BASE
 	{
 		//getShiftPoint(zoom_ref);
 	}
 
-	if((ctrl & 0xff) == 33)
+	if((ctrl & 0xff) == TR_INIT_ND_ANG)
 	{
 		// code to set the angles
 		setConnectionAngles(zoom_ref, TR_NODE_OUT);

@@ -85,8 +85,6 @@ private:
 
 	bool moveBaseLine(const TrZoomMap & zoom_ref);
 
-	void setMoveParLine(const TrZoomMap & zoom_ref);
-
 	void drawParLine(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mode);
 
 	void triCross(const TrZoomMap & zoom_ref, TrMapNode & node);

@@ -74,11 +74,11 @@ bool TrMapNetRoad::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject *
 	{
 		TR_INF << "only one shift!";
 		// TODO: set the angles -> check: double use?
-		m_link_list->init(zoom_ref, TR_INIT_GEOMETRY | 29, nullptr);
-		m_node_map->init(zoom_ref, TR_INIT_GEOMETRY | 33, m_primive_map);
-		m_link_list->init(zoom_ref, TR_INIT_GEOMETRY | 27, nullptr);	// setMoveParLine, mode base line to the side
-		m_node_map->init(zoom_ref, TR_INIT_GEOMETRY | 30, m_primive_map);
-		m_link_list->init(zoom_ref, TR_INIT_GEOMETRY | 30, nullptr);    // moveBaseLine
+		m_link_list->init(zoom_ref, TR_INIT_GEOMETRY | TR_INIT_MV_CLEAN, nullptr);
+		m_node_map->init(zoom_ref, TR_INIT_GEOMETRY | TR_INIT_ND_ANG, m_primive_map);
+		m_link_list->init(zoom_ref, TR_INIT_GEOMETRY | TR_INIT_MV_PAR, nullptr);	// mode base line to the side
+		//m_node_map->init(zoom_ref, TR_INIT_GEOMETRY | 30, m_primive_map);
+		m_link_list->init(zoom_ref, TR_INIT_GEOMETRY | TR_INIT_MV_BASE, nullptr);    // moveBaseLine
 		m_link_list->init(zoom_ref, TR_INIT_GEOMETRY | 35, nullptr);	// handleSmallElement, remove unneeded points
 
 		// set the link point data from moved node

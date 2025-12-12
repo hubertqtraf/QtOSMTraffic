@@ -55,6 +55,8 @@
 #define TR_NODE_IN  true
 #define TR_NODE_OUT false
 
+#define TR_INIT_ND_ANG 33
+
 struct TrConnectionMember
 {
 	double m_dir;

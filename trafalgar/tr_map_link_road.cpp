@@ -428,16 +428,6 @@ bool TrMapLinkRoad::moveBaseLine(const TrZoomMap & zoom_ref)
 	return true;
 }
 
-void TrMapLinkRoad::setMoveParLine(const TrZoomMap & zoom_ref)
-{
-	if((m_one_way & TR_LINK_DIR_ONEWAY) && (isAsDoubleLine()))
-	{
-		int32_t test_width = (0 - (m_mm_calc_width >> 1));
-		m_par_line.clear();
-		initDoubleLine(zoom_ref, m_par_line, test_width);
-	}
-}
-
 bool TrMapLinkRoad::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject * base)
 {
 	bool ret = false;
@@ -488,7 +478,7 @@ bool TrMapLinkRoad::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject 
 		}
 
 		// code for cleanup the polygon points
-		if(ctrl == 29)
+		if(ctrl == TR_INIT_MV_CLEAN)
 		{
 			if((m_one_way & TR_LINK_DIR_ONEWAY) && (isAsDoubleLine()) && (m_pline != nullptr))
 			{
@@ -515,13 +505,18 @@ bool TrMapLinkRoad::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject 
 			}
 		}
 
-		// code to move the parallel line
-		if(ctrl == 27)
+		// code to create the parallel line
+		if(ctrl == TR_INIT_MV_PAR)
 		{
-			setMoveParLine(zoom_ref);
+			if((m_one_way & TR_LINK_DIR_ONEWAY) && (isAsDoubleLine()))
+			{
+				int32_t test_width = (0 - (m_mm_calc_width >> 1));
+				m_par_line.clear();
+				initDoubleLine(zoom_ref, m_par_line, test_width);
+			}
 		}
 		// code to move the nodes of the oneway link
-		if(ctrl == 30)
+		if(ctrl == TR_INIT_MV_BASE)
 		{
 			//if((m_one_way & TR_LINK_DIR_ONEWAY) && (isAsDoubleLine()))
 			moveBaseLine(zoom_ref);

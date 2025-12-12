@@ -41,8 +41,6 @@
 #ifndef TR_MAP_NET_ROAD_H
 #define TR_MAP_NET_ROAD_H
 
-#include "tr_defs.h"
-
 #include "tr_geo_object.h"
 
 #include "tr_map_list.h"
@@ -50,6 +48,10 @@
 #include "tr_map_net.h"
 
 #include <stdint.h>
+
+#define TR_INIT_MV_CLEAN 29
+#define TR_INIT_MV_PAR 27
+#define TR_INIT_MV_BASE 30
 
 class TrMapNetRoad : public TrMapNet
 {
