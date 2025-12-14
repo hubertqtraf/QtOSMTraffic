@@ -81,7 +81,7 @@ private:
 
 	void getNodePoints(TrPoint & pt1, TrPoint & pt2);
 
-	bool getMoveCrossPoint(const TrZoomMap & zoom_ref);
+	//bool getMoveCrossPoint(const TrZoomMap & zoom_ref);
 
 	bool moveBaseLine(const TrZoomMap & zoom_ref);
 

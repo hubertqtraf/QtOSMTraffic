@@ -266,6 +266,7 @@ bool TrMapNode::setDirFlags()
 	return true;
 }
 
+// TODO: check, remove?
 int TrMapNode::getShiftPoint(const TrZoomMap & zoom_ref)
 {
 	for (TrConnectionMember item : m_vec_out)
@@ -349,7 +350,7 @@ TrGeoObject * TrMapNode::getSingleElement(int mode)
 	return ret;
 }
 
-bool TrMapNode::setCrossingByAngle(const TrZoomMap & zoom_ref, bool type)
+bool TrMapNode::setCrossingByAngle(const TrZoomMap & zoom_ref, bool type, int mode)
 {
 	TrGeoObject * first_obj = nullptr;
 	TrGeoObject * next_obj = nullptr;
@@ -382,14 +383,14 @@ bool TrMapNode::setCrossingByAngle(const TrZoomMap & zoom_ref, bool type)
 				if(last_obj == nullptr)
 					last_obj = next_obj;
 				if((idx >= 0) && (first_obj != nullptr))
-					first_obj->handleCrossing(zoom_ref, next_obj, this, 0);
+					first_obj->handleCrossing(zoom_ref, next_obj, this, mode);
 				first_obj = next_obj;
 			}
 		}
 		test++;
 	}while((idx >= 0) && (test < 10));
 	if(first_obj != nullptr)
-		first_obj->handleCrossing(zoom_ref, last_obj, this, 0);
+		first_obj->handleCrossing(zoom_ref, last_obj, this, mode);
 
 	return true;
 }
@@ -423,10 +424,10 @@ bool TrMapNode::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject * ba
 		}
 	}
 
-	// find the shift point
-	// TODO: to remove?
-	if((ctrl & 0xff) == 30) //TR_INIT_MV_BASE
+	// check and find the shift point
+	if((ctrl & 0xff) == TR_INIT_ND_MV) //TR_INIT_MV_BASE
 	{
+		setCrossingByAngle(zoom_ref, false, 2);
 		//getShiftPoint(zoom_ref);
 	}
 
@@ -437,7 +438,7 @@ bool TrMapNode::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject * ba
 		setConnectionAngles(zoom_ref, TR_NODE_IN);
 	}
 
-	if((ctrl & 0xff) == 21)
+	if((ctrl & 0xff) == TR_INIT_ND_CROSS)
 	{
 		// getIn == 2
 		// TODO: rework, simplify...
@@ -490,7 +491,8 @@ bool TrMapNode::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject * ba
 			//return true;
 		}
 
-		setCrossingByAngle(zoom_ref, false);
+		// default: no ramp
+		setCrossingByAngle(zoom_ref, false, 1);
 
 		return true;
 	}
@@ -593,13 +595,13 @@ TrGeoObject * TrMapNode::getNextOutElement(double angle)
 }
 
 // TODO: move to link -> road-link
-void TrMapNode::setCrossing(const TrZoomMap & zoom_ref, TrGeoObject * first_obj, TrGeoObject * next_obj)
+/*void TrMapNode::setCrossing(const TrZoomMap & zoom_ref, TrGeoObject * first_obj, TrGeoObject * next_obj)
 {
 	if((first_obj == nullptr) || (next_obj == nullptr))
 		return;
 
 	first_obj->handleCrossing(zoom_ref, next_obj, this, 0);
-}
+}*/
 
 void TrMapNode::initConnections(const TrZoomMap & zoom_ref, QVector<TrConnectionMember> & vec,
 		TrMapList * pr_list, TrMapList & nd_list)

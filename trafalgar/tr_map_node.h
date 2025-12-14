@@ -57,6 +57,11 @@
 
 #define TR_INIT_ND_ANG 33
 
+// for crossing of the parallel lines
+#define TR_INIT_ND_CROSS 21
+// move base line to the side on oneway links
+#define TR_INIT_ND_MV 30
+
 struct TrConnectionMember
 {
 	double m_dir;
@@ -87,7 +92,8 @@ private:
 	int getDirNextAngle(TrConnectionMember & member, QVector<TrConnectionMember> & vec, bool dir);
 	//
 	int getDirNextAngleIndex(double & angle, bool & dir, bool left);
-	void setCrossing(const TrZoomMap & zoom_ref, TrGeoObject * first_obj, TrGeoObject * next_obj);
+	// TODO: unused?
+	//void setCrossing(const TrZoomMap & zoom_ref, TrGeoObject * first_obj, TrGeoObject * next_obj);
 
 	void initConnections(const TrZoomMap & zoom_ref, QVector<TrConnectionMember> & vec,
 			TrMapList * pr_list, TrMapList & nd_list);
@@ -96,7 +102,7 @@ private:
 	QVector<TrConnectionMember> & getConVec(bool dir);
 	int hasRamp(QVector<TrConnectionMember> & vec);
 
-	bool setCrossingByAngle(const TrZoomMap & zoom_ref, bool type);
+	bool setCrossingByAngle(const TrZoomMap & zoom_ref, bool type, int mode);
 
 protected:
 
@@ -129,6 +135,7 @@ public:
 
 	bool setDirFlags();
 
+	// TODO: check, remove?
 	int getShiftPoint(const TrZoomMap & zoom_ref);
 
 	TrGeoObject * getSingleElement(int mode);

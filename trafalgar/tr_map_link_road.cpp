@@ -349,7 +349,7 @@ void TrMapLinkRoad::triCross(const TrZoomMap & zoom_ref, TrMapNode & node)
 }
 
 // TODO: move point -> node class
-bool TrMapLinkRoad::getMoveCrossPoint(const TrZoomMap & zoom_ref)
+/*bool TrMapLinkRoad::getMoveCrossPoint(const TrZoomMap & zoom_ref)
 {
 	double ang = getAngle(zoom_ref, true);
 	TrGeoObject * obj = m_node_to->getNextOutElement(geoInvertAngle(ang));
@@ -387,7 +387,7 @@ bool TrMapLinkRoad::getMoveCrossPoint(const TrZoomMap & zoom_ref)
 		return true;
 	}
 	return false;
-}
+}*/
 
 bool TrMapLinkRoad::moveBaseLine(const TrZoomMap & zoom_ref)
 {
@@ -400,7 +400,7 @@ bool TrMapLinkRoad::moveBaseLine(const TrZoomMap & zoom_ref)
 		return false;
 
 	// TODO TMP remove to the node class - move node #1
-	if(getMoveCrossPoint(zoom_ref))
+	//if(getMoveCrossPoint(zoom_ref))
 	{
 		// TODO: check return state
 	}
@@ -409,7 +409,10 @@ bool TrMapLinkRoad::moveBaseLine(const TrZoomMap & zoom_ref)
 	{
 		m_node_to->setViewOpt(m_node_to->getViewOpt() | TR_POINT_MOVE);
 		if(moveCheck(*m_node_to) && (m_node_to->getShiftPoint(zoom_ref) == 1))
+		{
+			// simply move the pos of the node
 			m_node_to->setPoint(m_par_line[m_par_line.size()-1]);
+		}
 		else
 		{
 			triCross(zoom_ref, *m_node_to);
@@ -518,7 +521,20 @@ bool TrMapLinkRoad::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject 
 		// code to move the nodes of the oneway link
 		if(ctrl == TR_INIT_MV_BASE)
 		{
-			//if((m_one_way & TR_LINK_DIR_ONEWAY) && (isAsDoubleLine()))
+			// move points but not nodes!
+			/*if((!(m_one_way & TR_LINK_DIR_ONEWAY)) || (!(isAsDoubleLine())))
+				return false;
+			if(m_par_line.size() < 2)
+				return false;
+
+			if(m_pline)
+			{
+				for(size_t i = 0; i < m_pline->getSize(); i++)
+				{
+					m_pline->setPoint(i, m_par_line[i+1]);
+				}
+				m_pline->init(zoom_ref, 0, nullptr);
+			}*/
 			moveBaseLine(zoom_ref);
 		}
 		if(ctrl == 35)
@@ -635,6 +651,12 @@ void TrMapLinkRoad::initDoubleLine(const TrZoomMap & zoom_ref, QVector<TrPoint> 
 
 uint8_t TrMapLinkRoad::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * other, TrGeoObject * node, uint8_t mode)
 {
+	if(mode == 2)
+	{
+		// TODO: move base line
+		return 0;
+	}
+
 	TrMapNode * n = dynamic_cast<TrMapNode *>(node);
 	if(n == nullptr)
 		return 0xef;

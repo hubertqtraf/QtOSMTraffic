@@ -77,8 +77,8 @@ bool TrMapNetRoad::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject *
 		m_link_list->init(zoom_ref, TR_INIT_GEOMETRY | TR_INIT_MV_CLEAN, nullptr);
 		m_node_map->init(zoom_ref, TR_INIT_GEOMETRY | TR_INIT_ND_ANG, m_primive_map);
 		m_link_list->init(zoom_ref, TR_INIT_GEOMETRY | TR_INIT_MV_PAR, nullptr);	// mode base line to the side
-		//m_node_map->init(zoom_ref, TR_INIT_GEOMETRY | 30, m_primive_map);
 		m_link_list->init(zoom_ref, TR_INIT_GEOMETRY | TR_INIT_MV_BASE, nullptr);    // moveBaseLine
+		m_node_map->init(zoom_ref, TR_INIT_GEOMETRY | TR_INIT_ND_MV, m_primive_map);
 		m_link_list->init(zoom_ref, TR_INIT_GEOMETRY | 35, nullptr);	// handleSmallElement, remove unneeded points
 
 		// set the link point data from moved node
@@ -125,7 +125,7 @@ bool TrMapNetRoad::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject *
 	if(s_mask & TR_MASK_SET_RAMPS)
 	{
 		m_link_list->init(zoom_ref, TR_INIT_GEOMETRY | 12, nullptr);
-		m_node_map->init(zoom_ref, TR_INIT_GEOMETRY | 21, m_primive_map);
+		m_node_map->init(zoom_ref, TR_INIT_GEOMETRY | TR_INIT_ND_CROSS, m_primive_map);
 	}
 
 	// TODO: code = 20 -> 'setRampMode' only edges?
