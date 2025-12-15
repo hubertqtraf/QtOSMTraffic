@@ -357,7 +357,13 @@ bool TrMapNode::setCrossingByAngle(const TrZoomMap & zoom_ref, bool type, int mo
 	TrGeoObject * last_obj = nullptr;
 	TrGeoObject * test_obj = nullptr;
 	double ang = -0.0001;
-	if(s_mask & TR_MASK_LEFT_DRIVE)
+
+	bool rot = ((s_mask & TR_MASK_LEFT_DRIVE) == TR_MASK_LEFT_DRIVE);
+	if(mode == 2)
+	{
+		rot = !rot;
+	}
+	if(rot)
 	{
 		ang = 0.0001;
 	}
@@ -366,7 +372,7 @@ bool TrMapNode::setCrossingByAngle(const TrZoomMap & zoom_ref, bool type, int mo
 	do
 	{
 		bool dir = true;
-		idx = getDirNextAngleIndex(ang, dir, ((s_mask & TR_MASK_LEFT_DRIVE) == TR_MASK_LEFT_DRIVE));
+		idx = getDirNextAngleIndex(ang, dir, rot);
 
 		if(idx >= 0)
 		{

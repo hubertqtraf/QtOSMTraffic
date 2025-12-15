@@ -651,12 +651,6 @@ void TrMapLinkRoad::initDoubleLine(const TrZoomMap & zoom_ref, QVector<TrPoint> 
 
 uint8_t TrMapLinkRoad::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * other, TrGeoObject * node, uint8_t mode)
 {
-	if(mode == 2)
-	{
-		// TODO: move base line
-		return 0;
-	}
-
 	TrMapNode * n = dynamic_cast<TrMapNode *>(node);
 	if(n == nullptr)
 		return 0xef;
@@ -671,8 +665,28 @@ uint8_t TrMapLinkRoad::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * 
 	TrGeoSegment next_segment;
 	TrPoint cross_pt;
 
-	TrGeoObject * first_obj = getSegmentWithParm(first_segment, n->getGeoId(), false);
-	TrGeoObject * next_obj = next_link->getSegmentWithParm(next_segment, n->getGeoId(), true);
+	if(mode == 2)
+	{
+		return 0;
+		if(getSegmentWithParm(first_segment, n->getGeoId(), false, mode) == nullptr)
+		{
+		}
+		next_link->getSegmentWithParm(next_segment, n->getGeoId(), true, mode);
+		TrMapNet::ms_seg_1->setPoints(first_segment);
+		TrMapNet::ms_seg_2->setPoints(next_segment);
+
+		first_segment.getCrossPoint(zoom_ref, cross_pt, next_segment);
+
+		int code = first_segment.getAngleCode(zoom_ref, next_segment);
+		if((code == 3) || (code == 0))
+			n->setPoint(cross_pt);
+		if(code == 1)
+			n->setPoint(first_segment.getSecondPoint());
+		return 5;
+	}
+
+	TrGeoObject * first_obj = getSegmentWithParm(first_segment, n->getGeoId(), false, mode);
+	TrGeoObject * next_obj = next_link->getSegmentWithParm(next_segment, n->getGeoId(), true, mode);
 
 	if((first_obj == nullptr) || (next_obj == nullptr))
 		return 1;
@@ -760,7 +774,7 @@ uint8_t TrMapLinkRoad::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * 
 	return 0;
 }
 
-TrGeoObject * TrMapLinkRoad::getSegmentWithParm(TrGeoSegment & segment, int64_t nd_id, bool dir)
+TrGeoObject * TrMapLinkRoad::getSegmentWithParm(TrGeoSegment & segment, int64_t nd_id, bool dir, int mode)
 {
 	if(!(isAsDoubleLine()))
 		return nullptr;
@@ -810,11 +824,16 @@ TrGeoObject * TrMapLinkRoad::getSegmentWithParm(TrGeoSegment & segment, int64_t 
 	if(parallel == nullptr)
 		return nullptr;
 
+	bool md = true;
+	if(mode == 2)
+	{
+		md = false;
+	}
 	// if not oneway -> parallel line is allways true
 	if(parallel->getOneWay() & TR_LINK_DIR_BWD)
-		parallel->getSegment(segment, dir, true);
+		parallel->getSegment(segment, dir, md);
 	else
-		parallel->getSegment(segment, !dir, true);
+		parallel->getSegment(segment, !dir, md);
 	return parallel;
 }
 

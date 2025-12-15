@@ -135,7 +135,7 @@ public:
 
 	virtual bool getParSegment(const TrZoomMap & zoom_ref, poly_add & add, bool dir);
 
-	virtual TrGeoObject * getSegmentWithParm(TrGeoSegment & segment, int64_t nd_id, bool dir);
+	virtual TrGeoObject * getSegmentWithParm(TrGeoSegment & segment, int64_t nd_id, bool dir, int mode);
 
 	virtual bool init(const TrZoomMap & zoom_ref, uint64_t ctrl = 0, TrGeoObject * base = nullptr);
 
