@@ -383,7 +383,7 @@ bool TrMapNode::setCrossingByAngle(const TrZoomMap & zoom_ref, bool type, int mo
 		}
 		if(test_obj != nullptr)
 		{
-			if(((test_obj->getType() & 0x000f) <= 9) || type)
+			if(((test_obj->getType() & 0x000f) < 9) || type)
 			{
 				next_obj = test_obj;
 				if(last_obj == nullptr)

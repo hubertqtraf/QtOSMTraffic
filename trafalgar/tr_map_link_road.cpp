@@ -522,7 +522,7 @@ bool TrMapLinkRoad::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject 
 		if(ctrl == TR_INIT_MV_BASE)
 		{
 			// move points but not nodes!
-			/*if((!(m_one_way & TR_LINK_DIR_ONEWAY)) || (!(isAsDoubleLine())))
+			if((!(m_one_way & TR_LINK_DIR_ONEWAY)) || (!(isAsDoubleLine())))
 				return false;
 			if(m_par_line.size() < 2)
 				return false;
@@ -534,8 +534,9 @@ bool TrMapLinkRoad::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject 
 					m_pline->setPoint(i, m_par_line[i+1]);
 				}
 				m_pline->init(zoom_ref, 0, nullptr);
-			}*/
-			moveBaseLine(zoom_ref);
+			}
+			// TODO: to remove
+			//moveBaseLine(zoom_ref);
 		}
 		if(ctrl == 35)
 		{
@@ -667,16 +668,17 @@ uint8_t TrMapLinkRoad::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * 
 
 	if(mode == 2)
 	{
-		return 0;
-		if(getSegmentWithParm(first_segment, n->getGeoId(), false, mode) == nullptr)
-		{
-		}
+		getSegmentWithParm(first_segment, n->getGeoId(), false, mode);
 		next_link->getSegmentWithParm(next_segment, n->getGeoId(), true, mode);
 		TrMapNet::ms_seg_1->setPoints(first_segment);
 		TrMapNet::ms_seg_2->setPoints(next_segment);
 
 		first_segment.getCrossPoint(zoom_ref, cross_pt, next_segment);
 
+		if((!((getOneWay() & TR_LINK_DIR_ONEWAY))) && (!(next_link->getOneWay() & TR_LINK_DIR_ONEWAY)))
+		{
+			return 6;
+		}
 		int code = first_segment.getAngleCode(zoom_ref, next_segment);
 		if((code == 3) || (code == 0))
 			n->setPoint(cross_pt);
