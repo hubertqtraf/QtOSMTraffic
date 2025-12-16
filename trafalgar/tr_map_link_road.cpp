@@ -670,8 +670,8 @@ uint8_t TrMapLinkRoad::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * 
 	{
 		getSegmentWithParm(first_segment, n->getGeoId(), false, mode);
 		next_link->getSegmentWithParm(next_segment, n->getGeoId(), true, mode);
-		TrMapNet::ms_seg_1->setPoints(first_segment);
-		TrMapNet::ms_seg_2->setPoints(next_segment);
+		//TrMapNet::ms_seg_1->setPoints(first_segment);
+		//TrMapNet::ms_seg_2->setPoints(next_segment);
 
 		first_segment.getCrossPoint(zoom_ref, cross_pt, next_segment);
 
