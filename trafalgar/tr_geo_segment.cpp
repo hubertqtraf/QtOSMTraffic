@@ -207,7 +207,7 @@ void TrGeoSegment::doReverse()
 	m_second = cp;
 }
 
-int TrGeoSegment::getAngleCode(const TrZoomMap & zoom_ref, const TrGeoSegment &other)
+int TrGeoSegment::getAngleCode(const TrZoomMap & zoom_ref, const TrGeoSegment &other, double & ang)
 {
 	double ang1 = getAngle(zoom_ref);
 	double ang2 = other.getAngle(zoom_ref);
@@ -216,14 +216,19 @@ int TrGeoSegment::getAngleCode(const TrZoomMap & zoom_ref, const TrGeoSegment &o
 
 	if(err_code)
 	{
-		TR_ERR << err_code << *this;
+		//TR_ERR << err_code << *this;
 		return -1;
 	}
 	if((ang1 > 99.0) || (ang2 > 99.0))
 		return -2;
 
 	double diff = abs(ang1 - ang2);
+	if(diff > (M_PI * 2.0))
+	{
+		ang = abs(diff - (M_PI * 2.0));
+	}
 	if(diff > M_PI)
+	//if(diff > (M_PI * 2.0))
 	{
 		diff = abs(diff - (M_PI * 2.0));
 	}
@@ -243,6 +248,7 @@ int TrGeoSegment::getAngleCode(const TrZoomMap & zoom_ref, const TrGeoSegment &o
 	}
 	return 0;
 }
+
 
 double TrGeoSegment::getLength(const TrZoomMap & zoom_ref)
 {
@@ -360,7 +366,7 @@ void TrGeoSegment::draw(const TrZoomMap & zoom_ref, QPainter * p, uint8_t mode)
 {
 	if(!(m_inst_mask & TR_MASK_DRAW))
 	{
-        //return;
+		//return;
 	}
 
 	if(this->clip(zoom_ref))
@@ -372,7 +378,7 @@ void TrGeoSegment::draw(const TrZoomMap & zoom_ref, QPainter * p, uint8_t mode)
 	zoom_ref.setMovePoint(&screen_2.x,&screen_2.y);
 	//TR_INF << screen_1.x << screen_1.y << screen_2.x << screen_2.y;
 	p->setPen(QPen(QColor(0,200,0)));
-	//p->drawLine(screen_1.x, screen_1.y, screen_2.x, screen_2.y);
+	p->drawLine(screen_1.x, screen_1.y, screen_2.x, screen_2.y);
 	p->drawEllipse(static_cast<int>(screen_1.x)-5, static_cast<int>(screen_1.y)-5, 10, 10);
 	p->drawRect(static_cast<int>(screen_2.x)-5, static_cast<int>(screen_2.y)-5, 10, 10);
 }

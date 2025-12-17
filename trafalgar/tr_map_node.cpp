@@ -358,6 +358,9 @@ bool TrMapNode::setCrossingByAngle(const TrZoomMap & zoom_ref, bool type, int mo
 	TrGeoObject * test_obj = nullptr;
 	double ang = -0.0001;
 
+	TrPoint point = this->getPoint();
+	int ret = 0;
+
 	bool rot = ((s_mask & TR_MASK_LEFT_DRIVE) == TR_MASK_LEFT_DRIVE);
 	if(mode == 2)
 	{
@@ -389,15 +392,28 @@ bool TrMapNode::setCrossingByAngle(const TrZoomMap & zoom_ref, bool type, int mo
 				if(last_obj == nullptr)
 					last_obj = next_obj;
 				if((idx >= 0) && (first_obj != nullptr))
-					first_obj->handleCrossing(zoom_ref, next_obj, this, mode);
+				{
+					ret = first_obj->handleCrossing(zoom_ref, next_obj, this, mode);
+					if((ret != 33) && (mode == 2))
+					{
+						this->setPoint(point);
+						return false;
+					}
+				}
 				first_obj = next_obj;
 			}
 		}
 		test++;
 	}while((idx >= 0) && (test < 10));
 	if(first_obj != nullptr)
-		first_obj->handleCrossing(zoom_ref, last_obj, this, mode);
-
+	{
+		ret = first_obj->handleCrossing(zoom_ref, last_obj, this, mode);
+		if((ret != 33) && (mode == 2))
+		{
+			this->setPoint(point);
+			return false;
+		}
+	}
 	return true;
 }
 

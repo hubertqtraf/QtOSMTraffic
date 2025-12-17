@@ -99,7 +99,7 @@ public:
 
 	void doReverse();
 
-	int getAngleCode(const TrZoomMap & zoom_ref, const TrGeoSegment& other);
+	int getAngleCode(const TrZoomMap & zoom_ref, const TrGeoSegment& other, double &ang);
 
 	void getSegList(QList<TrGeoSegment> & seg_list, TrGeoPolygon & poly);
 

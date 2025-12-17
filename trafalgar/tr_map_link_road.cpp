@@ -673,18 +673,30 @@ uint8_t TrMapLinkRoad::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * 
 		//TrMapNet::ms_seg_1->setPoints(first_segment);
 		//TrMapNet::ms_seg_2->setPoints(next_segment);
 
+		if(getOneWay() & TR_LINK_DIR_BWD)
+		{
+			first_segment.doReverse();
+		}
+		if(next_link->getOneWay() & TR_LINK_DIR_BWD)
+		{
+			next_segment.doReverse();
+		}
+
 		first_segment.getCrossPoint(zoom_ref, cross_pt, next_segment);
 
 		if((!((getOneWay() & TR_LINK_DIR_ONEWAY))) && (!(next_link->getOneWay() & TR_LINK_DIR_ONEWAY)))
 		{
 			return 6;
 		}
-		int code = first_segment.getAngleCode(zoom_ref, next_segment);
+		double ang = 10.0;
+		int code = first_segment.getAngleCode(zoom_ref, next_segment, ang);
+		//if(ang < (M_PI / 4.0))
+		//	return 7;
 		if((code == 3) || (code == 0))
 			n->setPoint(cross_pt);
 		if(code == 1)
 			n->setPoint(first_segment.getSecondPoint());
-		return 5;
+		return 33;
 	}
 
 	TrGeoObject * first_obj = getSegmentWithParm(first_segment, n->getGeoId(), false, mode);
@@ -713,7 +725,8 @@ uint8_t TrMapLinkRoad::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * 
 	// create the crossing point
 	first_segment.getCrossPoint(zoom_ref, cross_pt, next_segment);
 
-	int code = first_segment.getAngleCode(zoom_ref, next_segment);
+	double ang = 10.0;
+	int code = first_segment.getAngleCode(zoom_ref, next_segment, ang);
 	if(code)
 	{
 		if(code < 0)
