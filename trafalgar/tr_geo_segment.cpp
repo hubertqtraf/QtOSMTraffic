@@ -222,7 +222,7 @@ int TrGeoSegment::getAngleCode(const TrZoomMap & zoom_ref, const TrGeoSegment &o
 	if((ang1 > 99.0) || (ang2 > 99.0))
 		return -2;
 
-	double diff = abs(ang1 - ang2);
+	double diff = ang = abs(ang1 - ang2);
 	if(diff > (M_PI * 2.0))
 	{
 		ang = abs(diff - (M_PI * 2.0));

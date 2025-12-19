@@ -690,10 +690,17 @@ uint8_t TrMapLinkRoad::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * 
 		}
 		double ang = 10.0;
 		int code = first_segment.getAngleCode(zoom_ref, next_segment, ang);
+		if((first_segment.getLength(zoom_ref) < 5.0) || (next_segment.getLength(zoom_ref) < 5.0))
+		{
+			// TODO: check length of the segments
+			return 7;
+		}
 		//if(ang < (M_PI / 4.0))
 		//	return 7;
 		if((code == 3) || (code == 0))
+		{
 			n->setPoint(cross_pt);
+		}
 		if(code == 1)
 			n->setPoint(first_segment.getSecondPoint());
 		return 33;
