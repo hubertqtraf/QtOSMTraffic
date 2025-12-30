@@ -55,8 +55,9 @@ TrMapView::~TrMapView()
 {
 	if(m_fileProgress != nullptr)
 	{
-		m_fileProgress->quit();
-		m_fileProgress->wait();
+		// TODO: check
+		//m_fileProgress->quit();
+		//m_fileProgress->wait();
 	}
 }
 
@@ -373,6 +374,12 @@ void TrMapView::loadDocByThread(const QString & filename, int type, QProgressBar
 	m_fileProgress->setProgressBar(bar);
 	m_fileProgress->setDocument(&m_doc, type, 0);
 	m_fileProgress->addList(m_list);
+
+	if(m_doc.m_is_loaded)
+	{
+		m_doc.clean();
+	}
+
 	m_fileProgress->start();
 
 	m_doc.setFileName(filename);
@@ -382,14 +389,6 @@ void TrMapView::loadDocByThread(const QString & filename, int type, QProgressBar
 	connect(m_fileProgress, SIGNAL(finished()), m_fileProgress, SLOT(deleteLater()));
 	bar->setRange(0,100);
 	bar->setValue(2);
-	//connect(&m_doc, SIGNAL(valueChanged(int)), bar, SLOT(setValue(int)));
-
-	if(m_doc.m_is_loaded)
-	{
-		// TODO: check if file name is same -> Dialog box?
-		m_doc.clean();
-		//m_doc.addLayerType(m_profile_dlg->getElemStringList("modes"));
-	}
 }
 
 
