@@ -17,12 +17,14 @@
         <nd ref="27471294"/>
         <tag k="highway" v="motorway"/>
         <tag k="lanes" v="2"/>
+        <tag k="oneway" v="0"/>
     </way>
     <way id="2" version="1">
         <nd ref="27471294"/>
         <nd ref="27471295"/>
         <tag k="highway" v="primary"/>
         <tag k="lanes" v="4"/>
+        <tag k="oneway" v="0"/>
     </way>
     <way id="3" version="1">
         <nd ref="27471294"/>
