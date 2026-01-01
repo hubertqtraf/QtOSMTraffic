@@ -740,6 +740,12 @@ uint8_t TrMapLinkRoad::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * 
 		{
 			return code;
 		}
+		// same angle, parallel
+		if(code == 1)
+		{
+			cross_pt = first_segment.getSecondPoint();
+			return code;
+		}
 		// backward angle
 		if(code == 2)
 			return code;
@@ -753,7 +759,7 @@ uint8_t TrMapLinkRoad::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * 
 				return 5;
 			}
 			// overwrite the cossing point
-			cross_pt = first_segment.getFirstPoint();
+			cross_pt = first_segment.getSecondPoint();
 		}
 	}
 
