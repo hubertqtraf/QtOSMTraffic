@@ -84,6 +84,7 @@ TrMapNode::TrMapNode()
 	, m_dir_flags(TR_NODE_DIR_EMTY)
 	, m_in_flags(0x0000000000000000)
 	, m_out_flags(0x0000000000000000)
+	, m_mv_pt{0.0, 0.0}
 	, m_shadow(nullptr)
 {
 	m_inst_mask = (TR_MASK_EXIST | TR_MASK_DRAW);
@@ -105,12 +106,22 @@ TrMapNode::~TrMapNode()
 QDebug operator<<(QDebug dbg, const TrMapNode& node)
 {
 	return dbg << node.getXmlName() << node.getGeoId() << "in:" <<
-		node.getIn(false) << "out:" << node.getOut(false);
+		node.getIn(false) << "out:" << node.getOut(false) << TR_COOR(node.m_pt);
 }
 
 QString TrMapNode::getXmlName() const
 {
 	return "map_node";
+}
+
+void TrMapNode::setMovePoint(const TrPoint &point)
+{
+	m_mv_pt = point;
+}
+
+TrPoint TrMapNode::getMovePoint() const
+{
+	return m_mv_pt;
 }
 
 double TrMapNode::getDeg(double rad)

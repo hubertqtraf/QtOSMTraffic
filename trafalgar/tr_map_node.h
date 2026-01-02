@@ -82,6 +82,8 @@ private:
 	// TODO: m_in_flags, m_out_flags -> remove?
 	uint64_t m_in_flags;		// blocked connection(s)
 	uint64_t m_out_flags;
+	// save the position of the node if moved
+	TrPoint m_mv_pt;
 	TrGeoObject * m_shadow;
 	QVector<TrConnectionMember> m_vec_in;	// to link(s)
 	QVector<TrConnectionMember> m_vec_out;	// from link(s)
@@ -116,6 +118,9 @@ public:
 	friend QDebug operator<<(QDebug dbg, const TrMapNode& seg);
 
 	QString getXmlName() const;
+
+	void setMovePoint(const TrPoint &point);
+	TrPoint getMovePoint() const;
 
 	static double getDeg(double rad);
 
