@@ -84,7 +84,7 @@ TrMapNode::TrMapNode()
 	, m_dir_flags(TR_NODE_DIR_EMTY)
 	, m_in_flags(0x0000000000000000)
 	, m_out_flags(0x0000000000000000)
-	, m_mv_pt{0.0, 0.0}
+	, m_mv_pt{40000000.0, 40000000.0}
 	, m_shadow(nullptr)
 {
 	m_inst_mask = (TR_MASK_EXIST | TR_MASK_DRAW);
@@ -528,6 +528,15 @@ bool TrMapNode::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject * ba
 		setCrossingByAngle(zoom_ref, false, 1);
 
 		return true;
+	}
+	if((ctrl & 0xff) == TR_INIT_ND_SET)
+	{
+		if(m_mv_pt.x < 39000000.0)
+		{
+			// TODO: check/set node point if moved
+			//TR_INF << TR_COOR(m_pt) << TR_COOR(m_mv_pt);
+			//setPoint(m_mv_pt);
+		}
 	}
 	return TrGeoPoint::init(zoom_ref, ctrl, base);
 }

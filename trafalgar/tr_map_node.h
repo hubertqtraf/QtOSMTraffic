@@ -61,6 +61,7 @@
 #define TR_INIT_ND_CROSS 21
 // move base line to the side on oneway links
 #define TR_INIT_ND_MV 30
+#define TR_INIT_ND_SET 50
 
 struct TrConnectionMember
 {
