@@ -533,9 +533,8 @@ bool TrMapNode::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject * ba
 	{
 		if(m_mv_pt.x < 39000000.0)
 		{
-			// TODO: check/set node point if moved
-			//TR_INF << TR_COOR(m_pt) << TR_COOR(m_mv_pt);
-			//setPoint(m_mv_pt);
+			// check/set node point if moved
+			setPoint(m_mv_pt);
 		}
 	}
 	return TrGeoPoint::init(zoom_ref, ctrl, base);

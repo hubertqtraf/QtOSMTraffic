@@ -670,6 +670,7 @@ uint8_t TrMapLinkRoad::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * 
 	{
 		getSegmentWithParm(first_segment, n->getGeoId(), false, mode);
 		next_link->getSegmentWithParm(next_segment, n->getGeoId(), true, mode);
+
 		//TrMapNet::ms_seg_1->setPoints(first_segment);
 		//TrMapNet::ms_seg_2->setPoints(next_segment);
 
@@ -693,16 +694,19 @@ uint8_t TrMapLinkRoad::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * 
 		if((first_segment.getLength(zoom_ref) < 5.0) || (next_segment.getLength(zoom_ref) < 5.0))
 		{
 			// TODO: check length of the segments
-			return 7;
+			//return 7;
 		}
 		//if(ang < (M_PI / 4.0))
 		//	return 7;
 		if((code == 3) || (code == 0))
 		{
-			n->setPoint(cross_pt);
+			n->setMovePoint(cross_pt);
 		}
 		if(code == 1)
-			n->setPoint(first_segment.getSecondPoint());
+		{
+			n->setMovePoint(first_segment.getSecondPoint());
+			return code;
+		}
 		return 33;
 	}
 
@@ -743,6 +747,7 @@ uint8_t TrMapLinkRoad::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * 
 		// same angle, parallel
 		if(code == 1)
 		{
+			// TODO: check width
 			cross_pt = first_segment.getSecondPoint();
 			return code;
 		}
