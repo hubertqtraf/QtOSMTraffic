@@ -704,7 +704,10 @@ uint8_t TrMapLinkRoad::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * 
 		}
 		if(code == 1)
 		{
-			n->setMovePoint(first_segment.getSecondPoint());
+			if(n->getGeoId() == this->m_node_from->getGeoId())
+				n->setMovePoint(first_segment.getFirstPoint());
+			else
+				n->setMovePoint(first_segment.getSecondPoint());
 			return code;
 		}
 		return 33;
@@ -819,7 +822,10 @@ TrGeoObject * TrMapLinkRoad::getSegmentWithParm(TrGeoSegment & segment, int64_t 
 			if(nd_id == getNodeTo())
 			{
 				//TR_INF << "TO" << *this;
-				getSegment(segment, true, false);
+				if(mode == 2)
+					getSegment(segment, true, true);
+				else
+					getSegment(segment, true, false);
 			}
 			else
 			{
@@ -832,7 +838,10 @@ TrGeoObject * TrMapLinkRoad::getSegmentWithParm(TrGeoSegment & segment, int64_t 
 			if(nd_id == getNodeFrom())
 			{
 				//TR_INF << "FROM" << *this;
-				getSegment(segment, false, false);
+				if(mode == 2)
+					getSegment(segment, false, true);
+				else
+					getSegment(segment, false, false);
 			}
 			else
 			{
