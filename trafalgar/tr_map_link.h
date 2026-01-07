@@ -51,8 +51,6 @@
 #define TR_IS_TO_DIR true
 #define TR_IS_FROM_DIR false
 
-#include "tr_defs.h"
-
 #include "tr_geo_poly.h"
 #include "tr_geo_segment.h"
 #include "tr_map_node.h"

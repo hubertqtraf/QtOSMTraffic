@@ -581,10 +581,11 @@ double TrMapLink::getAngle(const TrZoomMap & zoom_ref, bool dir)
 	}
 	//TR_INF << seg << TR_COOR(next_point) << TR_COOR(m_node_from->getPoint()) << TR_COOR(m_node_to->getPoint());
 	ang = seg.getAngle(zoom_ref);
-    int err_code = zoom_ref.getErrorCode();
+	int err_code = zoom_ref.getErrorCode();
 	if(err_code)
-		TR_ERR << err_code;
-
+	{
+		TR_ERR << err_code << *this;
+	}
 	return ang;
 }
 
