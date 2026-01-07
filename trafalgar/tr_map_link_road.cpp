@@ -705,7 +705,7 @@ uint8_t TrMapLinkRoad::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * 
 		if(code == 1)
 		{
 			if(n->getGeoId() == this->m_node_from->getGeoId())
-				n->setMovePoint(first_segment.getFirstPoint());
+				n->setMovePoint(next_segment.getSecondPoint());
 			else
 				n->setMovePoint(first_segment.getSecondPoint());
 			return code;
@@ -751,8 +751,7 @@ uint8_t TrMapLinkRoad::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * 
 		if(code == 1)
 		{
 			// TODO: check width
-			cross_pt = first_segment.getSecondPoint();
-			return code;
+			cross_pt = next_segment.getSecondPoint();
 		}
 		// backward angle
 		if(code == 2)
