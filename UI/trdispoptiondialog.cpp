@@ -55,9 +55,13 @@ void TrDispOptionDialog::setLayerList(const QStringList & profile, const QString
 	}
 	//TR_INF << "list: " << m_checkedLayerList;
 
-	for (int i = 0; i < m_checkedLayerList.size(); ++i)
+	// after a reload of an other OSM file, use the existing tabs
+	if(ui->tabWidget->count() <= 1)
 	{
-		createLayerTab(m_checkedLayerList[i]);
+		for (int i = 0; i < m_checkedLayerList.size(); ++i)
+		{
+			createLayerTab(m_checkedLayerList[i]);
+		}
 	}
 
 	QTableWidget * world = getTable("World");
