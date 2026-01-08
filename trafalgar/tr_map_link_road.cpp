@@ -725,7 +725,7 @@ uint8_t TrMapLinkRoad::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * 
 	if((first_obj == nullptr) || (next_obj == nullptr))
 		return 1;
 
-	//int lane_diff = abs(next_link->getLanes() - first_link->getLanes());
+	int lane_diff = abs(next_link->getLanes() - first_link->getLanes());
 
 	if(getOneWay() & TR_LINK_DIR_BWD)
 	{
@@ -770,6 +770,11 @@ uint8_t TrMapLinkRoad::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * 
 		}
 	}
 
+	if(lane_diff && (ang < 0.5) && (code == 0))
+	{
+		cross_pt = first_segment.getSecondPoint();
+			return 5;
+	}
 	if(first_link->getOneWay() & TR_LINK_DIR_ONEWAY)
 	{
 		if(first_link->getNodeToRef() == node)
