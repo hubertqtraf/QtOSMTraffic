@@ -37,12 +37,12 @@
 
 #include "tr_map_net.h"
 #include "tr_map_node.h"
-#include "tr_map_link_road.h"
 
 // Segment: for debug output drawing used for cross point
 #ifdef SEG_TEST
 TrGeoSegment * TrMapNet::ms_seg_1 = new TrGeoSegment;
 TrGeoSegment * TrMapNet::ms_seg_2 = new TrGeoSegment;
+TrPoint TrMapNet::ms_point;
 #endif
 
 TrMapNet::TrMapNet()
@@ -242,6 +242,13 @@ void TrMapNet::draw(const TrZoomMap & zoom_ref, QPainter * p, uint8_t mode)
 	p->setPen(QPen(QColor(155,0,0)));
 	TrMapNet::ms_seg_1->draw(zoom_ref, p, 0);
 	TrMapNet::ms_seg_2->draw(zoom_ref, p, 0);
+	TrPoint screen;
+	screen.x = TrMapNet::ms_point.x;
+	screen.y = TrMapNet::ms_point.y;
+	zoom_ref.setMovePoint(&screen.x, &screen.y);
+	p->setPen(QPen(QColor(255,255,0)));
+	p->drawRect(static_cast <int>(screen.x-DRAW_SIZE),
+		static_cast <int>(screen.y-DRAW_SIZE), DRAW_SIZE+20, DRAW_SIZE*3);
 #endif
 
 	if(m_link_list != nullptr)
