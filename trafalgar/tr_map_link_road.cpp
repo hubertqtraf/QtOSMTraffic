@@ -666,22 +666,15 @@ uint8_t TrMapLinkRoad::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * 
 	TrGeoSegment next_segment;
 	TrPoint cross_pt;
 
+	//if(test){TrMapNet::ms_point = n->getPoint();}
+
 	if(mode == 2)
 	{
 		getSegmentWithParm(first_segment, n->getGeoId(), false, mode);
 		next_link->getSegmentWithParm(next_segment, n->getGeoId(), true, mode);
 
-		//TrMapNet::ms_seg_1->setPoints(first_segment);
-		//TrMapNet::ms_seg_2->setPoints(next_segment);
-
-		if(getOneWay() & TR_LINK_DIR_BWD)
-		{
-			first_segment.doReverse();
-		}
-		if(next_link->getOneWay() & TR_LINK_DIR_BWD)
-		{
-			next_segment.doReverse();
-		}
+		//if(test){TrMapNet::ms_seg_1->setPoints(first_segment);}
+		//if(test){TrMapNet::ms_seg_2->setPoints(next_segment);}
 
 		first_segment.getCrossPoint(zoom_ref, cross_pt, next_segment);
 
@@ -704,6 +697,15 @@ uint8_t TrMapLinkRoad::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * 
 		}
 		if(code == 1)
 		{
+			if(getOneWay() & TR_LINK_DIR_BWD)
+			{
+				first_segment.doReverse();
+			}
+			if(next_link->getOneWay() & TR_LINK_DIR_BWD)
+			{
+				next_segment.doReverse();
+			}
+
 			if(n->getGeoId() == this->m_node_from->getGeoId())
 				n->setMovePoint(next_segment.getSecondPoint());
 			else
