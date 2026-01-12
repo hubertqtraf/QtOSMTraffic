@@ -41,27 +41,26 @@
 #ifndef TR_MAP_NET_H
 #define TR_MAP_NET_H
 
-#include "tr_defs.h"
-
 #include "tr_geo_object.h"
 
 #include "tr_map_list.h"
 
 #include "tr_map_link.h"
 
+//#define SEG_TEST
+#ifdef SEG_TEST
+// just for debug
+#include "tr_geo_segment.h"
+#endif
+
 #ifdef TR_EDGE
 #include "tr_map_edge.h"
 #endif
-
-// just for debug
-#include "tr_geo_segment.h"
 
 #include <stdint.h>
 
 #define LIST_DELETE true
 #define LIST_CREATE false
-
-//#define SEG_TEST
 
 class TrMapNet : public TrGeoObject
 {

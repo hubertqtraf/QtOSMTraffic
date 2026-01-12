@@ -896,7 +896,9 @@ uint64_t TrImportOsmStream::getDir(const QString & value)
 		return(1);
 
 	if(value == "-1")
-		return(2);
+		return(0);
+	// TODO: should be '2', workaround because negative onways
+	// are not working - no oneway -> both directions!
 
 	if(value == "roundabout")
 		return(1);
@@ -904,7 +906,6 @@ uint64_t TrImportOsmStream::getDir(const QString & value)
 	if(value == "mini_roundabout")
 		return(1);
 
-	//return 1;
 	return(0);              // both directions
 }
 
