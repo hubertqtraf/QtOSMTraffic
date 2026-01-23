@@ -41,11 +41,8 @@
 #include <math.h>
 
 #include "tr_map_node.h"
-#include "tr_geo_poly.h"
-#include "tr_geo_segment.h"
+#include "tr_map_link.h"
 
-// only for debug output
-#include "tr_map_net.h"
 // TODO only once used, change?
 //#include "tr_map_link_road.h"
 
@@ -524,6 +521,11 @@ bool TrMapNode::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject * ba
 		// default: no ramp
 		setCrossingByAngle(zoom_ref, false, 1);
 		return true;
+	}
+	if((ctrl & 0xff) == TR_INIT_ND_RESET)
+	{
+		m_mv_pt.x = 40000000.0;
+		m_mv_pt.y = 40000000.0;
 	}
 	if((ctrl & 0xff) == TR_INIT_ND_SET)
 	{

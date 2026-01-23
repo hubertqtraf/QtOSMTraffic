@@ -40,7 +40,6 @@
 #define TR_MAP_NODE_H
 
 #include "tr_geo_point.h"
-#include "tr_geo_segment.h"
 #include "tr_map_list.h"
 
 #define TR_NODE_DIR_EMTY 0x01
@@ -57,6 +56,8 @@
 
 #define TR_INIT_ND_ANG 33
 
+// reset node value
+#define TR_INIT_ND_RESET 19
 // for crossing of the parallel lines
 #define TR_INIT_ND_CROSS 21
 // move base line to the side on oneway links
