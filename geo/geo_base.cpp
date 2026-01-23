@@ -71,13 +71,32 @@ double geoGetLineByPoints(TrGeo2DRef * ref, straight_line * result, double x1, d
 	{
 		result->flags |= DIR_RIGHT;
 	}
-    result->slope = dy / dx;
+	result->slope = dy / dx;
 	result->intercept = Geo2DY(ref, x1, y1) - (result->slope * Geo2DX(ref, x1, y1));
 	if(fabs(dy) < MIN_DIF)
 		result->flags |= DIR_HORIZ;
 	return len;
 }
 
+double geoGetPointByAngle(TrGeo2DRef * ref, double x1, double y1, double * x2, double * y2, double angle)
+{
+	straight_line result;
+	double dx = Geo2DX(ref, x1, y1);
+	double dy = Geo2DY(ref, x1, y1);
+
+	double len = geoGetLineByPoints(ref, &result, x1, y1, *x2, *y2);
+
+	double ang = geoGetAngle(&result);
+	ang += angle;
+
+	double ax = (len * cos(ang)) + dx;
+	double ay = (len * sin(ang)) + dy;
+
+	*(x2) = Geo2DOrigX(ref, ax, ay);
+	*(y2) = Geo2DOrigY(ref, ax, ay);
+
+	return len;
+}
 
 void geoInitLineL(straight_line * result, double intercept, double slope)
 {

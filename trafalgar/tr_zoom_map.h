@@ -90,6 +90,8 @@ public:
 
 	void getLineByPoints(poly_add & sec, const TrPoint & first_point, const TrPoint & second_point) const;
 
+	TrPoint getPointByAngle(const TrPoint & first_point, const TrPoint & second_point, double ang) const;
+
 	double getSegmentClosest(poly_add * orig,  TrPoint seg_point, TrPoint & pt) const;
 private:
 	double m_y_correction;

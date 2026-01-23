@@ -55,7 +55,7 @@ TrZoomMap::TrZoomMap()
 	m_screen_width=200;
 	m_screen_height=101;
 
-    TrgGlobeInit(&m_world_ref);
+	TrgGlobeInit(&m_world_ref);
 
 	m_move_x = m_move_y = 0;
 }
@@ -190,8 +190,8 @@ void TrZoomMap::zoom2Rect(double x1, double y1, double x2, double y2)
 
 void TrZoomMap::setPoint(double * x, double * y) const
 {
-    *x -= m_visibleWorld[0].x;
-    *y -= m_visibleWorld[0].y;
+	*x -= m_visibleWorld[0].x;
+	*y -= m_visibleWorld[0].y;
 
 	*x *= (m_scale * m_y_correction);
 	*y *= m_scale;
@@ -206,8 +206,8 @@ void TrZoomMap::getPoint(double * x, double * y) const
 	*x /= (m_scale * m_y_correction);
 	*y /= m_scale;
 
-    *x += m_visibleWorld[0].x;
-    *y += m_visibleWorld[0].y;
+	*x += m_visibleWorld[0].x;
+	*y += m_visibleWorld[0].y;
 }
 
 void TrZoomMap::getMetric(double * x, double * y, bool metric) const
@@ -298,13 +298,20 @@ void TrZoomMap::getParCrossPoint(poly_add & sec1, poly_add & sec2, TrPoint & pt,
 
 double TrZoomMap::initPolyLen(poly_base * base) const
 {
-    return geoPolyInitLen(base->pt, base->n_pt, base->add, (TrGeo2DRef*)&m_world_ref);
+	return geoPolyInitLen(base->pt, base->n_pt, base->add, (TrGeo2DRef*)&m_world_ref);
 }
 
 void TrZoomMap::getLineByPoints(poly_add & sec, const TrPoint & first_point, const TrPoint & second_point) const
 {
 	geoGetSegmentByPoints((TrGeo2DRef*)&m_world_ref, &sec, first_point.x, first_point.y,
 		second_point.x, second_point.y);
+}
+
+TrPoint TrZoomMap::getPointByAngle(const TrPoint &first_point, const TrPoint &sec_point, double ang) const
+{
+	TrPoint ang_point = sec_point;
+	geoGetPointByAngle((TrGeo2DRef*)&m_world_ref, first_point.x, first_point.y, &(ang_point.x), &(ang_point.y), ang);
+	return ang_point;
 }
 
 // TODO: polyAddInit/geoPolyClosest: keep in TrZoomMap class?

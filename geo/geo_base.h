@@ -81,5 +81,7 @@ double geoInvertAngle(double angle);
 
 double geoGetInterceptByPoint(straight_line * line, double x, double y);
 
+double geoGetPointByAngle(TrGeo2DRef * ref, double x1, double y1, double * x2, double * y2, double angle);
+
 #endif /* _geo_base_h */
 
