@@ -656,6 +656,11 @@ uint8_t TrMapLinkRoad::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * 
 	if(n == nullptr)
 		return 0xef;
 
+	if(this == other)
+	{
+		return 5;
+	}
+
 	TrMapLinkRoad * next_link = dynamic_cast<TrMapLinkRoad *>(other);
 	if(next_link == nullptr)
 	{
