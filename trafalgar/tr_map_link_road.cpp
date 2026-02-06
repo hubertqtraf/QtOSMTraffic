@@ -656,6 +656,7 @@ uint8_t TrMapLinkRoad::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * 
 	if(n == nullptr)
 		return 0xef;
 
+	// no crossing is possible if links are same
 	if(this == other)
 	{
 		return 5;
@@ -693,6 +694,13 @@ uint8_t TrMapLinkRoad::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * 
 		{
 			// TODO: check length of the segments
 			//return 7;
+		}
+		// TODO: magic number '0.2'; more logic on the rule?
+		if(ang < 0.2)
+		{
+			// ignore on small angle if the links starts with the same node
+			if(getNodeFrom() == next_link->getNodeFrom())
+				return 6;
 		}
 		//if(ang < (M_PI / 4.0))
 		//	return 7;
