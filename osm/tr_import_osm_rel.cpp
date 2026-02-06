@@ -425,6 +425,10 @@ uint64_t TrImportOsmRel::getBuildingClass(const QString & value)
 	{
 		return (BUILDING_INDUST | FLAG_FEATURE_AERA);
 	}
+	if(value == "conservatory")
+	{
+		return (BUILDING_HOUSE | FLAG_FEATURE_AERA);
+	}
 	if(value == "garage")
 		return (BUILDING_CAR | FLAG_FEATURE_AERA);
 	if(value == "garages")
@@ -432,7 +436,13 @@ uint64_t TrImportOsmRel::getBuildingClass(const QString & value)
 	if(value == "carport")
 		return (BUILDING_CAR | FLAG_FEATURE_AERA);
 	if(value == "parking")
+	{
 		return (BUILDING_CAR | FLAG_FEATURE_AERA);
+	}
+	if(value == "parking_entrance")
+	{
+		return (BUILDING_CAR | FLAG_FEATURE_AERA);
+	}
 	if(value == "hotel")
 		return (BUILDING_PUBLIC | FLAG_FEATURE_AERA);
 	if(value == "government")
@@ -464,6 +474,19 @@ uint64_t TrImportOsmRel::getBuildingClass(const QString & value)
 	if(value == "water_tower")
 	{
 		return (BUILDING_SERVICE | FLAG_FEATURE_AERA);
+	}
+	if(value == "storage_tank")
+	{
+		return (BUILDING_SERVICE | FLAG_FEATURE_AERA);
+	}
+	if(value == "supermarket")
+	{
+		return (BUILDING_SERVICE | FLAG_FEATURE_AERA);
+	}
+	// TODO: use a flag?
+	if(value == "construction")
+	{
+		return (BUILDING_INDUST | FLAG_FEATURE_AERA);
 	}
 	return (0x0007 | FLAG_FEATURE_AERA);
 }
