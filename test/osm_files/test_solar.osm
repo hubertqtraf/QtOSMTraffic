@@ -15,6 +15,9 @@
     <tag k='generator:type' v='solar_photovoltaic_panel' />
     <tag k='power' v='generator' />
     </node>
+    <node id="28000001" version="1" lon="111.0007" lat="48.0005">
+    <tag k='power' v='tower' />
+    </node>
     <way id="1" version="1">
         <nd ref="27471287"/>
         <nd ref="27471297"/>

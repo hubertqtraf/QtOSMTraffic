@@ -52,7 +52,7 @@
   <value index="5" name="inner" rgb="#50b1c5b4" type="color"/>
   <value index="6" name="ruin" rgb="#ffeb9b" type="color"/>
   <value index="7" name="test1" rgb="#64aa0000" type="color"/>
-  <value index="8" name="power" rgb="#ff0000" type="color"/>
+  <value index="8" name="power" rgb="#ea97ff" type="color"/>
   <value index="9" name="test3" rgb="#c800ff" type="color"/>
   <value index="a" name="test4" rgb="#c800ff" type="color"/>
   <value index="b" name="test5" rgb="#c800ff" type="color"/>
@@ -116,6 +116,7 @@
   <value index="6" name="staion" rgb="#c28100" type="color"/>
   <value index="7" name="alpine" rgb="#f34e31" type="color"/>
   <value index="8" name="power" rgb="#220067" type="color"/>
+  <value index="9" name="pole" rgb="#ffaa00" type="color"/>
   <value index="a" name="test1" rgb="#f34e31" type="color"/>
   <value index="b" name="test2" rgb="#f34e31" type="color"/>
  </section>

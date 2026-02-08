@@ -391,6 +391,10 @@ uint64_t TrImportOsmRel::getBuildingClass(const QString & value)
 		return (BUILDING_REL | FLAG_FEATURE_AERA);
 	if(value == "chapel")
 		return (BUILDING_REL | FLAG_FEATURE_AERA);
+	if(value == "monastery")
+	{
+		return (BUILDING_REL | FLAG_FEATURE_AERA);
+	}
 	if(value == "public")
 		return (BUILDING_PUBLIC | FLAG_FEATURE_AERA);
 	if(value == "civic")
@@ -419,8 +423,15 @@ uint64_t TrImportOsmRel::getBuildingClass(const QString & value)
 		return (BUILDING_HOUSE | FLAG_FEATURE_AERA);
 	if(value == "hut")
 		return (BUILDING_HOUSE | FLAG_FEATURE_AERA);
+	// small, like hut
+	if(value == "outbuilding")
+	{
+		return (BUILDING_HOUSE | FLAG_FEATURE_AERA);
+	}
 	if(value == "sports_centre")
+	{
 		return (BUILDING_SERVICE | FLAG_FEATURE_AERA);
+	}
 	if(value == "greenhouse")
 	{
 		return (BUILDING_INDUST | FLAG_FEATURE_AERA);
@@ -480,6 +491,14 @@ uint64_t TrImportOsmRel::getBuildingClass(const QString & value)
 		return (BUILDING_SERVICE | FLAG_FEATURE_AERA);
 	}
 	if(value == "supermarket")
+	{
+		return (BUILDING_SERVICE | FLAG_FEATURE_AERA);
+	}
+	if(value == "cinema")
+	{
+		return (BUILDING_SERVICE | FLAG_FEATURE_AERA);
+	}
+	if(value == "airport")
 	{
 		return (BUILDING_SERVICE | FLAG_FEATURE_AERA);
 	}
@@ -784,14 +803,20 @@ uint64_t TrImportOsmRel::getPowerClass(const QString & value, bool node)
 {
 	if(value == "generator")
 	{
+		if(node)
+			return TYPE_BUILDING | BUILDING_POWER | FLAG_FEATURE_AERA;
 		return TYPE_BUILDING | BUILDING_POWER | FLAG_FEATURE_AERA;
 	}
 	if(value == "tower")
 	{
+		if(node)
+			return TYPE_BUILDING | BUILDING_POLE | FLAG_FEATURE_AERA;
 		return 0;
 	}
 	if(value == "pole")
 	{
+		if(node)
+			return TYPE_BUILDING | BUILDING_POLE | FLAG_FEATURE_AERA;
 		return 0;
 	}
 	if(value == "substation")

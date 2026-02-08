@@ -42,7 +42,6 @@
 
 #include "tr_geo_point.h"
 #include "tr_map_poi.h"
-#include "tr_geo_poly.h"
 
 #include "tr_prof_class_def.h"
 
@@ -150,8 +149,8 @@ bool TrMapPoi::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject * bas
 	}
 
 	if(m_poi_flags & TYPE_POI_N_PEAK)
-        {
-                if(((m_poi_data & 0x00000000000000ffff) == 0x00000000000000ffff) &&
+	{
+		if(((m_poi_data & 0x00000000000000ffff) == 0x00000000000000ffff) &&
 			(m_name.size() == 0))
 		{
 			TR_MSG << "peak " << m_geo_id << ": " << "no info, ignore";
@@ -179,10 +178,14 @@ bool TrMapPoi::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject * bas
 	if(m_poi_flags & (TYPE_BUILDING | TYPE_RESTRICT))
 		m_geo_active_pen = list->getObjectPen(4);
 
-	if(m_poi_flags & BUILDING_POWER)
-		//if(m_poi_flags & TYPE_POWER)
-		m_geo_active_pen = list->getObjectPen(8);
-
+	if(m_poi_flags & TYPE_BUILDING)
+	{
+		uint8_t  col = m_poi_flags & 0x00ff;
+		if((col == BUILDING_POWER) || (col == BUILDING_POLE))
+		{
+			m_geo_active_pen = list->getObjectPen(col);
+		}
+	}
 	if(m_poi_flags & (TYPE_ROAD | TYPE_RAIL | TYPE_STREAM))
 		m_geo_active_pen = list->getObjectPen(6);
 
@@ -263,15 +266,23 @@ void TrMapPoi::draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mode
 		//p->drawStaticText(screen.x+4, screen.y, QStaticText(m_name));
 		return;
 	}
-	// TODO: rework power, red rectangle looks bad...
-	if(((m_poi_flags & (TYPE_BUILDING | BUILDING_POWER)) == (TYPE_BUILDING | BUILDING_POWER)))
-	//if(m_poi_flags & TYPE_POWER)
+	if(m_poi_flags & TYPE_BUILDING)
 	{
-		// TODO: add more infomation before to draw
-		p->fillRect(static_cast <int>(screen.x-5),
-			static_cast <int>(screen.y-7),
-			10, 15, QBrush(getActivePen()->color()));
-		return;
+		// TODO: rework power, red rectangle looks bad...
+		if((m_poi_flags & 0x00ff) == BUILDING_POWER)
+		{
+			// TODO: add more infomation before to draw
+			p->fillRect(static_cast <int>(screen.x-5),
+				static_cast <int>(screen.y-7),
+				10, 15, QBrush(getActivePen()->color()));
+			return;
+		}
+		if((m_poi_flags & 0x00ff) == BUILDING_POLE)
+		{
+			p->fillRect(static_cast <int>(screen.x-2),static_cast <int>(screen.y),
+				4, -10, QBrush(getActivePen()->color()));
+			return;
+		}
 	}
 
 	if(m_poi_flags & TYPE_PUBLIC)

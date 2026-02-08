@@ -64,6 +64,7 @@
 #define BUILDING_FARM       0x0005U
 #define BUILDING_RUINS      0x0006U
 #define BUILDING_POWER      0x0008U
+#define BUILDING_POLE       0x0009U
 
 #define POWER_LINE          0x0001U
 #define POWER_LINE_MINOR    0x0002U
