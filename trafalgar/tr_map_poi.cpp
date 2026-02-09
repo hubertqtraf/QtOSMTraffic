@@ -56,11 +56,14 @@ TrMapPoi::TrMapPoi()
 	: TrGeoPoint()
 	, m_poi_flags(0)
 	, m_poi_data(0)
+	, m_symbol(nullptr)
 {
 }
 
 TrMapPoi::~TrMapPoi()
 {
+    if(m_symbol != nullptr)
+        delete m_symbol;
 }
 
 QDebug operator<<(QDebug dbg, const TrMapPoi & poi)
@@ -148,6 +151,8 @@ bool TrMapPoi::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject * bas
 		return false;
 	}
 
+	uint8_t col = m_poi_flags & 0x00ff;
+
 	if(m_poi_flags & TYPE_POI_N_PEAK)
 	{
 		if(((m_poi_data & 0x00000000000000ffff) == 0x00000000000000ffff) &&
@@ -161,37 +166,39 @@ bool TrMapPoi::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject * bas
 	if(m_poi_flags & TYPE_ADMIN)
 	{
 		if(m_poi_flags & TYPE_POI_A_VILL)
-			m_geo_active_pen = list->getObjectPen(1);
+			m_geo_active_pen = list->getObjectPen(col);
 	}
 	if(m_poi_flags & TYPE_PUBLIC)
 	{
 		if(m_name.size())
-			m_geo_active_pen = list->getObjectPen(2);
+			m_geo_active_pen = list->getObjectPen(col);
 		// TODO: set an another color
 		if(m_poi_flags & TYPE_POI_P_PARKING)
 			m_geo_active_pen = list->getObjectPen(4);
 	}
 
 	if(m_poi_flags & TYPE_NATURAL)
-		m_geo_active_pen = list->getObjectPen(3);
+		m_geo_active_pen = list->getObjectPen(col);
 
 	if(m_poi_flags & (TYPE_BUILDING | TYPE_RESTRICT))
-		m_geo_active_pen = list->getObjectPen(4);
+		m_geo_active_pen = list->getObjectPen(col);
 
 	if(m_poi_flags & TYPE_BUILDING)
 	{
-		uint8_t  col = m_poi_flags & 0x00ff;
 		if((col == BUILDING_POWER) || (col == BUILDING_POLE))
 		{
 			m_geo_active_pen = list->getObjectPen(col);
 		}
 	}
 	if(m_poi_flags & (TYPE_ROAD | TYPE_RAIL | TYPE_STREAM))
+	{
+		//TODO: define class '6'
 		m_geo_active_pen = list->getObjectPen(6);
-
+	}
 	if(m_poi_flags & TYPE_POI_P_ALPINE)
-		m_geo_active_pen = list->getObjectPen(7);
-
+	{
+		m_geo_active_pen = list->getObjectPen(col);
+	}
 	return true;
 }
 
@@ -279,8 +286,8 @@ void TrMapPoi::draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mode
 		}
 		if((m_poi_flags & 0x00ff) == BUILDING_POLE)
 		{
-			p->fillRect(static_cast <int>(screen.x-2),static_cast <int>(screen.y),
-				4, -10, QBrush(getActivePen()->color()));
+			p->fillRect(static_cast <int>(screen.x-2),static_cast <int>(screen.y-2),
+				4, 10, QBrush(getActivePen()->color()));
 			return;
 		}
 	}

@@ -40,7 +40,6 @@
 #define TR_MAP_POI_H
 
 #include "tr_geo_point.h"
-#include "tr_map_list.h"
 
 #define SELECT_SIZE 6
 #define DRAW_SIZE 4
@@ -51,6 +50,7 @@ private:
 	QString m_name;
 	uint64_t m_poi_flags;
 	uint64_t m_poi_data;
+	TrGeoObject * m_symbol;
 
 protected:
 
