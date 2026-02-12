@@ -12,7 +12,7 @@
  * system:	UNIX/LINUX
  * compiler:	gcc
  *
- * @author	Schmid Hubert (C)2023-2025
+ * @author	Schmid Hubert (C)2023-2026
  *
  * beginning:	03.2023
  *
@@ -41,6 +41,7 @@
 #include <math.h>
 
 #include "tr_geo_point.h"
+#include "tr_geo_poly.h"
 #include "tr_map_poi.h"
 
 #include "tr_prof_class_def.h"
@@ -189,6 +190,31 @@ bool TrMapPoi::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject * bas
 		{
 			m_geo_active_pen = list->getObjectPen(col);
 		}
+		if(m_symbol != nullptr)
+		{
+			return true;
+		}
+		TrPoint res[3];
+		res[0] = getPoint();
+		//zoom_ref.getMetric(res[0], true);
+		res[0].x = res[0].x + 5.0;
+		res[1].x = res[0].x - 10.0;
+		res[1].y = res[0].y;
+		res[2].x = res[0].x - 5.0;
+		res[2].y = res[0].y - 20.0;
+		TrGeoPolygon * poly = new TrGeoPolygon();
+		QVector<TrPoint> res2[4];
+		res2->append(res[0]);
+		res2->append(res[1]);
+		res2->append(res[2]);
+		res2->append(res[0]);
+		//res2->append(TrPoint{111.0002 * TR_COOR_FACTOR , 48 * TR_COOR_FACTOR});
+		//res2->append(TrPoint{111 * TR_COOR_FACTOR, 48.0004 * TR_COOR_FACTOR});
+		poly->appendPoints(*res2);
+		poly->setActivePen(m_geo_active_pen);
+		poly->init(zoom_ref);
+		poly->setMask(TR_MASK_DRAW);
+		m_symbol = poly;
 	}
 	if(m_poi_flags & (TYPE_ROAD | TYPE_RAIL | TYPE_STREAM))
 	{
@@ -286,8 +312,13 @@ void TrMapPoi::draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mode
 		}
 		if((m_poi_flags & 0x00ff) == BUILDING_POLE)
 		{
-			p->fillRect(static_cast <int>(screen.x-2),static_cast <int>(screen.y-2),
-				4, 10, QBrush(getActivePen()->color()));
+			if(m_symbol != nullptr)
+			{
+				m_symbol->draw(zoom_ref, p, 3);
+			}
+			// TODO: remove static version?
+			//p->fillRect(static_cast <int>(screen.x-2),static_cast <int>(screen.y-2),
+			//	4, 10, QBrush(getActivePen()->color()));
 			return;
 		}
 	}
@@ -353,6 +384,8 @@ void TrMapPoi::drawSelect(const TrZoomMap & zoom_ref, QPainter * p, uint8_t mode
 bool TrMapPoi::setSurroundingRect()
 {
 	// TODO: set size of the symbol...
+	if(m_symbol != nullptr)
+		m_symbol->setSurroundingRect();
 	return TrGeoPoint::setSurroundingRect();
 }
 
