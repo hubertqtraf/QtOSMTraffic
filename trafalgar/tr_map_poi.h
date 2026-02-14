@@ -52,6 +52,8 @@ private:
 	uint64_t m_poi_data;
 	TrGeoObject * m_symbol;
 
+	TrGeoObject *createSymbolData(const TrZoomMap & zoom_ref, const QVector<TrPoint> & sym);
+
 protected:
 
 public:
