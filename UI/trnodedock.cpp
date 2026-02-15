@@ -55,11 +55,15 @@ void TrNodeDock::setData(TrGeoPoint * node)
 	{
 		ui->label_type_2->setText("POI");
 		ui->lineEdit_text->setText(poi->getPoiName());
+		ui->lineEdit_Flags->setText(QString::number(poi->getPoiTypeFlags(), 16));
+		ui->lineEdit_Data->setText(QString::number(poi->getPoiNumData(), 16));
 	}
 	else
 	{
 		ui->label_type_2->setText("Node");
 		ui->lineEdit_text->setText("---");
+		ui->lineEdit_Flags->setText("---");
+		ui->lineEdit_Data->setText("---");
 	}
 	ui->lineEdit_ID->setText(QString::number(node->getGeoId()));
 	TrPoint pt = node->getPoint();
