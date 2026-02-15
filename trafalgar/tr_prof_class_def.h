@@ -10,7 +10,7 @@
  * system:	UNIX/LINUX
  * compiler:	gcc
  *
- * @author	Schmid Hubert (C)2023-2025
+ * @author	Schmid Hubert (C)2023-2026
  *
  * beginning:	04.2023
  *
@@ -102,6 +102,14 @@
 // <value rgb="#5c82a6" type="color" index="4" name="stream"/>
 #define WATER_CANAL         0x0005U
 // <value rgb="#91a6a3" type="color" index="5" name="canal"/>
+
+#define POI_ADMIN        0x0001U
+#define POI_PUBIC        0x0002U
+#define POI_NATURE       0x0003U
+#define POI_BUILDING     0x0004U
+#define POI_POWER        0x0005U
+#define POI_STATION      0x0006U
+#define POI_ALPINE       0x0007U
 
 /*
 // use  only 'act_world->node_flags'!

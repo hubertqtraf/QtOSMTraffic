@@ -13,7 +13,7 @@
  *
  * beginning:	2.2024
  *
- * @author	Schmid Hubert (C)2024-2025
+ * @author	Schmid Hubert (C)2024-2026
  *
  * history:
  *
@@ -799,24 +799,48 @@ uint64_t TrImportOsmRel::getLeisureClass(const QString & value)
 	return 0;
 }
 
+// https://wiki.openstreetmap.org/wiki/Key:generator:source
+// <tag k='generator:source' v='solar' />
+// hydro, wind, geothermal
+// <tag k='generator:method' v='wind_turbine' />
+uint64_t TrImportOsmRel::getPowerSource(const QString & value, bool node)
+{
+	if(value == "solar")
+		return 1;
+	if(value == "wind")
+		return 2;
+	if(value == "hydro")
+		return 3;
+	if(value == "gas")
+		return 4;
+	if(value == "coal")
+		return 4;
+	if(value == "oil")
+		return 4;
+	if(value == "geothermal")
+		return 5;
+
+	return 0;
+}
+
 uint64_t TrImportOsmRel::getPowerClass(const QString & value, bool node)
 {
 	if(value == "generator")
 	{
 		if(node)
-			return TYPE_BUILDING | BUILDING_POWER | FLAG_FEATURE_AERA;
+			return TYPE_POWER | POI_POWER | FLAG_FEATURE_AERA;
 		return TYPE_BUILDING | BUILDING_POWER | FLAG_FEATURE_AERA;
 	}
 	if(value == "tower")
 	{
 		if(node)
-			return TYPE_BUILDING | BUILDING_POLE | FLAG_FEATURE_AERA;
+			return TYPE_POWER | BUILDING_POLE | FLAG_FEATURE_AERA;
 		return 0;
 	}
 	if(value == "pole")
 	{
 		if(node)
-			return TYPE_BUILDING | BUILDING_POLE | FLAG_FEATURE_AERA;
+			return TYPE_POWER | BUILDING_POLE | FLAG_FEATURE_AERA;
 		return 0;
 	}
 	if(value == "substation")

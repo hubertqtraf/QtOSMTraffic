@@ -197,10 +197,9 @@ bool TrMapPoi::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject * bas
 	if(m_poi_flags & (TYPE_BUILDING | TYPE_RESTRICT))
 		m_geo_active_pen = list->getObjectPen(col);
 
-	if(m_poi_flags & TYPE_BUILDING)
+	if(m_poi_flags & TYPE_POWER)
 	{
-
-		if((m_poi_flags & 0x00ff) == BUILDING_POWER)
+		if((m_poi_flags & 0x00ff) == POI_POWER)
 		{
 			m_geo_active_pen = list->getObjectPen(col);
 
@@ -332,7 +331,7 @@ void TrMapPoi::draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mode
 		//p->drawStaticText(screen.x+4, screen.y, QStaticText(m_name));
 		return;
 	}
-	if(m_poi_flags & TYPE_BUILDING)
+	if(m_poi_flags & TYPE_POWER)
 	{
 		if(m_symbol != nullptr)
 		{
