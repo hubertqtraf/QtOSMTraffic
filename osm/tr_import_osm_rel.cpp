@@ -803,22 +803,23 @@ uint64_t TrImportOsmRel::getLeisureClass(const QString & value)
 // <tag k='generator:source' v='solar' />
 // hydro, wind, geothermal
 // <tag k='generator:method' v='wind_turbine' />
+// generator:output:electricity
 uint64_t TrImportOsmRel::getPowerSource(const QString & value, bool node)
 {
 	if(value == "solar")
-		return 1;
+		return 0x0100;
 	if(value == "wind")
-		return 2;
+		return 0x0200;
 	if(value == "hydro")
-		return 3;
+		return 0x0300;
 	if(value == "gas")
-		return 4;
+		return 0x0400;
 	if(value == "coal")
-		return 4;
+		return 0x0400;
 	if(value == "oil")
-		return 4;
+		return 0x0400;
 	if(value == "geothermal")
-		return 5;
+		return 0x0500;
 
 	return 0;
 }

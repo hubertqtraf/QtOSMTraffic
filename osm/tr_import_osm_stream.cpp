@@ -381,6 +381,8 @@ void TrImportOsmStream::closeNode(QMap<QString, name_set> & name_map,
 	point.id = m_id;
 
 	point.pt_type = 0;
+	point.pt_data = 0;
+
 	if(m_tags.contains("highway"))
 	{
 		uint64_t code = TrImportOsmRel::getHighwayPointClass(m_tags["highway"]);
@@ -420,6 +422,30 @@ void TrImportOsmStream::closeNode(QMap<QString, name_set> & name_map,
 		uint64_t code = TrImportOsmRel::getPowerClass(m_tags["power"], true);
 		if(code)
 		{
+			if(m_tags["power"] == "generator")
+			{
+				QStringList list;
+				list = m_tags["generator:output:electricity"].split(' ');
+				if(list.size())
+				{
+					if(list[0] == "yes")
+					{
+						point.pt_data = 1;
+					}
+					else
+					{
+						double kw = list[0].toDouble();
+						point.pt_data = kw * 1000;
+					}
+				}
+				else
+					point.pt_data = 0;
+
+				if(m_tags.contains("generator:source"))
+				{
+					code |= TrImportOsmRel::getPowerSource(m_tags["generator:source"], true);
+				}
+			}
 			point.pt_type = code;
 		}
 		//TR_INF << "node power" << code;
@@ -464,8 +490,6 @@ void TrImportOsmStream::closeNode(QMap<QString, name_set> & name_map,
 			point.id = name_map[m_tags["name"]].id;
 		}
 	}
-
-	point.pt_data = 0;
 
 	if(m_id > 0)
 	{
@@ -622,10 +646,13 @@ void TrImportOsmStream::closeWay(QMap<QString, name_set> & name_map, uint64_t & 
 		uint64_t code = TrImportOsmRel::getAmenityClass(m_tags["amenity"], false);
 		if(code)
 		{
-			//way.type = TYPE_NATURAL | code;
-			way.type = code;
+			if(way.type | TYPE_BUILDING)
+			{
+				// TODO: create a node with amenity POI
+			}
+			else
+				way.type = code;
 		}
-		//way.type = TYPE_NATURAL | 6 | FLAG_FEATURE_AERA;
 	}
 
 	if(m_tags.contains("waterway"))
