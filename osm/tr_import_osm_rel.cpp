@@ -893,19 +893,17 @@ uint64_t TrImportOsmRel::getNaturalClass(const QString & value, bool node)
 	{
 		return (TYPE_LANDUSE | LANDUSE_COAST);
 	}
-	if(value == "tree")	// POI
+	if((value == "tree") && node)// POI
 	{
-		if(node)
-		{
-			return (8 | TYPE_NATURAL | FLAG_FEATURE_NODE | TYPE_POI_N_TREE);
-		}
+		return (8 | TYPE_NATURAL | FLAG_FEATURE_NODE | TYPE_POI_N_TREE);
 	}
-	if(value == "peak")
+	if((value == "peak") && node)
 	{
-		if(node)
-		{
-			return (TYPE_NATURAL | FLAG_FEATURE_NODE | TYPE_POI_N_PEAK);
-		}
+		return (TYPE_NATURAL | FLAG_FEATURE_NODE | TYPE_POI_N_PEAK);
+	}
+	if((value == "cave_entrance") && node)
+	{
+		return (TYPE_NATURAL | FLAG_FEATURE_NODE | TYPE_POI_N_CAVE);
 	}
 	return 0;
 }
