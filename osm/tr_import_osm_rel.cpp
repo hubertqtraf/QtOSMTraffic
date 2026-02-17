@@ -310,7 +310,7 @@ bool TrImportOsmRel::handleMultiPoly(QMap<uint64_t, Way_t> & waylist, Relation &
 	}
 	if(m_tags.contains("natural"))
 	{
-		type = getNaturalClass(m_tags["natural"]);
+		type = getNaturalClass(m_tags["natural"], false);
 		rel.m_flags |= type;
 	}
 	if(m_tags.contains("landuse"))
@@ -559,14 +559,6 @@ uint64_t TrImportOsmRel::getRailwayPointClass(const QString & value)
 		return (7 | FLAG_FEATURE_NODE | TYPE_RAIL);
 	return 0;
 }
-
-//<tag k='natural' v='tree' />
-/*uint64_t TrImportOsmRel::getNaturalClass(const QString & value)
-{
-	if(value == "tree")
-		return (1 | FLAG_FEATURE_NODE | TYPE_NATURAL);
-	return 0;
-}*/
 
 uint64_t TrImportOsmRel::getAmenityClass(const QString & value, bool node)
 {
@@ -874,7 +866,7 @@ uint64_t TrImportOsmRel::getPowerClass(const QString & value, bool node)
 	return 0;
 }
 
-uint64_t TrImportOsmRel::getNaturalClass(const QString & value)
+uint64_t TrImportOsmRel::getNaturalClass(const QString & value, bool node)
 {
 	if(value == "wood")
 		//return (NATURAL_FOREST | FLAG_FEATURE_AERA);
@@ -903,8 +895,17 @@ uint64_t TrImportOsmRel::getNaturalClass(const QString & value)
 	}
 	if(value == "tree")	// POI
 	{
-		//TR_INF << "-----tree------";
-		return (8 | TYPE_NATURAL | FLAG_FEATURE_NODE | TYPE_POI_N_TREE);
+		if(node)
+		{
+			return (8 | TYPE_NATURAL | FLAG_FEATURE_NODE | TYPE_POI_N_TREE);
+		}
+	}
+	if(value == "peak")
+	{
+		if(node)
+		{
+			return (TYPE_NATURAL | FLAG_FEATURE_NODE | TYPE_POI_N_PEAK);
+		}
 	}
 	return 0;
 }

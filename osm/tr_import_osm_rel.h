@@ -92,7 +92,7 @@ public:
 	static uint64_t getLeisureClass(const QString & value);
 	static uint64_t getPowerClass(const QString & value, bool node);
 	static uint64_t getPowerSource(const QString &value, bool node);
-	static uint64_t getNaturalClass(const QString & value);
+	static uint64_t getNaturalClass(const QString & value, bool node);
 	static uint64_t getWaterWayClass(const QString & value);
 	static uint64_t getRailWayClass(const QString & value);
 

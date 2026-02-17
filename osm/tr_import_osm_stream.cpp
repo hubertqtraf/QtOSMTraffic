@@ -401,9 +401,14 @@ void TrImportOsmStream::closeNode(QMap<QString, name_set> & name_map,
 	}
 	if(m_tags.contains("natural"))
 	{
-		uint64_t code = TrImportOsmRel::getNaturalClass(m_tags["natural"]);
+		uint64_t code = TrImportOsmRel::getNaturalClass(m_tags["natural"], true);
 		if(code)
 		{
+			if((code & TYPE_POI_N_PEAK) == TYPE_POI_N_PEAK)
+			{
+				QString ele = m_tags["ele"];
+				point.pt_data = ele.toInt();
+			}
 			point.pt_type = code;
 		}
 	}
@@ -634,7 +639,7 @@ void TrImportOsmStream::closeWay(QMap<QString, name_set> & name_map, uint64_t & 
 
 	if(m_tags.contains("natural"))
 	{
-		uint64_t code = TrImportOsmRel::getNaturalClass(m_tags["natural"]);
+		uint64_t code = TrImportOsmRel::getNaturalClass(m_tags["natural"], false);
 		if(code)
 		{
 			way.type = code; //TYPE_NATURAL | code;
