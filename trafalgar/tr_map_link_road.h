@@ -81,13 +81,7 @@ private:
 
 	void getNodePoints(TrPoint & pt1, TrPoint & pt2);
 
-	//bool getMoveCrossPoint(const TrZoomMap & zoom_ref);
-
-	bool moveBaseLine(const TrZoomMap & zoom_ref);
-
 	void drawParLine(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mode);
-
-	void triCross(const TrZoomMap & zoom_ref, TrMapNode & node);
 
 	bool setCrossingPoint(TrPoint & pt, bool dir);
 
@@ -96,7 +90,6 @@ protected:
 	TrPoint m_pt_from;
 	TrPoint m_pt_to;
 
-	int moveCheck(TrMapNode & node);
 	TrMapLinkRoad * getNextLink(TrMapNode & node, int n, bool dir, double & ang);
 
 public:
