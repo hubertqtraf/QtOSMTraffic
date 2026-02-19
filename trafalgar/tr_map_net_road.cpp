@@ -127,6 +127,7 @@ bool TrMapNetRoad::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject *
 	if(s_mask & TR_MASK_SET_RAMPS)
 	{
 		m_link_list->init(zoom_ref, TR_INIT_GEOMETRY | 12, nullptr);
+		m_node_map->init(zoom_ref, TR_INIT_GEOMETRY | TR_INIT_ND_ANG, nullptr);
 		m_node_map->init(zoom_ref, TR_INIT_GEOMETRY | TR_INIT_ND_CROSS, m_primive_map);
 	}
 

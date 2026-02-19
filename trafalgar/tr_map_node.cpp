@@ -425,8 +425,6 @@ bool TrMapNode::setCrossingByAngle(const TrZoomMap & zoom_ref, bool type, int mo
 
 bool TrMapNode::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject * base)
 {
-	int fork = 0;
-
 	if(ctrl & TR_INIT_COLORS)
 	{
 		if(base != nullptr)
@@ -467,21 +465,6 @@ bool TrMapNode::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject * ba
 
 	if((ctrl & 0xff) == TR_INIT_ND_CROSS)
 	{
-		// getIn == 2
-		// TODO: rework, simplify...
-		if(checkTwoFork(true, true))
-		{
-			//getOut == 1
-			fork = 1;
-		}
-		// getOut == 2
-		if(checkTwoFork(false, true))
-		{
-			fork = 2;
-			//return true;
-		}
-		//m_test.clear();
-		//TR_INF << "in out" << getIn(false) << getOut(false);
 		if((getIn(false) <= 1) && (getOut(false) <= 1))
 		{
 			// TODO: check the 'return true'
@@ -492,11 +475,8 @@ bool TrMapNode::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject * ba
 		{
 			//return true;
 		}
-		// TODO: check: is needed! -> old? double used?
-		setConnectionAngles(zoom_ref, TR_NODE_OUT);
-		setConnectionAngles(zoom_ref, TR_NODE_IN);
 
-		if(fork == 1)
+		if(checkTwoFork(true, true))
 		{
 			TrGeoObject * next_obj = m_vec_out[0].tr_obj;
 			TrMapLink * next_link = dynamic_cast<TrMapLink *>(next_obj);
@@ -506,7 +486,7 @@ bool TrMapNode::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject * ba
 					return true;
 			}
 		}
-		if(fork == 2)
+		if(checkTwoFork(false, true))
 		{
 			TrGeoObject * next_obj = m_vec_in[0].tr_obj;
 			TrMapLink * next_link = dynamic_cast<TrMapLink *>(next_obj);
@@ -515,7 +495,6 @@ bool TrMapNode::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject * ba
 				if(next_link->setRamp(zoom_ref, false))
 					return true;
 			}
-			//return true;
 		}
 
 		// default: no ramp
