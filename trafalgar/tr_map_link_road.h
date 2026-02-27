@@ -85,6 +85,8 @@ private:
 
 	bool setCrossingPoint(TrPoint & pt, bool dir);
 
+	uint8_t handleRamps(const TrZoomMap &zoom_ref, TrMapLinkRoad *next_link, TrGeoObject *node, uint8_t mode);
+
 protected:
 	// copy of moved position of the node
 	TrPoint m_pt_from;

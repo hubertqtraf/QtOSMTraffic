@@ -469,6 +469,70 @@ void TrMapLinkRoad::initDoubleLine(const TrZoomMap & zoom_ref, QVector<TrPoint> 
 	}
 }
 
+//#define TR_LINK_DIR_ONEWAY	0x01
+//#define TR_LINK_DIR_BWD	0x04
+
+uint8_t TrMapLinkRoad::handleRamps(const TrZoomMap & zoom_ref, TrMapLinkRoad * next_link, TrGeoObject * node, uint8_t mode)
+{
+	TrGeoSegment first_segment;
+	TrGeoSegment next_segment;
+
+	if(this == next_link)
+		return 0;
+
+	TrMapNode * n = dynamic_cast<TrMapNode *>(node);
+	if(n == nullptr)
+		return 0xef;
+
+	int ramps = 0;
+	if(getType() & TR_LINK_RAMP_FLAG)
+	{
+		ramps++;
+	}
+	if(next_link->getType() & TR_LINK_RAMP_FLAG)
+	{
+		ramps++;
+	}
+	if(ramps == 0)
+		return 0;
+
+	double ang = 10.0;
+	if(next_link->getNodeFrom() == getNodeFrom())
+	{
+		getSegmentWithParm(first_segment, n->getGeoId(), false, mode);
+		next_link->getSegmentWithParm(next_segment, n->getGeoId(), true, mode);
+
+		int code = first_segment.getAngleCode(zoom_ref, next_segment, ang);
+		TrPoint pt = next_segment.getSecondPoint();
+		//TR_INF << "ang " << code << ang;
+		if(ang < 1.0)
+		{
+			setCrossingPoint(pt, true);
+			initDoubleLineWidth(zoom_ref);
+			return 1;
+		}
+	}
+	if(next_link->getNodeTo() == getNodeTo())
+	{
+		getSegmentWithParm(first_segment, n->getGeoId(), false, mode);
+		next_link->getSegmentWithParm(next_segment, n->getGeoId(), true, mode);
+
+		if(!(getOneWay() & TR_LINK_DIR_BWD))
+			next_segment.doReverse();
+
+		int code = first_segment.getAngleCode(zoom_ref, next_segment, ang);
+		if(ang < 1.0)
+		{
+			TrPoint pt = first_segment.getSecondPoint();
+			//if(test){TrMapNet::ms_point = pt;}
+			next_link->setCrossingPoint(pt, false);
+			next_link->initDoubleLineWidth(zoom_ref);
+			return 1;
+		}
+	}
+	return 5;
+}
+
 uint8_t TrMapLinkRoad::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * other, TrGeoObject * node, uint8_t mode)
 {
 	TrMapNode * n = dynamic_cast<TrMapNode *>(node);
@@ -566,6 +630,8 @@ uint8_t TrMapLinkRoad::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * 
 
 	if((first_obj == nullptr) || (next_obj == nullptr))
 		return 1;
+
+	// handleRamps
 
 	int lane_diff = abs(next_link->getLanes() - first_link->getLanes());
 
