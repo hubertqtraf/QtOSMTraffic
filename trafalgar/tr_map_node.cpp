@@ -465,39 +465,6 @@ bool TrMapNode::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject * ba
 
 	if((ctrl & 0xff) == TR_INIT_ND_CROSS)
 	{
-		if((getIn(false) <= 1) && (getOut(false) <= 1))
-		{
-			// TODO: check the 'return true'
-			// one to one with lane number change seems to be OK
-		}
-		// TODO: one to one double dir -> more checking...
-		if((getIn(false) == 2) && (getOut(false) == 2))
-		{
-			//return true;
-		}
-
-		if(checkTwoFork(true, true))
-		{
-			TrGeoObject * next_obj = m_vec_out[0].tr_obj;
-			TrMapLink * next_link = dynamic_cast<TrMapLink *>(next_obj);
-			if(next_link != nullptr)
-			{
-				if(next_link->setRamp(zoom_ref, true))
-					return true;
-			}
-		}
-		if(checkTwoFork(false, true))
-		{
-			TrGeoObject * next_obj = m_vec_in[0].tr_obj;
-			TrMapLink * next_link = dynamic_cast<TrMapLink *>(next_obj);
-			if(next_link != nullptr)
-			{
-				if(next_link->setRamp(zoom_ref, false))
-					return true;
-			}
-		}
-
-		// default: no ramp
 		setCrossingByAngle(zoom_ref, false, 1);
 		return true;
 	}

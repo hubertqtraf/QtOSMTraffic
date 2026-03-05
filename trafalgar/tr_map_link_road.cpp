@@ -362,6 +362,11 @@ bool TrMapLinkRoad::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject 
 			if((getType() & 0x000f) < 9)
 				handleSmallElement(zoom_ref, 0.2, m_mm_calc_width / 1000.0);
 		}
+		// TODO: test
+		if(ctrl == 45)
+		{
+			//initDoubleLineWidth(zoom_ref);
+		}
 
 		// code for double line
 		if(ctrl == 14)
@@ -469,9 +474,6 @@ void TrMapLinkRoad::initDoubleLine(const TrZoomMap & zoom_ref, QVector<TrPoint> 
 	}
 }
 
-//#define TR_LINK_DIR_ONEWAY	0x01
-//#define TR_LINK_DIR_BWD	0x04
-
 uint8_t TrMapLinkRoad::handleRamps(const TrZoomMap & zoom_ref, TrMapLinkRoad * next_link, TrGeoObject * node, uint8_t mode)
 {
 	TrGeoSegment first_segment;
@@ -499,14 +501,27 @@ uint8_t TrMapLinkRoad::handleRamps(const TrZoomMap & zoom_ref, TrMapLinkRoad * n
 	double ang = 10.0;
 	if(next_link->getNodeFrom() == getNodeFrom())
 	{
+		if((getOneWay() & TR_LINK_DIR_ONEWAY) != TR_LINK_DIR_ONEWAY)
+		{
+			return 0;
+		}
+		/*if((next_link->getOneWay() & TR_LINK_DIR_ONEWAY) != TR_LINK_DIR_ONEWAY)
+		{
+			return 0;
+		}*/
 		getSegmentWithParm(first_segment, n->getGeoId(), false, mode);
 		next_link->getSegmentWithParm(next_segment, n->getGeoId(), true, mode);
 
+		if((next_link->getOneWay() & TR_LINK_DIR_ONEWAY) == TR_LINK_DIR_ONEWAY)
+		{
+			next_segment.doReverse();
+		}
+
 		int code = first_segment.getAngleCode(zoom_ref, next_segment, ang);
 		TrPoint pt = next_segment.getSecondPoint();
-		//TR_INF << "ang " << code << ang;
 		if(ang < 1.0)
 		{
+			//TR_INF << "From " << ang << *this << *next_link;
 			setCrossingPoint(pt, true);
 			initDoubleLineWidth(zoom_ref);
 			return 1;
@@ -517,14 +532,23 @@ uint8_t TrMapLinkRoad::handleRamps(const TrZoomMap & zoom_ref, TrMapLinkRoad * n
 		getSegmentWithParm(first_segment, n->getGeoId(), false, mode);
 		next_link->getSegmentWithParm(next_segment, n->getGeoId(), true, mode);
 
+		if((getOneWay() & TR_LINK_DIR_ONEWAY) != TR_LINK_DIR_ONEWAY)
+		{
+			return 0;
+		}
+		/*if((next_link->getOneWay() & TR_LINK_DIR_ONEWAY) != TR_LINK_DIR_ONEWAY)
+		{
+			return 0;
+		}*/
+
 		if(!(getOneWay() & TR_LINK_DIR_BWD))
 			next_segment.doReverse();
 
 		int code = first_segment.getAngleCode(zoom_ref, next_segment, ang);
 		if(ang < 1.0)
 		{
+			//TR_INF << "TO  " << ang << *this << *next_link;
 			TrPoint pt = first_segment.getSecondPoint();
-			//if(test){TrMapNet::ms_point = pt;}
 			next_link->setCrossingPoint(pt, false);
 			next_link->initDoubleLineWidth(zoom_ref);
 			return 1;
@@ -631,8 +655,10 @@ uint8_t TrMapLinkRoad::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * 
 	if((first_obj == nullptr) || (next_obj == nullptr))
 		return 1;
 
-	// handleRamps
-
+	if(handleRamps(zoom_ref, next_link, node, mode) == 1)
+	{
+		return 5;
+	}
 	int lane_diff = abs(next_link->getLanes() - first_link->getLanes());
 
 	if(getOneWay() & TR_LINK_DIR_BWD)
