@@ -51,6 +51,11 @@ bool FileOptions::getShiftOption()
 	return (ui->shiftCheck->checkState() == Qt::Checked);
 }
 
+bool FileOptions::getLeftOption()
+{
+    return (ui->leftDrive->checkState() == Qt::Checked);
+}
+
 bool FileOptions::getRelationOption()
 {
 	return (ui->relCheck->checkState() == Qt::Unchecked);
@@ -114,6 +119,14 @@ void FileOptions::manageSettings(QSettings & settings, bool mode)
 		{
 			ui->shiftCheck->setCheckState(Qt::Unchecked);
 		}
+		if(settings.value("Left").toInt())
+		{
+			ui->leftDrive->setCheckState(Qt::Checked);
+		}
+		else
+		{
+			ui->leftDrive->setCheckState(Qt::Unchecked);
+		}
 	}
 	else            // write
 	{
@@ -122,11 +135,21 @@ void FileOptions::manageSettings(QSettings & settings, bool mode)
 		settings.setValue("Profile", ui->profileDir->text());
 		if(ui->shiftCheck->checkState() == Qt::Checked)
 		{
+			TrGeoObject::s_mask |= TR_MASK_LEFT_DRIVE;
 			settings.setValue("Shift", 2);
 		}
 		else
 		{
+			TrGeoObject::s_mask &= ~TR_MASK_LEFT_DRIVE;
 			settings.setValue("Shift", 0);
+		}
+		if(ui->leftDrive->checkState() == Qt::Checked)
+		{
+			settings.setValue("Left", 2);
+		}
+		else
+		{
+			settings.setValue("Left", 0);
 		}
 	}
 	settings.endGroup();
@@ -134,13 +157,15 @@ void FileOptions::manageSettings(QSettings & settings, bool mode)
 
 void FileOptions::useOptions(uint64_t opt)
 {
-	if(opt & TR_MASK_LEFT_DRIVE)
+	if(ui->leftDrive->checkState() == Qt::Checked)
 	{
+		TrGeoObject::s_mask |= TR_MASK_LEFT_DRIVE;
 		TrMapLinkRoad::ms_lane_width_p = 0-ui->laneSpinBox->value();
 		TrMapLinkRoad::ms_lane_width_n = ui->laneSpinBox->value();
 	}
 	else
 	{
+		TrGeoObject::s_mask &= ~TR_MASK_LEFT_DRIVE;
 		TrMapLinkRoad::ms_lane_width_p = ui->laneSpinBox->value();
 		TrMapLinkRoad::ms_lane_width_n = 0-ui->laneSpinBox->value();
 	}

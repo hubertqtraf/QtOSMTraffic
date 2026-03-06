@@ -158,7 +158,7 @@ void MainWindow::on_handleResults(const TrGeoObject **obj)
 	window()->setWindowTitle("OSM Traffic: " + m_map_view->getDocument().getFileName());
 	m_map_view->setLoadedFlag(true);
 	on_updateNetOptions(0);
-	on_updateNetOptions(m_net_option->getNetFlags());
+	on_updateNetOptions(TrGeoObject::s_mask); //m_net_option->getNetFlags());
 
 	unsetCursor();
 

@@ -52,8 +52,6 @@ private slots:
 
 	void on_rd_name_clicked(bool checked);
 
-	void on_leftDrive_clicked(bool checked);
-
 private:
 	Ui::TrNetDock *ui;
 
