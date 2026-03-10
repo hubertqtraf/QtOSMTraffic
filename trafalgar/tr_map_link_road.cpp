@@ -501,16 +501,16 @@ uint8_t TrMapLinkRoad::handleRamps(const TrZoomMap & zoom_ref, TrMapLinkRoad * n
 	double ang = 10.0;
 	if(next_link->getNodeFrom() == getNodeFrom())
 	{
-		if((getOneWay() & TR_LINK_DIR_ONEWAY) != TR_LINK_DIR_ONEWAY)
-		{
-			return 0;
-		}
-		/*if((next_link->getOneWay() & TR_LINK_DIR_ONEWAY) != TR_LINK_DIR_ONEWAY)
-		{
-			return 0;
-		}*/
 		getSegmentWithParm(first_segment, n->getGeoId(), false, mode);
 		next_link->getSegmentWithParm(next_segment, n->getGeoId(), true, mode);
+
+		if((next_link->getOneWay() & TR_LINK_DIR_ONEWAY) != TR_LINK_DIR_ONEWAY)
+		{
+			if((next_link->getOneWay() & TR_LINK_DIR_BWD) != TR_LINK_DIR_BWD)
+			{
+				next_segment.doReverse();
+			}
+		}
 
 		if((next_link->getOneWay() & TR_LINK_DIR_ONEWAY) == TR_LINK_DIR_ONEWAY)
 		{
@@ -532,17 +532,15 @@ uint8_t TrMapLinkRoad::handleRamps(const TrZoomMap & zoom_ref, TrMapLinkRoad * n
 		getSegmentWithParm(first_segment, n->getGeoId(), false, mode);
 		next_link->getSegmentWithParm(next_segment, n->getGeoId(), true, mode);
 
-		if((getOneWay() & TR_LINK_DIR_ONEWAY) != TR_LINK_DIR_ONEWAY)
+		if((next_link->getOneWay() & TR_LINK_DIR_ONEWAY) != TR_LINK_DIR_ONEWAY)
 		{
-			return 0;
+			if(!(getOneWay() & TR_LINK_DIR_BWD))
+				next_segment.doReverse();
 		}
-		/*if((next_link->getOneWay() & TR_LINK_DIR_ONEWAY) != TR_LINK_DIR_ONEWAY)
+		if((next_link->getOneWay() & TR_LINK_DIR_ONEWAY) == TR_LINK_DIR_ONEWAY)
 		{
-			return 0;
-		}*/
-
-		if(!(getOneWay() & TR_LINK_DIR_BWD))
 			next_segment.doReverse();
+		}
 
 		int code = first_segment.getAngleCode(zoom_ref, next_segment, ang);
 		if(ang < 1.0)
