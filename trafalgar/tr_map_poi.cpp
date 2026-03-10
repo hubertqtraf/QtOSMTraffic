@@ -248,30 +248,55 @@ bool TrMapPoi::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject * bas
 			m_symbol = createSymbolData(zoom_ref, *res);
 		}
 	}
+
 	if(m_poi_flags & (TYPE_ROAD | TYPE_RAIL | TYPE_STREAM))
 	{
+		// TODO: switch for station/bus stop
 		m_geo_active_pen = list->getObjectPen(col);
 		if(m_symbol != nullptr)
 		{
 			return true;
 		}
-		QVector<TrPoint> res[5];
-		TrPoint base = getPoint();
-		base.x = base.x + 1.0;
-		base.y = base.y + 2.0;
-		res->append(base);
-		base.x = getPoint().x - 1.0;
-		base.y = getPoint().y + 2.0;
-		res->append(base);
-		base.x = getPoint().x + 1.0;
-		base.y = getPoint().y - 2.0;
-		res->append(base);
-		base.x = getPoint().x - 1.0;
-		base.y = getPoint().y - 2.0;
-		res->append(base);
-		res->append(res[0]);
+		if((m_poi_flags & 0x000000000000000f) == 7)
+		{
+			QVector<TrPoint> res[5];
+			TrPoint base = getPoint();
+			base.x = base.x + 1.0;
+			base.y = base.y + 2.0;
+			res->append(base);
+			base.x = getPoint().x - 1.0;
+			base.y = getPoint().y + 2.0;
+			res->append(base);
+			base.x = getPoint().x + 1.0;
+			base.y = getPoint().y - 2.0;
+			res->append(base);
+			base.x = getPoint().x - 1.0;
+			base.y = getPoint().y - 2.0;
+			res->append(base);
+			res->append(res[0]);
 
-		m_symbol = createSymbolData(zoom_ref, *res);
+			m_symbol = createSymbolData(zoom_ref, *res);
+		}
+		if((m_poi_flags & 0x000000000000000f) == 1)
+		{
+			QVector<TrPoint> res[5];
+			TrPoint base = getPoint();
+			base.x = base.x + 1.0;
+			base.y = base.y + 1.0;
+			res->append(base);
+			base.x = base.x - 2.0;
+			base.y = base.y - 2.0;
+			res->append(base);
+			base = getPoint();
+			res->append(base);
+			base.x = base.x + 1.0;
+			base.y = base.y - 1.0;
+			res->append(base);
+			base.x = base.x - 2.0;
+			base.y = base.y + 2.0;
+			res->append(base);
+			m_symbol = createSymbolData(zoom_ref, *res);
+		}
 	}
 	if(m_poi_flags & TYPE_POI_P_ALPINE)
 	{
@@ -371,25 +396,10 @@ void TrMapPoi::draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mode
 
 	if(m_poi_flags & (TYPE_ROAD | TYPE_RAIL | TYPE_STREAM))
 	{
-		if((m_poi_flags & 0x000000000000000f) == 7)
+		if(m_symbol != nullptr)
 		{
-			if(m_symbol != nullptr)
-			{
-				m_symbol->draw(zoom_ref, p, 3);
-			}
+			m_symbol->draw(zoom_ref, p, 3);
 		}
-		if((m_poi_flags & 0x000000000000000f) == 1)
-		{
-			p->drawLine(static_cast <int>(screen.x-4),
-				static_cast <int>(screen.y-4),
-				static_cast <int>(screen.x+4),
-				static_cast <int>(screen.y+4));
-			p->drawLine(static_cast <int>(screen.x-4),
-				static_cast <int>(screen.y+4),
-				static_cast <int>(screen.x+4),
-				static_cast <int>(screen.y-4));
-		}
-		// TODO: switch for station/bus stop
 	}
 
 	if(m_name.size())
