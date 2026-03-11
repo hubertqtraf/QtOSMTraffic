@@ -702,28 +702,37 @@ void TrImportOsmStream::closeWay(QMap<QString, name_set> & name_map, uint64_t & 
 		//TR_INF << m_tags["width"] << way.width;
 	}
 
+	QString full_name;
 	if(m_tags.contains("name"))
 	{
-		if(!name_map.contains(m_tags["name"]))
-		{
-			name_set set;
-			set.id = act_id;
-			set.number = 1;
-			name_map[m_tags["name"]] = set;
-			way.name_id = act_id;
-
-			//TR_INF << "Way: " << way.name_id << m_tags["name"];
-			act_id++;
-		}
-		else
-		{
-			name_map[m_tags["name"]].number++;
-			way.name_id = name_map[m_tags["name"]].id;
-		}
+		full_name = m_tags["name"];
 	}
 	if(m_tags.contains("name:en"))
 	{
 		//TR_INF << "E" << m_tags["name:en"];
+	}
+	if(m_tags.contains("ref"))
+	{
+		if(full_name.size())
+			full_name += "/";
+		full_name += m_tags["ref"];
+	}
+
+	if(!name_map.contains(full_name))
+	{
+		name_set set;
+		set.id = act_id;
+		set.number = 1;
+		name_map[full_name] = set;
+		way.name_id = act_id;
+
+		//TR_INF << "Way: " << way.name_id << m_tags["name"];
+		act_id++;
+	}
+	else
+	{
+		name_map[full_name].number++;
+		way.name_id = name_map[full_name].id;
 	}
 
 	// exp: <tag k='parking:left:orientation' v='parallel' />

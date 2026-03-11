@@ -517,7 +517,7 @@ uint8_t TrMapLinkRoad::handleRamps(const TrZoomMap & zoom_ref, TrMapLinkRoad * n
 			next_segment.doReverse();
 		}
 
-		int code = first_segment.getAngleCode(zoom_ref, next_segment, ang);
+		/*int code = */first_segment.getAngleCode(zoom_ref, next_segment, ang);
 		TrPoint pt = next_segment.getSecondPoint();
 		if(ang < 1.0)
 		{
@@ -542,7 +542,7 @@ uint8_t TrMapLinkRoad::handleRamps(const TrZoomMap & zoom_ref, TrMapLinkRoad * n
 			next_segment.doReverse();
 		}
 
-		int code = first_segment.getAngleCode(zoom_ref, next_segment, ang);
+		/*int code = */first_segment.getAngleCode(zoom_ref, next_segment, ang);
 		if(ang < 1.0)
 		{
 			//TR_INF << "TO  " << ang << *this << *next_link;
