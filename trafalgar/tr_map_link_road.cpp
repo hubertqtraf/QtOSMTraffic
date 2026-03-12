@@ -362,11 +362,6 @@ bool TrMapLinkRoad::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject 
 			if((getType() & 0x000f) < 9)
 				handleSmallElement(zoom_ref, 0.2, m_mm_calc_width / 1000.0);
 		}
-		// TODO: test
-		if(ctrl == 45)
-		{
-			//initDoubleLineWidth(zoom_ref);
-		}
 
 		// code for double line
 		if(ctrl == 14)
@@ -818,72 +813,6 @@ TrGeoObject * TrMapLinkRoad::getSegmentWithParm(TrGeoSegment & segment, int64_t 
 	else
 		parallel->getSegment(segment, !dir, md);
 	return parallel;
-}
-
-bool TrMapLinkRoad::setRamp(const TrZoomMap & zoom_ref, bool dir)
-{
-	if((m_node_from == nullptr) || (m_node_to == nullptr))
-	{
-		TR_ERR << "nullptr";
-		return -1;
-	}
-	TrMapNode * nd = m_node_to;
-	if(dir)
-		nd = m_node_from;
-
-	// only for onway links
-	if(!nd->checkTwoFork(dir, true))
-	{
-		return false;
-	}
-
-	TrPoint t_pt = {0.0, 0.0};
-
-	double ang1 = 10.0;
-	double ang2 = 10.0;
-	TrMapLinkRoad * link1 = nullptr;
-	TrMapLinkRoad * link2 = nullptr;
-	if(s_mask & TR_MASK_LEFT_DRIVE)
-	{
-		link2 = dynamic_cast<TrMapLinkRoad *>(nd->getElement(0, dir, ang1));
-		link1 = dynamic_cast<TrMapLinkRoad *>(nd->getElement(1, dir, ang2));
-	}
-	else
-	{
-		link1 = dynamic_cast<TrMapLinkRoad *>(nd->getElement(0, dir, ang1));
-		link2 = dynamic_cast<TrMapLinkRoad *>(nd->getElement(1, dir, ang2));
-	}
-
-	if((link1 == nullptr) || (link2 == nullptr))
-	{
-		return false;
-	}
-
-	if(TrMapNode::switchLinksByAngle(ang2, ang1, dir))
-	{
-		TrMapLinkRoad * cp = link1;
-		link1 = link2;
-		link2 = cp;
-	}
-
-	bool dir1 = dir;
-	bool dir2 = dir;
-	if(link1->getOneWay() & TR_LINK_DIR_BWD)
-		dir1 = !dir;
-	if(link2->getOneWay() & TR_LINK_DIR_BWD)
-		dir2 = !dir;
-
-	if(link2->getParPoint(!dir2, t_pt))
-	{
-		if(link1->isAsDoubleLine() && link2->isAsDoubleLine())
-		{
-			link1->setCrossingPoint(t_pt, !dir1);
-			TrMapLinkRoad * link = dynamic_cast<TrMapLinkRoad *>(link1);
-			if(link != nullptr)
-				link->initDoubleLineWidth(zoom_ref);
-		}
-	}
-	return true;
 }
 
 //#define SEGMENT_FROM false

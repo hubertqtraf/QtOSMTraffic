@@ -144,8 +144,6 @@ public:
 
 	bool setSurroundingRect();
 
-	bool setRamp(const TrZoomMap & zoom_ref, bool dir);
-
 	bool checkRamps(const TrZoomMap & zoom_ref, bool do_reset);
 
 	virtual bool getParPoint(bool first, TrPoint & pt);

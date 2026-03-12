@@ -162,8 +162,6 @@ public:
 
 	int getNextAngleObj(TrConnectionMember & member, bool dir);
 
-	bool checkTwoFork(bool dir, bool filter);
-
 	int checkTwoByTwo();
 
 	void setShadowNode(TrMapNode * node);

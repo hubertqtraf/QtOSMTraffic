@@ -697,12 +697,6 @@ bool TrMapLink::setParPoint(bool first, TrPoint & pt)
 	return false;
 }
 
-bool TrMapLink::setRamp(const TrZoomMap & zoom_ref, bool dir)
-{
-	TR_WRN << "do not use";
-	return false;
-}
-
 // used for ramp and normal crossing on base line (oneway)
 bool TrMapLink::setCrossingPoint(TrPoint & pt, bool dir)
 {

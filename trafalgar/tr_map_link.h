@@ -195,7 +195,6 @@ public:
 	virtual bool getParPoint(bool first, TrPoint & pt);
 	virtual bool setParPoint(bool first, TrPoint & pt);
 
-	virtual bool setRamp(const TrZoomMap & zoom_ref, bool dir);
 	virtual bool setCrossingPoint(TrPoint & pt, bool dir);
 
 	virtual void setPolyPoints(TrGeoPolygon & line);

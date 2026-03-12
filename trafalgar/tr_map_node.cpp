@@ -813,28 +813,6 @@ int TrMapNode::hasRamp(QVector<TrConnectionMember> & vec)
 	return count_ramp;
 }
 
-// if all are oneway links
-bool TrMapNode::checkTwoFork(bool dir, bool filter)
-{
-	if(dir)
-	{
-		if((getIn(filter)  == 2) && (getOut(filter) == 1))
-		{
-			if((hasRamp(m_vec_in) == 1) && (getIn(filter)  == 2))
-				return true;
-		}
-	}
-	else
-	{
-		if ((getIn(filter)  == 1) && (getOut(filter) == 2))
-		{
-			if((hasRamp(m_vec_out) == 1) && (getOut(filter)  == 2))
-				return true;
-		}
-	}
-	return false;
-}
-
 int TrMapNode::checkTwoByTwo()
 {
 	if((m_vec_in.size() == 1) && (m_vec_out.size() == 1))
