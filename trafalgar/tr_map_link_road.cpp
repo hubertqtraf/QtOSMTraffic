@@ -518,9 +518,12 @@ uint8_t TrMapLinkRoad::handleRamps(const TrZoomMap & zoom_ref, TrMapLinkRoad * n
 		}
 
 		/*int code = */first_segment.getAngleCode(zoom_ref, next_segment, ang);
-		TrPoint pt = next_segment.getSecondPoint();
+
 		if(ang < 1.0)
 		{
+			TrPoint pt = next_segment.getSecondPoint();
+			if((getOneWay() & TR_LINK_DIR_BWD) == TR_LINK_DIR_BWD)
+				next_segment.getFirstPoint();
 			//TR_INF << "From " << ang << *this << *next_link;
 			setCrossingPoint(pt, true);
 			initDoubleLineWidth(zoom_ref);
@@ -547,6 +550,8 @@ uint8_t TrMapLinkRoad::handleRamps(const TrZoomMap & zoom_ref, TrMapLinkRoad * n
 		{
 			//TR_INF << "TO  " << ang << *this << *next_link;
 			TrPoint pt = first_segment.getSecondPoint();
+			if((getOneWay() & TR_LINK_DIR_BWD) == TR_LINK_DIR_BWD)
+				pt = first_segment.getFirstPoint();
 			next_link->setCrossingPoint(pt, false);
 			next_link->initDoubleLineWidth(zoom_ref);
 			return 1;
