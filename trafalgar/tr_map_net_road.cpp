@@ -39,8 +39,6 @@
 
 #include "tr_map_node.h"
 
-#include "tr_name_element.h"
-
 TrMapList * TrMapNetRoad::ms_name_list = nullptr;
 
 TrMapNetRoad::TrMapNetRoad()
