@@ -469,14 +469,22 @@ void TrMapLinkRoad::initDoubleLine(const TrZoomMap & zoom_ref, QVector<TrPoint> 
 	}
 }
 
-double TrMapLinkRoad::checkCrossing(const TrZoomMap & zoom_ref, TrGeoSegment & cross_segment, TrPoint cross)
+double TrMapLinkRoad::checkCrossing(const TrZoomMap & zoom_ref, TrGeoSegment &cross_segment, TrPoint cross)
 {
 	TrGeoSegment test_segment(cross_segment.getSecondPoint(), cross);
-	double ang_diff = abs(cross_segment.getAngle(zoom_ref) - test_segment.getAngle(zoom_ref));
+	double test_ang = test_segment.getAngle(zoom_ref);
+	double cross_ang = cross_segment.getAngle(zoom_ref);
+
+	double ang_diff = fabs(test_ang - cross_ang);
+	if((test_ang > 99.0) || (cross_ang > 99.0))
+		return -1.0;
+	if(ang_diff > (M_PI * 2.0))
+		ang_diff -= (M_PI * 2.0);
 	if(ang_diff < 0.5)
 		return test_segment.getLength(zoom_ref);
 	return -1.0;
 }
+
 
 uint8_t TrMapLinkRoad::handleRamps(const TrZoomMap & zoom_ref, TrMapLinkRoad * next_link, TrGeoObject * node, uint8_t mode)
 {
@@ -680,13 +688,6 @@ uint8_t TrMapLinkRoad::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * 
 	// create the crossing point
 	first_segment.getCrossPoint(zoom_ref, cross_pt, next_segment);
 
-	double len = checkCrossing(zoom_ref, next_segment, cross_pt);
-	if(len > 0.0)
-		return 5;
-	len = checkCrossing(zoom_ref, first_segment, cross_pt);
-	if(len > 0.0)
-		return 5;
-
 	double ang = 10.0;
 	int code = first_segment.getAngleCode(zoom_ref, next_segment, ang);
 	if(code)
@@ -721,6 +722,16 @@ uint8_t TrMapLinkRoad::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * 
 	if(lane_diff && (ang < 0.5) && (code == 0))
 	{
 		cross_pt = first_segment.getSecondPoint();
+		return 5;
+	}
+	double len = checkCrossing(zoom_ref, next_segment, cross_pt);
+	if(len > -0.5)
+	{
+		return 5;
+	}
+	len = checkCrossing(zoom_ref, first_segment, cross_pt);
+	if(len > -0.5)
+	{
 		return 5;
 	}
 	if(first_link->getOneWay() & TR_LINK_DIR_ONEWAY)
