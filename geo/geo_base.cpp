@@ -41,6 +41,7 @@
 
 #include <stdio.h>
 
+
 double geoGetLineByPoints(TrGeo2DRef * ref, straight_line * result, double x1, double y1,
 	double x2, double y2)
 {
@@ -49,6 +50,10 @@ double geoGetLineByPoints(TrGeo2DRef * ref, straight_line * result, double x1, d
 
 	double len = sqrt((dx*dx)+(dy*dy));
 
+	result->flags = 0;
+	result->slope = 1.0;
+	result->intercept = 1.0;
+
 	if((fabs(dx) < MIN_DIF) && (fabs(dy) < MIN_DIF))
 	{
 		//printf("base error %f %i\n", len, ref->core.error_code);
@@ -56,7 +61,6 @@ double geoGetLineByPoints(TrGeo2DRef * ref, straight_line * result, double x1, d
 		result->flags = DIR_ERROR;
 		return len;
 	}
-
 	result->flags = 0x00;
 	if(fabs(dx) < MIN_DIF)
 	{
@@ -160,7 +164,7 @@ void geoGetParallel(TrGeo2DRef * ref, straight_line * orig, straight_line * dest
 	if(orig->flags & DIR_VERT)
 	{
 		if(orig->flags & DIR_RIGHT)
-            dest->intercept = 0 - dist;
+			dest->intercept = 0 - dist;
 		else
 			dest->intercept = dist;
 		return;

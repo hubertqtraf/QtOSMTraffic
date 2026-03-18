@@ -268,13 +268,14 @@ double TrZoomMap::getLength(const TrPoint & p1, const TrPoint & p2) const
 
 double TrZoomMap::getAngle(const TrPoint & p1, const TrPoint & p2) const
 {
-	straight_line line; //= ;
-	TrPoint pt_m1 = p1;
-	TrPoint pt_m2 = p2;
+	straight_line line = {0, 1.0, 1.0};
 
-	geoGetLineByPoints((TrGeo2DRef*)&m_world_ref, &line, pt_m1.x, pt_m1.y, pt_m2.x, pt_m2.y);
+	geoGetLineByPoints((TrGeo2DRef*)&m_world_ref, &line, p1.x, p1.y, p2.x, p2.y);
 
-	return geoGetAngle(&line);
+	double ret_ang = geoGetAngle(&line);
+	if(getErrorCode())
+		return 100.0;
+	return ret_ang;
 }
 
 int TrZoomMap::getSegParPoint(straight_line & sec, TrPoint & pt, double width) const
