@@ -48,6 +48,8 @@
 
 #include <QtCore/qjsondocument.h>
 
+bool TrMapList::ms_back = false;
+
 TrMapList::TrMapList()
 	: TrGeoObject()
 	//, default_pen_idx(-1)
@@ -513,13 +515,36 @@ void TrMapList::draw(const TrZoomMap & zoom_ref, QPainter * p, uint8_t mode)
 {
 	if(m_inst_mask & TR_MASK_DRAW)
 	{
-		for(TrMap::const_iterator ii = obj_map.constBegin(); ii !=  obj_map.constEnd(); ++ii)
+		if(TrMapList::ms_back)
 		{
-			ii.value()->draw(zoom_ref, p, mode);
+			QMapIterator<uint64_t, TrGeoObject *> ii(obj_map);
+			ii.toBack();
+			while (ii.hasPrevious())
+			{
+				ii.previous();
+				ii.value()->draw(zoom_ref, p, mode);
+			}
 		}
-		for (int i = 0; i < obj_list.size(); ++i)
+		else
 		{
-			obj_list[i]->draw(zoom_ref, p, mode);
+			for(TrMap::const_iterator ii = obj_map.constBegin(); ii !=  obj_map.constEnd(); ++ii)
+			{
+				ii.value()->draw(zoom_ref, p, mode);
+			}
+		}
+		if(TrMapList::ms_back)
+		{
+			for(int i = obj_list.size()-1; i >= 0; i--)
+			{
+				obj_list[i]->draw(zoom_ref, p, mode);
+			}
+		}
+		else
+		{
+			for (int i = 0; i < obj_list.size(); ++i)
+			{
+				obj_list[i]->draw(zoom_ref, p, mode);
+			}
 		}
 	}
 }

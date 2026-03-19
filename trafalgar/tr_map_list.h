@@ -67,6 +67,8 @@ private:
 
 	QString m_obj_class;
 
+	static bool ms_back;
+
 public:
 	TrMapList();
 
