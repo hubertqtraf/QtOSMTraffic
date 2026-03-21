@@ -630,12 +630,15 @@ uint8_t TrMapLinkRoad::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * 
 		{
 			n->setMovePoint(cross_pt);
 		}
-		if((!((getOneWay() & TR_LINK_DIR_ONEWAY))) || (!(next_link->getOneWay() & TR_LINK_DIR_ONEWAY)))
+		if(((getOneWay() & TR_LINK_DIR_ONEWAY)) && (next_link->getOneWay() & TR_LINK_DIR_ONEWAY))
 		{
-			if(code != 3)
+			if((next_link->getNodeFrom() == getNodeTo()) || (next_link->getNodeTo() == getNodeFrom()))
 			{
-				n->setMovePoint(n->getPoint());
-				return 9;
+				if((ang > 2.5) && ((ang < 4.5)))
+				{
+					n->setMovePoint(n->getPoint());
+					return 9;
+				}
 			}
 		}
 		if(code == 1)
