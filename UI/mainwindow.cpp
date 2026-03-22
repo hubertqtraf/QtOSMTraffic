@@ -215,6 +215,12 @@ void MainWindow::on_actionPrint_triggered()
 	}
 }
 
+void MainWindow::on_actionrefresh_triggered()
+{
+	TR_INF << "refresh";
+}
+
+
 void MainWindow::on_actionSVG_triggered()
 {
 	// TODO: file dialog

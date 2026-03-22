@@ -20,7 +20,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>23</height>
+     <height>30</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -30,6 +30,7 @@
     <addaction name="actionOpen"/>
     <addaction name="actionPrint"/>
     <addaction name="actionSVG"/>
+    <addaction name="actionrefresh"/>
     <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menuAbout">
@@ -113,7 +114,7 @@
   </action>
   <action name="actionConfigure">
    <property name="icon">
-    <iconset resource="res.qrc">
+    <iconset resource="../res.qrc">
      <normaloff>:/icon/configure.svg</normaloff>:/icon/configure.svg</iconset>
    </property>
    <property name="text">
@@ -148,7 +149,7 @@
   </action>
   <action name="actionDirectories">
    <property name="icon">
-    <iconset resource="res.qrc">
+    <iconset resource="../res.qrc">
      <normaloff>:/icon/configure.svg</normaloff>:/icon/configure.svg</iconset>
    </property>
    <property name="text">
@@ -157,7 +158,7 @@
   </action>
   <action name="actionPrint">
    <property name="icon">
-    <iconset resource="res.qrc">
+    <iconset resource="../res.qrc">
      <normaloff>:/icon/document-print.svg</normaloff>:/icon/document-print.svg</iconset>
    </property>
    <property name="text">
@@ -199,9 +200,24 @@
     <string>Ctrl+O</string>
    </property>
   </action>
+  <action name="actionrefresh">
+   <property name="icon">
+    <iconset resource="../res.qrc">
+     <normaloff>:/icon/edit-refresh.svg</normaloff>:/icon/edit-refresh.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Refresh</string>
+   </property>
+   <property name="toolTip">
+    <string>refresh</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
  </widget>
  <resources>
-  <include location="res.qrc"/>
+  <include location="../res.qrc"/>
  </resources>
  <connections/>
 </ui>

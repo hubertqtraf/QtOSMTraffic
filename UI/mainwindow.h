@@ -60,6 +60,8 @@ private slots:
 
 	void on_actionSVG_triggered();
 
+	void on_actionrefresh_triggered();
+
 	void on_actionReset_triggered();
 
 	void on_actionZoon_in_triggered();

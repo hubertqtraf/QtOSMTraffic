@@ -4,5 +4,6 @@
         <file>icon/document-open.svg</file>
         <file>icon/document-print.svg</file>
         <file>icon/configure.svg</file>
+        <file>icon/edit-refresh.svg</file>
     </qresource>
 </RCC>
