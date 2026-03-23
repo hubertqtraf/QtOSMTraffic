@@ -217,9 +217,15 @@ void MainWindow::on_actionPrint_triggered()
 
 void MainWindow::on_actionrefresh_triggered()
 {
-	TR_INF << "refresh";
+	if(m_map_view == nullptr)
+		return;
+	/*TR_INF << "refresh";
+	on_updateWorld();
+	on_updateWorld();*/
+	QPoint pt;
+	m_map_view->notifyClick(pt, 0, Qt::NoButton);
+	m_map_view->update();
 }
-
 
 void MainWindow::on_actionSVG_triggered()
 {

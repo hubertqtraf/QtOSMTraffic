@@ -303,12 +303,20 @@ bool TrMapView::notifyClick(const QPoint qpt, int mode, Qt::MouseButton button)
 {
 	TrPoint pt = getWorldPoint(qpt);
 	uint64_t pos = TR_NO_VALUE;
+	m_dockLink->setData(nullptr);
+	m_dockNode->setData(nullptr);
 
 	if(m_selected != nullptr)
 	{
 		m_selected->removeMask(TR_MASK_SELECTED);
 		m_selected = nullptr;
 	}
+
+	if(button == Qt::NoButton)
+	{
+		return false;
+	}
+
 	TrGeoObject * pobj = selectObject(pt, pos, TR_MASK_SELECT_POINT);
 	if((pobj != nullptr) && (m_dockNode != nullptr))
 	{

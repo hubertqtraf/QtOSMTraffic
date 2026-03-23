@@ -44,6 +44,8 @@ public:
 private slots:
 	void on_spinBox_Lanes_valueChanged(int arg1);
 
+	void on_checkBox_Ramp_checkStateChanged(const Qt::CheckState &arg1);
+
 private:
 	Ui::TrLinkDock *ui;
 	TrMapLinkRoad * m_link;

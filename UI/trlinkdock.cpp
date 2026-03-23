@@ -115,3 +115,17 @@ void TrLinkDock::on_spinBox_Lanes_valueChanged(int lanes)
 		m_link->setLanes(lanes);
 	}
 }
+
+void TrLinkDock::on_checkBox_Ramp_checkStateChanged(const Qt::CheckState &arg1)
+{
+	// just test the value, is NOT stored on file!
+
+	if(m_link == nullptr)
+		return;
+	uint16_t type = m_link->getType();
+	if(arg1 == Qt::Checked)
+		type |= TR_LINK_RAMP_FLAG;
+	else
+		type &= ~TR_LINK_RAMP_FLAG;
+	m_link->setType(type);
+}
