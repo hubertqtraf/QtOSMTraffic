@@ -12,7 +12,7 @@
  * system:	UNIX/LINUX
  * compiler:	gcc
  *
- * @author	Schmid Hubert (C)2009-2025
+ * @author	Schmid Hubert (C)2009-2026
  *
  * beginning:	04.2009
  *
@@ -90,6 +90,7 @@
 class TrGeoObject 
 {
 private:
+	static double ms_select_size;
 
 protected:
 	QPen * m_geo_active_pen;

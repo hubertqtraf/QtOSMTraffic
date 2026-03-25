@@ -14,7 +14,7 @@
  *
  * beginning:	05.2024
  *
- * @author	Schmid Hubert (C)2024-2025
+ * @author	Schmid Hubert (C)2024-2026
  *
  * history:
  *

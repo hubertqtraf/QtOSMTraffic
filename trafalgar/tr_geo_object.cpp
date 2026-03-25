@@ -12,7 +12,7 @@
  * system:	UNIX/LINUX
  * compiler:	gcc
  *
- * @author	Schmid Hubert (C)2009-2025
+ * @author	Schmid Hubert (C)2009-2026
  *
  * beginning:	04.2009
  *
@@ -44,6 +44,8 @@
 #include <math.h>
 
 uint64_t TrGeoObject::s_mask = 0;
+
+double TrGeoObject::ms_select_size = 4.0;
 
 TrGeoObject::TrGeoObject() 
 	: m_geo_active_pen(nullptr)
@@ -185,15 +187,15 @@ uint64_t TrGeoObject::findSelect(const TrZoomMap & zoom_ref, const TrPoint & ins
 	rect[2] = surroundingRect[2];
 	rect[3] = surroundingRect[3];
 
-	if(fabs(rect[0] - rect[2]) < 1.0)
+	if(fabs(rect[0] - rect[2]) < TrGeoObject::ms_select_size)
 	{
-		rect[0] -= 0.5;
-		rect[2] += 0.5;
+		rect[0] -= (TrGeoObject::ms_select_size/2.0);
+		rect[2] += (TrGeoObject::ms_select_size/2.0);
 	}
-	if(fabs(rect[1] - rect[3]) < 1.0)
+	if(fabs(rect[1] - rect[3]) < TrGeoObject::ms_select_size)
 	{
-		rect[1] -= 0.5;
-		rect[3] += 0.5;
+		rect[1] -= (TrGeoObject::ms_select_size/2.0);
+		rect[3] += (TrGeoObject::ms_select_size/2.0);
 	}
 
 	if((rect[0] < inside.x) && (rect[2] > inside.x) &&
