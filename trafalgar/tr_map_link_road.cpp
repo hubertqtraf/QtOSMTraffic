@@ -87,9 +87,9 @@ QDebug operator<<(QDebug dbg, const TrMapLinkRoad& link)
 		"class " << HEX << link.getType() << link.m_one_way;
 	return dbg << link.getXmlName() << " " << DEC <<
 		link.m_node_from->getGeoId() << " - " <<
-		link.m_node_to->getGeoId() << " class " << HEX <<
-		link.getType() << " " << link.m_one_way << " lanes: " <<
-		link.m_lanes << " parking " << park;
+		link.m_node_to->getGeoId() << " class: " << HEX <<
+		link.getType() << " one:" << link.m_one_way << " lanes: " <<
+		link.m_lanes << " parking: " << park;
 }
 
 QString TrMapLinkRoad::getXmlName() const

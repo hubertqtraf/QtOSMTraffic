@@ -1,7 +1,7 @@
 /******************************************************************
  * project:	OSM Traffic
  *
- * (C)		Schmid Hubert 2024-2025
+ * (C)		Schmid Hubert 2024-2026
  ******************************************************************/
 
 /*
@@ -47,6 +47,7 @@ void TrLinkDock::setData(TrGeoObject* obj)
 {
 	if(obj == nullptr)
 	{
+		m_link = nullptr;
 		ui->label_type_2->setText("---");
 		ui->lineEdit_ID->setText("---");
 		ui->lineEdit_Head->setText("---");
