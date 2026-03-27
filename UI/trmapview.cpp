@@ -1,7 +1,7 @@
 /******************************************************************
  * project:	OSM Traffic
  *
- * (C)		Schmid Hubert 2024
+ * (C)		Schmid Hubert 2026
  ******************************************************************/
 
 /*
@@ -99,11 +99,6 @@ void TrMapView::paint(QPainter *p)
 	{
 		p->setRenderHint(QPainter::Antialiasing);
 		m_doc.draw(m_zoom_ref, p, 0);
-		if(m_selected != nullptr)
-		{
-			if(m_selected->checkMask(TR_MASK_SELECTED) == TR_MASK_SELECTED)
-				m_selected->drawSurroundingRect(m_zoom_ref, p, 0);
-		}
 	}
 	else
 	{

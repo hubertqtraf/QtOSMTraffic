@@ -1,7 +1,7 @@
 /******************************************************************
  * project:	OSM Traffic
  *
- * (C)		Schmid Hubert 2024-2025
+ * (C)		Schmid Hubert 2024-2026
  ******************************************************************/
 
 /*
@@ -219,11 +219,9 @@ void MainWindow::on_actionrefresh_triggered()
 {
 	if(m_map_view == nullptr)
 		return;
-	/*TR_INF << "refresh";
-	on_updateWorld();
-	on_updateWorld();*/
 	QPoint pt;
 	m_map_view->notifyClick(pt, 0, Qt::NoButton);
+	on_updateFileOptions();
 	m_map_view->update();
 }
 
