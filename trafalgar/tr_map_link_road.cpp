@@ -733,12 +733,19 @@ uint8_t TrMapLinkRoad::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * 
 	double len = checkCrossing(zoom_ref, next_segment, cross_pt);
 	if(len > -0.5)
 	{
-		return 5;
+		// TODO: check next point (-> m_pline)
+		if(len < 2.0)
+			cross_pt = next_segment.getSecondPoint();
+		else
+			return 5;
 	}
 	len = checkCrossing(zoom_ref, first_segment, cross_pt);
 	if(len > -0.5)
 	{
-		return 5;
+		if(len < 2.0)
+			cross_pt = first_segment.getSecondPoint();
+		else
+			return 5;
 	}
 	if(first_link->getOneWay() & TR_LINK_DIR_ONEWAY)
 	{
