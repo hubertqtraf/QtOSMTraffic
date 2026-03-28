@@ -119,6 +119,10 @@ void TrLinkDock::on_spinBox_Lanes_valueChanged(int lanes)
 
 void TrLinkDock::on_checkBox_Ramp_checkStateChanged(const Qt::CheckState &arg1)
 {
+}
+
+void TrLinkDock::on_checkBox_Ramp_stateChanged(int arg1)
+{
 	// just test the value, is NOT stored on file!
 
 	if(m_link == nullptr)

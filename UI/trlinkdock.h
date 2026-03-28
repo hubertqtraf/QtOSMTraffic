@@ -46,6 +46,8 @@ private slots:
 
 	void on_checkBox_Ramp_checkStateChanged(const Qt::CheckState &arg1);
 
+	void on_checkBox_Ramp_stateChanged(int arg1);
+
 private:
 	Ui::TrLinkDock *ui;
 	TrMapLinkRoad * m_link;
