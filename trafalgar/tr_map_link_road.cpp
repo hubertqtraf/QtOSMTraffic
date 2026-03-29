@@ -470,9 +470,18 @@ void TrMapLinkRoad::initDoubleLine(const TrZoomMap & zoom_ref, QVector<TrPoint> 
 	}
 }
 
-double TrMapLinkRoad::checkCrossing(const TrZoomMap & zoom_ref, TrGeoSegment &cross_segment, TrPoint cross)
+double TrMapLinkRoad::checkCrossing(const TrZoomMap & zoom_ref, TrGeoSegment &cross_segment, TrPoint cross, bool dir)
 {
-	TrGeoSegment test_segment(cross_segment.getSecondPoint(), cross);
+	TrGeoSegment test_segment;
+
+	if(dir)
+	{
+		test_segment.setPoints(cross_segment.getSecondPoint(), cross);
+	}
+	else
+	{
+		test_segment.setPoints(cross, cross_segment.getFirstPoint());
+	}
 	double test_ang = test_segment.getAngle(zoom_ref);
 	double cross_ang = cross_segment.getAngle(zoom_ref);
 
@@ -486,6 +495,23 @@ double TrMapLinkRoad::checkCrossing(const TrZoomMap & zoom_ref, TrGeoSegment &cr
 	return -1.0;
 }
 
+bool TrMapLinkRoad::selectCrossing(const TrZoomMap &zoom_ref, TrGeoSegment &cross_segment, TrPoint &cross, bool dir)
+{
+	double len = checkCrossing(zoom_ref, cross_segment, cross, dir);
+	if(len > -0.5)
+	{
+		if(len < 2.0)
+		{
+			if(dir)
+				cross = cross_segment.getSecondPoint();
+			else
+				cross = cross_segment.getFirstPoint();
+		}
+		else
+			return true;
+	}
+	return false;
+}
 
 uint8_t TrMapLinkRoad::handleRamps(const TrZoomMap & zoom_ref, TrMapLinkRoad * next_link, TrGeoObject * node, uint8_t mode)
 {
@@ -720,7 +746,7 @@ uint8_t TrMapLinkRoad::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * 
 			{
 				return 5;
 			}
-			// overwrite the cossing point
+			// overwrite the crossing point
 			cross_pt = first_segment.getSecondPoint();
 		}
 	}
@@ -730,23 +756,17 @@ uint8_t TrMapLinkRoad::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * 
 		cross_pt = first_segment.getSecondPoint();
 		return 5;
 	}
-	double len = checkCrossing(zoom_ref, next_segment, cross_pt);
-	if(len > -0.5)
-	{
-		// TODO: check next point (-> m_pline)
-		if(len < 2.0)
-			cross_pt = next_segment.getSecondPoint();
-		else
-			return 5;
-	}
-	len = checkCrossing(zoom_ref, first_segment, cross_pt);
-	if(len > -0.5)
-	{
-		if(len < 2.0)
-			cross_pt = first_segment.getSecondPoint();
-		else
-			return 5;
-	}
+
+	// TODO: 'selectCrossing' if move line option is sselected?
+	if(selectCrossing(zoom_ref, next_segment, cross_pt, true))
+		return 5;
+	if(selectCrossing(zoom_ref, first_segment, cross_pt, true))
+		return 5;
+	if(selectCrossing(zoom_ref, next_segment, cross_pt, false))
+		return 5;
+	if(selectCrossing(zoom_ref, first_segment, cross_pt, false))
+		return 5;
+
 	if(first_link->getOneWay() & TR_LINK_DIR_ONEWAY)
 	{
 		if(first_link->getNodeToRef() == node)

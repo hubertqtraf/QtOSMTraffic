@@ -87,7 +87,9 @@ private:
 
 	uint8_t handleRamps(const TrZoomMap &zoom_ref, TrMapLinkRoad *next_link, TrGeoObject *node, uint8_t mode);
 
-	double checkCrossing(const TrZoomMap &zoom_ref, TrGeoSegment &cross_segment, TrPoint cross);
+	double checkCrossing(const TrZoomMap &zoom_ref, TrGeoSegment &cross_segment, TrPoint cross, bool dir);
+
+	bool selectCrossing(const TrZoomMap &zoom_ref, TrGeoSegment &cross_segment, TrPoint &cross, bool dir);
 
 protected:
 	// copy of moved position of the node
