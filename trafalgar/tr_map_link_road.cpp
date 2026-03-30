@@ -680,9 +680,15 @@ uint8_t TrMapLinkRoad::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * 
 			}
 
 			if(n->getGeoId() == this->m_node_from->getGeoId())
-				n->setMovePoint(next_segment.getSecondPoint());
+			{
+				if(next_link->getOneWay() & TR_LINK_DIR_ONEWAY)
+					n->setMovePoint(next_segment.getSecondPoint());
+			}
 			else
-				n->setMovePoint(first_segment.getSecondPoint());
+			{
+				if(getOneWay() & TR_LINK_DIR_ONEWAY)
+					n->setMovePoint(first_segment.getSecondPoint());
+			}
 			return code;
 		}
 		return 33;
