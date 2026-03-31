@@ -181,10 +181,14 @@ void MainWindow::on_actionOpen_triggered()
 	}
 	TR_INF << m_file_options->getOsmDir();
 	QString fileName = QFileDialog::getOpenFileName(this, tr("Open OSM File"),
-							m_file_options->getOsmDir(), tr("OSM File (*.osm)"));
+				m_file_options->getOsmDir(), tr("OSM File (*.osm)"));
 	if(fileName.isEmpty())
 		return;
 	on_loadWorld(fileName, m_file_options->getShiftOption());
+	// reset the docks values
+	QPoint pt;
+	m_map_view->notifyClick(pt, 0, Qt::NoButton);
+
 	m_map_view->update();
 }
 
