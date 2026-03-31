@@ -625,8 +625,8 @@ uint8_t TrMapLinkRoad::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * 
 
 	if(mode == 2)
 	{
-		getSegmentWithParm(first_segment, n->getGeoId(), true, mode);
-		next_link->getSegmentWithParm(next_segment, n->getGeoId(), false, mode);
+		getSegmentWithParm(first_segment, n->getGeoId(), (getOneWay() & TR_LINK_DIR_BWD) == TR_LINK_DIR_BWD, mode);
+		next_link->getSegmentWithParm(next_segment, n->getGeoId(), (next_link->getOneWay() & TR_LINK_DIR_BWD) == TR_LINK_DIR_BWD, mode);
 
 		//if(test){TrMapNet::ms_seg_1->setPoints(first_segment);}
 		//if(test){TrMapNet::ms_seg_2->setPoints(next_segment);}
