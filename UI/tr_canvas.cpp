@@ -10,7 +10,7 @@
  * system:	UNIX/LINUX
  * compiler:	gcc
  *
- * @author	Schmid Hubert (C)2004/2022
+ * @author	Schmid Hubert (C)2004/2026
  *
  * beginning:	08.2004
  *

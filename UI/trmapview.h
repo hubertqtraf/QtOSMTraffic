@@ -70,6 +70,9 @@ public:
 
 	void setLoadedFlag(bool loaded);
 
+	bool doTracking();
+	void setTracking(bool enable);
+
 	void setElementDock(QDockWidget * dock);
 
 	void recalcExtRect();

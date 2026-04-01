@@ -47,6 +47,7 @@
     <addaction name="actionConfigure"/>
     <addaction name="actionDirectories"/>
     <addaction name="actionFonts"/>
+    <addaction name="actionTracking"/>
     <addaction name="separator"/>
    </widget>
    <widget class="QMenu" name="menuView">
@@ -213,6 +214,17 @@
    </property>
    <property name="menuRole">
     <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="actionTracking">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Tracking</string>
    </property>
   </action>
  </widget>

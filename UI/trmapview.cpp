@@ -49,6 +49,8 @@ TrMapView::TrMapView(QWidget *parent)
 	m_dockNode->setVisible(false);
 
 	//m_fileProgress = new TrProgress();
+
+	setMouseTracking(true);
 }
 
 TrMapView::~TrMapView()
@@ -86,6 +88,16 @@ void TrMapView::initObjects(uint64_t ctrl)
 void TrMapView::setLoadedFlag(bool loaded)
 {
 	m_doc.m_is_loaded = true;
+}
+
+bool TrMapView::doTracking()
+{
+	return hasMouseTracking();
+}
+
+void TrMapView::setTracking(bool enable)
+{
+	setMouseTracking(enable);
 }
 
 void TrMapView::setElementDock(QDockWidget * dock)
@@ -244,16 +256,12 @@ bool TrMapView::notifyMove(const QPoint pt, Qt::MouseButton button)
 {
 	if(!m_doc.m_is_loaded)
 		return false;
-	TrPoint dpt1;
 	TrPoint dpt = getWorldPoint(pt);
-	dpt1 = dpt;
-	m_zoom_ref.getPoint(&dpt1.x, &dpt1.y);
 	if(m_move_pressed == 0)
-		emit sendMessage("coor: lon " + TR_COOR_VAL(dpt1.x) + "; lat " + TR_COOR_VAL(dpt1.y), 0);
+		emit sendMessage("coor: lon " + TR_COOR_VAL(dpt.x) + "; lat " + TR_COOR_VAL(dpt.y), 0);
 	if(m_select_box.isRubber())
 	{
 		TrPoint spt;
-
 		QPoint qpt = m_select_box.getStart();
 		spt.x = qpt.x();
 		spt.y = qpt.y();
