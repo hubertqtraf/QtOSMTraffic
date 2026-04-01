@@ -54,6 +54,7 @@ int TrMapLinkRoad::ms_pen_width = 3;
 int TrMapLinkRoad::ms_pen_center_width = 2;
 // TODO: or Qt::SolidLine as option?
 Qt::PenStyle TrMapLinkRoad::ms_pen_center_style = Qt::DashLine;
+double TrMapLinkRoad::ms_ramp_angle = 1.0;
 
 TrMapLinkRoad::TrMapLinkRoad()
 	: TrMapLink()
@@ -558,7 +559,7 @@ uint8_t TrMapLinkRoad::handleRamps(const TrZoomMap & zoom_ref, TrMapLinkRoad * n
 
 		/*int code = */first_segment.getAngleCode(zoom_ref, next_segment, ang);
 
-		if(ang < 1.0)
+		if((ang < ms_ramp_angle) || (ang > ((M_PI * 2.0) - ms_ramp_angle)))
 		{
 			TrPoint pt = next_segment.getSecondPoint();
 			if((getOneWay() & TR_LINK_DIR_BWD) == TR_LINK_DIR_BWD)
@@ -585,7 +586,7 @@ uint8_t TrMapLinkRoad::handleRamps(const TrZoomMap & zoom_ref, TrMapLinkRoad * n
 		}
 
 		/*int code = */first_segment.getAngleCode(zoom_ref, next_segment, ang);
-		if(ang < 1.0)
+		if((ang < ms_ramp_angle) || (ang > ((M_PI * 2.0) - ms_ramp_angle)))
 		{
 			//TR_INF << "TO  " << ang << *this << *next_link;
 			TrPoint pt = first_segment.getSecondPoint();

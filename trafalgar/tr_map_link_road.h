@@ -79,6 +79,8 @@ private:
 	QPen m_pen_para;
 	// TODO: memmory?
 
+	static double ms_ramp_angle;
+
 	void getNodePoints(TrPoint & pt1, TrPoint & pt2);
 
 	void drawParLine(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mode);
