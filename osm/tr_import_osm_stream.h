@@ -72,8 +72,8 @@ private:
 	void readWay(const QXmlStreamAttributes &attributes);
 
 	void closeNode(QMap<QString, name_set> & name_map,
-			uint64_t & act_id, QMap<uint64_t, QString> & n_map);
-	void closeWay(QMap<QString, name_set> & name_map, uint64_t & act_id);
+            uint64_t & act_id, QMap<uint64_t, QString> & n_map);
+	void closeWay(QMap<QString, name_set> & name_map, uint64_t & act_id, QMap<uint64_t, QString> &n_map);
 	void closeOsm(World_t & world);
 
 	void addRelation(const Relation & rel);
@@ -110,6 +110,7 @@ public:
 
 	QString errorString() const;
 
+	void addPoiFromWay(QMap<QString, name_set> &name_map, uint64_t &act_id, QMap<uint64_t, QString> &n_map, uint64_t id);
 signals:
 	void valueBarChanged(int val);
 };

@@ -149,7 +149,7 @@ bool TrImportOsmStream::osmRead(World_t & world)
 			if(xml.name().toString() == "way")
 			{
 				//TR_INF << "close way" << m_tags;
-				closeWay(world.m_name_map, world.act_name_idx);
+				closeWay(world.m_name_map, world.act_name_idx, world.m_point_name_map);
 			}
 			if(xml.name().toString() == "relation")
 			{
@@ -372,7 +372,7 @@ void TrImportOsmStream::readNodePoint(const QXmlStreamAttributes &attributes)
 }
 
 void TrImportOsmStream::closeNode(QMap<QString, name_set> & name_map,
-		uint64_t & act_id, QMap<uint64_t, QString> & n_map)
+        uint64_t & act_id, QMap<uint64_t, QString> & n_map)
 {
 	Point_t point;
 
@@ -419,7 +419,6 @@ void TrImportOsmStream::closeNode(QMap<QString, name_set> & name_map,
 		{
 			point.pt_type = code;
 			//act_world->node_flags & (TYPE_FILTER | 0xffffffff00000000);
-			//TR_INF << ">> amenity" << HEX << code << point.pt_type;
 		}
 	}
 	if(m_tags.contains("power"))
@@ -530,7 +529,36 @@ void TrImportOsmStream::readWay(const QXmlStreamAttributes &attributes)
 		TR_WRN << "integer fault" << attributes.value("id");
 }
 
-void TrImportOsmStream::closeWay(QMap<QString, name_set> & name_map, uint64_t & act_id)
+
+void TrImportOsmStream::addPoiFromWay(QMap<QString, name_set> & name_map, uint64_t & act_id, QMap<uint64_t, QString> & n_map, uint64_t code)
+{
+	if(!m_way_reflist.size())
+	{
+		return;
+	}
+	uint64_t nd_id = m_way_reflist[0];
+	m_nodelist[nd_id].pt_type = code;
+
+	if(m_tags.contains("name"))
+	{
+		if(!name_map.contains(m_tags["name"]))
+		{
+			name_set set;
+			set.id = act_id;
+			set.number = 1;
+			name_map[m_tags["name"]] = set;
+			// TODO: use of point.id -> crash!
+			n_map[nd_id] = m_tags["name"];
+			act_id++;
+		}
+		else
+		{
+			name_map[m_tags["name"]].number++;
+		}
+	}
+}
+
+void TrImportOsmStream::closeWay(QMap<QString, name_set> & name_map, uint64_t & act_id, QMap<uint64_t, QString> & n_map)
 {
 	Way_t way;
 	way.id = m_id;
@@ -653,7 +681,7 @@ void TrImportOsmStream::closeWay(QMap<QString, name_set> & name_map, uint64_t & 
 		{
 			if(way.type | TYPE_BUILDING)
 			{
-				// TODO: create a node with amenity POI
+				addPoiFromWay(name_map, act_id, n_map, code);
 			}
 			else
 				way.type = code;
