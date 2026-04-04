@@ -13,7 +13,7 @@
  *
  * beginning:	01.2024
  *
- * @author	Schmid Hubert (C)2024-2025
+ * @author	Schmid Hubert (C)2024-2026
  *
  * history:
  *
@@ -53,7 +53,7 @@
 
 class TrImportOsmStream : public QObject, TrGeoObject
 {
-        Q_OBJECT
+	Q_OBJECT
 
 private:
 	uint8_t m_mode;
@@ -66,6 +66,8 @@ private:
 	QMap<uint64_t, Way_t> m_waylist;
 	QVector<Rel_t> m_rellist;
 	QVector<uint64_t> m_way_reflist;
+
+	bool addName(QMap<QString, name_set> &name_map, const QString &name, uint64_t &act_id);
 
 	void readTag(const QXmlStreamAttributes &attributes);
 	void readNodePoint(const QXmlStreamAttributes &attributes);

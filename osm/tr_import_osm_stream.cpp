@@ -13,7 +13,7 @@
  *
  * beginning:	1.2024
  *
- * @author	Schmid Hubert (C)2024-2025
+ * @author	Schmid Hubert (C)2024-2026
  *
  * history:
  *
@@ -64,6 +64,20 @@ TrImportOsmStream::TrImportOsmStream()
 TrImportOsmStream::~TrImportOsmStream()
 {
 	//m_poly_points.clear();
+}
+
+bool TrImportOsmStream::addName(QMap<QString, name_set> & name_map, const QString & name, uint64_t & act_id)
+{
+	if(name_map.contains(name))
+	{
+		name_map[name].number++;
+		return false;
+	}
+	name_set set;
+	set.id = act_id;
+	set.number = 1;
+	name_map[name] = set;
+	return true;
 }
 
 bool TrImportOsmStream::osmRead(World_t & world)
@@ -474,23 +488,17 @@ void TrImportOsmStream::closeNode(QMap<QString, name_set> & name_map,
 	//<tag k='tourism' v='artwork' />
 	//<tag k='healthcare' v='pharmacy' />
 	//<tag k='leisure' v='fitness_centre' />
+
 	if(m_tags.contains("name"))
 	{
-		if(!name_map.contains(m_tags["name"]))
+		if(addName(name_map, m_tags["name"], act_id))
 		{
-			name_set set;
-			set.id = act_id;
-			set.number = 1;
-			name_map[m_tags["name"]] = set;
-			// TODO: use of point.id -> crash!
-			//point.id = act_id;
-			//TR_INF << "POI: " << point.id << m_tags["name"];
 			n_map[point.id] = m_tags["name"];
 			act_id++;
 		}
 		else
 		{
-			name_map[m_tags["name"]].number++;
+			// ???
 			point.id = name_map[m_tags["name"]].id;
 		}
 	}
@@ -541,19 +549,10 @@ void TrImportOsmStream::addPoiFromWay(QMap<QString, name_set> & name_map, uint64
 
 	if(m_tags.contains("name"))
 	{
-		if(!name_map.contains(m_tags["name"]))
+		if(addName(name_map, m_tags["name"], act_id))
 		{
-			name_set set;
-			set.id = act_id;
-			set.number = 1;
-			name_map[m_tags["name"]] = set;
-			// TODO: use of point.id -> crash!
-			n_map[nd_id] = m_tags["name"];
 			act_id++;
-		}
-		else
-		{
-			name_map[m_tags["name"]].number++;
+			n_map[nd_id] = m_tags["name"];
 		}
 	}
 }
@@ -748,20 +747,13 @@ void TrImportOsmStream::closeWay(QMap<QString, name_set> & name_map, uint64_t & 
 		full_name += m_tags["ref"];
 	}
 
-	if(!name_map.contains(full_name))
+	if(addName(name_map, full_name, act_id))
 	{
-		name_set set;
-		set.id = act_id;
-		set.number = 1;
-		name_map[full_name] = set;
 		way.name_id = act_id;
-
-		//TR_INF << "Way: " << way.name_id << m_tags["name"];
 		act_id++;
 	}
 	else
 	{
-		name_map[full_name].number++;
 		way.name_id = name_map[full_name].id;
 	}
 
