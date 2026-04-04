@@ -647,6 +647,8 @@ void TrImportOsmStream::closeWay(QMap<QString, name_set> & name_map, uint64_t & 
 		if(code)
 		{
 			way.type = TYPE_BUILDING | code;
+			if(m_tags.contains("name"))
+				addPoiFromWay(name_map, act_id, n_map, way.type);
 		}
 	}
 
