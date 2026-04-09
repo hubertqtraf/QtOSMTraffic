@@ -86,6 +86,8 @@ private slots:
 
 	void on_actionTracking_toggled(bool tracking);
 
+	void on_actionRuler_changed();
+
 public slots:
 	void on_updateNetOptions(uint64_t flags);
 

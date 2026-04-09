@@ -65,6 +65,8 @@ MainWindow::MainWindow(QWidget *parent)
 	view->setWidget(m_map_view);
 	view->setWidgetResizable(true);
 	m_map_view->setTracking(ui->actionTracking->isChecked());
+	ui->actionRuler->setChecked(true);
+	m_map_view->showRuler(true);
 
 	m_file_options = new FileOptions(this);
 	connect(m_file_options, SIGNAL(updateSettings()), this, SLOT(on_updateFileOptions()));
@@ -134,6 +136,14 @@ void MainWindow::on_actionTracking_toggled(bool tracking)
 {
 	if(m_map_view != nullptr)
 		m_map_view->setTracking(tracking);
+}
+
+void MainWindow::on_actionRuler_changed()
+{
+	ui->actionRuler->data();
+	TR_INF << "Ruler" << ui->actionRuler->isChecked();
+	if(m_map_view != nullptr)
+		m_map_view->showRuler(ui->actionRuler->isChecked());
 }
 
 void MainWindow::on_handleResults(const TrGeoObject **obj)

@@ -50,6 +50,8 @@ TrMapView::TrMapView(QWidget *parent)
 
 	//m_fileProgress = new TrProgress();
 
+	m_ruler = new Ruler(this);
+
 	setMouseTracking(true);
 }
 
@@ -100,6 +102,11 @@ void TrMapView::setTracking(bool enable)
 	setMouseTracking(enable);
 }
 
+void TrMapView::showRuler(bool enable)
+{
+	m_ruler->showRuler(enable);
+}
+
 void TrMapView::setElementDock(QDockWidget * dock)
 {
 	m_elementDock = dock;
@@ -111,6 +118,7 @@ void TrMapView::paint(QPainter *p)
 	{
 		p->setRenderHint(QPainter::Antialiasing);
 		m_doc.draw(m_zoom_ref, p, 0);
+		m_ruler->paint(p);
 	}
 	else
 	{

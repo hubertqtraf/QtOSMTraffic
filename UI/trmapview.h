@@ -27,6 +27,7 @@
 #include "tr_document.h"
 #include "trnodedock.h"
 #include "trlinkdock.h"
+#include "ruler.h"
 #include "tr_progess_thread.h"
 //#include <QSvgGenerator>
 #include <QDockWidget>
@@ -56,6 +57,7 @@ private:
 	TrLinkDock * m_dockLink;
 
 	TrProgress * m_fileProgress;
+	Ruler * m_ruler;
 
 protected:
 	void resizeEvent(QResizeEvent *);
@@ -72,6 +74,8 @@ public:
 
 	bool doTracking();
 	void setTracking(bool enable);
+
+	void showRuler(bool enable);
 
 	void setElementDock(QDockWidget * dock);
 

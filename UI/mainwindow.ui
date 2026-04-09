@@ -48,6 +48,7 @@
     <addaction name="actionDirectories"/>
     <addaction name="actionFonts"/>
     <addaction name="actionTracking"/>
+    <addaction name="actionRuler"/>
     <addaction name="separator"/>
    </widget>
    <widget class="QMenu" name="menuView">
@@ -225,6 +226,14 @@
    </property>
    <property name="text">
     <string>Tracking</string>
+   </property>
+  </action>
+  <action name="actionRuler">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Ruler</string>
    </property>
   </action>
  </widget>
