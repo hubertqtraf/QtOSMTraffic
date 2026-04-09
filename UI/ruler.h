@@ -27,6 +27,8 @@
 #include <QWidget>
 #include <QPainter>
 
+#include <tr_zoom_map.h>
+
 class Ruler : public QWidget
 {
 	Q_OBJECT
@@ -35,11 +37,14 @@ public:
 
 	void showRuler(bool enable);
 
+	void init(const TrZoomMap & zoom_ref);
+
 	virtual void paint(QPainter * p);
 signals:
 
 private:
 	bool m_active;
+	double m_dist;
 };
 
 #endif // RULER_H

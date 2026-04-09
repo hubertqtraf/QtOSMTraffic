@@ -23,8 +23,12 @@
 
 #include "ruler.h"
 
+#include <tr_geo_object.h>
+
 Ruler::Ruler(QWidget *parent)
 	: QWidget{parent}
+	, m_active(false)
+	, m_dist(1000.0)
 {
 }
 
@@ -33,8 +37,24 @@ void Ruler::showRuler(bool enable)
 	m_active = enable;
 }
 
+void Ruler::init(const TrZoomMap &zoom_ref)
+{
+	TrPoint pt = {20,25};
+
+	zoom_ref.getPoint(&pt.x, &pt.y);
+	TrPoint pta = pt;
+	pt.x = 120;
+	zoom_ref.getPoint(&pt.x, &pt.y);
+
+	m_dist = fabs(pt.x - pta.x);
+}
+
 void Ruler::paint(QPainter *p)
 {
 	if(m_active)
-		p->fillRect(20,20,100,20, QColor(100,100,100));
+	{
+		p->fillRect(20,20,100,20, QColor(200,200,200));
+		p->setPen(QColor(0,0,0));
+		p->drawText(QPoint(25,35), QString::number(m_dist) + " [m]");
+	}
 }

@@ -149,6 +149,7 @@ void TrMapView::recalcExtRect()
 	m_zoom_ref.setVisibleWorld(m_doc.getSurroundRectVal(0), m_doc.getSurroundRectVal(1),
 	m_doc.getSurroundRectVal(2), m_doc.getSurroundRectVal(3));
 	m_zoom_ref.zoom2Rect();
+	m_ruler->init(m_zoom_ref);
 	update();
 	TR_MSG << m_doc.getSurroundRectVal(0) << m_doc.getSurroundRectVal(1) <<
 		m_doc.getSurroundRectVal(2) << m_doc.getSurroundRectVal(3);
@@ -180,6 +181,8 @@ void TrMapView::zoomChange(double value, const QPoint pt, int limit)
 	emit sendMessage("coor", 0);
 	m_zoom_ref.setScreenDimension(width(), height());
 	m_zoom_ref.moveToPoint(pt.x(), pt.y(), value);
+
+	m_ruler->init(m_zoom_ref);
 
 	update();
 }
