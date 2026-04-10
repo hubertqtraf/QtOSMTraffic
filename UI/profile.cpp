@@ -1,7 +1,7 @@
 /******************************************************************
  * project:	OSM Traffic
  *
- * (C)		Schmid Hubert 2024
+ * (C)		Schmid Hubert 2024-2026
  ******************************************************************/
 
 /*
@@ -31,23 +31,6 @@ Profile::Profile(QObject *parent)
 	, rootItem(nullptr)
 {
 }
-
-bool Profile::setDataByFile(const QString & fname)
-{
-	QFile file;
-	TR_INF << "profile: " << fname;
-	file.setFileName(fname);
-	if(!file.exists())
-		return false;
-
-	file.open(QIODevice::ReadOnly);
-
-	domDocument.setContent(&file);
-	rootItem = new TrSetItem(domDocument, 0);
-	file.close();
-	return true;
-}
-
 
 QVariant Profile::headerData(int section, Qt::Orientation orientation, int role) const
 {

@@ -1,7 +1,7 @@
 /******************************************************************
  * project:	OSM Traffic
  *
- * (C)		Schmid Hubert 2024
+ * (C)		Schmid Hubert 2014-2026
  ******************************************************************/
 
 /*
@@ -37,8 +37,6 @@ class Profile : public QAbstractItemModel
 
 public:
 	explicit Profile(QObject *parent = nullptr);
-
-	bool setDataByFile(const QString &fname);
 
 	// Header:
 	QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;

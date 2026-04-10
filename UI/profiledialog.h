@@ -1,7 +1,7 @@
 /******************************************************************
  * project:	OSM Traffic
  *
- * (C)		Schmid Hubert 2024
+ * (C)		Schmid Hubert 2014-2026
  ******************************************************************/
 
 /*
@@ -23,7 +23,6 @@
 #ifndef PROFILEDIALOG_H
 #define PROFILEDIALOG_H
 
-#include "profile.h"
 #include "tr_set_model.h"
 
 #include <QAbstractButton>

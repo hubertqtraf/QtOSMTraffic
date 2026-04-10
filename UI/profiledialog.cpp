@@ -1,7 +1,7 @@
 /******************************************************************
  * project:	OSM Traffic
  *
- * (C)		Schmid Hubert 2024
+ * (C)		Schmid Hubert 2024-2026
  ******************************************************************/
 
 /*
@@ -205,7 +205,11 @@ void ProfileDialog::on_buttonBox_clicked(QAbstractButton *button)
 			return;
 		}
 		QFile file(m_filename);
-		file.open(QIODevice::WriteOnly);
+		if(file.open(QIODevice::WriteOnly) == false)
+		{
+			TR_WRN << "unable to load [" << m_filename << "]";
+			return;
+		}
 		QDomDocument * xml_doc = m_profile->getDocument();
 		QByteArray xml_array = xml_doc->toByteArray(1);
 		file.write(xml_array.constData());

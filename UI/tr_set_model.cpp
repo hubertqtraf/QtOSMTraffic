@@ -10,7 +10,7 @@
  *
  * beginning:	12.2016
  *
- * (C)		Schmid Hubert 2016-2022
+ * (C)		Schmid Hubert 2016-2026
  *
  * history:
  *
@@ -34,7 +34,7 @@
 
 #include "tr_set_model.h"
 
-#include <stdio.h>
+#include <tr_geo_object.h>
 
 TrSetModel::TrSetModel(QObject *parent)
 	: QAbstractItemModel(parent)
@@ -48,7 +48,11 @@ bool TrSetModel::setDataByFile(const QString & fname)
 	file.setFileName(fname);
 	if(!file.exists())
 		return false;
-	file.open(QIODevice::ReadOnly);
+	if(file.open(QIODevice::ReadOnly) == false)
+	{
+		TR_WRN << "unable to load [" << fname << "]";
+		return false;
+	}
 
 	domDocument.setContent(&file);
 	rootItem = new TrSetItem(domDocument, 0);

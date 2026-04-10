@@ -75,7 +75,6 @@ MainWindow::MainWindow(QWidget *parent)
 	m_map_view->getDocument().setFileName("unloaded.osm");
 	m_profile_dlg = new ProfileDialog(this);
 	QString profile = m_file_options->getProfileFileName();
-	TR_INF << profile;
 	m_profile_dlg->read(profile);
 	connect(m_profile_dlg, &ProfileDialog::accepted, this,  &MainWindow::on_updateWorld);
 

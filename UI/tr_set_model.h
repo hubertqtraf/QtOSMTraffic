@@ -10,7 +10,7 @@
  *
  * beginning:	12.2016
  *
- * (C)		Schmid Hubert 2016-2022
+ * (C)		Schmid Hubert 2016-2026
  *
  * history:
  *
@@ -53,7 +53,7 @@ private:
 	TrSetItem * getItem(const QModelIndex &index) const;
 
 public:
-    explicit TrSetModel(QObject *parent = nullptr);
+	explicit TrSetModel(QObject *parent = nullptr);
 
 	bool setDataByFile(const QString & fname);
 

@@ -48,7 +48,6 @@
     <addaction name="actionDirectories"/>
     <addaction name="actionFonts"/>
     <addaction name="actionTracking"/>
-    <addaction name="actionRuler"/>
     <addaction name="separator"/>
    </widget>
    <widget class="QMenu" name="menuView">
@@ -60,6 +59,8 @@
     <addaction name="actionReset"/>
     <addaction name="actionZoon_in"/>
     <addaction name="actionZoom_out"/>
+    <addaction name="separator"/>
+    <addaction name="actionRuler"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuView"/>
