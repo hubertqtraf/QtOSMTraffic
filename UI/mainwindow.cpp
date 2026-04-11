@@ -53,6 +53,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
 	ui->setupUi(this);
 
+	this->setWindowIcon(QIcon(":/icon/app_icon.png"));
 	m_progress = new QProgressBar();
 	statusBar()->addPermanentWidget(m_progress);
 
@@ -140,7 +141,6 @@ void MainWindow::on_actionTracking_toggled(bool tracking)
 void MainWindow::on_actionRuler_changed()
 {
 	ui->actionRuler->data();
-	TR_INF << "Ruler" << ui->actionRuler->isChecked();
 	if(m_map_view != nullptr)
 		m_map_view->showRuler(ui->actionRuler->isChecked());
 }
