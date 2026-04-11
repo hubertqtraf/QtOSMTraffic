@@ -71,11 +71,12 @@ private:
 	QColor m_background;
 	QFont * m_font;
 
-
 signals:
 	void documentChanged();		// TODO, unused?
 
 protected:
+	bool m_antialiasing;
+
 	SelectBox m_select_box;
 	int m_count_click;  
 
@@ -95,6 +96,7 @@ public:
 	explicit TrCanvas(QWidget *parent = nullptr);
 
 	void setFont(QFont * font);
+	void useAntialiasing(bool enable);
 
 	virtual void zoomReset();
 	virtual void zoomChange(double value, const QPoint pt, int limit);

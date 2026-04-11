@@ -61,6 +61,7 @@
     <addaction name="actionZoom_out"/>
     <addaction name="separator"/>
     <addaction name="actionRuler"/>
+    <addaction name="actionAntialiasing"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuView"/>
@@ -235,6 +236,17 @@
    </property>
    <property name="text">
     <string>Ruler</string>
+   </property>
+  </action>
+  <action name="actionAntialiasing">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Antialiasing</string>
    </property>
   </action>
  </widget>

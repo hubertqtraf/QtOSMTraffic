@@ -274,6 +274,12 @@ void MainWindow::on_actionZoom_out_triggered()
 	m_map_view->zoomChange(false);
 }
 
+void MainWindow::on_actionAntialiasing_triggered(bool checked)
+{
+	if(m_map_view)
+		m_map_view->useAntialiasing(checked);
+}
+
 void MainWindow::on_actionExit_triggered()
 {
 	writeSettings();

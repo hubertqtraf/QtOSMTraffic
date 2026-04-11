@@ -116,7 +116,7 @@ void TrMapView::paint(QPainter *p)
 {
 	if(m_doc.m_is_loaded)
 	{
-		p->setRenderHint(QPainter::Antialiasing);
+		p->setRenderHint(QPainter::Antialiasing, m_antialiasing);
 		m_doc.draw(m_zoom_ref, p, 0);
 		m_ruler->paint(p);
 	}

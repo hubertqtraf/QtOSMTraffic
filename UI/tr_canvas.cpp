@@ -82,6 +82,7 @@ TrCanvas::TrCanvas(QWidget * parent)
 	, flags(0)
 	, m_double_click(0,0)
 	, m_font(nullptr)
+	, m_antialiasing(true)
 	, m_count_click(0)
 {
 	QPalette palette(QApplication::palette());
@@ -104,6 +105,11 @@ void TrCanvas::setBackgroundColor(QMap<int, QColor> & c_map)
 		setPalette(palette);
 		//setStyleSheet("background-color:black;");
 	}
+}
+
+void TrCanvas::useAntialiasing(bool enable)
+{
+	m_antialiasing = enable;
 }
 
 void TrCanvas::setFont(QFont * font)
@@ -306,8 +312,6 @@ void TrCanvas::paintEvent(QPaintEvent *event)
 	p.setBrush(m_background);
 	p.drawRect(0, 0, width(), height());
 
-	// TODO: use flag -> move derv class
-	//p.setRenderHint(QPainter::Antialiasing);
 	if(m_font != nullptr)
 		p.setFont(*m_font);
 	paint(&p);

@@ -68,6 +68,10 @@ private slots:
 
 	void on_actionZoom_out_triggered();
 
+	void on_actionRuler_changed();
+
+	void on_actionAntialiasing_triggered(bool checked);
+
 	void on_actionAboutQt_triggered();
 
 	void on_actionAbout_triggered();
@@ -85,8 +89,6 @@ private slots:
 	void on_actionDirectories_triggered();
 
 	void on_actionTracking_toggled(bool tracking);
-
-	void on_actionRuler_changed();
 
 public slots:
 	void on_updateNetOptions(uint64_t flags);
