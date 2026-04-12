@@ -23,6 +23,7 @@
 
 #include "ruler.h"
 
+#include <math.h>
 #include <tr_geo_object.h>
 
 Ruler::Ruler(QWidget *parent)
