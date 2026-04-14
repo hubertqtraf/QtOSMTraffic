@@ -413,6 +413,10 @@ void TrImportOsmStream::closeNode(QMap<QString, name_set> & name_map,
 			point.pt_type = code;
 		}
 	}
+	if(m_tags.contains("aerialway"))
+	{
+		// TODO: aerialway nodes
+	}
 	if(m_tags.contains("natural"))
 	{
 		uint64_t code = TrImportOsmRel::getNaturalClass(m_tags["natural"], true);
@@ -614,6 +618,12 @@ void TrImportOsmStream::closeWay(QMap<QString, name_set> & name_map, uint64_t & 
 		way.type = FLAG_FEATURE_AERA | FIELD_AREA_ROAD | TYPE_NATURAL;
 	}
 
+	if(m_tags.contains("climbing"))
+	{
+		// TODO: set 'climbing' to 'highway->step', create new road type?
+		way.type = 0x000000000000000D | TYPE_ROAD;
+	}
+
 	if(m_tags.contains("railway"))
 	{
 		uint64_t code = TrImportOsmRel::getRailWayClass(m_tags["railway"]);
@@ -621,6 +631,12 @@ void TrImportOsmStream::closeWay(QMap<QString, name_set> & name_map, uint64_t & 
 		{
 			way.type = TYPE_RAIL | code;
 		}
+	}
+
+	if(m_tags.contains("aerialway"))
+	{
+		// code: rail/cable
+		way.type = TYPE_RAIL | 0x00000000000000C0;
 	}
 
 	if(m_tags.contains("power"))

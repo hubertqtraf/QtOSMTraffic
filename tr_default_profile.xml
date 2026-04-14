@@ -38,7 +38,7 @@
   <value index="2" name="sub" rgb="#7a6b69" type="color"/>
   <value index="3" name="tram" rgb="#55525f" type="color"/>
   <value index="4" name="small" rgb="#6b7787" type="color"/>
-  <value index="5" name="cable" rgb="#989898" type="color"/>
+  <value index="5" name="cable" rgb="#ff00ff" type="color"/>
   <value index="6" name="unused" rgb="#dcdcff" type="color"/>
   <value index="7" name="planned" rgb="#b1d577" type="color"/>
   <value index="8" name="ab" rgb="#7c7c7b" type="color"/>
