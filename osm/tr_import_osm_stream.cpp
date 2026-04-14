@@ -658,7 +658,18 @@ void TrImportOsmStream::closeWay(QMap<QString, name_set> & name_map, uint64_t & 
 	if(m_tags.contains("building"))
 	{
 		// TODO: use: 'building:part'?
+
 		uint64_t code = TrImportOsmRel::getBuildingClass(m_tags["building"]);
+		if(m_tags.contains("tourism"))
+		{
+			// other: wilderness_hut, chalet, ...
+			if((m_tags["tourism"] == "alpine_hut") && (m_tags.contains("name")))
+			{
+				way.type = TYPE_BUILDING | code;
+				addPoiFromWay(name_map, act_id, n_map, TYPE_PUBLIC | POI_ALPINE);
+				code = 0;
+			}
+		}
 		if(code)
 		{
 			way.type = TYPE_BUILDING | code;
@@ -698,7 +709,8 @@ void TrImportOsmStream::closeWay(QMap<QString, name_set> & name_map, uint64_t & 
 		{
 			if(way.type | TYPE_BUILDING)
 			{
-				addPoiFromWay(name_map, act_id, n_map, code);
+				// TODO, double use -> check...
+				//addPoiFromWay(name_map, act_id, n_map, code);
 			}
 			else
 				way.type = code;

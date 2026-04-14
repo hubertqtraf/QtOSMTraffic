@@ -327,12 +327,6 @@ void TrMapPoi::draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mode
 	bool text = true;
 	p->setPen(*getActivePen());
 
-	if(m_poi_flags & TYPE_POI_P_ALPINE)
-	{
-		p->fillRect(static_cast <int>(screen.x-3),
-		static_cast <int>(screen.y-6), 12, 6, QBrush(getActivePen()->color()));
-	}
-
 	p->setBrush(Qt::NoBrush);
 	if(m_poi_flags & TYPE_POI_N_PEAK)
 	{
@@ -391,6 +385,13 @@ void TrMapPoi::draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mode
 			text = true;
 		if(m_poi_flags & TYPE_POI_P_FOOD)
 			text = true;
+		//TODO: check TYPE_POI_P_ALPINE
+		if((m_poi_flags & 0x000000ff) == POI_ALPINE)
+		{
+			p->fillRect(static_cast <int>(screen.x-3),
+				static_cast <int>(screen.y-6), 12, 6, QBrush(getActivePen()->color()));
+			text = true;
+		}
 		// false: TYPE_POI_P_CHURCH, TYPE_POI_P_MONEY, TYPE_POI_P_SHOP, TYPE_POI_P_TOUR
 	}
 
