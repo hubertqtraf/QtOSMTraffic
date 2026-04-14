@@ -30,6 +30,7 @@ Ruler::Ruler(QWidget *parent)
 	: QWidget{parent}
 	, m_active(false)
 	, m_dist(1000.0)
+	, m_bpt{20,20}
 {
 }
 
@@ -38,24 +39,37 @@ void Ruler::showRuler(bool enable)
 	m_active = enable;
 }
 
+void Ruler::setBasePoint(const QPoint pt)
+{
+	m_bpt = pt;
+}
+
 void Ruler::init(const TrZoomMap &zoom_ref)
 {
-	TrPoint pt = {20,25};
-
+	TrPoint pt;
+	TrPoint pta;
+	pt.x = m_bpt.x();
+	pt.y = pta.y = m_bpt.y();
 	zoom_ref.getPoint(&pt.x, &pt.y);
-	TrPoint pta = pt;
-	pt.x = 120;
-	zoom_ref.getPoint(&pt.x, &pt.y);
+	pta.x = m_bpt.x() + 100;
+	zoom_ref.getPoint(&pta.x, &pta.y);
 
 	m_dist = fabs(pt.x - pta.x);
+
+	if(!m_base_line.size())
+	{
+		m_base_line.setPoints(4, m_bpt.x()+5, m_bpt.y()+15, m_bpt.x()+5, m_bpt.y()+25,
+			m_bpt.x()+105, m_bpt.y()+25, m_bpt.x()+105, m_bpt.y()+15);
+	}
 }
 
 void Ruler::paint(QPainter *p)
 {
-	if(m_active)
-	{
-		p->fillRect(20,20,100,20, QColor(200,200,200));
-		p->setPen(QColor(0,0,0));
-		p->drawText(QPoint(25,35), QString::number(m_dist) + " [m]");
-	}
+	if(!m_active)
+		return;
+
+	p->fillRect(m_bpt.x(), m_bpt.y(),110,40, QColor(200, 200, 200, 200));
+	p->setPen(QColor(0, 0, 0));
+	p->drawPolyline(m_base_line);
+	p->drawText(QPoint(m_bpt.x() + 10, m_bpt.y() + 15), QString::number(m_dist) + " [m]");
 }

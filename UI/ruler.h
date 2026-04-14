@@ -37,14 +37,19 @@ public:
 
 	void showRuler(bool enable);
 
+	void setBasePoint(const QPoint pt);
+
 	void init(const TrZoomMap & zoom_ref);
 
 	virtual void paint(QPainter * p);
+
 signals:
 
 private:
 	bool m_active;
 	double m_dist;
+	QPoint m_bpt;
+	QPolygon m_base_line;
 };
 
 #endif // RULER_H

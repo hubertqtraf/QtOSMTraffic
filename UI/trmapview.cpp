@@ -149,6 +149,11 @@ void TrMapView::recalcExtRect()
 	m_zoom_ref.setVisibleWorld(m_doc.getSurroundRectVal(0), m_doc.getSurroundRectVal(1),
 	m_doc.getSurroundRectVal(2), m_doc.getSurroundRectVal(3));
 	m_zoom_ref.zoom2Rect();
+	QPoint size;
+	//size.setX(width() - 120);
+	size.setX(10);
+	size.setY(height() - 50);
+	m_ruler->setBasePoint(size);
 	m_ruler->init(m_zoom_ref);
 	update();
 	TR_MSG << m_doc.getSurroundRectVal(0) << m_doc.getSurroundRectVal(1) <<
