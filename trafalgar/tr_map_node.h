@@ -81,6 +81,8 @@ class TrMapNode : public TrGeoPoint
 {
 private:
 	uint8_t m_dir_flags;
+
+	uint64_t m_con_flags;   // border, oneway border, size all, size double
 	// TODO: m_in_flags, m_out_flags -> remove?
 	uint64_t m_in_flags;		// blocked connection(s)
 	uint64_t m_out_flags;
@@ -141,6 +143,7 @@ public:
 	void resetIoOut();
 
 	bool setDirFlags();
+	void setConFlags();
 
 	// TODO: check, remove?
 	int getShiftPoint(const TrZoomMap & zoom_ref);

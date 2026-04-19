@@ -79,6 +79,7 @@ void TrConnectionMember::setDir(double adir)
 TrMapNode::TrMapNode()
 	: TrGeoPoint()
 	, m_dir_flags(TR_NODE_DIR_EMTY)
+	, m_con_flags(0x0000000000000000)
 	, m_in_flags(0x0000000000000000)
 	, m_out_flags(0x0000000000000000)
 	, m_mv_pt{40000000.0, 40000000.0}
@@ -241,6 +242,30 @@ void TrMapNode::resetIoOut()
 	else
 		m_dir_flags = TR_NODE_DIR_EMTY;
 	//TR_INF << HEX << m_dir_flags;
+}
+
+
+void TrMapNode::setConFlags()
+{
+	uint64_t cflags;
+	m_con_flags = 0x3000000030000000;
+
+	for (TrConnectionMember item : m_vec_in)
+	{
+		if(item.tr_obj != nullptr)
+		{
+			cflags = item.tr_obj->handleConnecion(this, true, m_con_flags & 0x00000000ffffffff);
+			m_con_flags = (m_con_flags & 0xffffffff00000000) + cflags;
+		}
+	}
+	for (TrConnectionMember item : m_vec_out)
+	{
+		if(item.tr_obj != nullptr)
+		{
+			cflags = item.tr_obj->handleConnecion(this, false, m_con_flags >> 32);
+			m_con_flags = (m_con_flags & 0x00000000ffffffff) + (cflags << 32);
+		}
+	}
 }
 
 bool TrMapNode::setDirFlags()
@@ -454,6 +479,11 @@ bool TrMapNode::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject * ba
 	{
 		setCrossingByAngle(zoom_ref, false, 2);
 		//getShiftPoint(zoom_ref);
+	}
+
+	if((ctrl & 0xff) == 17)
+	{
+		setConFlags();
 	}
 
 	if((ctrl & 0xff) == TR_INIT_ND_ANG)

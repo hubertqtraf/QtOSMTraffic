@@ -228,9 +228,9 @@ void TrMapLink::setNameId(uint32_t id)
 
 TrGeoObject * TrMapLink::getNameElement()
 {
-    if(TrMapNetRoad::ms_name_list == nullptr)
-        return nullptr;
-    return TrMapNetRoad::ms_name_list->getMapObject(m_name_id);
+	if(TrMapNetRoad::ms_name_list == nullptr)
+		return nullptr;
+	return TrMapNetRoad::ms_name_list->getMapObject(m_name_id);
 }
 
 
@@ -456,6 +456,12 @@ bool TrMapLink::initSecs(const TrZoomMap & zoom_ref, TrMapList * pr_list, TrMapL
 uint8_t TrMapLink::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * other, TrGeoObject * node, uint8_t mode)
 {
 	return 0xff;
+}
+
+uint32_t TrMapLink::handleConnecion(TrGeoObject *node, bool dir, uint32_t flags)
+{
+	TR_INF << HEX << flags;
+	return flags;
 }
 
 // TODO: to check the length

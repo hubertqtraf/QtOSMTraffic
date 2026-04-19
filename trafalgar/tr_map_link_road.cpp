@@ -816,6 +816,12 @@ uint8_t TrMapLinkRoad::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * 
 	return 0;
 }
 
+uint32_t TrMapLinkRoad::handleConnecion(TrGeoObject *node, bool dir, uint32_t flags)
+{
+	TR_INF << HEX << flags;
+	return flags;
+}
+
 TrGeoObject * TrMapLinkRoad::getSegmentWithParm(TrGeoSegment & segment, int64_t nd_id, bool dir, int mode)
 {
 	if(!(isAsDoubleLine()))

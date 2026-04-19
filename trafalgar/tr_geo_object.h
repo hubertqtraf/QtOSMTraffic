@@ -184,6 +184,8 @@ public:
 
 	virtual uint8_t handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * other, TrGeoObject * node, uint8_t mode);
 
+	virtual uint32_t handleConnecion(TrGeoObject * node, bool dir, uint32_t flags);
+
 	virtual void setType(uint16_t);
 
 	virtual void setLayerShowMask(uint64_t mask);
