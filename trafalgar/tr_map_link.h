@@ -190,7 +190,7 @@ public:
 
 	virtual uint8_t handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * other, TrGeoObject * node, uint8_t mode);
 
-	virtual uint32_t handleConnecion(TrGeoObject * node, bool dir, uint32_t flags);
+	virtual uint64_t handleConnecion(TrGeoObject * node, bool dir, uint64_t flags);
 
 	TrGeoObject * manageGap(const TrZoomMap & zoom_ref, uint8_t mode, const TrPoint & pt, TrGeoObject * obj = nullptr);
 

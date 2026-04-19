@@ -458,7 +458,7 @@ uint8_t TrMapLink::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * othe
 	return 0xff;
 }
 
-uint32_t TrMapLink::handleConnecion(TrGeoObject *node, bool dir, uint32_t flags)
+uint64_t TrMapLink::handleConnecion(TrGeoObject *node, bool dir, uint64_t flags)
 {
 	TR_INF << HEX << flags;
 	return flags;

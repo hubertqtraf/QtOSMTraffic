@@ -247,23 +247,20 @@ void TrMapNode::resetIoOut()
 
 void TrMapNode::setConFlags()
 {
-	uint64_t cflags;
-	m_con_flags = 0x3000000030000000;
-
+	//TR_INF << getGeoId();
+	m_con_flags = 0;
 	for (TrConnectionMember item : m_vec_in)
 	{
 		if(item.tr_obj != nullptr)
 		{
-			cflags = item.tr_obj->handleConnecion(this, true, m_con_flags & 0x00000000ffffffff);
-			m_con_flags = (m_con_flags & 0xffffffff00000000) + cflags;
+			m_con_flags = item.tr_obj->handleConnecion(this, TR_NODE_IN, m_con_flags);
 		}
 	}
 	for (TrConnectionMember item : m_vec_out)
 	{
 		if(item.tr_obj != nullptr)
 		{
-			cflags = item.tr_obj->handleConnecion(this, false, m_con_flags >> 32);
-			m_con_flags = (m_con_flags & 0x00000000ffffffff) + (cflags << 32);
+			m_con_flags = item.tr_obj->handleConnecion(this, TR_NODE_OUT, m_con_flags);
 		}
 	}
 }

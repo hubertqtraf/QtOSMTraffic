@@ -324,9 +324,9 @@ uint8_t TrGeoObject::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * ot
 	return 0xff;
 }
 
-uint32_t TrGeoObject::handleConnecion(TrGeoObject *node, bool dir, uint32_t flags)
+uint64_t TrGeoObject::handleConnecion(TrGeoObject *node, bool dir, uint64_t flags)
 {
-	return 0xffffffff;
+	return 0xffffffffffffffff;
 }
 
 uint16_t TrGeoObject::getType() const

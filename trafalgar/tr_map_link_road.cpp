@@ -816,10 +816,22 @@ uint8_t TrMapLinkRoad::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * 
 	return 0;
 }
 
-uint32_t TrMapLinkRoad::handleConnecion(TrGeoObject *node, bool dir, uint32_t flags)
+uint64_t TrMapLinkRoad::handleConnecion(TrGeoObject *node, bool dir, uint64_t flags)
 {
-	TR_INF << HEX << flags;
-	return flags;
+	uint32_t count_in = flags & 0x00000000ffffffff;
+	uint32_t count_out = flags >> 32;
+
+	if(dir)
+		count_in++;
+	else
+		count_out++;
+
+	uint64_t ret_flags = count_out;
+	ret_flags <<= 32;
+	ret_flags += count_in;
+
+	//TR_INF << HEX << count_in << count_out << "ret_flags" << ret_flags;
+	return ret_flags;
 }
 
 TrGeoObject * TrMapLinkRoad::getSegmentWithParm(TrGeoSegment & segment, int64_t nd_id, bool dir, int mode)
