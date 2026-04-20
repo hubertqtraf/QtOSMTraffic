@@ -460,8 +460,20 @@ uint8_t TrMapLink::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * othe
 
 uint64_t TrMapLink::handleConnecion(TrGeoObject *node, bool dir, uint64_t flags)
 {
-	TR_INF << HEX << flags;
-	return flags;
+	uint32_t count_in = flags & 0x00000000ffffffff;
+	uint32_t count_out = flags >> 32;
+
+	if(dir)
+		count_in+=(0x00000100);
+	else
+		count_out+=(0x00000100);
+
+	uint64_t ret_flags = count_out;
+	ret_flags <<= 32;
+	ret_flags += count_in;
+
+	//TR_INF << HEX << flags;
+	return ret_flags;
 }
 
 // TODO: to check the length

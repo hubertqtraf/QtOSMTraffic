@@ -45,6 +45,8 @@
 #define TR_NODE_DIR_EMTY 0x01
 #define TR_NODE_DIR_ONE  0x02
 
+#define TR_NODE_DIR_CON_READY 0x01
+
 #define TR_NODE_DIR_FORK_IN  0x10
 #define TR_NODE_DIR_FORK_OUT 0x20
 
@@ -55,6 +57,8 @@
 #define TR_NODE_OUT false
 
 #define TR_INIT_ND_ANG 33
+
+#define TR_INIT_ND_CON 17
 
 // reset node value
 #define TR_INIT_ND_RESET 19
@@ -122,6 +126,8 @@ public:
 	friend QDebug operator<<(QDebug dbg, const TrMapNode& seg);
 
 	QString getXmlName() const;
+
+	uint64_t getConFlags();
 
 	void setMovePoint(const TrPoint &point);
 	TrPoint getMovePoint() const;

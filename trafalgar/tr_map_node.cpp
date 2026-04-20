@@ -112,6 +112,11 @@ QString TrMapNode::getXmlName() const
 	return "map_node";
 }
 
+uint64_t TrMapNode::getConFlags()
+{
+	return m_con_flags;
+}
+
 void TrMapNode::setMovePoint(const TrPoint &point)
 {
 	m_mv_pt = point;
@@ -247,7 +252,6 @@ void TrMapNode::resetIoOut()
 
 void TrMapNode::setConFlags()
 {
-	//TR_INF << getGeoId();
 	m_con_flags = 0;
 	for (TrConnectionMember item : m_vec_in)
 	{
@@ -263,6 +267,8 @@ void TrMapNode::setConFlags()
 			m_con_flags = item.tr_obj->handleConnecion(this, TR_NODE_OUT, m_con_flags);
 		}
 	}
+	m_con_flags |= TR_NODE_DIR_CON_READY;
+	//TR_INF << DEC << getGeoId() << HEX << m_con_flags;
 }
 
 bool TrMapNode::setDirFlags()
@@ -478,7 +484,7 @@ bool TrMapNode::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject * ba
 		//getShiftPoint(zoom_ref);
 	}
 
-	if((ctrl & 0xff) == 17)
+	if((ctrl & 0xff) == TR_INIT_ND_CON)
 	{
 		setConFlags();
 	}

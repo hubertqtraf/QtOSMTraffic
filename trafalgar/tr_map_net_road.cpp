@@ -67,6 +67,8 @@ bool TrMapNetRoad::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject *
 		return false;
 	}
 
+	m_node_map->init(zoom_ref, TR_INIT_GEOMETRY | TR_INIT_ND_CON, nullptr);
+
 	// code to move the oneway link
 	if(s_mask & TR_MASK_MOVE_LINE)
 	{
