@@ -164,6 +164,8 @@ bool TrImportOsmStream::osmRead(World_t & world)
 			{
 				//TR_INF << "close way" << m_tags;
 				closeWay(world.m_name_map, world.act_name_idx, world.m_point_name_map);
+				m_id = 0;
+				m_tags.clear();
 			}
 			if(xml.name().toString() == "relation")
 			{
@@ -816,9 +818,6 @@ void TrImportOsmStream::closeWay(QMap<QString, name_set> & name_map, uint64_t & 
 			m_waylist[m_id] = way;
 		}
 	}
-
-	m_id = 0;
-	m_tags.clear();
 }
 
 void TrImportOsmStream::closeOsm(World_t & world)

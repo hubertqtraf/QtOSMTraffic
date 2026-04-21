@@ -114,6 +114,7 @@ private:
 
 	bool setCrossingByAngle(const TrZoomMap & zoom_ref, bool type, int mode);
 
+	bool checkOneWay(QVector<TrConnectionMember> &vec);
 protected:
 
 public:

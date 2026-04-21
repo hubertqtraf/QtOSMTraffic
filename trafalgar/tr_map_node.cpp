@@ -249,14 +249,33 @@ void TrMapNode::resetIoOut()
 	//TR_INF << HEX << m_dir_flags;
 }
 
+bool TrMapNode::checkOneWay(QVector<TrConnectionMember> & vec)
+{
+	for (TrConnectionMember item : vec)
+	{
+		if(item.tr_obj != nullptr)
+		{
+			TrMapLink * link = dynamic_cast<TrMapLink *>(item.tr_obj);
+			if(link != nullptr)
+			{
+				if(link->getOneWay() & TR_LINK_DIR_ONEWAY)
+					return false;
+			}
+		}
+	}
+	return true;
+}
 
 void TrMapNode::setConFlags()
 {
 	m_con_flags = 0;
+	TrGeoObject * lobj1 = nullptr;
+	TrGeoObject * lobj2 = nullptr;
 	for (TrConnectionMember item : m_vec_in)
 	{
 		if(item.tr_obj != nullptr)
 		{
+			lobj1 = item.tr_obj;
 			m_con_flags = item.tr_obj->handleConnecion(this, TR_NODE_IN, m_con_flags);
 		}
 	}
@@ -264,11 +283,36 @@ void TrMapNode::setConFlags()
 	{
 		if(item.tr_obj != nullptr)
 		{
+			lobj2 = item.tr_obj;
 			m_con_flags = item.tr_obj->handleConnecion(this, TR_NODE_OUT, m_con_flags);
 		}
 	}
 	m_con_flags |= TR_NODE_DIR_CON_READY;
 	//TR_INF << DEC << getGeoId() << HEX << m_con_flags;
+	if((m_con_flags & 0x0000ff000000ff00) == 0x0000010000000100)
+	{
+		if(lobj1 != nullptr)
+		{
+			bool test = false;
+			if(lobj2 == getParallelElement(lobj1, true))
+				test = true;
+			if((lobj2 == getParallelElement(lobj1, false)) && !test)
+				test = true;
+			if(test)
+				m_con_flags |= 0x0000000000000002;
+			else
+				m_con_flags |= 0x0000000000000010;
+		}
+	}
+	if((m_con_flags & 0x0000ff000000ff00) == 0x0000000000000100)
+		m_con_flags |= 0x0000000000000002;
+	if((m_con_flags & 0x0000ff000000ff00) == 0x0000010000000000)
+		m_con_flags |= 0x0000000000000002;
+	if((m_con_flags & 0x0000ff000000ff00) == 0x0000020000000200)
+	{
+		if(checkOneWay(m_vec_in) && checkOneWay(m_vec_out))
+			m_con_flags |= 0x0000000000000010;
+	}
 }
 
 bool TrMapNode::setDirFlags()
@@ -1032,6 +1076,10 @@ void TrMapNode::draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mod
 	p->setPen(*getActivePen());
 	// TODO: remove hardcoded color
 	p->setBrush(QBrush(QColor(220,174,192)));
+	if(m_con_flags & 0x02)
+		p->setBrush(QBrush(QColor(0xff,0x00,0x00,0x40)));
+	if(m_con_flags & 0x10)
+		p->setBrush(QBrush(QColor(0x00,0xff,0x00,0x40)));
 
 	/* test code
 	p->setPen(QPen(QColor(0,0,200)));
