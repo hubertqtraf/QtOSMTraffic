@@ -606,9 +606,20 @@ uint8_t TrMapLinkRoad::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * 
 	if(n == nullptr)
 		return 0xef;
 
+	TrGeoSegment first_segment;
 	// no crossing is possible if links are same
+	// could be if there is only link is connected (oneway border)
 	if(this == other)
 	{
+		if(mode != 2)
+			return 5;
+		getSegmentWithParm(first_segment, n->getGeoId(), (getOneWay() & TR_LINK_DIR_BWD) == TR_LINK_DIR_BWD, mode);
+		if(this->m_node_from == nullptr)
+			return 5;
+		if(this->m_node_from->getGeoId() == n->getGeoId())
+			n->setMovePoint(first_segment.getFirstPoint());
+		else
+			n->setMovePoint(first_segment.getSecondPoint());
 		return 5;
 	}
 
@@ -618,7 +629,6 @@ uint8_t TrMapLinkRoad::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * 
 		return 0xef;
 	}
 
-	TrGeoSegment first_segment;
 	TrGeoSegment next_segment;
 	TrPoint cross_pt;
 
