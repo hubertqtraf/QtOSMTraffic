@@ -56,11 +56,8 @@ void Ruler::init(const TrZoomMap &zoom_ref)
 
 	m_dist = fabs(pt.x - pta.x);
 
-	if(!m_base_line.size())
-	{
-		m_base_line.setPoints(4, m_bpt.x()+5, m_bpt.y()+15, m_bpt.x()+5, m_bpt.y()+25,
-			m_bpt.x()+105, m_bpt.y()+25, m_bpt.x()+105, m_bpt.y()+15);
-	}
+	m_base_line.setPoints(4, m_bpt.x()+5, m_bpt.y()+19, m_bpt.x()+5, m_bpt.y()+29,
+		m_bpt.x()+105, m_bpt.y()+29, m_bpt.x()+105, m_bpt.y()+19);
 }
 
 void Ruler::paint(QPainter *p)
@@ -71,5 +68,5 @@ void Ruler::paint(QPainter *p)
 	p->fillRect(m_bpt.x(), m_bpt.y(),110,40, QColor(200, 200, 200, 200));
 	p->setPen(QColor(0, 0, 0));
 	p->drawPolyline(m_base_line);
-	p->drawText(QPoint(m_bpt.x() + 10, m_bpt.y() + 15), QString::number(m_dist) + " [m]");
+	p->drawText(QPoint(m_bpt.x() + 10, m_bpt.y() + 19), QString::number(m_dist) + " [m]");
 }

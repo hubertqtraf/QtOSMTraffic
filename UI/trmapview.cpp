@@ -149,11 +149,7 @@ void TrMapView::recalcExtRect()
 	m_zoom_ref.setVisibleWorld(m_doc.getSurroundRectVal(0), m_doc.getSurroundRectVal(1),
 	m_doc.getSurroundRectVal(2), m_doc.getSurroundRectVal(3));
 	m_zoom_ref.zoom2Rect();
-	QPoint size;
-	//size.setX(width() - 120);
-	size.setX(10);
-	size.setY(height() - 50);
-	m_ruler->setBasePoint(size);
+
 	m_ruler->init(m_zoom_ref);
 	update();
 	TR_MSG << m_doc.getSurroundRectVal(0) << m_doc.getSurroundRectVal(1) <<
@@ -196,6 +192,11 @@ void TrMapView::resizeEvent(QResizeEvent *)
 {
 	m_zoom_ref.setScreenDimension(width(), height());
 	m_zoom_ref.zoom2Rect();
+	QPoint size;
+	size.setX(10);
+	size.setY(height() - 50);
+	m_ruler->setBasePoint(size);
+	m_ruler->init(m_zoom_ref);
 }
 
 TrPoint TrMapView::getWorldPoint(const QPoint & pt)
@@ -307,6 +308,7 @@ bool TrMapView::notifyRelease(const QPoint pt, Qt::MouseButton button)
 	{
 		m_select_box.setZoomRect(m_zoom_ref);
 		m_select_box.setHide();
+		m_ruler->init(m_zoom_ref);
 	}
 	else
 	{
