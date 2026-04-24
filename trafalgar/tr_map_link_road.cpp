@@ -775,13 +775,16 @@ uint8_t TrMapLinkRoad::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * 
 	}
 
 	// TODO: 'selectCrossing' if move line option is sselected?
-	if(selectCrossing(zoom_ref, next_segment, cross_pt, true))
+	TrGeoSegment set_segment;
+	set_segment.setPoints(next_segment);
+	if((next_link->getOneWay() & TR_LINK_DIR_BWD))
+		set_segment.doReverse();
+	if(selectCrossing(zoom_ref, set_segment, cross_pt, true))
 		return 5;
-	if(selectCrossing(zoom_ref, first_segment, cross_pt, true))
-		return 5;
-	if(selectCrossing(zoom_ref, next_segment, cross_pt, false))
-		return 5;
-	if(selectCrossing(zoom_ref, first_segment, cross_pt, false))
+	set_segment.setPoints(first_segment);
+	if((getOneWay() & TR_LINK_DIR_BWD))
+		set_segment.doReverse();
+	if(selectCrossing(zoom_ref, set_segment, cross_pt, false))
 		return 5;
 
 	if(first_link->getOneWay() & TR_LINK_DIR_ONEWAY)
