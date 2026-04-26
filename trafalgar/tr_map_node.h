@@ -172,8 +172,6 @@ public:
 
 	int getNextAngleObj(TrConnectionMember & member, bool dir);
 
-	int checkTwoByTwo();
-
 	void setShadowNode(TrMapNode * node);
 
 	bool markDivider(TrMapList & list, TrGeoObject * obj);

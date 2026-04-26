@@ -7,8 +7,10 @@
   <value index="1004" name="marker_2" rgb="#ff5500" type="color"/>
   <value index="1005" name="construction_1" rgb="#258680" type="color"/>
   <value index="1006" name="construction_2" rgb="#3fcabf" type="color"/>
-  <value index="1020" name="node_1" rgb="#ba5eca" type="color"/>
-  <value index="1021" name="node_2" rgb="#6a9cca" type="color"/>
+  <value index="1020" name="node_1" rgb="#c8ba5eca" type="color"/>
+  <value index="1021" name="node_2" rgb="#c8ff0000" type="color"/>
+  <value index="1022" name="node_3" rgb="#c855aa00" type="color"/>
+  <value index="1023" name="node_4" rgb="#6a9cca" type="color"/>
  </section>
  <section name="road">
   <value index="1" name="motorway" rgb="#d58e00" type="color"/>

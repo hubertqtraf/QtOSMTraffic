@@ -173,6 +173,7 @@ void MainWindow::on_handleResults(const TrGeoObject **obj)
 	m_map_view->setLoadedFlag(true);
 	on_updateNetOptions(0);
 	on_updateNetOptions(TrGeoObject::s_mask | m_net_option->getNetFlags());
+	on_updateFileOptions();
 
 	unsetCursor();
 

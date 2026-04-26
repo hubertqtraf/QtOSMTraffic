@@ -505,14 +505,13 @@ bool TrMapNode::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject * ba
 			if(list != nullptr)
 			{
 				// text -> 1002;
-				QPen * str_pen = list->getObjectPen(0x1002);
+				QPen * str_pen = list->getObjectPen(0x1020);
 				// TODO check rule!; create a 'shadow rule'?
 				// TODO remove the 'm_flags' parameter
-				int code = checkTwoByTwo();
-				if(code & 2)
-					str_pen = list->getObjectPen(0x1020);
-				if(code & 1)
+				if(m_con_flags & 0x02)
 					str_pen = list->getObjectPen(0x1021);
+				if(m_con_flags & 0x10)
+					str_pen = list->getObjectPen(0x1022);
 				if(str_pen != nullptr)
 				{
 					m_geo_active_pen = str_pen;
@@ -890,35 +889,6 @@ int TrMapNode::hasRamp(QVector<TrConnectionMember> & vec)
 	return count_ramp;
 }
 
-int TrMapNode::checkTwoByTwo()
-{
-	if((m_vec_in.size() == 1) && (m_vec_out.size() == 1))
-	{
-		TrGeoObject * obj = m_vec_in[0].tr_obj;
-		if(getParallelElement(obj, true) == m_vec_out[0].tr_obj)
-		{
-			return 4; //3;
-		}
-		// ono to one (-->*-->)
-		return 1;
-	}
-	if((m_vec_in.size() == 2) && (m_vec_out.size() == 2))
-	{
-		TrGeoObject * p_obj = getParallelElement(m_vec_in[0].tr_obj, true);
-		if((m_vec_out[0].tr_obj == p_obj) || (m_vec_out[1].tr_obj == p_obj))
-		{
-			p_obj = getParallelElement(m_vec_in[1].tr_obj, true);
-			if((m_vec_out[0].tr_obj != p_obj) && (m_vec_out[0].tr_obj != p_obj))
-			{
-				// two to two (<==>*<==>)
-				return 2;
-			}
-		}
-	}
-	return 0;
-}
-
-
 void TrMapNode::setShadowNode(TrMapNode * node)
 {
 	if(m_shadow == nullptr)
@@ -1072,14 +1042,13 @@ void TrMapNode::draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mod
 	if(m_dir_flags & TR_NODE_IS_SHADOW)
 		p_mode = 1;
 
-	// TODO check crash
-	p->setPen(*getActivePen());
-	// TODO: remove hardcoded color
-	p->setBrush(QBrush(QColor(220,174,192)));
-	if(m_con_flags & 0x02)
-		p->setBrush(QBrush(QColor(0xff,0x00,0x00,0x40)));
-	if(m_con_flags & 0x10)
-		p->setBrush(QBrush(QColor(0x00,0xff,0x00,0x40)));
+	if(getActivePen() == nullptr)
+	{
+		TR_WRN << "active pen == nullptr";
+		return;
+	}
+	p->setPen(QColor(100,100,100, 200));
+	p->setBrush(QBrush(getActivePen()->color()));
 
 	/* test code
 	p->setPen(QPen(QColor(0,0,200)));
