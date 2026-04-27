@@ -746,10 +746,10 @@ uint8_t TrMapLinkRoad::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * 
 		// same angle, parallel
 		if(code == 1)
 		{
-			// TODO: check width
-			//cross_pt = next_segment.getSecondPoint();
 			// TODO: create a rule for lane drop without step
-			return 5;
+			TrGeoSegment test_segment(n->getPoint(), cross_pt);
+			if(lane_diff || (test_segment.getLength(zoom_ref) > 50.0))
+				return 5;
 		}
 		// backward angle
 		if(code == 2)
