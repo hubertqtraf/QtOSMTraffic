@@ -586,7 +586,8 @@ uint8_t TrMapLinkRoad::handleRamps(const TrZoomMap & zoom_ref, TrMapLinkRoad * n
 		}
 
 		/*int code = */first_segment.getAngleCode(zoom_ref, next_segment, ang);
-		if((ang < ms_ramp_angle) || (ang > ((M_PI * 2.0) - ms_ramp_angle)))
+		// TODO: remove the angle test, rework
+		//if((ang < ms_ramp_angle) || (ang > ((M_PI * 2.0) - ms_ramp_angle)))
 		{
 			//TR_INF << "TO  " << ang << *this << *next_link;
 			TrPoint pt = first_segment.getSecondPoint();
