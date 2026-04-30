@@ -207,11 +207,10 @@ void TrGeoSegment::doReverse()
 	m_second = cp;
 }
 
-int TrGeoSegment::getAngleCode(const TrZoomMap & zoom_ref, const TrGeoSegment &other, double & ang)
+int TrGeoSegment::getAngleCode(const TrZoomMap & zoom_ref, const TrGeoSegment &other, double & ang, double level)
 {
 	double ang1 = getAngle(zoom_ref);
 	double ang2 = other.getAngle(zoom_ref);
-	double level = 0.2;
 	int err_code = zoom_ref.getErrorCode();
 
 	if(err_code)
@@ -302,6 +301,12 @@ bool TrGeoSegment::isEvenPolygon(const TrZoomMap & zoom_ref, QList<TrGeoSegment>
 	return ret;
 }
 
+TrPoint TrGeoSegment::getPointByAngle(const TrZoomMap & zoom_ref, double ang, bool dir)
+{
+	TrPoint ret = zoom_ref.getPointByAngle(m_first, m_second, ang);//ang + thisAng);
+	return ret;
+}
+
 bool TrGeoSegment::managePolygon(const TrZoomMap & zoom_ref, TrGeoPolygon & poly,
 	QList<TrGeoSegment> & seg_list, int width)
 {
@@ -377,9 +382,11 @@ void TrGeoSegment::draw(const TrZoomMap & zoom_ref, QPainter * p, uint8_t mode)
 	TrPoint screen_2 = m_second;
 	zoom_ref.setMovePoint(&screen_2.x,&screen_2.y);
 	//TR_INF << screen_1.x << screen_1.y << screen_2.x << screen_2.y;
-	p->setPen(QPen(QColor(0,200,0)));
+	QPen xpen = QPen(QColor(0,200,0));
+	xpen.setWidth(5);
+	p->setPen(xpen);
 	p->drawLine(screen_1.x, screen_1.y, screen_2.x, screen_2.y);
-	p->drawEllipse(static_cast<int>(screen_1.x)-5, static_cast<int>(screen_1.y)-5, 10, 10);
+	p->drawEllipse(static_cast<int>(screen_1.x)-8, static_cast<int>(screen_1.y)-5, 18, 10);
 	p->drawRect(static_cast<int>(screen_2.x)-5, static_cast<int>(screen_2.y)-5, 10, 10);
 }
 

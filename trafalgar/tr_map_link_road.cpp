@@ -544,61 +544,38 @@ uint8_t TrMapLinkRoad::handleRamps(const TrZoomMap & zoom_ref, TrMapLinkRoad * n
 		getSegmentWithParm(first_segment, n->getGeoId(), false, mode);
 		next_link->getSegmentWithParm(next_segment, n->getGeoId(), true, mode);
 
-		if((next_link->getOneWay() & TR_LINK_DIR_ONEWAY) != TR_LINK_DIR_ONEWAY)
+		int code = first_segment.getAngleCode(zoom_ref, next_segment, ang, 0.7);
+		//TR_INF << "ANG FO " << code << ang << *n;
+		if((code != 1) && (code != 2))
 		{
-			if((next_link->getOneWay() & TR_LINK_DIR_BWD) != TR_LINK_DIR_BWD)
-			{
-				next_segment.doReverse();
-			}
+			return 5;
 		}
+		TrPoint pt = next_segment.getFirstPoint();
+		if((next_link->getOneWay() & TR_LINK_DIR_BWD) == TR_LINK_DIR_BWD)
+			pt = next_segment.getSecondPoint();
 
-		if((next_link->getOneWay() & TR_LINK_DIR_ONEWAY) == TR_LINK_DIR_ONEWAY)
-		{
-			next_segment.doReverse();
-		}
-
-		/*int code = */first_segment.getAngleCode(zoom_ref, next_segment, ang);
-
-		if((ang < ms_ramp_angle) || (ang > ((M_PI * 2.0) - ms_ramp_angle)))
-		{
-			TrPoint pt = next_segment.getSecondPoint();
-			if((getOneWay() & TR_LINK_DIR_BWD) == TR_LINK_DIR_BWD)
-				next_segment.getFirstPoint();
-			//TR_INF << "From " << ang << *this << *next_link;
-			setCrossingPoint(pt, true);
-			initDoubleLineWidth(zoom_ref);
-			return 1;
-		}
+		setCrossingPoint(pt, true);
+		initDoubleLineWidth(zoom_ref);
 	}
 	if(next_link->getNodeTo() == getNodeTo())
 	{
 		getSegmentWithParm(first_segment, n->getGeoId(), false, mode);
 		next_link->getSegmentWithParm(next_segment, n->getGeoId(), true, mode);
 
-		if((next_link->getOneWay() & TR_LINK_DIR_ONEWAY) != TR_LINK_DIR_ONEWAY)
+		int code = first_segment.getAngleCode(zoom_ref, next_segment, ang, 0.7);
+		//TR_INF << "ANG TO " << code << ang << *n;
+		if((code != 1) && (code != 2))
 		{
-			if(!(getOneWay() & TR_LINK_DIR_BWD))
-				next_segment.doReverse();
+			return 5;
 		}
-		if((next_link->getOneWay() & TR_LINK_DIR_ONEWAY) == TR_LINK_DIR_ONEWAY)
-		{
-			next_segment.doReverse();
-		}
+		TrPoint pt = first_segment.getSecondPoint();
+		if((getOneWay() & TR_LINK_DIR_BWD) == TR_LINK_DIR_BWD)
+			pt = first_segment.getFirstPoint();
 
-		/*int code = */first_segment.getAngleCode(zoom_ref, next_segment, ang);
-		// TODO: remove the angle test, rework
-		//if((ang < ms_ramp_angle) || (ang > ((M_PI * 2.0) - ms_ramp_angle)))
-		{
-			//TR_INF << "TO  " << ang << *this << *next_link;
-			TrPoint pt = first_segment.getSecondPoint();
-			if((getOneWay() & TR_LINK_DIR_BWD) == TR_LINK_DIR_BWD)
-				pt = first_segment.getFirstPoint();
-			next_link->setCrossingPoint(pt, false);
-			next_link->initDoubleLineWidth(zoom_ref);
-			return 1;
-		}
+		next_link->setCrossingPoint(pt, false);
+		next_link->initDoubleLineWidth(zoom_ref);
 	}
-	return 5;
+	return 1;
 }
 
 uint8_t TrMapLinkRoad::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * other, TrGeoObject * node, uint8_t mode)
@@ -650,7 +627,7 @@ uint8_t TrMapLinkRoad::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * 
 			return 6;
 		}
 		double ang = 10.0;
-		int code = first_segment.getAngleCode(zoom_ref, next_segment, ang);
+		int code = first_segment.getAngleCode(zoom_ref, next_segment, ang, 0.2);
 		if((first_segment.getLength(zoom_ref) < 5.0) || (next_segment.getLength(zoom_ref) < 5.0))
 		{
 			// TODO: check length of the segments
@@ -737,7 +714,7 @@ uint8_t TrMapLinkRoad::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * 
 	first_segment.getCrossPoint(zoom_ref, cross_pt, next_segment);
 
 	double ang = 10.0;
-	int code = first_segment.getAngleCode(zoom_ref, next_segment, ang);
+	int code = first_segment.getAngleCode(zoom_ref, next_segment, ang, 0.2);
 	if(code)
 	{
 		if(code < 0)
@@ -1185,7 +1162,6 @@ void TrMapLinkRoad::writeXmlDescription(QXmlStreamWriter & xml_out, uint64_t id)
 	{
 		xml_out.writeAttribute("ramp", "1");
 	}
-
 	xml_out.writeStartElement("link");
 	writeXmlLinkPart(xml_out, id);
 	xml_out.writeEndElement();
@@ -1194,7 +1170,6 @@ void TrMapLinkRoad::writeXmlDescription(QXmlStreamWriter & xml_out, uint64_t id)
 		TR_INF << *m_parking;
 		m_parking->writeXmlDescription(xml_out, id);
 	}
-
 	xml_out.writeEndElement();
 }
 #endif

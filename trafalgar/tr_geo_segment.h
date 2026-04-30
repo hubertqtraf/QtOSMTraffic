@@ -85,6 +85,8 @@ public:
 
 	bool getCrossPoint(const TrZoomMap & zoom_ref, TrPoint & pt, TrGeoSegment & other);
 
+	TrPoint getPointByAngle(const TrZoomMap &zoom_ref, double ang, bool dir);
+
 	bool init(const TrZoomMap & zoom_ref, uint64_t ctrl = 0, TrGeoObject * base = nullptr);
 
 	bool setSurroundingRect();
@@ -99,7 +101,7 @@ public:
 
 	void doReverse();
 
-	int getAngleCode(const TrZoomMap & zoom_ref, const TrGeoSegment& other, double &ang);
+	int getAngleCode(const TrZoomMap & zoom_ref, const TrGeoSegment& other, double &ang, double level);
 
 	void getSegList(QList<TrGeoSegment> & seg_list, TrGeoPolygon & poly);
 
