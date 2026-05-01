@@ -63,6 +63,10 @@ MainWindow::MainWindow(QWidget *parent)
 	connect(m_map_view, SIGNAL(loadResult(const TrGeoObject **)),
 		this, SLOT(on_handleResults(const TrGeoObject ** )));
 
+	KeyEnterReceiver* key = new KeyEnterReceiver();
+	view->installEventFilter(key);
+	QObject::connect(key, SIGNAL(getKey(QKeyEvent*)), m_map_view, SLOT(on_Key(QKeyEvent*)));
+
 	view->setWidget(m_map_view);
 	view->setWidgetResizable(true);
 	m_map_view->setTracking(ui->actionTracking->isChecked());

@@ -44,6 +44,7 @@ private:
 	TrDocument m_doc;
 	TrZoomMap m_zoom_ref;
 	Qt::MouseButton m_move_pressed;
+	QPoint m_selected_point;
 	TrGeoObject * m_selected;
 	QMap<QString, QStringList> m_list;
 
@@ -102,6 +103,9 @@ public:
 
 public slots:
 	void on_handleResults(const TrGeoObject **obj);
+
+	/** react on on key */
+	void on_Key(QKeyEvent* key);
 
 signals:
 	void sendMessage(const QString, int);

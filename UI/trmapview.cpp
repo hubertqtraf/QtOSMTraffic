@@ -30,6 +30,7 @@ TrMapView::TrMapView(QWidget *parent)
 	: TrCanvas(parent)
 	, m_pos_select(TR_NO_VALUE)
 	, m_move_pressed(Qt::NoButton)  // TODO: check the default, was '0'
+	, m_selected_point{0,0}
 	, m_selected(nullptr)
 	, m_elementDock(nullptr)
 	, m_dockNode(nullptr)
@@ -326,6 +327,7 @@ bool TrMapView::notifyClick(const QPoint qpt, int mode, Qt::MouseButton button)
 	uint64_t pos = TR_NO_VALUE;
 	m_dockLink->setData(nullptr);
 	m_dockNode->setData(nullptr);
+	m_selected_point = qpt;
 
 	if(m_selected != nullptr)
 	{
@@ -424,4 +426,10 @@ void TrMapView::loadDocByThread(const QString & filename, int type, QProgressBar
 void TrMapView::on_handleResults(const TrGeoObject **obj)
 {
 	emit loadResult(obj);
+}
+
+void TrMapView::on_Key(QKeyEvent *key)
+{
+	if(key->text() == " ")
+		notifyClick(m_selected_point, 0, Qt::LeftButton);
 }
