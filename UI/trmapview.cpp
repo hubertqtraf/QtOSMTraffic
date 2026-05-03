@@ -297,6 +297,7 @@ bool TrMapView::notifyMove(const QPoint pt, Qt::MouseButton button)
 			m_zoom_ref.setMove(diff.x(), diff.y());
 		}
 	}
+	update();
 	return true;
 }
 
@@ -373,8 +374,6 @@ bool TrMapView::notifyClick(const QPoint qpt, int mode, Qt::MouseButton button)
 		m_dockLink->setData(pobj);
 		m_pos_select = pos;
 	}
-	m_dockLink->setData(pobj);
-
 	update();
 	return false;
 }

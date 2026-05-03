@@ -208,7 +208,6 @@ void TrCanvas::mousePressEvent(QMouseEvent * m)
 	{
 		return;
 	}
-	update();
 }
 
 void TrCanvas::mouseMoveEvent(QMouseEvent * m)
@@ -221,8 +220,6 @@ void TrCanvas::mouseMoveEvent(QMouseEvent * m)
 	}
 
 	notifyMove(m->pos(), m->button());
-
-	update();
 }
 
 void TrCanvas::mouseReleaseEvent(QMouseEvent * m)
@@ -245,7 +242,6 @@ void TrCanvas::mouseReleaseEvent(QMouseEvent * m)
 	{
 		// no need for rect selection -> return
 		m_select_box.setHide();
-		update();
 		return;
 	}
 
@@ -281,8 +277,6 @@ void TrCanvas::mouseReleaseEvent(QMouseEvent * m)
 	notifyRectSelect(m_select_box.getRect(), m->button());
 
 	m_select_box.setHide();
-
-	update();
 }
 
 void TrCanvas::wheelEvent(QWheelEvent *event)

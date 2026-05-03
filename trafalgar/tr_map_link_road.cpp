@@ -985,14 +985,17 @@ void TrMapLinkRoad::drawSelect(const TrZoomMap & zoom_ref, QPainter * p, uint8_t
 
 void TrMapLinkRoad::draw(const TrZoomMap & zoom_ref, QPainter * p, uint8_t mode)
 {
-	if(!(m_inst_mask & TR_MASK_DRAW))
-		return;
 	if(this->clip(zoom_ref))
 		return;
 
 	if(m_inst_mask & TR_MASK_SELECTED)
+	{
 		drawSelect(zoom_ref, p, mode);
-
+	}
+	if(!(m_inst_mask & TR_MASK_DRAW))
+	{
+		return;
+	}
 	if(m_geo_active_pen == nullptr)
 	{
 		//TR_WRN << "no active_pen -> exiting!" << HEX << m_rd_class;
