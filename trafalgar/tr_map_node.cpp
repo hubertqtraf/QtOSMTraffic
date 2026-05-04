@@ -313,6 +313,24 @@ void TrMapNode::setConFlags()
 		if(checkOneWay(m_vec_in) && checkOneWay(m_vec_out))
 			m_con_flags |= 0x0000000000000010;
 	}
+	if(m_con_flags & 0x00ff000000ff0000)
+	{
+		if(m_con_flags & 0x0000000000000002)
+			return;
+		if(m_con_flags & 0x0000000000000010)
+			return;
+		if((m_con_flags & 0x00ff000000ff0000) == 0x0001000000010000)
+			return;
+		if((m_con_flags & 0x00ff000000ff0000) == 0x0002000000020000)
+		{
+			if(checkOneWay(m_vec_in) || checkOneWay(m_vec_out))
+			{
+				return;
+			}
+		}
+		m_con_flags |= 0x0000000000000020;
+	}
+	//TR_INF << HEX << (0x1000000000000000 | m_con_flags);
 }
 
 bool TrMapNode::setDirFlags()
@@ -512,6 +530,8 @@ bool TrMapNode::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject * ba
 					str_pen = list->getObjectPen(0x1021);
 				if(m_con_flags & 0x10)
 					str_pen = list->getObjectPen(0x1022);
+				if(m_con_flags & 0x20)
+					str_pen = list->getObjectPen(0x1023);
 				if(str_pen != nullptr)
 				{
 					m_geo_active_pen = str_pen;
