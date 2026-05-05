@@ -35,3 +35,18 @@ NodesType::~NodesType()
 {
 	delete ui;
 }
+
+uint64_t NodesType::getMask()
+{
+	uint64_t ret = 0;
+
+	if(ui->checkBox_raod->isChecked())
+		ret |= 0x0000000000000001;
+	if(ui->checkBox_standard->isChecked())
+		ret |= 0x0000000000000002;
+	if(ui->checkBox_line->isChecked())
+		ret |= 0x0000000000000004;
+	if(ui->checkBox_end->isChecked())
+		ret |= 0x0000000000000008;
+	return ret;
+}

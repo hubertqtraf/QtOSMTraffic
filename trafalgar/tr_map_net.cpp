@@ -44,6 +44,7 @@ TrGeoSegment * TrMapNet::ms_seg_1 = new TrGeoSegment;
 TrGeoSegment * TrMapNet::ms_seg_2 = new TrGeoSegment;
 TrPoint TrMapNet::ms_point;
 #endif
+uint64_t TrMapNet::ms_node_mask = 0x000000000000000f;
 
 TrMapNet::TrMapNet()
 	: TrGeoObject()
@@ -246,9 +247,11 @@ void TrMapNet::draw(const TrZoomMap & zoom_ref, QPainter * p, uint8_t mode)
 	screen.x = TrMapNet::ms_point.x;
 	screen.y = TrMapNet::ms_point.y;
 	zoom_ref.setMovePoint(&screen.x, &screen.y);
-	p->setPen(QPen(QColor(255,255,0)));
-	p->drawRect(static_cast <int>(screen.x-DRAW_SIZE),
-		static_cast <int>(screen.y-DRAW_SIZE), DRAW_SIZE+20, DRAW_SIZE*3);
+	p->setPen(QPen(QColor(255,0,255), 3));
+	p->drawLine(static_cast <int>(screen.x),static_cast <int>(screen.y),
+		static_cast <int>(screen.x-10), static_cast <int>(screen.y-10));
+	p->drawLine(static_cast <int>(screen.x),static_cast <int>(screen.y),
+		static_cast <int>(screen.x-10), static_cast <int>(screen.y+10));
 #endif
 
 	if(m_link_list != nullptr)

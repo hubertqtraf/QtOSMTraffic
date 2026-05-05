@@ -518,5 +518,8 @@ void MainWindow::on_actionNodes_triggered()
 	{
 		m_nodes_type = new NodesType(this);
 	}
-	m_nodes_type->show();
+	if(m_nodes_type->exec())
+	{
+		TrMapNet::ms_node_mask = m_nodes_type->getMask();
+	}
 }

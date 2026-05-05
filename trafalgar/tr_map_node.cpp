@@ -42,6 +42,7 @@
 
 #include "tr_map_node.h"
 #include "tr_map_link.h"
+#include "tr_map_net.h"
 
 // TODO only once used, change?
 //#include "tr_map_link_road.h"
@@ -302,16 +303,26 @@ void TrMapNode::setConFlags()
 				m_con_flags |= 0x0000000000000002;
 			else
 				m_con_flags |= 0x0000000000000010;
+			m_con_flags &= 0xfffffffffffffffe;
 		}
 	}
 	if((m_con_flags & 0x0000ff000000ff00) == 0x0000000000000100)
+	{
 		m_con_flags |= 0x0000000000000002;
+		m_con_flags &= 0xfffffffffffffffe;
+	}
 	if((m_con_flags & 0x0000ff000000ff00) == 0x0000010000000000)
+	{
 		m_con_flags |= 0x0000000000000002;
+		m_con_flags &= 0xfffffffffffffffe;
+	}
 	if((m_con_flags & 0x0000ff000000ff00) == 0x0000020000000200)
 	{
 		if(checkOneWay(m_vec_in) && checkOneWay(m_vec_out))
+		{
 			m_con_flags |= 0x0000000000000010;
+			m_con_flags &= 0xfffffffffffffffe;
+		}
 	}
 	if(m_con_flags & 0x00ff000000ff0000)
 	{
@@ -329,6 +340,7 @@ void TrMapNode::setConFlags()
 			}
 		}
 		m_con_flags |= 0x0000000000000020;
+		m_con_flags &= 0xfffffffffffffffe;
 	}
 	//TR_INF << HEX << (0x1000000000000000 | m_con_flags);
 }
@@ -1057,6 +1069,21 @@ void TrMapNode::draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mod
 
 	if(m_inst_mask & TR_MASK_SELECTED)
 		drawSelect(zoom_ref, p, mode);
+
+	bool do_show = false;
+	//uint64_t show = m_con_flags;
+
+	if((TrMapNet::ms_node_mask & 0x0000000000000002) && (m_con_flags & 0x01))
+		do_show = true;
+	if((TrMapNet::ms_node_mask & 0x0000000000000001) && (m_con_flags & 0x20))
+		do_show = true;
+	if((TrMapNet::ms_node_mask & 0x0000000000000008) && (m_con_flags & 0x02))
+		do_show = true;
+	if((TrMapNet::ms_node_mask & 0x0000000000000004) && (m_con_flags & 0x10))
+		do_show = true;
+
+	if(!do_show)
+		return;
 
 	int p_mode = 0;
 	if(m_dir_flags & TR_NODE_IS_SHADOW)

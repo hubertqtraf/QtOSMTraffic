@@ -38,6 +38,8 @@ public:
 	explicit NodesType(QWidget *parent = nullptr);
 	~NodesType();
 
+	uint64_t getMask();
+
 private:
 	Ui::NodesType *ui;
 };

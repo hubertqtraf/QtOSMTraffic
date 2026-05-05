@@ -88,6 +88,7 @@ public:
 	static TrGeoSegment * ms_seg_2;
 	static TrPoint ms_point;
 #endif
+	static uint64_t ms_node_mask;
 
 	TrMapNet();
 
