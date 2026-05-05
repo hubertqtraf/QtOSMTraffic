@@ -47,6 +47,7 @@ MainWindow::MainWindow(QWidget *parent)
 	, m_profile_dlg(nullptr)
 	, m_file_options(nullptr)
 	, m_disp_option(nullptr)
+	, m_nodes_type(nullptr)
 	, m_about(nullptr)
 	, m_net_option(nullptr)
 	, m_net_dock(nullptr)
@@ -509,4 +510,13 @@ void MainWindow::on_updateFileOptions()
 		on_updateLayerView();
 		on_updateNetOptions(m_net_option->getNetFlags());
 	}
+}
+
+void MainWindow::on_actionNodes_triggered()
+{
+	if(m_nodes_type == nullptr)
+	{
+		m_nodes_type = new NodesType(this);
+	}
+	m_nodes_type->show();
 }

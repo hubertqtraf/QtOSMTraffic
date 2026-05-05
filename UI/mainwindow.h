@@ -28,6 +28,7 @@
 #include "trmapview.h"
 #include "trnetdock.h"
 #include "fileoptions.h"
+#include "nodestype.h"
 #include "about.h"
 
 #include <QMainWindow>
@@ -90,6 +91,8 @@ private slots:
 
 	void on_actionTracking_toggled(bool tracking);
 
+	void on_actionNodes_triggered();
+
 public slots:
 	void on_updateNetOptions(uint64_t flags);
 
@@ -111,6 +114,7 @@ private:
 	ProfileDialog * m_profile_dlg;
 	FileOptions * m_file_options;
 	TrDispOptionDialog * m_disp_option;
+	NodesType * m_nodes_type;
 	About * m_about;
 
 	TrNetDock * m_net_option;
