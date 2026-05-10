@@ -250,7 +250,7 @@ void TrMapNode::resetIoOut()
 	//TR_INF << HEX << m_dir_flags;
 }
 
-bool TrMapNode::checkOneWay(QVector<TrConnectionMember> & vec)
+bool TrMapNode::checkOneWay(QVector<TrConnectionMember> & vec, bool type)
 {
 	for (TrConnectionMember item : vec)
 	{
@@ -259,8 +259,16 @@ bool TrMapNode::checkOneWay(QVector<TrConnectionMember> & vec)
 			TrMapLink * link = dynamic_cast<TrMapLink *>(item.tr_obj);
 			if(link != nullptr)
 			{
-				if(link->getOneWay() & TR_LINK_DIR_ONEWAY)
-					return false;
+				if(type)
+				{
+					if((link->getOneWay() & TR_LINK_DIR_ONEWAY) && link->isAsDoubleLine())
+						return false;
+				}
+				else
+				{
+					if(link->getOneWay() & TR_LINK_DIR_ONEWAY)
+						return false;
+				}
 			}
 		}
 	}
@@ -318,7 +326,7 @@ void TrMapNode::setConFlags()
 	}
 	if((m_con_flags & 0x0000ff000000ff00) == 0x0000020000000200)
 	{
-		if(checkOneWay(m_vec_in) && checkOneWay(m_vec_out))
+		if(checkOneWay(m_vec_in, false) && checkOneWay(m_vec_out, false))
 		{
 			m_con_flags |= 0x0000000000000010;
 			m_con_flags &= 0xfffffffffffffffe;
@@ -334,10 +342,11 @@ void TrMapNode::setConFlags()
 			return;
 		if((m_con_flags & 0x00ff000000ff0000) == 0x0002000000020000)
 		{
-			if(checkOneWay(m_vec_in) || checkOneWay(m_vec_out))
+			if(checkOneWay(m_vec_in, true) || checkOneWay(m_vec_out, true))
 			{
 				return;
 			}
+
 		}
 		m_con_flags |= 0x0000000000000020;
 		m_con_flags &= 0xfffffffffffffffe;
