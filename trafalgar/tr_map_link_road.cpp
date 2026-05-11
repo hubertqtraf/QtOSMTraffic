@@ -335,6 +335,14 @@ bool TrMapLinkRoad::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject 
 			if((m_one_way & TR_LINK_DIR_ONEWAY) && (isAsDoubleLine()))
 			{
 				int32_t test_width = (0 - (m_mm_calc_width >> 1));
+				if(getPlacement())
+				{
+					if(getPlacement() & 0x01)
+						test_width -= (TrMapLinkRoad::ms_lane_width_p/2.0);
+					if(getPlacement() & 0x02)
+						test_width += (TrMapLinkRoad::ms_lane_width_p/2.0);
+				}
+				//TR_INF << HEX << getPlacement() << HEX << m_mm_calc_width << (0 - (m_mm_calc_width >> 1));
 				m_par_line.clear();
 				initDoubleLine(zoom_ref, m_par_line, test_width);
 			}
