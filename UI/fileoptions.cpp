@@ -1,7 +1,7 @@
 /******************************************************************
  * project:	OSM Traffic
  *
- * (C)		Schmid Hubert 2024
+ * (C)		Schmid Hubert 2024-2026
  ******************************************************************/
 
 /*
@@ -27,6 +27,10 @@
 #include <tr_map_link_road.h>
 
 #include <QFileDialog>
+
+QString FileOptions::s_shift = "Shift";
+QString FileOptions::s_left = "Left";
+QString FileOptions::s_place = "Placement";
 
 FileOptions::FileOptions(QWidget *parent) :
 	QDialog(parent),
@@ -111,7 +115,7 @@ void FileOptions::manageSettings(QSettings & settings, bool mode)
 	{
 		ui->osmDir->setText(settings.value("OSM").toString());
 		ui->profileDir->setText(settings.value("Profile").toString());
-		if(settings.value("Shift").toInt())
+		if(settings.value(FileOptions::s_shift).toInt())
 		{
 			ui->shiftCheck->setCheckState(Qt::Checked);
 		}
@@ -119,13 +123,23 @@ void FileOptions::manageSettings(QSettings & settings, bool mode)
 		{
 			ui->shiftCheck->setCheckState(Qt::Unchecked);
 		}
-		if(settings.value("Left").toInt())
+		if(settings.value(FileOptions::s_left).toInt())
 		{
 			ui->leftDrive->setCheckState(Qt::Checked);
 		}
 		else
 		{
 			ui->leftDrive->setCheckState(Qt::Unchecked);
+		}
+		if(settings.value(FileOptions::s_place).toInt())
+		{
+			ui->placement->setCheckState(Qt::Checked);
+			TrGeoObject::s_mask |= TR_MASK_PLACEMENT;
+		}
+		else
+		{
+			ui->placement->setCheckState(Qt::Unchecked);
+			TrGeoObject::s_mask &= ~TR_MASK_PLACEMENT;
 		}
 	}
 	else            // write
@@ -136,20 +150,30 @@ void FileOptions::manageSettings(QSettings & settings, bool mode)
 		if(ui->shiftCheck->checkState() == Qt::Checked)
 		{
 			TrGeoObject::s_mask |= TR_MASK_LEFT_DRIVE;
-			settings.setValue("Shift", 2);
+			settings.setValue(FileOptions::s_shift, 2);
 		}
 		else
 		{
 			TrGeoObject::s_mask &= ~TR_MASK_LEFT_DRIVE;
-			settings.setValue("Shift", 0);
+			settings.setValue(FileOptions::s_shift, 0);
 		}
-		if(ui->leftDrive->checkState() == Qt::Checked)
+		if(ui->placement->checkState() == Qt::Checked)
 		{
-			settings.setValue("Left", 2);
+			TrGeoObject::s_mask |= TR_MASK_PLACEMENT;
+			settings.setValue(FileOptions::s_place, 2);
 		}
 		else
 		{
-			settings.setValue("Left", 0);
+			TrGeoObject::s_mask &= ~TR_MASK_PLACEMENT;
+			settings.setValue(FileOptions::s_place, 0);
+		}
+		if(ui->leftDrive->checkState() == Qt::Checked)
+		{
+			settings.setValue(FileOptions::s_left, 2);
+		}
+		else
+		{
+			settings.setValue(FileOptions::s_left, 0);
 		}
 	}
 	settings.endGroup();
@@ -168,6 +192,14 @@ void FileOptions::useOptions(uint64_t opt)
 		TrGeoObject::s_mask &= ~TR_MASK_LEFT_DRIVE;
 		TrMapLinkRoad::ms_lane_width_p = ui->laneSpinBox->value();
 		TrMapLinkRoad::ms_lane_width_n = 0-ui->laneSpinBox->value();
+	}
+	if(ui->placement->checkState() == Qt::Checked)
+	{
+		TrGeoObject::s_mask |= TR_MASK_PLACEMENT;
+	}
+	else
+	{
+		TrGeoObject::s_mask &= ~TR_MASK_PLACEMENT;
 	}
 }
 

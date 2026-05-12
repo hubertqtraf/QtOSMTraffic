@@ -18,40 +18,24 @@
     <layout class="QGridLayout" name="gridLayout_3">
      <item row="0" column="0">
       <layout class="QGridLayout" name="gridLayout_2">
-       <item row="7" column="0">
-        <widget class="QLineEdit" name="profileDir"/>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLineEdit" name="osmDir"/>
-       </item>
-       <item row="1" column="1">
-        <widget class="QPushButton" name="setOsmDir">
+       <item row="5" column="0">
+        <widget class="QLabel" name="label_3">
          <property name="text">
-          <string>Select</string>
+          <string>Lane width [mm]</string>
          </property>
         </widget>
        </item>
-       <item row="6" column="0">
-        <widget class="QLabel" name="label_2">
-         <property name="text">
-          <string>Profile file</string>
-         </property>
-        </widget>
-       </item>
-       <item row="7" column="1">
+       <item row="8" column="1">
         <widget class="QPushButton" name="setProfileDir">
          <property name="text">
           <string>Select</string>
          </property>
         </widget>
        </item>
-       <item row="4" column="1">
-        <widget class="QSpinBox" name="laneSpinBox">
-         <property name="maximum">
-          <number>10000</number>
-         </property>
-         <property name="singleStep">
-          <number>100</number>
+       <item row="7" column="0">
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Profile file</string>
          </property>
         </widget>
        </item>
@@ -65,6 +49,33 @@
          </property>
         </widget>
        </item>
+       <item row="6" column="0">
+        <widget class="QCheckBox" name="relCheck">
+         <property name="text">
+          <string>Show relations on missing ways</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QPushButton" name="setOsmDir">
+         <property name="text">
+          <string>Select</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1">
+        <widget class="QSpinBox" name="laneSpinBox">
+         <property name="maximum">
+          <number>10000</number>
+         </property>
+         <property name="singleStep">
+          <number>100</number>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="0">
+        <widget class="QLineEdit" name="profileDir"/>
+       </item>
        <item row="0" column="0">
         <widget class="QLabel" name="label">
          <property name="text">
@@ -72,24 +83,20 @@
          </property>
         </widget>
        </item>
-       <item row="5" column="0">
-        <widget class="QCheckBox" name="relCheck">
-         <property name="text">
-          <string>Show relations on missing ways</string>
-         </property>
-        </widget>
-       </item>
        <item row="4" column="0">
-        <widget class="QLabel" name="label_3">
-         <property name="text">
-          <string>Lane width [mm]</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0">
         <widget class="QCheckBox" name="leftDrive">
          <property name="text">
           <string>Left Drive</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLineEdit" name="osmDir"/>
+       </item>
+       <item row="3" column="0">
+        <widget class="QCheckBox" name="placement">
+         <property name="text">
+          <string>Placement</string>
          </property>
         </widget>
        </item>

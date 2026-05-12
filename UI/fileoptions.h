@@ -1,7 +1,7 @@
 /******************************************************************
  * project:	OSM Traffic
  *
- * (C)		Schmid Hubert 2024
+ * (C)		Schmid Hubert 2024-2026
  ******************************************************************/
 
 /*
@@ -62,6 +62,10 @@ private slots:
 
 private:
 	Ui::FileOptions *ui;
+
+	static QString s_shift;
+	static QString s_left;
+	static QString s_place;
 };
 
 #endif // FILEOPTIONS_H
