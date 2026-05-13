@@ -39,6 +39,7 @@
 
 // TODO: only for the name list?
 #include "tr_map_net_road.h"
+#include "tr_map_transverse.h"
 #include "tr_name_element.h"
 
 #include <math.h>
@@ -260,6 +261,7 @@ bool TrMapLinkRoad::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject 
 		TR_WRN << "node == nullptr";
 		return false;
 	}
+
 	if(m_special != nullptr)
 	{
 		// TODO: warning on init->initDoubleLine(461)...
@@ -279,6 +281,29 @@ bool TrMapLinkRoad::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject 
 	if(ctrl & TR_INIT_GEOMETRY)
 	{
 		ctrl &= 0xff;
+
+		if(ctrl == TR_INIT_CON_TO_LIST)
+		{
+			if(TrMapTransverse::hasTransverse(base, m_node_from->getGeoId()) ||
+				TrMapTransverse::hasTransverse(base, m_node_to->getGeoId()))
+			{
+				if((!this->isAsDoubleLine()) && (m_special == nullptr))
+				{
+					//setMask(TR_MASK_SELECTED);
+					TrMapTransverse *tra = new TrMapTransverse();
+					tra->setPoi(base, this);
+					TrMapPoi * poi = tra->getPoi();
+					if(poi != nullptr)
+					{
+						if(!tra->getDir())
+							m_node_from->setPoint(poi->getPoint());
+						else
+							m_node_to->setPoint(poi->getPoint());
+					}
+					m_special = tra;
+				}
+			}
+		}
 
 		if(ctrl == 50)
 		{

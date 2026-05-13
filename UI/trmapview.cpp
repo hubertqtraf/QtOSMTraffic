@@ -216,6 +216,16 @@ bool TrMapView::notifyCoor(const QPoint pt, int mode, Qt::MouseButton button)
 	return false;
 }
 
+void TrMapView::connectListToNet()
+{
+	TrMapList * obj_list = dynamic_cast<TrMapList *>(m_doc.getLayerObjectByName("poi"));
+	TrMapNet * net = dynamic_cast<TrMapNet *>(m_doc.getLayerObjectByName("road"));
+	if(net != nullptr)
+	{
+		net->init(m_zoom_ref, TR_INIT_GEOMETRY | TR_INIT_CON_TO_LIST, obj_list);
+	}
+}
+
 TrGeoObject * TrMapView::selectObject(const TrPoint & pt, uint64_t & pos, uint64_t flag)
 {
 	TrGeoObject * sobj = nullptr;

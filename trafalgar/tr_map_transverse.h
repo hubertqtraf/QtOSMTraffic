@@ -12,7 +12,7 @@
  * system:	UNIX/LINUX
  * compiler:	gcc
  *
- * @author	Schmid Hubert (C)2025-2025
+ * @author	Schmid Hubert (C)2025-2026
  *
  * beginning:	03.2025
  *
@@ -41,11 +41,24 @@
 #define TR_MAP_TRANSVERSE_H
 
 #include "tr_map_link.h"
+#include "tr_map_poi.h"
 
 class TrMapTransverse : public TrMapLink
 {
+private:
+	TrMapPoi * m_poi;
+	bool m_from;
+
 public:
 	TrMapTransverse();
+
+	TrMapPoi *getPoi();
+
+	bool getDir();
+
+	static bool hasTransverse(TrGeoObject * obj, int64_t nd);
+
+	void setPoi(TrGeoObject *obj, TrMapLink *link);
 
 	bool setSurroundingRect();
 
@@ -60,6 +73,7 @@ public:
 
 	virtual void writeXmlDescription(QXmlStreamWriter & xml_out, uint64_t id);
 #endif
+
 };
 
 #endif // TR_MAP_TRANSVERSE_H

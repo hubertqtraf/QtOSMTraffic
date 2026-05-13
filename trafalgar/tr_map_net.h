@@ -59,6 +59,8 @@
 
 #include <stdint.h>
 
+#define TR_INIT_CON_TO_LIST 15
+
 #define LIST_DELETE true
 #define LIST_CREATE false
 

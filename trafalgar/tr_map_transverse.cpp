@@ -12,7 +12,7 @@
  * system:	UNIX/LINUX
  * compiler:	gcc
  *
- * @author	Schmid Hubert (C)2025-2025
+ * @author	Schmid Hubert (C)2025-2026
  *
  * beginning:	03.2025
  *
@@ -40,19 +40,67 @@
 #include "tr_map_transverse.h"
 
 TrMapTransverse::TrMapTransverse()
-    : TrMapLink()
+	: TrMapLink()
+	, m_poi(nullptr)
+	, m_from(false)
 {
 
+}
+
+TrMapPoi * TrMapTransverse::getPoi()
+{
+	return m_poi;
+}
+
+bool TrMapTransverse::getDir()
+{
+	return m_from;
+}
+
+bool TrMapTransverse::hasTransverse(TrGeoObject *obj, int64_t nd)
+{
+	if(obj == nullptr)
+		return false;
+	TrMapList * list = dynamic_cast<TrMapList *>(obj);
+	if(list == nullptr)
+		return false;
+	if(list->getObject(nd) == nullptr)
+		return false;
+	//TR_INF << nd;
+	return true;
+}
+
+void TrMapTransverse::setPoi(TrGeoObject *obj, TrMapLink * link)
+{
+	if(obj == nullptr)
+		return;
+	TrMapList * list = dynamic_cast<TrMapList *>(obj);
+	if(list == nullptr)
+		return;
+	m_poi = nullptr;
+	TrGeoObject * poi = list->getObject(link->getNodeFrom());
+	if(poi != nullptr)
+	{
+		m_from = true;
+		m_poi = dynamic_cast<TrMapPoi *>(poi);
+	}
+	poi = list->getObject(link->getNodeFrom());
+	{
+		m_from = false;
+		m_poi = dynamic_cast<TrMapPoi *>(poi);
+	}
+	//if(m_poi != nullptr)
+	//	TR_INF << *m_poi;
 }
 
 bool TrMapTransverse::setSurroundingRect()
 {
-    return false;
+	return false;
 }
 
 bool TrMapTransverse::init(const TrZoomMap &zoom_ref, uint64_t ctrl, TrGeoObject *base)
 {
-    return false;
+	return false;
 }
 
 void TrMapTransverse::draw(const TrZoomMap &zoom_ref, QPainter *p, uint8_t mode)

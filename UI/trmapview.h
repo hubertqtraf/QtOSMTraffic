@@ -101,6 +101,8 @@ public:
 
 	void addList(const QStringList &list, const QString &name);
 
+	void connectListToNet();
+
 public slots:
 	void on_handleResults(const TrGeoObject **obj);
 
