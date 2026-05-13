@@ -60,7 +60,7 @@ TrMapLinkRoad::TrMapLinkRoad()
 	: TrMapLink()
 	, m_lanes(1)
 	, m_placement(0)
-	, m_parking(nullptr)
+	, m_special(nullptr)
 	, m_mm_calc_width(DEF_WITH_P)
 	, m_pt_from{0.0,0.0}
 	, m_pt_to{0.0,0.0}
@@ -70,16 +70,16 @@ TrMapLinkRoad::TrMapLinkRoad()
 
 TrMapLinkRoad::~TrMapLinkRoad()
 {
-	if(m_parking != nullptr)
-		delete m_parking;
+	if(m_special != nullptr)
+		delete m_special;
 }
 
 QDebug operator<<(QDebug dbg, const TrMapLinkRoad& link)
 {
 	uint64_t park = 0;
-	if(link.m_parking != nullptr)
+	if(link.m_special != nullptr)
 	{
-		TrMapParkLane * lpark = dynamic_cast<TrMapParkLane *>(link.m_parking);
+		TrMapParkLane * lpark = dynamic_cast<TrMapParkLane *>(link.m_special);
 		if(lpark != nullptr)
 			park = lpark->getParking();
 	}
@@ -127,13 +127,13 @@ uint8_t TrMapLinkRoad::getPlacement()
 
 void TrMapLinkRoad::setParking(uint64_t code)
 {
-	if(code && (m_parking == nullptr))
+	if(code && (m_special == nullptr))
 	{
-		m_parking = new TrMapParkLane();
+		m_special = new TrMapParkLane();
 	}
-	if(m_parking != nullptr)
+	if(m_special != nullptr)
 	{
-		TrMapParkLane * park = dynamic_cast<TrMapParkLane *>(m_parking);
+		TrMapParkLane * park = dynamic_cast<TrMapParkLane *>(m_special);
 		park->setLinkRef(this);
 		if(park != nullptr)
 			park->setParking(code);
@@ -153,9 +153,9 @@ int32_t TrMapLinkRoad::getRoadWidth()
 
 uint64_t TrMapLinkRoad::getParking()
 {
-	if(m_parking != nullptr)
+	if(m_special != nullptr)
 	{
-		TrMapParkLane * park = dynamic_cast<TrMapParkLane *>(m_parking);
+		TrMapParkLane * park = dynamic_cast<TrMapParkLane *>(m_special);
 		if(park != nullptr)
 			return static_cast<uint64_t>(park->getParking());
 	}
@@ -260,10 +260,10 @@ bool TrMapLinkRoad::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject 
 		TR_WRN << "node == nullptr";
 		return false;
 	}
-	if(m_parking != nullptr)
+	if(m_special != nullptr)
 	{
 		// TODO: warning on init->initDoubleLine(461)...
-		m_parking->init(zoom_ref, ctrl, base);
+		m_special->init(zoom_ref, ctrl, base);
 	}
 
 	ret = TrMapLink::init(zoom_ref, ctrl, base);
@@ -1011,9 +1011,9 @@ void TrMapLinkRoad::draw(const TrZoomMap & zoom_ref, QPainter * p, uint8_t mode)
 	}
 	// print parking part, draw first, do not overwrite the oher lines
 	//if((m_parking & 0xff00) && (s_mask & TR_MASK_SHOW_PARKING) && (m_pen_park != nullptr))
-	if(m_parking != nullptr)
+	if(m_special != nullptr)
 	{
-		m_parking->draw(zoom_ref, p, mode);
+		m_special->draw(zoom_ref, p, mode);
 	}
 	// show the parallel line
 	//drawParLine(zoom_ref, p, 0);

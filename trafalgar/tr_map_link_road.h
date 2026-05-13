@@ -70,8 +70,8 @@ private:
 
 	uint8_t m_placement;
 
-	// could be one lane or a list
-	TrGeoObject * m_parking;
+	// could be one lane or a list or traverse
+	TrGeoObject * m_special;
 
 	int32_t m_mm_calc_width;
 
