@@ -51,6 +51,8 @@ private:
 	TrPoint m_pt_first;
 	TrPoint m_pt_last;
 
+	TrMapPoi *getPoiType(TrMapList * list, int64_t nd);
+
 public:
 	TrMapTransverse();
 
@@ -75,7 +77,6 @@ public:
 
 	virtual void writeXmlDescription(QXmlStreamWriter & xml_out, uint64_t id);
 #endif
-
 };
 
 #endif // TR_MAP_TRANSVERSE_H

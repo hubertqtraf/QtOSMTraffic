@@ -292,8 +292,11 @@ bool TrMapLinkRoad::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject 
 					TrMapTransverse *tra = new TrMapTransverse();
 					tra->setPoi(base, this);
 					tra->setLinkData(*this);
-					m_special = tra;
-					removeMask(TR_MASK_DRAW);
+					if((tra->getPoi(true) != nullptr) || (tra->getPoi(false) != nullptr))
+					{
+						m_special = tra;
+						removeMask(TR_MASK_DRAW);
+					}
 				}
 			}
 		}

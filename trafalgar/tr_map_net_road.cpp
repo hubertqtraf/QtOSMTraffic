@@ -68,12 +68,14 @@ bool TrMapNetRoad::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject *
 	}
 
 	m_node_map->init(zoom_ref, TR_INIT_GEOMETRY | TR_INIT_ND_CON, nullptr);
+	m_link_list->init(zoom_ref, ctrl, base);
 
 	// code to move the oneway link
 	if(s_mask & TR_MASK_MOVE_LINE)
 	{
 		TR_INF << "only one shift!";
 		// TODO: set the angles -> check: double use?
+
 		m_link_list->init(zoom_ref, TR_INIT_GEOMETRY | TR_INIT_MV_CLEAN, nullptr);
 		m_node_map->init(zoom_ref, TR_INIT_GEOMETRY | TR_INIT_ND_RESET, nullptr);
 		m_node_map->init(zoom_ref, TR_INIT_GEOMETRY | TR_INIT_ND_ANG, m_primive_map);

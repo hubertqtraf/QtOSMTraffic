@@ -55,6 +55,20 @@ TrMapPoi * TrMapTransverse::getPoi(bool dir)
 	return m_poi2;
 }
 
+TrMapPoi * TrMapTransverse::getPoiType(TrMapList * list, int64_t nd)
+{
+	TrGeoObject * poi_obj = list->getObject(nd);
+	if(poi_obj == nullptr)
+		return nullptr;
+
+	TrMapPoi * poi = dynamic_cast<TrMapPoi *>(poi_obj);
+	if(poi == nullptr)
+		return nullptr;
+	if((poi->getPoiTypeFlags() & 0x000000000000000f) != 1)
+		return nullptr;
+	return poi;
+}
+
 bool TrMapTransverse::hasTransverse(TrGeoObject *obj, int64_t nd)
 {
 	if(obj == nullptr)
@@ -75,18 +89,8 @@ void TrMapTransverse::setPoi(TrGeoObject *obj, TrMapLink * link)
 	TrMapList * list = dynamic_cast<TrMapList *>(obj);
 	if(list == nullptr)
 		return;
-	m_poi1 = nullptr;
-	m_poi2 = nullptr;
-	TrGeoObject * poi = list->getObject(link->getNodeFrom());
-	if(poi != nullptr)
-	{
-		m_poi1 = dynamic_cast<TrMapPoi *>(poi);
-	}
-	poi = list->getObject(link->getNodeTo());
-	if(poi != nullptr)
-	{
-		m_poi2 = dynamic_cast<TrMapPoi *>(poi);
-	}
+	m_poi1 = this->getPoiType(list, link->getNodeFrom());
+	m_poi2 = this->getPoiType(list, link->getNodeTo());
 }
 
 void TrMapTransverse::setLinkData(TrMapLink &link)
