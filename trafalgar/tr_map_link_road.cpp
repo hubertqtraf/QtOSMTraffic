@@ -289,18 +289,11 @@ bool TrMapLinkRoad::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject 
 			{
 				if((!this->isAsDoubleLine()) && (m_special == nullptr))
 				{
-					//setMask(TR_MASK_SELECTED);
 					TrMapTransverse *tra = new TrMapTransverse();
 					tra->setPoi(base, this);
-					TrMapPoi * poi = tra->getPoi();
-					if(poi != nullptr)
-					{
-						if(!tra->getDir())
-							m_node_from->setPoint(poi->getPoint());
-						else
-							m_node_to->setPoint(poi->getPoint());
-					}
+					tra->setLinkData(*this);
 					m_special = tra;
+					removeMask(TR_MASK_DRAW);
 				}
 			}
 		}
@@ -1024,6 +1017,15 @@ void TrMapLinkRoad::draw(const TrZoomMap & zoom_ref, QPainter * p, uint8_t mode)
 	if(m_inst_mask & TR_MASK_SELECTED)
 	{
 		drawSelect(zoom_ref, p, mode);
+	}
+	if(m_special != nullptr)
+	{
+		TrMapTransverse * tra = dynamic_cast<TrMapTransverse *>(m_special);
+		if(tra != nullptr)
+		{
+			tra->draw(zoom_ref, p, mode);
+			return;
+		}
 	}
 	if(!(m_inst_mask & TR_MASK_DRAW))
 	{

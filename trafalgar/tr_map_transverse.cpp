@@ -41,20 +41,18 @@
 
 TrMapTransverse::TrMapTransverse()
 	: TrMapLink()
-	, m_poi(nullptr)
-	, m_from(false)
+	, m_poi1(nullptr)
+	, m_poi2(nullptr)
+	, m_pt_first{0.0,0.0}
+	, m_pt_last{0.0,0.0}
 {
-
 }
 
-TrMapPoi * TrMapTransverse::getPoi()
+TrMapPoi * TrMapTransverse::getPoi(bool dir)
 {
-	return m_poi;
-}
-
-bool TrMapTransverse::getDir()
-{
-	return m_from;
+	if(dir)
+		return m_poi1;
+	return m_poi2;
 }
 
 bool TrMapTransverse::hasTransverse(TrGeoObject *obj, int64_t nd)
@@ -77,20 +75,29 @@ void TrMapTransverse::setPoi(TrGeoObject *obj, TrMapLink * link)
 	TrMapList * list = dynamic_cast<TrMapList *>(obj);
 	if(list == nullptr)
 		return;
-	m_poi = nullptr;
+	m_poi1 = nullptr;
+	m_poi2 = nullptr;
 	TrGeoObject * poi = list->getObject(link->getNodeFrom());
 	if(poi != nullptr)
 	{
-		m_from = true;
-		m_poi = dynamic_cast<TrMapPoi *>(poi);
+		m_poi1 = dynamic_cast<TrMapPoi *>(poi);
 	}
-	poi = list->getObject(link->getNodeFrom());
+	poi = list->getObject(link->getNodeTo());
+	if(poi != nullptr)
 	{
-		m_from = false;
-		m_poi = dynamic_cast<TrMapPoi *>(poi);
+		m_poi2 = dynamic_cast<TrMapPoi *>(poi);
 	}
-	//if(m_poi != nullptr)
-	//	TR_INF << *m_poi;
+}
+
+void TrMapTransverse::setLinkData(TrMapLink &link)
+{
+	setActivePen(link.getActivePen());
+	if(link.getOneWay() & TR_LINK_DIR_BWD)
+	{
+		removeMask(TR_MASK_DRAW);
+	}
+	m_pt_last = link.getNodeFromRef()->getPoint();
+	m_pt_first = link.getNodeToRef()->getPoint();
 }
 
 bool TrMapTransverse::setSurroundingRect()
@@ -105,7 +112,32 @@ bool TrMapTransverse::init(const TrZoomMap &zoom_ref, uint64_t ctrl, TrGeoObject
 
 void TrMapTransverse::draw(const TrZoomMap &zoom_ref, QPainter *p, uint8_t mode)
 {
-
+	if(!(m_inst_mask & TR_MASK_DRAW))
+		return;
+	if(getActivePen() == nullptr)
+	{
+		TR_WRN << "getActivePen() == nullptr";
+		return;
+	}
+	QPolygon poly(2);
+	QPen tra_pen = QPen(getActivePen()->color(), 7);
+	p->setPen(tra_pen);
+	if((m_poi1 != nullptr) && (m_poi2 != nullptr))
+	{
+		getTwoLine(zoom_ref, poly, m_poi1->getPoint(), m_poi2->getPoint());
+		p->drawPolyline(poly);
+		return;
+	}
+	if(m_poi1 != nullptr)
+	{
+		getTwoLine(zoom_ref, poly, m_poi1->getPoint(), m_pt_first);
+		p->drawPolyline(poly);
+	}
+	if(m_poi2 != nullptr)
+	{
+		getTwoLine(zoom_ref, poly, m_pt_last, m_poi2->getPoint());
+		p->drawPolyline(poly);
+	}
 }
 
 #ifdef TR_SERIALIZATION

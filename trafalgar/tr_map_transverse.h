@@ -46,19 +46,21 @@
 class TrMapTransverse : public TrMapLink
 {
 private:
-	TrMapPoi * m_poi;
-	bool m_from;
+	TrMapPoi * m_poi1;
+	TrMapPoi * m_poi2;
+	TrPoint m_pt_first;
+	TrPoint m_pt_last;
 
 public:
 	TrMapTransverse();
 
-	TrMapPoi *getPoi();
-
-	bool getDir();
+	TrMapPoi *getPoi(bool dir);
 
 	static bool hasTransverse(TrGeoObject * obj, int64_t nd);
 
 	void setPoi(TrGeoObject *obj, TrMapLink *link);
+
+	void setLinkData(TrMapLink &link);
 
 	bool setSurroundingRect();
 
