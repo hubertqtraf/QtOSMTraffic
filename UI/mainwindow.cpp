@@ -445,6 +445,8 @@ void MainWindow::on_updateWorld()
 	m_map_view->setBackgroundColor(b_map);
 	m_map_view->initObjects(TR_INIT_COLORS);
 
+	m_map_view->connectListToNet();
+
 	m_map_view->update();
 }
 

@@ -102,6 +102,8 @@ void TrMapTransverse::setLinkData(TrMapLink &link)
 	}
 	m_pt_last = link.getNodeFromRef()->getPoint();
 	m_pt_first = link.getNodeToRef()->getPoint();
+
+	m_pline = link.getPolygon();
 }
 
 bool TrMapTransverse::setSurroundingRect()
@@ -114,6 +116,21 @@ bool TrMapTransverse::init(const TrZoomMap &zoom_ref, uint64_t ctrl, TrGeoObject
 	return false;
 }
 
+void TrMapTransverse::drawPart(const TrZoomMap &zoom_ref, QPainter *p, TrPoint p1, TrPoint p2)
+{
+	QPolygon poly(2);
+
+	if(m_pline == nullptr)
+	{
+		getTwoLine(zoom_ref, poly, p1, p2);
+		p->drawPolyline(poly);
+	}
+	else
+	{
+		m_pline->draw(zoom_ref, p, p1, p2, 2);
+	}
+}
+
 void TrMapTransverse::draw(const TrZoomMap &zoom_ref, QPainter *p, uint8_t mode)
 {
 	if(!(m_inst_mask & TR_MASK_DRAW))
@@ -123,24 +140,21 @@ void TrMapTransverse::draw(const TrZoomMap &zoom_ref, QPainter *p, uint8_t mode)
 		TR_WRN << "getActivePen() == nullptr";
 		return;
 	}
-	QPolygon poly(2);
-	QPen tra_pen = QPen(getActivePen()->color(), 7);
+	QPen tra_pen = QPen(getActivePen()->color(), 2);
 	p->setPen(tra_pen);
+
 	if((m_poi1 != nullptr) && (m_poi2 != nullptr))
 	{
-		getTwoLine(zoom_ref, poly, m_poi1->getPoint(), m_poi2->getPoint());
-		p->drawPolyline(poly);
+		drawPart(zoom_ref, p, m_poi1->getPoint(), m_poi2->getPoint());
 		return;
 	}
 	if(m_poi1 != nullptr)
 	{
-		getTwoLine(zoom_ref, poly, m_poi1->getPoint(), m_pt_first);
-		p->drawPolyline(poly);
+		drawPart(zoom_ref, p, m_poi1->getPoint(), m_pt_first);
 	}
 	if(m_poi2 != nullptr)
 	{
-		getTwoLine(zoom_ref, poly, m_pt_last, m_poi2->getPoint());
-		p->drawPolyline(poly);
+		drawPart(zoom_ref, p, m_pt_last, m_poi2->getPoint());
 	}
 }
 

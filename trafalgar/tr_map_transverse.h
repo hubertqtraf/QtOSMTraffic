@@ -53,6 +53,8 @@ private:
 
 	TrMapPoi *getPoiType(TrMapList * list, int64_t nd);
 
+	void drawPart(const TrZoomMap &zoom_ref, QPainter *p, TrPoint p1, TrPoint p2);
+
 public:
 	TrMapTransverse();
 
