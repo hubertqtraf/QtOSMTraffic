@@ -103,6 +103,7 @@ void TrMapTransverse::setLinkData(TrMapLink &link)
 	m_pt_last = link.getNodeFromRef()->getPoint();
 	m_pt_first = link.getNodeToRef()->getPoint();
 
+	setType(link.getType());
 	m_pline = link.getPolygon();
 }
 
@@ -140,8 +141,9 @@ void TrMapTransverse::draw(const TrZoomMap &zoom_ref, QPainter *p, uint8_t mode)
 		TR_WRN << "getActivePen() == nullptr";
 		return;
 	}
-	QPen tra_pen = QPen(getActivePen()->color(), 2);
+	QPen tra_pen = QPen(getActivePen()->color(), 3);
 	p->setPen(tra_pen);
+	//p->setPen(*getActivePen());
 
 	if((m_poi1 != nullptr) && (m_poi2 != nullptr))
 	{

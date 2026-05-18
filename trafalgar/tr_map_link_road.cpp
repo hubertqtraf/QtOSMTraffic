@@ -604,6 +604,8 @@ uint8_t TrMapLinkRoad::handleRamps(const TrZoomMap & zoom_ref, TrMapLinkRoad * n
 		next_link->setCrossingPoint(pt, false);
 		next_link->initDoubleLineWidth(zoom_ref);
 	}
+	if(ang > 9.0)
+		return 2;
 	return 1;
 }
 
