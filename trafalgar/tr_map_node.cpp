@@ -12,7 +12,7 @@
  * system:	UNIX/LINUX
  * compiler:	gcc
  *
- * @author	Schmid Hubert (C)2015-2025
+ * @author	Schmid Hubert (C)2015-2026
  *
  * beginning:	06.2015
  *
@@ -104,7 +104,7 @@ TrMapNode::~TrMapNode()
 
 QDebug operator<<(QDebug dbg, const TrMapNode& node)
 {
-	return dbg << node.getXmlName() << node.getGeoId() << "in:" <<
+	return dbg << node.getXmlName() << DEC << node.getGeoId() << "in:" <<
 		node.getIn(false) << "out:" << node.getOut(false) << TR_COOR(node.m_pt);
 }
 

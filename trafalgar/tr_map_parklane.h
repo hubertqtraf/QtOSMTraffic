@@ -12,7 +12,7 @@
  * system:	UNIX/LINUX
  * compiler:	gcc
  *
- * @author	Schmid Hubert (C)2024-2025
+ * @author	Schmid Hubert (C)2024-2026
  *
  * beginning:	12.2024
  *
@@ -96,6 +96,7 @@ private:
 
 	int32_t getWith(uint8_t code);
 	QPen * setParkingSidePen(uint16_t type, TrGeoObject * base);
+	int checkNodes(const TrZoomMap & zoom_ref);
 };
 
 #endif // TR_MAP_PARKLANE_H

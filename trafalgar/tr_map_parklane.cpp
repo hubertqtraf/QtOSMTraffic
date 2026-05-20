@@ -12,7 +12,7 @@
  * system:	UNIX/LINUX
  * compiler:	gcc
  *
- * @author	Schmid Hubert (C)2024-2025
+ * @author	Schmid Hubert (C)2024-2026
  *
  * beginning:	12.2024
  *
@@ -39,6 +39,8 @@
 #include "tr_map_parklane.h"
 
 #include "tr_map_link_road.h"
+
+#include "tr_map_net.h"
 
 TrMapParkLane::TrMapParkLane()
 	: TrGeoObject()
@@ -136,10 +138,34 @@ QPen * TrMapParkLane::getParkPen()
 	return m_pen_park;
 }
 
+int TrMapParkLane::checkNodes(const TrZoomMap & zoom_ref)
+{
+	if(m_ref == nullptr)
+		return -1;
+	TrMapLinkRoad * link = dynamic_cast<TrMapLinkRoad *>(m_ref);
+	if(link == nullptr)
+		return -1;
+	TrMapNode * n_t = dynamic_cast<TrMapNode *>(link->getNodeToRef());
+	TrMapNode * n_f = dynamic_cast<TrMapNode *>(link->getNodeFromRef());
+	if((n_t == nullptr) && (n_f  == nullptr))
+		return -1;
+
+	if((n_t->getConFlags() & 0x20) && (n_f->getConFlags() & 0x20)) // yellow
+	{
+		TrGeoSegment seg = TrGeoSegment(n_t->getPoint(), n_f->getPoint());
+		if(seg.getLength(zoom_ref) < 30.0)
+			removeMask(TR_MASK_DRAW);
+
+		//TR_INF << HEX << n_t->getConFlags() << n_f->getConFlags() << *n_t << *n_f;
+	}
+	return 0;
+}
+
 bool TrMapParkLane::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject * base)
 {
 	if(m_ref == nullptr)
 		return false;
+	setMask(TR_MASK_DRAW);
 	TrMapLinkRoad * link = dynamic_cast<TrMapLinkRoad *>(m_ref);
 	if(link == nullptr)
 		return false;
@@ -161,7 +187,15 @@ bool TrMapParkLane::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject 
 			{
 				int32_t w = getWith(m_parking & 0x00000000000000ffU);
 				if(w)
+				{
 					link->initDoubleLine(zoom_ref, m_par_line, w);
+					checkNodes(zoom_ref);
+					/*if(m_par_line.size() > 1)
+					{
+						TrMapNet::ms_seg_1->setPoints(TrGeoSegment::getSegBorder(m_par_line, true));
+						TrMapNet::ms_seg_2->setPoints(TrGeoSegment::getSegBorder(m_par_line, false));
+					}*/
+				}
 				if(m_pen_park_left != nullptr)
 				{
 					w = -setParkingWidth((m_parking >> 32) & 0x00000000000000ff);
@@ -177,9 +211,17 @@ void TrMapParkLane::draw(const TrZoomMap & zoom_ref, QPainter * p, uint8_t mode)
 {
 	if(m_ref == nullptr)
 		return;
+
+	if(!(m_inst_mask & TR_MASK_DRAW))
+		return;
+
+	if(m_par_line.size() == 0)
+		return;
+
 	TrMapLinkRoad * link = dynamic_cast<TrMapLinkRoad *>(m_ref);
 	if(link == nullptr)
 		return;
+
 	QVector<QPointF> pointPairs;
 
 	if(/*(m_parking & 0xff00) &&*/ (s_mask & TR_MASK_SHOW_PARKING))

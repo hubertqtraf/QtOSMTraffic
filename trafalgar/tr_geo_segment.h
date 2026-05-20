@@ -12,7 +12,7 @@
  * system:	UNIX/LINUX
  * compiler:	gcc
  *
- * @author	Schmid Hubert (C)2023-2025
+ * @author	Schmid Hubert (C)2023-2026
  *
  * beginning:	10.2023
  *
@@ -78,6 +78,8 @@ public:
 	void setFirstPoint(TrPoint & pt);
 
 	void setSecondPoint(TrPoint & pt);
+
+	static TrGeoSegment getSegBorder(const QVector<TrPoint> & vec, bool dir);
 
 	TrPoint getScreenPoint(const TrZoomMap & zoom_ref, bool select);
 

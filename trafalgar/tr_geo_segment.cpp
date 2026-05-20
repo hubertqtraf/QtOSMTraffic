@@ -12,7 +12,7 @@
  * system:	UNIX/LINUX
  * compiler:	gcc
  *
- * @author	Schmid Hubert (C)2023-2025
+ * @author	Schmid Hubert (C)2023-2026
  *
  * beginning:	10.2023
  *
@@ -145,6 +145,19 @@ void TrGeoSegment::setSecondPoint(TrPoint & pt)
 {
 	m_inst_mask |= TR_MASK_DATA;
 	m_second = pt;
+}
+
+TrGeoSegment TrGeoSegment::getSegBorder(const QVector<TrPoint> &vec, bool dir)
+{
+	TrGeoSegment ret;
+	if(vec.size() > 1)
+	{
+		if(dir)
+			ret.setPoints(vec[0], vec[1]);
+		else
+			ret.setPoints(vec[vec.size()-2], vec[vec.size()-1]);
+	}
+	return ret;
 }
 
 TrPoint TrGeoSegment::getScreenPoint(const TrZoomMap & zoom_ref, bool select)
