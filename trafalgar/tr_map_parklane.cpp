@@ -152,7 +152,6 @@ int TrMapParkLane::checkNode(const TrZoomMap & zoom_ref, TrGeoObject * node, boo
 		removeMask(TR_MASK_DRAW);
 		return 1;
 	}
-	TrMapNet::ms_point = pt;
 	if(dir)
 		m_par_line[0] = pt;
 	else
