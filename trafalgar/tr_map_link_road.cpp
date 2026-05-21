@@ -130,7 +130,8 @@ void TrMapLinkRoad::setParking(uint64_t code)
 {
 	if(code && (m_special == nullptr))
 	{
-		m_special = new TrMapParkLane();
+		if(isAsDoubleLine())
+			m_special = new TrMapParkLane();
 	}
 	if(m_special != nullptr)
 	{

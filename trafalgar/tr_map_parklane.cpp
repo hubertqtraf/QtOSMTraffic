@@ -138,25 +138,65 @@ QPen * TrMapParkLane::getParkPen()
 	return m_pen_park;
 }
 
-int TrMapParkLane::checkNodes(const TrZoomMap & zoom_ref)
+int TrMapParkLane::checkNode(const TrZoomMap & zoom_ref, TrGeoObject * node, bool dir)
+{
+	TrMapNode * n = dynamic_cast<TrMapNode *>(node);
+	if(n == nullptr)
+		return -1;
+
+	TrGeoSegment seg = TrGeoSegment::getSegBorder(m_par_line, dir);
+	TrPoint pt = {0.0,0.0};
+	//if(seg.getSection(zoom_ref, pt, 10.0, true) == false)
+	if(seg.getSection(zoom_ref, pt, 10.0, dir) == false)
+	{
+		removeMask(TR_MASK_DRAW);
+		return 1;
+	}
+	TrMapNet::ms_point = pt;
+	if(dir)
+		m_par_line[0] = pt;
+	else
+		m_par_line[m_par_line.size()-1] = pt;
+	return 0;
+}
+
+
+int TrMapParkLane::checkNodes(const TrZoomMap & zoom_ref, int32_t w)
 {
 	if(m_ref == nullptr)
 		return -1;
 	TrMapLinkRoad * link = dynamic_cast<TrMapLinkRoad *>(m_ref);
 	if(link == nullptr)
 		return -1;
+	link->initDoubleLine(zoom_ref, m_par_line, w);
+	if(m_par_line.size() < 2)
+		return -2;
 	TrMapNode * n_t = dynamic_cast<TrMapNode *>(link->getNodeToRef());
 	TrMapNode * n_f = dynamic_cast<TrMapNode *>(link->getNodeFromRef());
-	if((n_t == nullptr) && (n_f  == nullptr))
+	if((n_t == nullptr) || (n_f  == nullptr))
 		return -1;
 
 	if((n_t->getConFlags() & 0x20) && (n_f->getConFlags() & 0x20)) // yellow
 	{
 		TrGeoSegment seg = TrGeoSegment(n_t->getPoint(), n_f->getPoint());
 		if(seg.getLength(zoom_ref) < 30.0)
+		{
 			removeMask(TR_MASK_DRAW);
-
+			return 1;
+		}
 		//TR_INF << HEX << n_t->getConFlags() << n_f->getConFlags() << *n_t << *n_f;
+	}
+	bool bwd = false;
+	if(link->getOneWay() & TR_LINK_DIR_BWD)
+		bwd = true;
+
+	if(n_t->getConFlags() & 0x20)
+	{
+		checkNode(zoom_ref, n_t, bwd);
+	}
+	if(n_f->getConFlags() & 0x20)
+	{
+		checkNode(zoom_ref, n_f, !bwd);
 	}
 	return 0;
 }
@@ -188,17 +228,13 @@ bool TrMapParkLane::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject 
 				int32_t w = getWith(m_parking & 0x00000000000000ffU);
 				if(w)
 				{
-					link->initDoubleLine(zoom_ref, m_par_line, w);
-					checkNodes(zoom_ref);
-					/*if(m_par_line.size() > 1)
-					{
-						TrMapNet::ms_seg_1->setPoints(TrGeoSegment::getSegBorder(m_par_line, true));
-						TrMapNet::ms_seg_2->setPoints(TrGeoSegment::getSegBorder(m_par_line, false));
-					}*/
+					checkNodes(zoom_ref, w);
+					//link->initDoubleLine(zoom_ref, m_par_line, w);
 				}
 				if(m_pen_park_left != nullptr)
 				{
 					w = -setParkingWidth((m_parking >> 32) & 0x00000000000000ff);
+					//checkNodes(zoom_ref, w);
 					link->initDoubleLine(zoom_ref, m_par_left_line, w);
 				}
 			}

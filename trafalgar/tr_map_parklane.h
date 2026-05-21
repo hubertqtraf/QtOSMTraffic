@@ -96,7 +96,8 @@ private:
 
 	int32_t getWith(uint8_t code);
 	QPen * setParkingSidePen(uint16_t type, TrGeoObject * base);
-	int checkNodes(const TrZoomMap & zoom_ref);
+	int checkNodes(const TrZoomMap & zoom_ref, int32_t w);
+	int checkNode(const TrZoomMap &zoom_ref, TrGeoObject *node, bool dir);
 };
 
 #endif // TR_MAP_PARKLANE_H
