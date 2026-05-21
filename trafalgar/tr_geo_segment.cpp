@@ -160,6 +160,28 @@ TrGeoSegment TrGeoSegment::getSegBorder(const QVector<TrPoint> &vec, bool dir)
 	return ret;
 }
 
+bool TrGeoSegment::getSection(const TrZoomMap &zoom_ref, TrPoint &pt, double sec, bool dir)
+{
+	double len = getLength(zoom_ref);
+	if(sec > len)
+		return false;
+
+	double fac = sec/len;
+	double dx = m_second.x - m_first.x;
+	double dy = m_second.y - m_first.y;
+	if(dir)
+	{
+		pt.x = m_first.x + (dx * fac);
+		pt.y = m_first.y + (dy * fac);
+	}
+	else
+	{
+		pt.x = m_second.x - (dx * fac);
+		pt.y = m_second.y - (dy * fac);
+	}
+	return true;
+}
+
 TrPoint TrGeoSegment::getScreenPoint(const TrZoomMap & zoom_ref, bool select)
 {
 	TrPoint pt;

@@ -81,6 +81,8 @@ public:
 
 	static TrGeoSegment getSegBorder(const QVector<TrPoint> & vec, bool dir);
 
+	bool getSection(const TrZoomMap &zoom_ref, TrPoint &pt, double sec, bool dir);
+
 	TrPoint getScreenPoint(const TrZoomMap & zoom_ref, bool select);
 
 	bool setPointsFromPoly(TrGeoPolygon & poly, uint64_t idx, bool dir);
