@@ -419,6 +419,8 @@ uint64_t TrImportOsmRel::getBuildingClass(const QString & value)
 		return (BUILDING_HOUSE | FLAG_FEATURE_AERA);
 	if(value == "stable")
 		return (BUILDING_HOUSE | FLAG_FEATURE_AERA);
+	if(value == "livestock")
+		return (BUILDING_HOUSE | FLAG_FEATURE_AERA);
 	if(value == "allotment_house")
 		return (BUILDING_HOUSE | FLAG_FEATURE_AERA);
 	if(value == "hut")
@@ -454,6 +456,10 @@ uint64_t TrImportOsmRel::getBuildingClass(const QString & value)
 	{
 		return (BUILDING_CAR | FLAG_FEATURE_AERA);
 	}
+	if(value == "train_station")
+		return (BUILDING_PUBLIC | FLAG_FEATURE_AERA);
+	if(value == "pavilion")
+		return (BUILDING_PUBLIC | FLAG_FEATURE_AERA);
 	if(value == "hotel")
 		return (BUILDING_PUBLIC | FLAG_FEATURE_AERA);
 	if(value == "government")
@@ -497,6 +503,10 @@ uint64_t TrImportOsmRel::getBuildingClass(const QString & value)
 	if(value == "cinema")
 	{
 		return (BUILDING_SERVICE | FLAG_FEATURE_AERA);
+	}
+	if(value == "gatehouse")
+	{
+		return (BUILDING_HOUSE | FLAG_FEATURE_AERA);
 	}
 	if(value == "airport")
 	{
