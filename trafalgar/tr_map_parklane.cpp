@@ -40,8 +40,6 @@
 
 #include "tr_map_link_road.h"
 
-#include "tr_map_net.h"
-
 TrMapParkLane::TrMapParkLane()
 	: TrGeoObject()
 	, m_parking(0)
@@ -89,6 +87,8 @@ QPen * TrMapParkLane::setParkingSidePen(uint16_t type, TrGeoObject * base)
 	if(list == nullptr)
 		return ret;
 
+	Qt::PenStyle style = Qt::DotLine; // TODO: or Qt::SolidLine?
+	int lwidth = 5;
 	if((type & 0x00f0) == V_PARK_PARALLEL)
 		ret = list->getObjectPen(0x2002);
 	if((type & 0x00f0) == V_PARK_DIAGONAL)
@@ -98,14 +98,21 @@ QPen * TrMapParkLane::setParkingSidePen(uint16_t type, TrGeoObject * base)
 	if((type & 0x00f0) == V_PARK_SEPARATE)
 		ret = list->getObjectPen(0x2005);
 	if((type & 0x000e) & V_PARK_NO)
+	{
 		ret = list->getObjectPen(0x2001);
+		style = Qt::DashLine;
+		lwidth = 3;
+	}
 	if((type & 0x000e) & V_PARK_NO_STOP)
+	{
 		ret = list->getObjectPen(0x2001);
-
+		style = Qt::DashLine;
+		lwidth = 3;
+	}
 	if(ret != nullptr)
 	{
-		ret->setStyle(Qt::DotLine);
-		ret->setWidth(5);
+		ret->setStyle(style);
+		ret->setWidth(lwidth);
 	}
 	return ret;
 }
