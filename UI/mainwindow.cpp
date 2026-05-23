@@ -48,6 +48,7 @@ MainWindow::MainWindow(QWidget *parent)
 	, m_file_options(nullptr)
 	, m_disp_option(nullptr)
 	, m_nodes_type(nullptr)
+	, m_parking_dlg(nullptr)
 	, m_about(nullptr)
 	, m_net_option(nullptr)
 	, m_net_dock(nullptr)
@@ -316,6 +317,19 @@ void MainWindow::on_actionConfigure_triggered()
 		m_map_view->update();
 	}
 }
+
+void MainWindow::on_actionParking_triggered()
+{
+	if(m_parking_dlg == nullptr)
+	{
+		m_parking_dlg = new ParkingDlg(this);
+	}
+	if(m_parking_dlg->exec())
+	{
+		//TrMapNet::ms_node_mask = m_nodes_type->getMask();
+	}
+}
+
 
 void MainWindow::on_actionFonts_triggered()
 {

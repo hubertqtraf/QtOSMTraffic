@@ -46,6 +46,7 @@
     </property>
     <addaction name="actionConfigure"/>
     <addaction name="actionDirectories"/>
+    <addaction name="actionParking"/>
     <addaction name="actionFonts"/>
     <addaction name="actionTracking"/>
     <addaction name="separator"/>
@@ -253,6 +254,11 @@
   <action name="actionNodes">
    <property name="text">
     <string>Nodes</string>
+   </property>
+  </action>
+  <action name="actionParking">
+   <property name="text">
+    <string>Parking</string>
    </property>
   </action>
  </widget>

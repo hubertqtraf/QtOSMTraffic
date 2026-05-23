@@ -29,6 +29,7 @@ SOURCES += \
     UI/about.cpp \
     UI/fileoptions.cpp \
     UI/nodestype.cpp \
+    UI/parkingdlg.cpp \
     UI/ruler.cpp \
     UI/tr_progess_thread.cpp \
     geo/geo_base.cpp \
@@ -77,6 +78,7 @@ HEADERS += \
     UI/about.h \
     UI/fileoptions.h \
     UI/nodestype.h \
+    UI/parkingdlg.h \
     UI/ruler.h \
     UI/tr_progess_thread.h \
     geo/geo_base.h \
@@ -132,6 +134,7 @@ FORMS += \
     UI/fileoptions.ui \
     UI/mainwindow.ui \
     UI/nodestype.ui \
+    UI/parkingdlg.ui \
     UI/profiledialog.ui \
     UI/trdispoptiondialog.ui \
     UI/trnetdock.ui  \
