@@ -99,11 +99,8 @@ private:
 	//QVector<TrPoint> m_test;
 
 	bool setDirectionAngles(const TrZoomMap & zoom_ref, QVector<TrConnectionMember> & vec, bool dir);
-	int getDirNextAngle(TrConnectionMember & member, QVector<TrConnectionMember> & vec, bool dir);
-	//
+
 	int getDirNextAngleIndex(double & angle, bool & dir, bool left);
-	// TODO: unused?
-	//void setCrossing(const TrZoomMap & zoom_ref, TrGeoObject * first_obj, TrGeoObject * next_obj);
 
 	void initConnections(const TrZoomMap & zoom_ref, QVector<TrConnectionMember> & vec,
 			TrMapList * pr_list, TrMapList & nd_list);
@@ -155,8 +152,6 @@ public:
 	// TODO: check, remove?
 	int getShiftPoint(const TrZoomMap & zoom_ref);
 
-	TrGeoObject * getSingleElement(int mode);
-
 	bool init(const TrZoomMap & zoom_ref, uint64_t ctrl = 0, TrGeoObject * base = nullptr);
 
 	// TODO rework...
@@ -168,9 +163,11 @@ public:
 
 	TrGeoObject * getNextOutElement(double angle);
 
-	bool setConnectionAngles(const TrZoomMap & zoom_ref, bool dir);
+	double getAngleByObj(TrGeoObject * element);
 
-	int getNextAngleObj(TrConnectionMember & member, bool dir);
+	TrGeoObject *getNextObjByAngle(double ang, bool &dir);
+
+	bool setConnectionAngles(const TrZoomMap & zoom_ref, bool dir);
 
 	void setShadowNode(TrMapNode * node);
 
