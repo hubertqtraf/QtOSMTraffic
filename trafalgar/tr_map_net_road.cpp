@@ -133,6 +133,8 @@ bool TrMapNetRoad::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject *
 		m_node_map->init(zoom_ref, TR_INIT_GEOMETRY | TR_INIT_ND_CROSS, m_primive_map);
 	}
 
+	m_link_list->init(zoom_ref, TR_INIT_GEOMETRY | TR_INIT_INIT_PARK,  base);
+
 	// TODO: code = 20 -> 'setRampMode' only edges?
 	m_link_list->init(zoom_ref, TR_INIT_GEOMETRY | 20, nullptr);
 	return ret;

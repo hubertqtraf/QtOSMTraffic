@@ -39,6 +39,7 @@
 #include "tr_map_parklane.h"
 
 #include "tr_map_link_road.h"
+#include "tr_map_net_road.h"
 
 TrMapParkLane::TrMapParkLane()
 	: TrGeoObject()
@@ -150,11 +151,21 @@ int TrMapParkLane::checkNode(const TrZoomMap & zoom_ref, TrGeoObject * node, boo
 	TrMapNode * n = dynamic_cast<TrMapNode *>(node);
 	if(n == nullptr)
 		return -1;
+	bool ldir = false;
+	double ang = n->getAngleByObj(m_ref);
+	TrGeoObject *x = n->getNextObjByAngle(ang, ldir);
+	//TrMapLinkRoad * link1 = dynamic_cast<TrMapLinkRoad *>(m_ref);
+	TrMapLinkRoad * link2 = dynamic_cast<TrMapLinkRoad *>(x);
+
+	double w = 10.0;
+	if(link2 != nullptr)
+	{
+		w = fabs(link2->getRoadWidth()/1000.0);
+	}
 
 	TrGeoSegment seg = TrGeoSegment::getSegBorder(m_par_line, dir);
 	TrPoint pt = {0.0,0.0};
-	//if(seg.getSection(zoom_ref, pt, 10.0, true) == false)
-	if(seg.getSection(zoom_ref, pt, 10.0, dir) == false)
+	if(seg.getSection(zoom_ref, pt, w, dir) == false)
 	{
 		removeMask(TR_MASK_DRAW);
 		return 1;
@@ -215,7 +226,6 @@ bool TrMapParkLane::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject 
 	TrMapLinkRoad * link = dynamic_cast<TrMapLinkRoad *>(m_ref);
 	if(link == nullptr)
 		return false;
-	//if(link->getNodeFrom() == 9400840110)
 
 	if(ctrl & TR_INIT_COLORS)
 	{
@@ -227,6 +237,8 @@ bool TrMapParkLane::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject 
 	}
 	if(ctrl & TR_INIT_GEOMETRY)
 	{
+		if((ctrl & 0xff) != TR_INIT_INIT_PARK)
+			return true;
 		if((m_ref != nullptr) && (m_parking))
 		{
 			if(link != nullptr)
@@ -305,7 +317,7 @@ void TrMapParkLane::draw(const TrZoomMap & zoom_ref, QPainter * p, uint8_t mode)
 
 bool TrMapParkLane::setSurroundingRect()
 {
-    return false;
+	return false;
 }
 
 int32_t TrMapParkLane::getWith(uint8_t code)
