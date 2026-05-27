@@ -154,13 +154,16 @@ int TrMapParkLane::checkNode(const TrZoomMap & zoom_ref, TrGeoObject * node, boo
 	bool ldir = false;
 	double ang = n->getAngleByObj(m_ref);
 	TrGeoObject *x = n->getNextObjByAngle(ang, ldir);
+	if(x == nullptr)	// angle: over 0.0
+		x = n->getNextObjByAngle(0.0, ldir);
 	//TrMapLinkRoad * link1 = dynamic_cast<TrMapLinkRoad *>(m_ref);
 	TrMapLinkRoad * link2 = dynamic_cast<TrMapLinkRoad *>(x);
 
 	double w = 10.0;
 	if(link2 != nullptr)
 	{
-		w = fabs(link2->getRoadWidth()/1000.0);
+		double wp = setParkingWidth(m_parking & 0x00000000000000ffU) / 1000.0;
+		w = fabs(link2->getRoadWidth()/1000.0) + wp;
 	}
 
 	TrGeoSegment seg = TrGeoSegment::getSegBorder(m_par_line, dir);
