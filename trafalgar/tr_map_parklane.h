@@ -66,6 +66,8 @@ public:
 
 	void setParking(uint64_t code);
 
+	TrMapParkLane *getParkingObj(TrGeoObject *next);
+
 	QPen *getParkPen();
 
 	int32_t setParkingWidth(uint16_t type);
@@ -77,6 +79,7 @@ public:
 	virtual void draw(const TrZoomMap & zoom_ref, QPainter * p, uint8_t mode = 0);
 
 	bool setSurroundingRect();
+
 
 #ifdef TR_SERIALIZATION
 	virtual uint64_t readXmlDescription(QXmlStreamReader & xml_in);

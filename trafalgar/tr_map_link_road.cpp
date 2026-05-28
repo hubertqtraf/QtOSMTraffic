@@ -126,6 +126,11 @@ uint8_t TrMapLinkRoad::getPlacement()
 	return m_placement;
 }
 
+TrGeoObject * TrMapLinkRoad::getSpecialObj()
+{
+	return m_special;
+}
+
 void TrMapLinkRoad::setParking(uint64_t code)
 {
 	if(code && (m_special == nullptr))

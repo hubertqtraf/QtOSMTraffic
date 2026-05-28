@@ -122,6 +122,8 @@ public:
 
 	uint8_t getPlacement();
 
+	TrGeoObject *getSpecialObj();
+
 	void setParking(uint64_t park);
 
 	uint64_t getParking();

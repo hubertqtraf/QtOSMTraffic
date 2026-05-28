@@ -146,6 +146,18 @@ QPen * TrMapParkLane::getParkPen()
 	return m_pen_park;
 }
 
+TrMapParkLane * TrMapParkLane::getParkingObj(TrGeoObject * next)
+{
+	TrMapLinkRoad * link = dynamic_cast<TrMapLinkRoad *>(next);
+	if(link == nullptr)
+		return nullptr;
+	TrGeoObject *spec = link->getSpecialObj();
+	if(spec == nullptr)
+		return nullptr;
+	TrMapParkLane * next_park = dynamic_cast<TrMapParkLane *>(spec);
+	return next_park;
+}
+
 int TrMapParkLane::checkNode(const TrZoomMap & zoom_ref, TrGeoObject * node, bool dir)
 {
 	TrMapNode * n = dynamic_cast<TrMapNode *>(node);
@@ -156,19 +168,26 @@ int TrMapParkLane::checkNode(const TrZoomMap & zoom_ref, TrGeoObject * node, boo
 	TrGeoObject *x = n->getNextObjByAngle(ang, ldir);
 	if(x == nullptr)	// angle: over 0.0
 		x = n->getNextObjByAngle(0.0, ldir);
+
+	TrMapParkLane * other = this->getParkingObj(x);
+	double w_x = 0.0;
+	if(other != nullptr)
+	{
+		w_x = fabs(other->setParkingWidth(other->getParking() & 0x00000000000000ffU) / 1000.0);
+	}
+
 	//TrMapLinkRoad * link1 = dynamic_cast<TrMapLinkRoad *>(m_ref);
 	TrMapLinkRoad * link2 = dynamic_cast<TrMapLinkRoad *>(x);
 
 	double w = 10.0;
 	if(link2 != nullptr)
 	{
-		double wp = setParkingWidth(m_parking & 0x00000000000000ffU) / 1000.0;
-		w = fabs(link2->getRoadWidth()/1000.0) + wp;
+		w = fabs(link2->getRoadWidth()/1000.0) + w_x;//wp;
 	}
 
 	TrGeoSegment seg = TrGeoSegment::getSegBorder(m_par_line, dir);
 	TrPoint pt = {0.0,0.0};
-	if(seg.getSection(zoom_ref, pt, w, dir) == false)
+	if(seg.getSection(zoom_ref, pt, w_x + w, dir) == false)
 	{
 		removeMask(TR_MASK_DRAW);
 		return 1;
