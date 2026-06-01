@@ -424,8 +424,7 @@ void TrMapView::loadDocByThread(const QString & filename, int type, QProgressBar
 
 	m_doc.setFileName(filename);
 
-	connect(m_fileProgress, SIGNAL(resultReady(const TrGeoObject **)),
-		this, SLOT(on_handleResults(const TrGeoObject ** )));
+	connect(m_fileProgress, &TrProgress::resultReady, this, &TrMapView::on_handleResults);
 	connect(m_fileProgress, SIGNAL(finished()), m_fileProgress, SLOT(deleteLater()));
 	bar->setRange(0,100);
 	bar->setValue(2);
@@ -441,4 +440,8 @@ void TrMapView::on_Key(QKeyEvent *key)
 {
 	if(key->text() == " ")
 		notifyClick(m_selected_point, 0, Qt::LeftButton);
+	if(key->text() == "+")
+		zoomChange(true);
+	if(key->text() == "-")
+		zoomChange(false);
 }
