@@ -62,8 +62,7 @@ MainWindow::MainWindow(QWidget *parent)
 	view = new QScrollArea(this);
 	setCentralWidget(view);
 	m_map_view = new TrMapView(view);
-	connect(m_map_view, SIGNAL(loadResult(const TrGeoObject **)),
-		this, SLOT(on_handleResults(const TrGeoObject ** )));
+	connect(m_map_view, &TrMapView::loadResult, this, &MainWindow::on_handleResults);
 
 	KeyEnterReceiver* key = new KeyEnterReceiver();
 	view->installEventFilter(key);
@@ -87,8 +86,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 	m_map_view->getDocument().addLayerType(m_profile_dlg->getElemStringList("modes"));
 
-	QObject::connect(m_map_view, SIGNAL(sendMessage(const QString &, int)), statusBar(),
-			SLOT(showMessage(const QString &, int)));
+	QObject::connect(m_map_view, &TrMapView::sendMessage, statusBar(), &QStatusBar::showMessage);
 
 	m_net_dock = new QDockWidget(tr("Networks"), this);
 	m_net_option = new TrNetDock(this);
@@ -326,7 +324,7 @@ void MainWindow::on_actionParking_triggered()
 	}
 	if(m_parking_dlg->exec())
 	{
-		//TrMapNet::ms_node_mask = m_nodes_type->getMask();
+		m_parking_dlg->getMask();
 	}
 }
 

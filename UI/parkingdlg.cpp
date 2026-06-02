@@ -23,6 +23,9 @@
 #include "parkingdlg.h"
 #include "ui_parkingdlg.h"
 
+#include <tr_defs.h>
+#include <tr_geo_object.h>
+
 ParkingDlg::ParkingDlg(QWidget *parent)
 	: QDialog(parent)
 	, ui(new Ui::ParkingDlg)
@@ -33,4 +36,17 @@ ParkingDlg::ParkingDlg(QWidget *parent)
 ParkingDlg::~ParkingDlg()
 {
 	delete ui;
+}
+
+uint64_t ParkingDlg::getMask()
+{
+	uint64_t ret = TrGeoObject::getGlobelFlags();
+
+	if(ui->Raw->isChecked())
+		ret |= TR_MASK_PARKING_MODE;
+	else
+		ret &= ~(TR_MASK_PARKING_MODE);
+
+	TrGeoObject::setGlobelFlags(ret);
+	return ret;
 }

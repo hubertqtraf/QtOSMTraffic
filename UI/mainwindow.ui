@@ -257,6 +257,10 @@
    </property>
   </action>
   <action name="actionParking">
+   <property name="icon">
+    <iconset resource="../res.qrc">
+     <normaloff>:/icon/configure.svg</normaloff>:/icon/configure.svg</iconset>
+   </property>
    <property name="text">
     <string>Parking</string>
    </property>

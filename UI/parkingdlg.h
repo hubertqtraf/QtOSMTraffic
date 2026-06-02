@@ -38,6 +38,7 @@ public:
 	explicit ParkingDlg(QWidget *parent = nullptr);
 	~ParkingDlg();
 
+	uint64_t getMask();
 private:
 	Ui::ParkingDlg *ui;
 };
