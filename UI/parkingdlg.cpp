@@ -40,13 +40,13 @@ ParkingDlg::~ParkingDlg()
 
 uint64_t ParkingDlg::getMask()
 {
-	uint64_t ret = TrGeoObject::getGlobelFlags();
+	uint64_t ret = 0; //TrGeoObject::getGlobelFlags();
 
 	if(ui->Raw->isChecked())
 		ret |= TR_MASK_PARKING_MODE;
 	else
 		ret &= ~(TR_MASK_PARKING_MODE);
 
-	TrGeoObject::setGlobelFlags(ret);
+	//TrGeoObject::setGlobelFlags(ret);
 	return ret;
 }

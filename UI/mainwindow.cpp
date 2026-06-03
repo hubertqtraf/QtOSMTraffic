@@ -154,6 +154,12 @@ void MainWindow::on_handleResults(const TrGeoObject **obj)
 	m_map_view->setSettingsData(m_profile_dlg->getElemStringList("modes"),
 		m_profile_dlg->getElemStringList("layer"));
 
+	uint64_t parking_mask = 0;
+	if(m_parking_dlg != nullptr)
+		parking_mask = m_parking_dlg->getMask();
+
+	on_updateNetOptions(TrGeoObject::s_mask | m_net_option->getNetFlags() | parking_mask);
+
 	on_updateWorld();
 	on_updateLayerView();
 
@@ -172,13 +178,13 @@ void MainWindow::on_handleResults(const TrGeoObject **obj)
 		m_disp_option->setLayerItemList(m_disp_option->getViewList()[i],
 		m_profile_dlg->getElemStringList(m_disp_option->getViewList()[i]));
 	}
-
 	window()->setWindowTitle("OSM Traffic: " + m_map_view->getDocument().getFileName());
 	m_map_view->setLoadedFlag(true);
-	on_updateNetOptions(0);
-	on_updateNetOptions(TrGeoObject::s_mask | m_net_option->getNetFlags());
-	on_updateFileOptions();
+	on_updateNetOptions(parking_mask);
 
+	on_updateNetOptions(TrGeoObject::s_mask | m_net_option->getNetFlags() | parking_mask);
+
+	on_updateFileOptions();
 	unsetCursor();
 
 	m_progress->setValue(0);
@@ -479,7 +485,10 @@ void MainWindow::on_updateLayerView()
 
 void MainWindow::on_updateNetOptions(uint64_t flags)
 {
-	TrGeoObject::setGlobelFlags(flags);
+	if(m_parking_dlg != nullptr)
+		TrGeoObject::setGlobelFlags(flags | m_parking_dlg->getMask());
+	else
+		TrGeoObject::setGlobelFlags(flags);
 	if(m_file_options != nullptr)
 	{
 		m_file_options->useOptions(flags);
@@ -522,7 +531,10 @@ void MainWindow::on_updateFileOptions()
 		m_profile_dlg->read(profile);
 		on_updateWorld();
 		on_updateLayerView();
-		on_updateNetOptions(m_net_option->getNetFlags());
+		if(m_parking_dlg != nullptr)
+			on_updateNetOptions(m_net_option->getNetFlags() | m_parking_dlg->getMask());
+		else
+			on_updateNetOptions(m_net_option->getNetFlags());
 	}
 }
 
