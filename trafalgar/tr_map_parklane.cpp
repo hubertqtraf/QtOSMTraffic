@@ -88,8 +88,14 @@ QPen * TrMapParkLane::setParkingSidePen(uint16_t type, TrGeoObject * base)
 	if(list == nullptr)
 		return ret;
 
-	Qt::PenStyle style = Qt::DotLine; // TODO: or Qt::SolidLine?
-	int lwidth = 5;
+	int lwidth = 3;
+	Qt::PenStyle style = Qt::SolidLine;
+	if(TrGeoObject::getGlobelFlags() & TR_MASK_PARKING_MODE)
+	{
+		style = Qt::DotLine;
+		lwidth = 5;
+	}
+
 	if((type & 0x00f0) == V_PARK_PARALLEL)
 		ret = list->getObjectPen(0x2002);
 	if((type & 0x00f0) == V_PARK_DIAGONAL)
@@ -200,14 +206,18 @@ int TrMapParkLane::checkNode(const TrZoomMap & zoom_ref, TrGeoObject * node, boo
 }
 
 
-int TrMapParkLane::checkNodes(const TrZoomMap & zoom_ref, int32_t w)
+int TrMapParkLane::checkNodes(const TrZoomMap & zoom_ref, int32_t w, bool other)
 {
 	if(m_ref == nullptr)
 		return -1;
 	TrMapLinkRoad * link = dynamic_cast<TrMapLinkRoad *>(m_ref);
 	if(link == nullptr)
 		return -1;
-	link->initDoubleLine(zoom_ref, m_par_line, w);
+	if(other)
+	{
+		// TODO: check oher side of the oneway link
+		return 0;
+	}
 	if(m_par_line.size() < 2)
 		return -2;
 	TrMapNode * n_t = dynamic_cast<TrMapNode *>(link->getNodeToRef());
@@ -244,6 +254,7 @@ bool TrMapParkLane::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject 
 {
 	if(m_ref == nullptr)
 		return false;
+
 	setMask(TR_MASK_DRAW);
 	TrMapLinkRoad * link = dynamic_cast<TrMapLinkRoad *>(m_ref);
 	if(link == nullptr)
@@ -268,14 +279,16 @@ bool TrMapParkLane::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject 
 				int32_t w = getWith(m_parking & 0x00000000000000ffU);
 				if(w)
 				{
-					checkNodes(zoom_ref, w);
-					//link->initDoubleLine(zoom_ref, m_par_line, w);
+					link->initDoubleLine(zoom_ref, m_par_line, w);
+					if(!(TrGeoObject::getGlobelFlags() & TR_MASK_PARKING_MODE))
+						checkNodes(zoom_ref, w, false);
 				}
 				if(m_pen_park_left != nullptr)
 				{
 					w = -setParkingWidth((m_parking >> 32) & 0x00000000000000ff);
-					//checkNodes(zoom_ref, w);
 					link->initDoubleLine(zoom_ref, m_par_left_line, w);
+					if(!(TrGeoObject::getGlobelFlags() & TR_MASK_PARKING_MODE))
+						checkNodes(zoom_ref, w, true);
 				}
 			}
 		}

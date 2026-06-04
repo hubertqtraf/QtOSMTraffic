@@ -99,7 +99,7 @@ private:
 
 	int32_t getWith(uint8_t code);
 	QPen * setParkingSidePen(uint16_t type, TrGeoObject * base);
-	int checkNodes(const TrZoomMap & zoom_ref, int32_t w);
+	int checkNodes(const TrZoomMap & zoom_ref, int32_t w, bool other);
 	int checkNode(const TrZoomMap &zoom_ref, TrGeoObject *node, bool dir);
 };
 
