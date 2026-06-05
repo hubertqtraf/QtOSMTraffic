@@ -331,6 +331,7 @@ void MainWindow::on_actionParking_triggered()
 	if(m_parking_dlg->exec())
 	{
 		m_parking_dlg->getMask();
+		on_updateNetOptions(m_net_option->getNetFlags() | m_parking_dlg->getMask());
 	}
 }
 

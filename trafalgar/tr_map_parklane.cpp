@@ -74,6 +74,35 @@ void TrMapParkLane::setParking(uint64_t code)
 	m_parking = code;
 }
 
+void TrMapParkLane::setParkingSPenStyle(bool mode)
+{
+	uint32_t type = m_parking & 0x00000000000000ffU;
+	QPen * pen = m_pen_park;
+	if(mode)
+	{
+		type = (m_parking >> 32) & 0x00000000000000ffU;
+		pen = m_pen_park_left;
+	}
+	if(pen == nullptr)
+		return;
+	type &= 0xfffe;
+
+	if(((type & 0x000e) & V_PARK_NO) || ((type & 0x000e) & V_PARK_NO_STOP))
+	{
+		pen->setStyle(Qt::DashLine);
+		pen->setWidth(3);
+		return;
+	}
+	if(TrGeoObject::getGlobelFlags() & TR_MASK_PARKING_MODE)
+	{
+		pen->setStyle(Qt::DotLine);
+		pen->setWidth(5);
+		return;
+	}
+	pen->setStyle(Qt::SolidLine);
+	pen->setWidth(3);
+}
+
 QPen * TrMapParkLane::setParkingSidePen(uint16_t type, TrGeoObject * base)
 {
 
@@ -88,14 +117,6 @@ QPen * TrMapParkLane::setParkingSidePen(uint16_t type, TrGeoObject * base)
 	if(list == nullptr)
 		return ret;
 
-	int lwidth = 3;
-	Qt::PenStyle style = Qt::SolidLine;
-	if(TrGeoObject::getGlobelFlags() & TR_MASK_PARKING_MODE)
-	{
-		style = Qt::DotLine;
-		lwidth = 5;
-	}
-
 	if((type & 0x00f0) == V_PARK_PARALLEL)
 		ret = list->getObjectPen(0x2002);
 	if((type & 0x00f0) == V_PARK_DIAGONAL)
@@ -105,22 +126,9 @@ QPen * TrMapParkLane::setParkingSidePen(uint16_t type, TrGeoObject * base)
 	if((type & 0x00f0) == V_PARK_SEPARATE)
 		ret = list->getObjectPen(0x2005);
 	if((type & 0x000e) & V_PARK_NO)
-	{
 		ret = list->getObjectPen(0x2001);
-		style = Qt::DashLine;
-		lwidth = 3;
-	}
 	if((type & 0x000e) & V_PARK_NO_STOP)
-	{
 		ret = list->getObjectPen(0x2001);
-		style = Qt::DashLine;
-		lwidth = 3;
-	}
-	if(ret != nullptr)
-	{
-		ret->setStyle(style);
-		ret->setWidth(lwidth);
-	}
 	return ret;
 }
 
@@ -164,7 +172,7 @@ TrMapParkLane * TrMapParkLane::getParkingObj(TrGeoObject * next)
 	return next_park;
 }
 
-int TrMapParkLane::checkNode(const TrZoomMap & zoom_ref, TrGeoObject * node, bool dir)
+int TrMapParkLane::checkNode(const TrZoomMap & zoom_ref, TrGeoObject * node, bool side, bool dir)
 {
 	TrMapNode * n = dynamic_cast<TrMapNode *>(node);
 	if(n == nullptr)
@@ -174,6 +182,10 @@ int TrMapParkLane::checkNode(const TrZoomMap & zoom_ref, TrGeoObject * node, boo
 	TrGeoObject *x = n->getNextObjByAngle(ang, ldir);
 	if(x == nullptr)	// angle: over 0.0
 		x = n->getNextObjByAngle(0.0, ldir);
+
+	QVector<TrPoint> &line = m_par_line;
+	if(side)
+		line = m_par_left_line;
 
 	TrMapParkLane * other = this->getParkingObj(x);
 	double w_x = 0.0;
@@ -191,7 +203,7 @@ int TrMapParkLane::checkNode(const TrZoomMap & zoom_ref, TrGeoObject * node, boo
 		w = fabs(link2->getRoadWidth()/1000.0) + w_x;//wp;
 	}
 
-	TrGeoSegment seg = TrGeoSegment::getSegBorder(m_par_line, dir);
+	TrGeoSegment seg = TrGeoSegment::getSegBorder(line, dir);
 	TrPoint pt = {0.0,0.0};
 	if(seg.getSection(zoom_ref, pt, w_x + w, dir) == false)
 	{
@@ -199,9 +211,9 @@ int TrMapParkLane::checkNode(const TrZoomMap & zoom_ref, TrGeoObject * node, boo
 		return 1;
 	}
 	if(dir)
-		m_par_line[0] = pt;
+		line[0] = pt;
 	else
-		m_par_line[m_par_line.size()-1] = pt;
+		line[line.size()-1] = pt;
 	return 0;
 }
 
@@ -218,8 +230,16 @@ int TrMapParkLane::checkNodes(const TrZoomMap & zoom_ref, int32_t w, bool other)
 		// TODO: check oher side of the oneway link
 		return 0;
 	}
-	if(m_par_line.size() < 2)
-		return -2;
+	if(other)
+	{
+		if(m_par_left_line.size() < 2)
+			return -2;
+	}
+	else
+	{
+		if(m_par_line.size() < 2)
+			return -2;
+	}
 	TrMapNode * n_t = dynamic_cast<TrMapNode *>(link->getNodeToRef());
 	TrMapNode * n_f = dynamic_cast<TrMapNode *>(link->getNodeFromRef());
 	if((n_t == nullptr) || (n_f  == nullptr))
@@ -241,11 +261,11 @@ int TrMapParkLane::checkNodes(const TrZoomMap & zoom_ref, int32_t w, bool other)
 
 	if(n_t->getConFlags() & 0x20)
 	{
-		checkNode(zoom_ref, n_t, bwd);
+		checkNode(zoom_ref, n_t, other, bwd);
 	}
 	if(n_f->getConFlags() & 0x20)
 	{
-		checkNode(zoom_ref, n_f, !bwd);
+		checkNode(zoom_ref, n_f, other, !bwd);
 	}
 	return 0;
 }
@@ -267,11 +287,16 @@ bool TrMapParkLane::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject 
 		{
 			m_pen_park_left = setParkingSidePen((m_parking >> 32) & 0x00000000000000ffU, base);
 		}
+		setParkingSPenStyle(true);
+		setParkingSPenStyle(false);
 	}
 	if(ctrl & TR_INIT_GEOMETRY)
 	{
 		if((ctrl & 0xff) != TR_INIT_INIT_PARK)
 			return true;
+		setParkingSPenStyle(true);
+		setParkingSPenStyle(false);
+
 		if((m_ref != nullptr) && (m_parking))
 		{
 			if(link != nullptr)
