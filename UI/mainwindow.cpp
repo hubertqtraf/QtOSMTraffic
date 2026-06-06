@@ -158,8 +158,6 @@ void MainWindow::on_handleResults(const TrGeoObject **obj)
 	if(m_parking_dlg != nullptr)
 		parking_mask = m_parking_dlg->getMask();
 
-	on_updateNetOptions(TrGeoObject::s_mask | m_net_option->getNetFlags() | parking_mask);
-
 	on_updateWorld();
 	on_updateLayerView();
 
