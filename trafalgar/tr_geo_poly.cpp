@@ -12,7 +12,7 @@
  * system:	UNIX/LINUX
  * compiler:	gcc
  *
- * @author	Schmid Hubert (C)2009-2025
+ * @author	Schmid Hubert (C)2009-2026
  *
  * beginning:	06.2009
  *
@@ -117,12 +117,12 @@ bool TrGeoPolygon::hasSegmentInfo()
 TrPoint TrGeoPolygon::getPoint(size_t id)
 {
 	//TR_INF << hasSegmentInfo() << getSize();
-    if(m_base.n_pt <= id)
-    {
-        TrPoint pt = {0.0,0.0};
-        return pt;
-    }
-    TrPoint * pt = (TrPoint*)(m_base.pt + (id * 2));
+	if(m_base.n_pt <= id)
+	{
+		TrPoint pt = {0.0,0.0};
+		return pt;
+	}
+	TrPoint * pt = (TrPoint*)(m_base.pt + (id * 2));
 
 	return *pt;
 }
@@ -445,8 +445,8 @@ void TrGeoPolygon::setInfoSect(const TrZoomMap & zoom_ref, poly_add & sec,
 		switch(code)
 		{
 		case 1:
-			// TODO: check the warnig
-			TR_WRN << "DIR" << code;
+			// len = 0 -> pojnts has a same polition
+			TR_WRN << "DIR" << code << sec.len_part;
 			break;
 		case 2:
 			TR_WRN << "INF" << code;
@@ -483,7 +483,7 @@ bool TrGeoPolygon::checkAngle(poly_add & pa, poly_add & pa1, double angle_b, dou
 
 int TrGeoPolygon::parallel(TrGeoPolygon * base, const TrZoomMap & zoom_ref, int32_t width)
 {
-    int ret = 0;
+	int ret = 0;
 	double float_width = width/1000.0;
 	size_t n = base->getSize();
 
@@ -538,7 +538,7 @@ int TrGeoPolygon::parallel(TrGeoPolygon * base, const TrZoomMap & zoom_ref, int3
 int TrGeoPolygon::parallel(QVector<TrPoint> * par_line, const TrZoomMap & zoom_ref,
 	straight_line first, straight_line last, int32_t width)
 {
-    double float_width = width/1000.0;
+	double float_width = width/1000.0;
 	TrPoint pt1;
 	poly_add pa, pa1;
 
@@ -644,7 +644,7 @@ bool TrGeoPolygon::removePoint(uint64_t id)
 		poly_points.append(pt);
 	}
 	// TODO: first point index is '1' not '0'-> change?
-    //TR_INF << id << (id-1);
+	//TR_INF << id << (id-1);
 	if(id == 0)
 	{
 		TR_WRN << id;
@@ -865,7 +865,7 @@ uint64_t TrGeoPolygon::readXmlDescription(QXmlStreamReader & xml_in)
 	id_check = attr.value("", "id").toInt();
 	uint64_t type = attr.value("", "type").toInt();
 	m_inst_mask = 0;
-    if(type & TR_POLY_RW_DEF)
+	if(type & TR_POLY_RW_DEF)
 		setMask(TR_POLY_TYPE_DEF);
 	if(type & TR_POLY_RW_CONSTRUCT)
 		setMask(TR_MASK_SHOW_CONSTRUCT);
@@ -923,8 +923,8 @@ uint64_t TrGeoPolygon::readXmlDescription(QXmlStreamReader & xml_in)
 						TR_INF << TR_COOR_VAL(start_x) << TR_COOR_VAL(poly_points[i].x)
 							<< TR_COOR_VAL(start_y) << TR_COOR_VAL(poly_points[i].y);
 						// TODO: rework! just a hack ;-)
-                        setMask(TR_MASK_DRAW | TR_MASK_SHOW_POINTS);
-                    }
+						setMask(TR_MASK_DRAW | TR_MASK_SHOW_POINTS);
+					}
 					start_x = poly_points[i].x;
 					start_y = poly_points[i].y;
 				}
@@ -970,5 +970,3 @@ void TrGeoPolygon::writeXmlDescription(QXmlStreamWriter & xml_out, uint64_t id)
 	xml_out.writeEndElement();
 }
 #endif
-
-

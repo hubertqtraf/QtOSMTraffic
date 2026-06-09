@@ -12,7 +12,7 @@
  * system:	UNIX/LINUX
  * compiler:	gcc
  *
- * @author	Schmid Hubert (C)2009-2025
+ * @author	Schmid Hubert (C)2009-2026
  *
  * beginning:	06.2009
  *
@@ -56,7 +56,7 @@ class TrGeoPolygon : public TrGeoObject
 {
 private:
 	QPen * stdPen;
-    poly_base m_base;
+	poly_base m_base;
 
 	bool readXmlPoint(QXmlStreamReader & xml_in, QVector<TrPoint> & poly_points);
 

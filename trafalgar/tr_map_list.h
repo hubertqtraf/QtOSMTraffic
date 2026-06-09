@@ -13,7 +13,7 @@
  *
  * beginning:	11.2012
  *
- * @author	Schmid Hubert (C)2012-2025
+ * @author	Schmid Hubert (C)2012-2026
  *
  * history:
  *
@@ -157,4 +157,3 @@ public:
 };
 
 #endif	// TR_MAP_LIST_H
-

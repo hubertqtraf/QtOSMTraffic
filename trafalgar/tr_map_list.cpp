@@ -13,7 +13,7 @@
  *
  * beginning:	11.2012
  *
- * @author	Schmid Hubert (C)2012-2025
+ * @author	Schmid Hubert (C)2012-2026
  *
  * history:
  *
@@ -86,17 +86,17 @@ QString TrMapList::getXmlName() const
 
 size_t TrMapList::objCount()
 {
-    return static_cast<size_t>(obj_list.size());
+	return static_cast<size_t>(obj_list.size());
 }
 
 size_t TrMapList::objCountMap()
 {
-    return static_cast<size_t>(obj_map.size());
+	return static_cast<size_t>(obj_map.size());
 }
 
 TrGeoObject * TrMapList::getVecObject(size_t n)
 {
-    if((obj_list.size() < static_cast<int>(n)) || (static_cast<int>(n) < 0))
+	if((obj_list.size() < static_cast<int>(n)) || (static_cast<int>(n) < 0))
 		return nullptr;
 	return obj_list.at(n);
 }
@@ -120,11 +120,11 @@ TrGeoObject * TrMapList::getObject(uint64_t id)
 
 TrGeoObject * TrMapList::getNextMapObject(uint64_t & id)
 {
-	TrMap::const_iterator ii;
+	TrMap::iterator ii;
 
 	if(id == 0)
 	{
-		ii = obj_map.constBegin();
+		ii = obj_map.begin();
 	}
 	else
 	{
@@ -148,11 +148,11 @@ TrGeoObject * TrMapList::getNextMapObject(uint64_t & id)
 
 TrGeoObject * TrMapList::getNextMapObject(uint64_t & id, const TrZoomMap & zoom_ref)
 {
-	TrMap::const_iterator ii;
+	TrMap::iterator ii;
 
 	if(id == 0)
 	{
-		ii = obj_map.constBegin();	
+		ii = obj_map.begin();
 	}
 	else
 	{	
@@ -166,7 +166,7 @@ TrGeoObject * TrMapList::getNextMapObject(uint64_t & id, const TrZoomMap & zoom_
 		ii++;
 	}
 
-	while (ii != obj_map.constEnd())
+	while (ii != obj_map.end())
 	{
 		if(ii.value()->clip(zoom_ref) == false)
 		{
@@ -221,7 +221,7 @@ uint64_t TrMapList::findObjectId(TrGeoObject * obj)
 		if(ii.value() == obj)
 			return ii.key();
 	}
-    for(int i = 0; i < obj_list.size(); ++i)
+	for(int i = 0; i < obj_list.size(); ++i)
 	{
 		if(obj_list[i] == obj)
 			return i;
@@ -328,7 +328,7 @@ void TrMapList::appendObject(TrGeoObject * list_obj)
 
 bool TrMapList::appendObject(TrGeoObject * list_obj, uint64_t key)
 {
-	TrMap::const_iterator i = obj_map.find(key);
+	TrMap::iterator i = obj_map.find(key);
 
 	if(i == obj_map.end())
 	{
@@ -344,7 +344,7 @@ bool TrMapList::deleteObject(const uint64_t key)
 	if(obj_list.size())
 	{
 		//TR_MSG << key;
-        if(key >= static_cast<uint64_t>(obj_list.size()))
+		if(key >= static_cast<uint64_t>(obj_list.size()))
 			return false;
 		obj_list.remove(key);
 		return true;
@@ -442,11 +442,11 @@ uint64_t TrMapList::findSelect(const TrZoomMap & zoom_ref, const TrPoint & insid
 {
 	if(obj_map.size())
 	{
-		TrMap::const_iterator ii;
+		TrMap::iterator ii;
 
 		if(pos == TR_NO_VALUE)
 		{
-			ii = obj_map.constBegin();
+			ii = obj_map.begin();
 		}
 		else
 		{
@@ -455,7 +455,7 @@ uint64_t TrMapList::findSelect(const TrZoomMap & zoom_ref, const TrPoint & insid
 			ii = obj_map.find(pos);
 			++ii;
 		}
-		while (ii != obj_map.constEnd())
+		while (ii != obj_map.end())
 		{
 			if(TR_NO_VALUE != ii.value()->findSelect(zoom_ref, inside, pos))
 			{
@@ -489,7 +489,7 @@ uint64_t TrMapList::findSelect(const TrZoomMap & zoom_ref, const TrPoint & insid
 			}
 		}
 		return TR_NO_VALUE;
-    }
+	}
 	return TR_NO_VALUE;
 }
 
@@ -599,19 +599,19 @@ bool TrMapList::setSurroundingRect()
 			return true;
 		}
 	}
-    //TR_MSG << "return false" << obj_list.size() << obj_map.count() <<
-    //    getSurroundRectVal(0) << getSurroundRectVal(1) << getSurroundRectVal(2) << getSurroundRectVal(3);
+	//TR_MSG << "return false" << obj_list.size() << obj_map.count() <<
+	//    getSurroundRectVal(0) << getSurroundRectVal(1) << getSurroundRectVal(2) << getSurroundRectVal(3);
 	return false;
 }
 
 void TrMapList::clear()
 {
 	// TODO: clear the 'class' name?
-    /*if(obj_map.count())
+	/*if(obj_map.count())
 	{
 		for(TrMap::const_iterator ii = obj_map.constBegin(); ii !=  obj_map.constEnd(); ++ii)
 		{
-            // TODO: fix the crash -> tree times reloding -> memmory leak!
+			// TODO: fix the crash -> tree times reloding -> memmory leak!
 			delete ii.value();
 		}
 	}
@@ -621,9 +621,9 @@ void TrMapList::clear()
 	for (int i = 0; i < obj_list.size(); ++i)
 	{
 		delete obj_list.at(i);		// TODO: clear?
-    }*/
-    obj_map.clear();
-    obj_list.clear();
+	}*/
+	obj_map.clear();
+	obj_list.clear();
 }
 
 #ifdef TR_SERIALIZATION
@@ -819,4 +819,3 @@ void TrMapList::writeXmlDescription(QXmlStreamWriter & xml_out, uint64_t id)
 	}
 }
 #endif
-
