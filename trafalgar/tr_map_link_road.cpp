@@ -338,8 +338,9 @@ bool TrMapLinkRoad::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject 
 				seg.getSegList(seg_list, *m_pline);
 				if(seg.isEvenPolygon(zoom_ref, seg_list, 0.01))
 				{
-					TrPoint pt;
-					manageGap(zoom_ref, TR_NET_GAP_REMOVE, pt, m_pline);
+					// all points are in line, no pline needed
+					m_pline = nullptr;
+					setPolygon(nullptr);
 				}
 				else
 				{
@@ -351,7 +352,10 @@ bool TrMapLinkRoad::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject 
 					if(m_pline->getSize())
 						m_pline->init(zoom_ref, TR_INIT_GEOMETRY, nullptr);
 					else
+					{
 						m_pline = nullptr;
+						setPolygon(nullptr);
+					}
 				}
 			}
 		}

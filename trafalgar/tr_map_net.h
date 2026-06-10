@@ -13,7 +13,7 @@
  *
  * beginning:	11.2012
  *
- * @author	Schmid Hubert (C)2012-2025
+ * @author	Schmid Hubert (C)2012-2026
  *
  * history:
  *
@@ -129,8 +129,10 @@ public:
 	// TODO: remove...?
 	uint64_t editElement(const TrZoomMap & zoom_ref, TrPoint & set, QVector<uint64_t> & ids);
 
+#ifdef OSM_C_FILTER
 	TrGeoObject * manageGap(const TrZoomMap & zoom_ref, TrMapLink & link, uint8_t mode,
 			const TrPoint & pt, TrGeoObject * obj = nullptr);
+#endif
 
 	virtual void setMask(uint64_t bit_mask);
 

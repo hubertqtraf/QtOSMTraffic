@@ -14,7 +14,7 @@
  *
  * beginning:	11.2012
  *
- * @author	Schmid Hubert(C) 2012-2025
+ * @author	Schmid Hubert(C) 2012-2026
  *
  * history:
  *
@@ -502,6 +502,7 @@ void TrMapLink::initDoubleLine(const TrZoomMap & zoom_ref, QVector<TrPoint> &m_p
 	TR_INF << "unused";
 }
 
+#ifdef OSM_C_FILTER
 TrGeoObject * TrMapLink::manageGap(const TrZoomMap & zoom_ref, uint8_t mode, const TrPoint & pt, TrGeoObject * obj)
 {
 	TrGeoPolygon * poly = nullptr;
@@ -577,6 +578,7 @@ TrGeoObject * TrMapLink::manageGap(const TrZoomMap & zoom_ref, uint8_t mode, con
 	}
 	return nullptr;
 }
+#endif
 
 // get the angle from the node to point inside fos the link or the next node
 double TrMapLink::getAngle(const TrZoomMap & zoom_ref, bool dir)

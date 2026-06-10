@@ -13,7 +13,7 @@
  *
  * beginning:	11.2012
  *
- * @author	Schmid Hubert (C)2012-2025
+ * @author	Schmid Hubert (C)2012-2026
  *
  * history:
  *
@@ -389,6 +389,7 @@ uint64_t TrMapNet::editElement(const TrZoomMap & zoom_ref, TrPoint & set, QVecto
 	return 0x1000000000000000;
 }
 
+#ifdef OSM_C_FILTER
 TrGeoObject * TrMapNet::manageGap(const TrZoomMap & zoom_ref, TrMapLink & link, uint8_t mode,
 		const TrPoint & pt, TrGeoObject * obj)
 {
@@ -438,6 +439,7 @@ TrGeoObject * TrMapNet::manageGap(const TrZoomMap & zoom_ref, TrMapLink & link, 
 	}
 	return nullptr;
 }
+#endif
 
 // TODO: use group parm
 bool TrMapNet::addPen(const QString & group, int idx, const QPen & pen)
