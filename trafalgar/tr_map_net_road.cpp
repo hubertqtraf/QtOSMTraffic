@@ -85,6 +85,8 @@ bool TrMapNetRoad::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject *
 		m_node_map->init(zoom_ref, TR_INIT_GEOMETRY | TR_INIT_ND_SET, nullptr);
 		m_link_list->init(zoom_ref, TR_INIT_GEOMETRY | 35, nullptr);	// handleSmallElement, remove unneeded points
 
+		m_link_list->init(zoom_ref, TR_INIT_GEOMETRY | TR_INIT_MV_CLEAN, nullptr);
+
 		// set the link point data from moved node
 		m_link_list->init(zoom_ref, TR_INIT_GEOMETRY | 50, nullptr);
 
