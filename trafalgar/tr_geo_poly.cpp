@@ -432,7 +432,7 @@ void TrGeoPolygon::setInfo(const TrZoomMap & zoom_ref)
 }
 
 
-void TrGeoPolygon::setInfoSect(const TrZoomMap & zoom_ref, poly_add & sec,
+int TrGeoPolygon::setInfoSect(const TrZoomMap & zoom_ref, poly_add & sec,
 	TrPoint first_point, TrPoint second_point)
 {
 	sec.len_part = zoom_ref.getLength(first_point.x, first_point.y, second_point.x, second_point.y);
@@ -456,6 +456,7 @@ void TrGeoPolygon::setInfoSect(const TrZoomMap & zoom_ref, poly_add & sec,
 			break;
 		}
 	}
+	return code;
 	// TODO: check the length
 	//sec.len_part = zoom_ref.getLength(first_point.x, first_point.y, second_point.x, second_point.y);
 }

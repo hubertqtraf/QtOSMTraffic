@@ -91,7 +91,7 @@ private:
 
 	double checkCrossing(const TrZoomMap &zoom_ref, TrGeoSegment &cross_segment, TrPoint cross, bool dir);
 
-	bool selectCrossing(const TrZoomMap &zoom_ref, TrGeoSegment &cross_segment, TrPoint &cross, bool dir);
+	int selectCrossing(const TrZoomMap &zoom_ref, TrGeoSegment &cross_segment, TrPoint &cross, bool dir);
 
 protected:
 	// copy of moved position of the node

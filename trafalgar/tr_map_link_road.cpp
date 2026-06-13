@@ -535,7 +535,7 @@ double TrMapLinkRoad::checkCrossing(const TrZoomMap & zoom_ref, TrGeoSegment &cr
 	return -1.0;
 }
 
-bool TrMapLinkRoad::selectCrossing(const TrZoomMap &zoom_ref, TrGeoSegment &cross_segment, TrPoint &cross, bool dir)
+int TrMapLinkRoad::selectCrossing(const TrZoomMap &zoom_ref, TrGeoSegment &cross_segment, TrPoint &cross, bool dir)
 {
 	double len = checkCrossing(zoom_ref, cross_segment, cross, dir);
 	if(len > -0.5)
@@ -543,14 +543,20 @@ bool TrMapLinkRoad::selectCrossing(const TrZoomMap &zoom_ref, TrGeoSegment &cros
 		if(len < 2.0)
 		{
 			if(dir)
+			{
 				cross = cross_segment.getSecondPoint();
+				return 1;
+			}
 			else
+			{
 				cross = cross_segment.getFirstPoint();
+				return 2;
+			}
 		}
 		else
-			return true;
+			return 0;
 	}
-	return false;
+	return -1;
 }
 
 uint8_t TrMapLinkRoad::handleRamps(const TrZoomMap & zoom_ref, TrMapLinkRoad * next_link, TrGeoObject * node, uint8_t mode)
@@ -798,14 +804,24 @@ uint8_t TrMapLinkRoad::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * 
 	set_segment.setPoints(next_segment);
 	if((next_link->getOneWay() & TR_LINK_DIR_BWD))
 		set_segment.doReverse();
-	if(selectCrossing(zoom_ref, set_segment, cross_pt, true))
+	int sec_mode = selectCrossing(zoom_ref, set_segment, cross_pt, true);
+	if(sec_mode == 0)
 		return 5;
+	if(sec_mode > 0)
+	{
+		// TODO: check angle/small segment
+	}
+
 	set_segment.setPoints(first_segment);
 	if((getOneWay() & TR_LINK_DIR_BWD))
 		set_segment.doReverse();
-	if(selectCrossing(zoom_ref, set_segment, cross_pt, false))
+	sec_mode = selectCrossing(zoom_ref, set_segment, cross_pt, false);
+	if(sec_mode == 0)
 		return 5;
-
+	if(sec_mode > 0)
+	{
+		// TODO: check angle/small segment
+	}
 	if(first_link->getOneWay() & TR_LINK_DIR_ONEWAY)
 	{
 		if(first_link->getNodeToRef() == node)

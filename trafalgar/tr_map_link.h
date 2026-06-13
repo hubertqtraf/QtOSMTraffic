@@ -159,6 +159,10 @@ public:
 
 	TrMapLink * getParallelLink();
 
+	int removePolyPointDir(const TrZoomMap &zoom_ref, bool dir);
+
+	int removePolyPoint(const TrZoomMap &zoom_ref, int pos);
+
 	double getAngle(const TrZoomMap & zoom_ref, bool dir);
 
 	bool handleSmallElement(const TrZoomMap & zoom_ref, double a_limit, double l_limit);
@@ -209,6 +213,7 @@ public:
 
 	virtual void writeXmlDescription(QXmlStreamWriter & xml_out, uint64_t id);
 #endif
+
 };
 
 #endif // TR_MAP_LINK_H

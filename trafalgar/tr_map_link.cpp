@@ -533,6 +533,8 @@ TrGeoObject * TrMapLink::manageGap(const TrZoomMap & zoom_ref, uint8_t mode, con
 
 	case TR_NET_GAP_REMOVE:         //0x02
 		//TR_INF << "del" << m_pline;
+		// TODO: use -> int TrMapLink::removePolyPoint(int pos)
+
 		if(m_pline != nullptr)
 		{
 			parallel_link = this->getParallelLink();
@@ -542,7 +544,7 @@ TrGeoObject * TrMapLink::manageGap(const TrZoomMap & zoom_ref, uint8_t mode, con
 				{
 					// TODO check!
 					parallel_link->setPolygon(nullptr);
-                    //parallel_link->initDoubleLine(zoom_ref, 100);
+					//parallel_link->initDoubleLine(zoom_ref, 100);
 				}
 			}
 			// TODO: crash on m_pline, check if only one point is left
@@ -555,7 +557,7 @@ TrGeoObject * TrMapLink::manageGap(const TrZoomMap & zoom_ref, uint8_t mode, con
 			// missing init?
 			// thread problem? -> parallel link!?
 			setPolygon(nullptr);
-            //initDoubleLine(zoom_ref, 100);
+			//initDoubleLine(zoom_ref, 100);
 			//TR_INF << "del 2" << m_pline << *this << m_node_from << m_node_to;
 		}
 		break;
@@ -567,9 +569,9 @@ TrGeoObject * TrMapLink::manageGap(const TrZoomMap & zoom_ref, uint8_t mode, con
 
 	case TR_NET_GAP_UPDATE:
 		parallel_link = this->getParallelLink();
-        //if(parallel_link != nullptr)
-        //	parallel_link->initDoubleLine(zoom_ref, 100);
-        //initDoubleLine(zoom_ref, 100);
+		//if(parallel_link != nullptr)
+		//	parallel_link->initDoubleLine(zoom_ref, 100);
+		//initDoubleLine(zoom_ref, 100);
 		break;
 
 	default:
@@ -607,6 +609,38 @@ double TrMapLink::getAngle(const TrZoomMap & zoom_ref, bool dir)
 		TR_ERR << err_code << *this;
 	}
 	return ang;
+}
+
+int TrMapLink::removePolyPointDir(const TrZoomMap & zoom_ref, bool dir)
+{
+	if(m_pline == nullptr)
+		return -1;
+	if(dir)
+		return removePolyPoint(zoom_ref, m_pline->getSize()-1);
+	return removePolyPoint(zoom_ref, 0);
+}
+
+int TrMapLink::removePolyPoint(const TrZoomMap & zoom_ref, int pos)
+{
+	if(m_pline == nullptr)
+		return -1;
+
+	if((pos == 0) && (m_pline->getSize() == 1))
+	{
+		TrMapLink * parallel_link = this->getParallelLink();
+		if(parallel_link != nullptr)
+		{
+			parallel_link->setPolygon(nullptr);
+		}
+		// TODO: cleanup the 'm_primive_map' -> remove element
+		//delete m_pline;
+		m_pline = nullptr;
+		return 0;
+	}
+	if(m_pline->removePoint(pos+1))
+		return -1;
+	m_pline->setInfo(zoom_ref);
+	return m_pline->getSize();
 }
 
 bool TrMapLink::removeSmallSeg(const TrZoomMap & zoom_ref, double l_limit, bool dir)

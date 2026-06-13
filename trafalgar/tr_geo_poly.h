@@ -113,7 +113,7 @@ public:
 
 	void setInfo(const TrZoomMap & zoom_ref);
 
-	static void setInfoSect(const TrZoomMap & zoom_ref, poly_add & sec,
+	static int setInfoSect(const TrZoomMap & zoom_ref, poly_add & sec,
 		TrPoint first_point, TrPoint second_point);
 
 	int parallel(TrGeoPolygon * base, const TrZoomMap & zoom_ref, int32_t width);
