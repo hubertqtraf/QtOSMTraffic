@@ -357,6 +357,11 @@ bool TrMapLinkRoad::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject 
 						setPolygon(nullptr);
 					}
 				}
+				if(m_pline != nullptr)
+				{
+					if(m_pline->getSize() > 1)
+						m_pline->setInfo(zoom_ref);
+				}
 			}
 		}
 
@@ -488,6 +493,8 @@ void TrMapLinkRoad::initDoubleLine(const TrZoomMap & zoom_ref, QVector<TrPoint> 
 
 		TrGeoPolygon::setInfoSect(zoom_ref, m_seg_to,
 			m_pline->getLastPoint(), pt2);
+		// TODO: workaround -> where is missing 'add' dataset?
+		m_pline->setInfo(zoom_ref);
 		m_pline->parallel(&par_line, zoom_ref, m_seg_from.sl, m_seg_to.sl, width);
 
 		TrGeoPolygon::calcParPoint(zoom_ref, pt2, m_seg_to.sl, width);
@@ -531,13 +538,16 @@ double TrMapLinkRoad::checkCrossing(const TrZoomMap & zoom_ref, TrGeoSegment &cr
 	if(ang_diff > (M_PI * 2.0))
 		ang_diff -= (M_PI * 2.0);
 	if(ang_diff < 0.5)
+	{
 		return test_segment.getLength(zoom_ref);
+	}
 	return -1.0;
 }
 
 int TrMapLinkRoad::selectCrossing(const TrZoomMap &zoom_ref, TrGeoSegment &cross_segment, TrPoint &cross, bool dir)
 {
 	double len = checkCrossing(zoom_ref, cross_segment, cross, dir);
+
 	if(len > -0.5)
 	{
 		if(len < 2.0)
@@ -804,23 +814,31 @@ uint8_t TrMapLinkRoad::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * 
 	set_segment.setPoints(next_segment);
 	if((next_link->getOneWay() & TR_LINK_DIR_BWD))
 		set_segment.doReverse();
-	int sec_mode = selectCrossing(zoom_ref, set_segment, cross_pt, true);
+	int sec_mode = -1;
+	if(next_link->getOneWay() & TR_LINK_DIR_ONEWAY)
+		sec_mode = selectCrossing(zoom_ref, set_segment, cross_pt, true);
 	if(sec_mode == 0)
 		return 5;
 	if(sec_mode > 0)
 	{
 		// TODO: check angle/small segment
+		if(next_link->getOneWay() & TR_LINK_DIR_ONEWAY)
+			next_link->removePolyPointDir(zoom_ref, true);
 	}
 
 	set_segment.setPoints(first_segment);
 	if((getOneWay() & TR_LINK_DIR_BWD))
 		set_segment.doReverse();
-	sec_mode = selectCrossing(zoom_ref, set_segment, cross_pt, false);
+	sec_mode = -1;
+	if(getOneWay() & TR_LINK_DIR_ONEWAY)
+		sec_mode = selectCrossing(zoom_ref, set_segment, cross_pt, false);
 	if(sec_mode == 0)
 		return 5;
 	if(sec_mode > 0)
 	{
 		// TODO: check angle/small segment
+		if(getOneWay() & TR_LINK_DIR_ONEWAY)
+			removePolyPointDir(zoom_ref, false);
 	}
 	if(first_link->getOneWay() & TR_LINK_DIR_ONEWAY)
 	{
