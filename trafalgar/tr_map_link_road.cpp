@@ -380,7 +380,7 @@ bool TrMapLinkRoad::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject 
 				}
 				//TR_INF << HEX << getPlacement() << HEX << m_mm_calc_width << (0 - (m_mm_calc_width >> 1));
 				m_par_line.clear();
-				initDoubleLine(zoom_ref, m_par_line, test_width);
+				initDoubleLine(zoom_ref, m_par_line, test_width, false);
 			}
 		}
 		// code to move the nodes of the oneway link
@@ -413,7 +413,7 @@ bool TrMapLinkRoad::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject 
 		if(ctrl == 14)
 		{
 			if(s_mask & TR_MASK_MORE_LINES)
-				initDoubleLine(zoom_ref, m_par_line, m_mm_calc_width);
+				initDoubleLine(zoom_ref, m_par_line, m_mm_calc_width, false);
 			return true;
 		}
 
@@ -446,11 +446,16 @@ bool TrMapLinkRoad::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject 
 	//return true;
 }
 
-void TrMapLinkRoad::getNodePoints(TrPoint & pt1, TrPoint & pt2)
+void TrMapLinkRoad::getNodePoints(TrPoint & pt1, TrPoint & pt2, bool mode)
 {
 	pt1 = m_pt_from;
 	pt2 = m_pt_to;
 
+	if((mode) && (m_node_from != nullptr) && (m_node_to != nullptr))
+	{
+		pt1 = m_node_from->getPoint();
+		pt2 = m_node_to->getPoint();
+	}
 	if(m_one_way & TR_LINK_DIR_BWD)
 	{
 		TrPoint pt_switch = pt2;
@@ -461,16 +466,16 @@ void TrMapLinkRoad::getNodePoints(TrPoint & pt1, TrPoint & pt2)
 
 void TrMapLinkRoad::initDoubleLineWidth(const TrZoomMap & zoom_ref)
 {
-	initDoubleLine(zoom_ref, m_par_line, m_mm_calc_width);
+	initDoubleLine(zoom_ref, m_par_line, m_mm_calc_width, false);
 }
 
 // the 'initDoubleLine->getLength' function needes the length
 // of the segment for all links, not usable for routing
-void TrMapLinkRoad::initDoubleLine(const TrZoomMap & zoom_ref, QVector<TrPoint> & par_line, int32_t width)
+void TrMapLinkRoad::initDoubleLine(const TrZoomMap & zoom_ref, QVector<TrPoint> & par_line, int32_t width, bool mode)
 {
 	TrPoint pt1;
 	TrPoint pt2;
-	getNodePoints(pt1, pt2);
+	getNodePoints(pt1, pt2, mode);
 
 	par_line.clear();
 

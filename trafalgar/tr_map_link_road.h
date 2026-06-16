@@ -81,7 +81,7 @@ private:
 
 	static double ms_ramp_angle;
 
-	void getNodePoints(TrPoint & pt1, TrPoint & pt2);
+	void getNodePoints(TrPoint & pt1, TrPoint & pt2, bool mode);
 
 	void drawParLine(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mode);
 
@@ -142,7 +142,7 @@ public:
 
 	virtual bool init(const TrZoomMap & zoom_ref, uint64_t ctrl = 0, TrGeoObject * base = nullptr);
 
-	virtual void initDoubleLine(const TrZoomMap & zoom_ref, QVector<TrPoint> &m_par_line, int32_t width);
+	virtual void initDoubleLine(const TrZoomMap & zoom_ref, QVector<TrPoint> &m_par_line, int32_t width, bool mode);
 
 	void initDoubleLineWidth(const TrZoomMap & zoom_ref);
 
