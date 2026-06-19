@@ -96,12 +96,14 @@ private:
 	QVector<TrPoint> m_par_line;
 	// own object -> list of parklane objects?
 	QVector<TrPoint> m_par_left_line;
+	bool m_showOther;
 
 	int32_t getWith(uint8_t code);
 	QPen * setParkingSidePen(uint16_t type, TrGeoObject * base);
 	int checkNodes(const TrZoomMap & zoom_ref, int32_t w, bool other);
 	int checkNode(const TrZoomMap &zoom_ref, TrGeoObject *node, bool side, bool dir);
 	void setParkingSPenStyle(bool mode);
+	void drawLine(const TrZoomMap &zoom_ref, QPainter *p, QVector<TrPoint> & par_line);
 };
 
 #endif // TR_MAP_PARKLANE_H

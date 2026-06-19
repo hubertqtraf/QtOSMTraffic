@@ -47,6 +47,7 @@ TrMapParkLane::TrMapParkLane()
 	, m_pen_park(nullptr)
 	, m_pen_park_left(nullptr)
 	, m_ref(nullptr)
+	, m_showOther(true)
 {
 }
 
@@ -185,7 +186,9 @@ int TrMapParkLane::checkNode(const TrZoomMap & zoom_ref, TrGeoObject * node, boo
 
 	QVector<TrPoint> &line = m_par_line;
 	if(side)
+	{
 		line = m_par_left_line;
+	}
 
 	TrMapParkLane * other = this->getParkingObj(x);
 	double w_x = 0.0;
@@ -202,12 +205,14 @@ int TrMapParkLane::checkNode(const TrZoomMap & zoom_ref, TrGeoObject * node, boo
 	{
 		w = fabs(link2->getRoadWidth()/1000.0) + w_x;//wp;
 	}
+	if(side && (w < 0.5))
+		w = 5.0;
 
 	TrGeoSegment seg = TrGeoSegment::getSegBorder(line, dir);
 	TrPoint pt = {0.0,0.0};
 	if(seg.getSection(zoom_ref, pt, w_x + w, dir) == false)
 	{
-		removeMask(TR_MASK_DRAW);
+		m_showOther = false;
 		return 1;
 	}
 	if(dir)
@@ -225,21 +230,7 @@ int TrMapParkLane::checkNodes(const TrZoomMap & zoom_ref, int32_t w, bool other)
 	TrMapLinkRoad * link = dynamic_cast<TrMapLinkRoad *>(m_ref);
 	if(link == nullptr)
 		return -1;
-	if(other)
-	{
-		// TODO: check oher side of the oneway link
-		return 0;
-	}
-	if(other)
-	{
-		if(m_par_left_line.size() < 2)
-			return -2;
-	}
-	else
-	{
-		if(m_par_line.size() < 2)
-			return -2;
-	}
+
 	TrMapNode * n_t = dynamic_cast<TrMapNode *>(link->getNodeToRef());
 	TrMapNode * n_f = dynamic_cast<TrMapNode *>(link->getNodeFromRef());
 	if((n_t == nullptr) || (n_f  == nullptr))
@@ -321,6 +312,25 @@ bool TrMapParkLane::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject 
 	return true;
 }
 
+void TrMapParkLane::drawLine(const TrZoomMap & zoom_ref, QPainter * p, QVector<TrPoint> & par_line)
+{
+	QVector<QPointF> pointPairs;
+
+	for(int i = 0; i < par_line.size(); i++)
+	{
+		TrPoint screenx = par_line[i];
+		zoom_ref.setMovePoint(&screenx.x, &screenx.y);
+		QPointF ptf;
+		ptf.setX(screenx.x);
+		ptf.setY(screenx.y);
+		pointPairs.append(ptf);
+	}
+	if(pointPairs.size())
+	{
+		p->drawPolyline(pointPairs);
+	}
+}
+
 void TrMapParkLane::draw(const TrZoomMap & zoom_ref, QPainter * p, uint8_t mode)
 {
 	if(m_ref == nullptr)
@@ -336,40 +346,20 @@ void TrMapParkLane::draw(const TrZoomMap & zoom_ref, QPainter * p, uint8_t mode)
 	if(link == nullptr)
 		return;
 
-	QVector<QPointF> pointPairs;
-
 	if(/*(m_parking & 0xff00) &&*/ (s_mask & TR_MASK_SHOW_PARKING))
 	{
-		for(int i = 0; i<m_par_line.size(); i++)
-		{
-			TrPoint screenx = m_par_line[i];
-			zoom_ref.setMovePoint(&screenx.x, &screenx.y);
-			QPointF ptf;
-			ptf.setX(screenx.x);
-			ptf.setY(screenx.y);
-			pointPairs.append(ptf);
-		}
-		if((pointPairs.size() > 1) && (m_pen_park != nullptr))
+		if((m_pen_park != nullptr))
 		{
 			p->setPen(*m_pen_park);
-			p->drawPolyline(pointPairs);
+			drawLine(zoom_ref, p, m_par_line);
 		}
+
 		if(link->getOneWay() & TR_LINK_DIR_ONEWAY)
 		{
-			pointPairs.clear();
-			for(int i = 0; i<m_par_left_line.size(); i++)
-			{
-				TrPoint screenx = m_par_left_line[i];
-				zoom_ref.setMovePoint(&screenx.x, &screenx.y);
-				QPointF ptf;
-				ptf.setX(screenx.x);
-				ptf.setY(screenx.y);
-				pointPairs.append(ptf);
-			}
-			if((pointPairs.size() > 1) && (m_pen_park_left != nullptr))
+			if(m_showOther && (m_pen_park_left != nullptr))
 			{
 				p->setPen(*m_pen_park_left);
-				p->drawPolyline(pointPairs);
+				drawLine(zoom_ref, p, m_par_left_line);
 			}
 		}
 	}
