@@ -88,7 +88,7 @@ public:
 
 	size_t objCountMap();
 
-	TrGeoObject * getVecObject(size_t n);
+	TrGeoObject * getVecObject(int n);
 
 	TrGeoObject * getMapObject(uint64_t id);
 

@@ -94,9 +94,9 @@ size_t TrMapList::objCountMap()
 	return static_cast<size_t>(obj_map.size());
 }
 
-TrGeoObject * TrMapList::getVecObject(size_t n)
+TrGeoObject * TrMapList::getVecObject(int n)
 {
-	if((obj_list.size() < static_cast<int>(n)) || (static_cast<int>(n) < 0))
+	if((n >= obj_list.size()) || (n < 0))
 		return nullptr;
 	return obj_list.at(n);
 }
