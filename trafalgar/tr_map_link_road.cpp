@@ -1068,6 +1068,9 @@ void TrMapLinkRoad::draw(const TrZoomMap & zoom_ref, QPainter * p, uint8_t mode)
 	if(this->clip(zoom_ref))
 		return;
 
+	if(!(m_inst_mask & TR_MASK_DRAW))
+		return;
+
 	if(m_inst_mask & TR_MASK_SELECTED)
 	{
 		drawSelect(zoom_ref, p, mode);
