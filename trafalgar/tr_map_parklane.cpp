@@ -41,6 +41,8 @@
 #include "tr_map_link_road.h"
 #include "tr_map_net_road.h"
 
+#include <math.h>
+
 TrMapParkLane::TrMapParkLane()
 	: TrGeoObject()
 	, m_parking(0)
