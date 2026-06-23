@@ -497,7 +497,7 @@ double TrMapLink::getLength(const TrZoomMap & zoom_ref)
 
 // the 'initDoubleLine->getLength' function needes the length
 // of the segment for all links, not usable for routing
-void TrMapLink::initDoubleLine(const TrZoomMap & zoom_ref, QVector<TrPoint> &m_par_line, int32_t width)
+void TrMapLink::initDoubleLine(const TrZoomMap & zoom_ref, QVector<TrPoint> &m_par_line, int32_t width, bool mode)
 {
 	TR_INF << "unused";
 }

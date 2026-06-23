@@ -181,7 +181,7 @@ public:
 	virtual bool initSecs(const TrZoomMap & zoom_ref, TrMapList * pr_list, TrMapList & nd_list);
 
 	// TODO: virtual - needed?
-	virtual void initDoubleLine(const TrZoomMap & zoom_ref, QVector<TrPoint> &m_par_line, int32_t width);
+	virtual void initDoubleLine(const TrZoomMap & zoom_ref, QVector<TrPoint> &m_par_line, int32_t width, bool mode);
 
 	virtual void drawSelect(const TrZoomMap & zoom_ref, QPainter * p, uint8_t mode = 0);
 
