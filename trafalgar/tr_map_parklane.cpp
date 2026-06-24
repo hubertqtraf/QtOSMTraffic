@@ -302,7 +302,10 @@ bool TrMapParkLane::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject 
 		}
 		if(m_pen_park_left != nullptr)
 		{
-			w = -setParkingWidth((m_parking >> 32) & 0x00000000000000ffU);
+			if(TrGeoObject::getGlobelFlags() & TR_MASK_LEFT_DRIVE)
+				w = setParkingWidth((m_parking >> 32) & 0x00000000000000ffU);
+			else
+				w = -setParkingWidth((m_parking >> 32) & 0x00000000000000ffU);
 			link->initDoubleLine(zoom_ref, m_par_left_line, w, false);
 			if(!(TrGeoObject::getGlobelFlags() & TR_MASK_PARKING_MODE))
 				checkNodes(zoom_ref, w, true);
