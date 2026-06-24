@@ -93,6 +93,8 @@ private:
 
 	int selectCrossing(const TrZoomMap &zoom_ref, TrGeoSegment &cross_segment, TrPoint &cross, bool dir);
 
+	uint8_t handleShiftNode(const TrZoomMap &zoom_ref, TrMapLinkRoad *next_link, TrGeoObject *node, uint8_t mode);
+
 protected:
 	// copy of moved position of the node
 	TrPoint m_pt_from;
