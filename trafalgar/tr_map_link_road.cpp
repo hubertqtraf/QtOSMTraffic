@@ -601,7 +601,7 @@ uint8_t TrMapLinkRoad::handleShiftNode(const TrZoomMap & zoom_ref, TrMapLinkRoad
 	double ang = 10.0;
 	int code = first_segment.getAngleCode(zoom_ref, next_segment, ang, 0.2);
 
-	// small angle
+	// tiny angle (--*--)
 	if(code == 1)
 	{
 		if(all_one_way)
@@ -612,6 +612,13 @@ uint8_t TrMapLinkRoad::handleShiftNode(const TrZoomMap & zoom_ref, TrMapLinkRoad
 				n->setMovePoint(first_segment.getSecondPoint());
 		}
 	}
+	// small angle and one double dir link (>*==)
+	if((ang > 2.5) && ((ang < 4.5)) && (!all_one_way))
+	{
+		n->setMovePoint(n->getPoint());
+		return 9;
+	}
+
 	if((code == 0) || (code == 3))
 	{
 		if(all_one_way)
