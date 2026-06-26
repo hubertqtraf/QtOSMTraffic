@@ -619,6 +619,13 @@ uint8_t TrMapLinkRoad::handleShiftNode(const TrZoomMap & zoom_ref, TrMapLinkRoad
 		return 9;
 	}
 
+	TrGeoSegment test_seg(cross_pt, first_segment.getSecondPoint());
+	int code_2 = first_segment.getAngleCode(zoom_ref, test_seg, ang, 0.2);
+	if((code_2 == 2) && all_one_way)
+	{
+		//TODO
+	}
+
 	if((code == 0) || (code == 3))
 	{
 		if(all_one_way)
@@ -631,7 +638,7 @@ uint8_t TrMapLinkRoad::handleShiftNode(const TrZoomMap & zoom_ref, TrMapLinkRoad
 			n->setMovePoint(cross_pt);
 		}
 	}
-	return 33;
+	return 1;
 }
 
 
