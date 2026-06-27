@@ -112,6 +112,8 @@ public:
 	bool managePolygon(const TrZoomMap & zoom_ref, TrGeoPolygon & poly,
 			QList<TrGeoSegment> & seg_list, int width);
 
+	bool managePoints(const TrZoomMap &zoom_ref, QVector<TrPoint> &pts, int made, double value);
+
 	bool isEvenPolygon(const TrZoomMap & zoom_ref, QList<TrGeoSegment> & seg_list, double ctrl);
 
 	virtual void draw(const TrZoomMap & zoom_ref, QPainter * p, uint8_t mode = 0);

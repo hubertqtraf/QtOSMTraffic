@@ -344,11 +344,14 @@ bool TrMapLinkRoad::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject 
 				}
 				else
 				{
+					QVector<TrPoint> points;
+					m_pline->getPoints(points);
+					seg.managePoints(zoom_ref, points, 1, 6.0);
+					m_pline->clearData();
+					if(points.size())
+						m_pline->appendPoints(points);
+
 					//TR_INF << *this << *m_pline << getWidth();
-					if(seg.managePolygon(zoom_ref, *m_pline, seg_list, 6000)) //m_mm_calc_width * 2))
-					{
-						seg.getSegList(seg_list, *m_pline);
-					}
 					if(m_pline->getSize())
 						m_pline->init(zoom_ref, TR_INIT_GEOMETRY, nullptr);
 					else

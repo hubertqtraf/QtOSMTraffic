@@ -342,6 +342,43 @@ TrPoint TrGeoSegment::getPointByAngle(const TrZoomMap & zoom_ref, double ang, bo
 	return ret;
 }
 
+bool TrGeoSegment::managePoints(const TrZoomMap & zoom_ref, QVector<TrPoint> & pts, int mode, double value)
+{
+	TrGeoSegment seg;
+	bool fwd = true;
+
+	if(mode == 1)
+	{
+		double len_fwd = -1.0;
+		double len_bwd = -1.0;
+
+		while(pts.size())
+		{
+			if(fwd)
+			{
+				seg.setPoints(m_first, pts[0]);
+				len_fwd = seg.getLength(zoom_ref);
+				if(len_fwd < value)
+					pts.removeFirst();
+				fwd = false;
+			}
+			else
+			{
+				seg.setPoints(pts.last(), m_second);
+				len_bwd = seg.getLength(zoom_ref);
+				if(len_bwd < value)
+					pts.removeLast();
+				fwd = true;
+			}
+			if((len_fwd >= value) && (len_bwd >= value))
+				return true;
+		}
+		return false;
+	}
+	return false;
+}
+
+// TODO: to remove
 bool TrGeoSegment::managePolygon(const TrZoomMap & zoom_ref, TrGeoPolygon & poly,
 	QList<TrGeoSegment> & seg_list, int width)
 {
