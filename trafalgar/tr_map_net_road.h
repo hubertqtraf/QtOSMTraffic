@@ -52,6 +52,7 @@
 #define TR_INIT_MV_CLEAN 29
 #define TR_INIT_MV_PAR 27
 #define TR_INIT_MV_BASE 30
+#define TR_INIT_SET_POINT 49
 #define TR_INIT_INIT_PARK 51
 
 class TrMapNetRoad : public TrMapNet

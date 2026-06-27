@@ -307,7 +307,7 @@ bool TrMapLinkRoad::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject 
 			}
 		}
 
-		if(ctrl == 50)
+		if(ctrl == TR_INIT_SET_POINT)
 		{
 			m_pt_from = m_node_from->getPoint();
 			m_pt_to = m_node_to->getPoint();

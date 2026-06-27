@@ -88,13 +88,13 @@ bool TrMapNetRoad::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject *
 		m_link_list->init(zoom_ref, TR_INIT_GEOMETRY | TR_INIT_MV_CLEAN, nullptr);
 
 		// set the link point data from moved node
-		m_link_list->init(zoom_ref, TR_INIT_GEOMETRY | 50, nullptr);
+		m_link_list->init(zoom_ref, TR_INIT_GEOMETRY | TR_INIT_SET_POINT, nullptr);
 
 		s_mask &= ~(TR_MASK_MOVE_LINE);
 	}
 
 	if(!(s_mask & TR_MASK_SET_RAMPS))
-		m_link_list->init(zoom_ref, TR_INIT_GEOMETRY | 50, nullptr);
+		m_link_list->init(zoom_ref, TR_INIT_GEOMETRY | TR_INIT_SET_POINT, nullptr);
 	// code for double line
 	m_link_list->init(zoom_ref, TR_INIT_GEOMETRY | 14, nullptr);
 
