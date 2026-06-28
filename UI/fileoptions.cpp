@@ -37,6 +37,7 @@ FileOptions::FileOptions(QWidget *parent) :
 	ui(new Ui::FileOptions)
 {
 	ui->setupUi(this);
+
 	ui->laneSpinBox->setValue(TrMapLinkRoad::ms_lane_width_p);
 }
 
@@ -115,6 +116,10 @@ void FileOptions::manageSettings(QSettings & settings, bool mode)
 	{
 		ui->osmDir->setText(settings.value("OSM").toString());
 		ui->profileDir->setText(settings.value("Profile").toString());
+		if(settings.value("Lane").toInt() == 0)
+			ui->laneSpinBox->setValue(TrMapLinkRoad::ms_lane_width_p);
+		else
+			ui->laneSpinBox->setValue(settings.value("Lane").toInt());
 		if(settings.value(FileOptions::s_shift).toInt())
 		{
 			ui->shiftCheck->setCheckState(Qt::Checked);
@@ -147,6 +152,7 @@ void FileOptions::manageSettings(QSettings & settings, bool mode)
 		//TR_INF << "write" << this->getWorldLayer() << this->getSelect();
 		settings.setValue("OSM", ui->osmDir->text());
 		settings.setValue("Profile", ui->profileDir->text());
+		settings.setValue("Lane", ui->laneSpinBox->value());
 		if(ui->shiftCheck->checkState() == Qt::Checked)
 		{
 			TrGeoObject::s_mask |= TR_MASK_LEFT_DRIVE;
