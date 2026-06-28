@@ -47,14 +47,14 @@ TrGeoSegment::TrGeoSegment()
 	, m_first{0.0, 0.0}
 	, m_second{0.0, 0.0}
 {
-        m_inst_mask = (TR_MASK_EXIST | TR_MASK_DRAW);
-        //m_geo_id = -1;
+	m_inst_mask = (TR_MASK_EXIST | TR_MASK_DRAW);
+	//m_geo_id = -1;
 }
 
 TrGeoSegment::TrGeoSegment(TrPoint first, TrPoint second)
 	: TrGeoObject()
 {
-	m_inst_mask = (TR_MASK_EXIST | TR_MASK_DRAW);
+	m_inst_mask = (TR_MASK_EXIST | TR_MASK_DRAW | TR_MASK_DATA);
 	setPoints(first, second);
 }
 
@@ -220,6 +220,11 @@ bool TrGeoSegment::getCrossPoint(const TrZoomMap & zoom_ref, TrPoint & pt, TrGeo
 	poly_add add1;
 	poly_add add2;
 
+	if(!(m_inst_mask & TR_MASK_DATA))
+	{
+		TR_WRN << "missing data";
+		return false;
+	}
 	this->getSegmentData(zoom_ref, add1, m_first.x);
 	other.getSegmentData(zoom_ref, add2, m_first.x);
 	zoom_ref.getCrossPoint(add1, add2, pt);
@@ -286,7 +291,10 @@ int TrGeoSegment::getAngleCode(const TrZoomMap & zoom_ref, const TrGeoSegment &o
 
 double TrGeoSegment::getLength(const TrZoomMap & zoom_ref)
 {
-	return zoom_ref.getLength(m_first, m_second);
+	if(m_inst_mask & TR_MASK_DATA)
+		return zoom_ref.getLength(m_first, m_second);
+	TR_WRN << "missing data";
+	return 0.0;
 }
 
 void TrGeoSegment::clearData()
@@ -445,6 +453,8 @@ void TrGeoSegment::draw(const TrZoomMap & zoom_ref, QPainter * p, uint8_t mode)
 	{
 		//return;
 	}
+	if(!(m_inst_mask & TR_MASK_DATA))
+		return;
 
 	if(this->clip(zoom_ref))
 		return;
