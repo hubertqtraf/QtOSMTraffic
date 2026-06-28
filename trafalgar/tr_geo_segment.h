@@ -49,6 +49,8 @@ class TrGeoSegment : public TrGeoObject
 private:
 	TrPoint m_first;
 	TrPoint m_second;
+	static double ms_min_size;
+
 	//static bool checkAngle(poly_add & pa, poly_add & pa1, double angle_b, double angle_a);
 
 public:
@@ -62,6 +64,8 @@ public:
 	//friend QDataStream& operator << (QDataStream&, TrGeoSegment);
 
 	QString getXmlName() const;
+
+	bool pointsAreIdentical();
 
 	void setPoints(TrPoint first, TrPoint second);
 

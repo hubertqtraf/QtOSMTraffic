@@ -40,7 +40,9 @@
 
 #include <math.h>
 
+double TrGeoSegment::ms_min_size = 0.000001;
 #define TR_DIST 6.0
+
 
 TrGeoSegment::TrGeoSegment()
 	: TrGeoObject()
@@ -77,6 +79,11 @@ QDebug operator<<(QDebug dbg, const TrGeoSegment& seg)
 QString TrGeoSegment::getXmlName() const
 {
 	return "segment";
+}
+
+bool TrGeoSegment::pointsAreIdentical()
+{
+	return ((fabs(m_first.x - m_second.x) < ms_min_size) && (fabs(m_first.y - m_second.y) < ms_min_size));
 }
 
 void TrGeoSegment::setPoints(TrPoint first, TrPoint second)
