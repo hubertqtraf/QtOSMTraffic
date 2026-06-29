@@ -615,6 +615,16 @@ uint8_t TrMapLinkRoad::handleShiftNode(const TrZoomMap & zoom_ref, TrMapLinkRoad
 				n->setMovePoint(first_segment.getSecondPoint());
 		}
 	}
+	// one to one connection: avoid 'Z'
+	if(all_one_way && (n->getConFlags() & 0x10))
+	{
+		TrGeoSegment test_segment(cross_pt, first_segment.getSecondPoint());
+		if(first_segment.getAngleCode(zoom_ref, test_segment, ang, 0.5) == 2)
+		{
+			n->setMovePoint(next_segment.getFirstPoint());
+			return 33;
+		}
+	}
 	// small angle and one double dir link (>*==)
 	if((ang > 2.5) && ((ang < 4.5)) && (!all_one_way))
 	{
