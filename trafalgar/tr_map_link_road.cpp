@@ -205,8 +205,7 @@ bool TrMapLinkRoad::getSegment(TrGeoSegment & seg, bool dir, bool par)
 		}
 		else
 		{
-			seg.setPoints(m_par_line[m_par_line.size() - 2],
-					m_par_line[m_par_line.size() - 1]);
+			seg.setPoints(m_par_line[m_par_line.size() - 2], m_par_line.last());
 		}
 		return true;
 	}
@@ -626,6 +625,8 @@ uint8_t TrMapLinkRoad::handleShiftNode(const TrZoomMap & zoom_ref, TrMapLinkRoad
 			return 5;
 		}
 	}
+	//if(all_one_way && (n->getConFlags() & 0x20))	// ==*-- and real node
+
 	// one to one connection: avoid 'Z'
 	if(all_one_way && (n->getConFlags() & 0x10))
 	{
@@ -646,7 +647,16 @@ uint8_t TrMapLinkRoad::handleShiftNode(const TrZoomMap & zoom_ref, TrMapLinkRoad
 	if((code == 0) || (code == 3))
 	{
 		if(all_one_way)
+		{
+			if(n->getGeoId() == this->m_node_from->getGeoId())
+			{
+				TrGeoSegment test_segment(cross_pt, next_segment.getSecondPoint());
+				double diff = fabs(test_segment.getAngle(zoom_ref) - first_segment.getAngle(zoom_ref));
+				if(diff < 0.7)
+					;//return 33;
+			}
 			n->setMovePoint(cross_pt);
+		}
 		else
 		{
 			TrGeoSegment test_seg(cross_pt, n->getPoint());
