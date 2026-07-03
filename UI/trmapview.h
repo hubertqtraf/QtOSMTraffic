@@ -41,6 +41,8 @@ class TrMapView : public TrCanvas
 private:
 	uint64_t m_pos_select;
 
+	static int sm_move;
+
 	TrDocument m_doc;
 	TrZoomMap m_zoom_ref;
 	Qt::MouseButton m_move_pressed;
@@ -84,6 +86,8 @@ public:
 	void resetZoom();
 	void zoomChange(double value, const QPoint pt, int limit);
 	void zoomChange(bool dir);
+
+	void shiftChange(QPoint mv_pt);
 
 	bool notifyCoor(const QPoint pt, int mode, Qt::MouseButton button);
 	bool notifyPress(const QPoint pt, Qt::MouseButton button);

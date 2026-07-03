@@ -26,6 +26,8 @@
 
 #include <qpainter.h>
 
+int TrMapView::sm_move = 20;
+
 TrMapView::TrMapView(QWidget *parent)
 	: TrCanvas(parent)
 	, m_pos_select(TR_NO_VALUE)
@@ -176,6 +178,17 @@ void TrMapView::zoomChange(bool dir)
 		zoomChange(0.8, pt, 0);
 	else
 		zoomChange(1.2, pt, 0);
+}
+
+void TrMapView::shiftChange(QPoint mv_pt)
+{
+	QPoint pt;
+	pt.setX(static_cast <int>((width()/2.0)));
+	pt.setY(static_cast <int>((height()/2.0)));
+
+	m_zoom_ref.setScreenDimension(width(), height());
+	m_zoom_ref.moveToPoint(pt.x() + mv_pt.x(), pt.y() + mv_pt.y());
+	update();
 }
 
 void TrMapView::zoomChange(double value, const QPoint pt, int limit)
@@ -438,6 +451,28 @@ void TrMapView::on_handleResults(const TrGeoObject **obj)
 
 void TrMapView::on_Key(QKeyEvent *key)
 {
+	//TR_INF << key;
+
+	if(key->key() == Qt::Key_Left)
+	{
+		QPoint pt(-sm_move, 0);
+		shiftChange(pt);
+	}
+	if(key->key() == Qt::Key_Right)
+	{
+		QPoint pt(sm_move, 0);
+		shiftChange(pt);
+	}
+	if(key->key() == Qt::Key_Up)
+	{
+		QPoint pt(0, sm_move);
+		shiftChange(pt);
+	}
+	if(key->key() == Qt::Key_Down)
+	{
+		QPoint pt(0, -sm_move);
+		shiftChange(pt);
+	}
 	if(key->text() == " ")
 		notifyClick(m_selected_point, 0, Qt::LeftButton);
 	if(key->text() == "+")
