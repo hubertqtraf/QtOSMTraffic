@@ -630,7 +630,13 @@ uint8_t TrMapLinkRoad::handleShiftNode(const TrZoomMap & zoom_ref, TrMapLinkRoad
 	// one to one connection: avoid 'Z'
 	if(all_one_way && (n->getConFlags() & 0x10))
 	{
-		TrGeoSegment test_segment(cross_pt, first_segment.getSecondPoint());
+		TrGeoSegment test_segment;
+		// TODO: left drive?
+		if(n->getGeoId() == this->m_node_to->getGeoId())
+			test_segment.setPoints(cross_pt, first_segment.getSecondPoint());
+		else
+			test_segment.setPoints(next_segment.getSecondPoint(), cross_pt);
+
 		if(first_segment.getAngleCode(zoom_ref, test_segment, ang, 0.5) == 2)
 		{
 			n->setMovePoint(next_segment.getFirstPoint());
@@ -644,17 +650,29 @@ uint8_t TrMapLinkRoad::handleShiftNode(const TrZoomMap & zoom_ref, TrMapLinkRoad
 		return 9;
 	}
 
+	if(all_one_way && (n->getConFlags() & 0x20))	// ==*-- and real node
+	{
+		if(n->getGeoId() == this->m_node_to->getGeoId())
+		{
+			TrGeoSegment test_segment(cross_pt, next_segment.getSecondPoint());
+			double diff = fabs(test_segment.getAngle(zoom_ref) - first_segment.getAngle(zoom_ref));
+			if(diff < 0.7)
+				code = 5;
+				//return 5;
+		}
+		if(n->getGeoId() == this->m_node_from->getGeoId())
+		{
+			TrGeoSegment test_segment(cross_pt, next_segment.getSecondPoint());
+			double diff = fabs(test_segment.getAngle(zoom_ref) - first_segment.getAngle(zoom_ref));
+			if(diff < 0.7)
+				code = 5;
+		}
+	}
+
 	if((code == 0) || (code == 3))
 	{
 		if(all_one_way)
 		{
-			if(n->getGeoId() == this->m_node_from->getGeoId())
-			{
-				TrGeoSegment test_segment(cross_pt, next_segment.getSecondPoint());
-				double diff = fabs(test_segment.getAngle(zoom_ref) - first_segment.getAngle(zoom_ref));
-				if(diff < 0.7)
-					;//return 33;
-			}
 			n->setMovePoint(cross_pt);
 		}
 		else
