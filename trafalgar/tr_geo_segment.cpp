@@ -247,6 +247,14 @@ double TrGeoSegment::getAngle(const TrZoomMap & zoom_ref) const
 	return 100.0;
 }
 
+double TrGeoSegment::getAngleDiff(const TrZoomMap & zoom_ref, double other) const
+{
+	double diff = fabs(getAngle(zoom_ref) - other);
+	if(diff > (M_PI * 2.0))
+		diff -= (M_PI * 2.0);
+	return diff;
+}
+
 void TrGeoSegment::doReverse()
 {
 	TrPoint cp = m_first;
@@ -336,21 +344,6 @@ void TrGeoSegment::getSegList(QList<TrGeoSegment> & seg_list, TrGeoPolygon & pol
 	seg_list.append(seg);
 }
 
-bool TrGeoSegment::isEvenPolygon(const TrZoomMap & zoom_ref, QList<TrGeoSegment> & seg_list, double ctrl)
-{
-	bool ret = true;
-	double ang = getAngle(zoom_ref);
-	//TR_INF << "====" << ang;
-	for (int i = 0; i < seg_list.size(); ++i)
-	{
-		double diff = fabs(ang - seg_list[i].getAngle(zoom_ref));
-		if(diff > ctrl)
-			ret = false;
-		//TR_INF << " - " << seg_list[i].getAngle(zoom_ref) << diff << ret;
-	}
-	return ret;
-}
-
 TrPoint TrGeoSegment::getPointByAngle(const TrZoomMap & zoom_ref, double ang, bool dir)
 {
 	TrPoint ret = zoom_ref.getPointByAngle(m_first, m_second, ang);//ang + thisAng);
@@ -362,6 +355,7 @@ bool TrGeoSegment::managePoints(const TrZoomMap & zoom_ref, QVector<TrPoint> & p
 	TrGeoSegment seg;
 	bool fwd = true;
 
+	// cut the ends on small segments
 	if(mode == 1)
 	{
 		double len_fwd = -1.0;
@@ -390,68 +384,30 @@ bool TrGeoSegment::managePoints(const TrZoomMap & zoom_ref, QVector<TrPoint> & p
 		}
 		return false;
 	}
-	return false;
-}
-
-// TODO: to remove
-bool TrGeoSegment::managePolygon(const TrZoomMap & zoom_ref, TrGeoPolygon & poly,
-	QList<TrGeoSegment> & seg_list, int width)
-{
-	// TODO: segment from nodes
-	// calc the distance beween the points
-	// remove the points near the nodes (partly done...)
-	// .. OR ..
-	// use angle between nodes; prove the angle to next polygon point
-	// start from nodes to center
-	// remove points...
-
-	//double ang = getAngle(zoom_ref);
-	//TR_INF << ang << getLength(zoom_ref) << poly.getSize();
-
-	double length_fwd = seg_list[0].getLength(zoom_ref);
-	size_t idx_fwd = 1;
-	bool do_fwd = true;
-	double length_bwd = seg_list[seg_list.size()-1].getLength(zoom_ref);
-	size_t idx_bwd = poly.getSize();
-	bool do_bwd = true;
-	//TR_INF << "*** start: " << poly.getSize() << "F: " << length_fwd << "B: " << length_bwd;
-	bool ret = false;
-
-	double d_width = fabs(width/1000.0);
-	//TR_INF << d_width << width;
-
-	while(do_fwd || do_bwd)
+	// isEvenPolygon
+	if(mode == 2)
 	{
-		//TR_INF << "F:" << length_fwd << "B:" << length_bwd << d_width << " | " << idx_bwd << idx_fwd << do_fwd << do_bwd;
-		if((length_fwd < d_width) && (idx_bwd >= (idx_fwd + 1)))
+		double diff = 400.0;
+		double ang = getAngle(zoom_ref);
+
+		TrPoint start = m_first;
+		TrGeoSegment seg;
+		for (int i = 0; i < pts.size(); ++i)
 		{
-			//TR_INF << "Poly size: " << poly.getSize();
-			if(poly.getSize() > 0)
-			{
-				ret = true;
-				poly.removePoint(1);
-			}
-			idx_fwd++;
-			length_fwd += seg_list[static_cast<int>(idx_fwd) -1].getLength(zoom_ref);
+			seg.setPoints(start, pts[i]);
+			diff = getAngleDiff(zoom_ref, seg.getAngle(zoom_ref));
+			//TR_INF << " - " << seg.getAngle(zoom_ref) << diff << seg;
+			if(diff > value)
+				return false;
+			start = pts[i];
 		}
-		else
-			do_fwd = false;
-		if((length_bwd < d_width) && (idx_bwd >= (idx_fwd + 1)))
-		{
-			if(poly.getSize() > 0)
-			{
-				ret = true;
-				poly.removePoint(poly.getSize());
-			}
-			idx_bwd--;
-			length_bwd += seg_list[static_cast<int>(idx_bwd) -1].getLength(zoom_ref);
-		}
-		else
-			do_bwd = false;
+		seg.setPoints(pts.last(), m_second);
+		diff = fabs(ang - seg.getAngle(zoom_ref));
+		if(diff > value)
+			return false;
+		return true;
 	}
-	// TODO: check last point, remove the point?
-	//TR_INF << "### end:   " << poly.getSize() << "F: " << length_fwd << idx_fwd << "B: " << length_bwd << idx_bwd;
-	return ret;
+	return false;
 }
 
 void TrGeoSegment::draw(const TrZoomMap & zoom_ref, QPainter * p, uint8_t mode)

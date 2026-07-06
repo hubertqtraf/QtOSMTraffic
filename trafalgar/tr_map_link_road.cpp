@@ -332,10 +332,10 @@ bool TrMapLinkRoad::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject 
 		{
 			if((m_one_way & TR_LINK_DIR_ONEWAY) && (isAsDoubleLine()) && (m_pline != nullptr))
 			{
-				QList<TrGeoSegment> seg_list;
+				QVector<TrPoint> points;
+				m_pline->getPoints(points);
 				TrGeoSegment seg(m_node_from->getPoint(), m_node_to->getPoint());
-				seg.getSegList(seg_list, *m_pline);
-				if(seg.isEvenPolygon(zoom_ref, seg_list, 0.01))
+				if(seg.managePoints(zoom_ref, points, 2, 0.05))
 				{
 					// all points are in line, no pline needed
 					m_pline = nullptr;

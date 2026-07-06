@@ -107,18 +107,16 @@ public:
 
 	double getAngle(const TrZoomMap & zoom_ref) const;
 
+	double getAngleDiff(const TrZoomMap &zoom_ref, double other) const;
+
 	void doReverse();
 
 	int getAngleCode(const TrZoomMap & zoom_ref, const TrGeoSegment& other, double &ang, double level);
 
+	// TODO: remove
 	void getSegList(QList<TrGeoSegment> & seg_list, TrGeoPolygon & poly);
 
-	bool managePolygon(const TrZoomMap & zoom_ref, TrGeoPolygon & poly,
-			QList<TrGeoSegment> & seg_list, int width);
-
 	bool managePoints(const TrZoomMap &zoom_ref, QVector<TrPoint> &pts, int made, double value);
-
-	bool isEvenPolygon(const TrZoomMap & zoom_ref, QList<TrGeoSegment> & seg_list, double ctrl);
 
 	virtual void draw(const TrZoomMap & zoom_ref, QPainter * p, uint8_t mode = 0);
 #ifdef TR_SERIALIZATION
@@ -132,7 +130,6 @@ public:
 
 	virtual void writeXmlDescription(QXmlStreamWriter & xml_out, uint64_t id);
 #endif
-
 };
 
 #endif // TR_GEO_SEGMENT_H

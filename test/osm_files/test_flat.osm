@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- test angle -->
+<osm version="0.6" generator="Trafalgar">
+    <node id="27471287" version="1" lon="-10.999" lat="68"/>
+    <node id="27471294" version="1" lon="-11.001" lat="68"/>
+    <node id="27471295" version="1" lon="-11.002" lat="68"/>
+    <node id="27471296" version="1" lon="-11.002" lat="68.000067"/>
+    <node id="27471297" version="1" lon="-11" lat="68"/>
+    <node id="27471298" version="1" lon="-11" lat="68.000067"/>
+    <node id="27471299" version="1" lon="-11.001" lat="68.000067"/>
+    <node id="27471397" version="1" lon="-11.003" lat="68"/>
+    <!--node id="27471398" version="1" lon="-11.004" lat="68"/-->
+    <node id="27471398" version="1" lon="-11.004" lat="68.00001"/>
+    <node id="27471399" version="1" lon="-11.005" lat="68"/>
+    <node id="27471394" version="1" lon="-11.006" lat="68"/>
+
+    <way id="1" version="1">
+        <nd ref="27471287"/>
+        <nd ref="27471297"/>
+        <nd ref="27471298"/>
+        <nd ref="27471299"/>
+        <nd ref="27471294"/>
+        <tag k="highway" v="motorway"/>
+        <tag k="lanes" v="1"/>
+	<tag k="oneway" v="true"/>
+    </way>
+    <way id="3" version="1">
+        <nd ref="27471294"/>
+        <nd ref="27471295"/>
+        <tag k="highway" v="primary"/>
+        <tag k="lanes" v="1"/>
+	<tag k="oneway" v="true"/>
+    </way>
+    <way id="4" version="1">
+	<nd ref="27471295"/>
+        <nd ref="27471397"/>
+        <nd ref="27471398"/>
+        <nd ref="27471399"/>
+        <nd ref="27471394"/>
+	<tag k="highway" v="motorway"/>
+        <tag k="lanes" v="1"/>
+	<tag k="oneway" v="true"/>
+    </way>
+</osm>
