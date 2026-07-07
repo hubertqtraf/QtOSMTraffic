@@ -643,75 +643,33 @@ int TrMapLink::removePolyPoint(const TrZoomMap & zoom_ref, int pos)
 	return m_pline->getSize();
 }
 
-bool TrMapLink::removeSmallSeg(const TrZoomMap & zoom_ref, double l_limit, bool dir)
-{
-        if(m_pline == nullptr)
-                return false;
-
-        TrGeoSegment seg;
-        seg.setPoints(m_node_from->getPoint(), m_node_to->getPoint());
-        QList<TrGeoSegment> seg_list;
-
-        seg.getSegList(seg_list, *m_pline);
-
-        //double len = seg_list[seg_list.size()-1].getLength(zoom_ref);
-        if(seg_list.size() < 1)
-                return false;
-        double len;
-        if(dir)
-        {
-                len = seg_list[seg_list.size()-1].getLength(zoom_ref);
-        }
-        else
-        {
-                len = seg_list[0].getLength(zoom_ref);
-        }
-        if(len > l_limit)
-                return false;
-
-        //TR_INF << len << m_pline->getSize();
-        if(dir)
-                m_pline->removePoint(m_pline->getSize());
-        else
-                m_pline->removePoint(1);
-
-        if(m_pline->getSize())
-        {
-                m_pline->init(zoom_ref, TR_INIT_GEOMETRY, nullptr);
-        }
-        else
-        {
-            this->setPolygon(nullptr);
-            TrMapLink * par = this->getParallelLink();
-            if(par != nullptr)
-                par->setPolygon(nullptr);
-        }
-        return true;
-}
-
-
-
 bool TrMapLink::handleSmallElement(const TrZoomMap & zoom_ref, double a_limit, double l_limit)
 {
-	// node to node with no polygon -> exit
 	if(m_pline == nullptr)
 		return false;
-	// backward link points to the same polygon
-	if(m_one_way & TR_LINK_DIR_BWD)
-		return false;
-	if(removeSmallSeg(zoom_ref, l_limit, true))
+
+	TrGeoSegment seg;
+	seg.setPoints(m_node_from->getPoint(), m_node_to->getPoint());
+	QVector<TrPoint> points;
+	m_pline->getPoints(points);
+	if(seg.managePoints(zoom_ref, points, 1, l_limit))
+		;
+	m_pline->clearData();
+	if(points.size())
+		m_pline->appendPoints(points);
+	if(m_pline->getSize())
 	{
-		if(removeSmallSeg(zoom_ref, l_limit, true))
-		{
-		}
+		m_pline->init(zoom_ref, TR_INIT_GEOMETRY, nullptr);
+		if(m_pline->getSize() > 1)
+			m_pline->setInfo(zoom_ref);
 	}
-	if(removeSmallSeg(zoom_ref, l_limit, false))
+	else
 	{
-		if(removeSmallSeg(zoom_ref, l_limit, false))
-		{
-		}
+		m_pline = nullptr;
+		setPolygon(nullptr);
+		return true;
 	}
-	return true;
+	return false;
 }
 
 // get the next point near the node

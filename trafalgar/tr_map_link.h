@@ -71,8 +71,6 @@ private:
 	// id of the name (street name...), 32 bit should be OK
 	uint32_t m_name_id;
 
-	bool removeSmallSeg(const TrZoomMap &zoom_ref, double l_limit, bool dir);
-
 protected:
 	TrMapNode * m_node_from;
 	TrMapNode * m_node_to;

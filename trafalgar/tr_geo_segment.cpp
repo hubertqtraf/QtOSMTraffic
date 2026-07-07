@@ -93,15 +93,6 @@ void TrGeoSegment::setPoints(TrPoint first, TrPoint second)
 	m_inst_mask |= TR_MASK_DATA;
 }
 
-void TrGeoSegment::setPoints(TrGeoPolygon & poly, size_t pos)
-{
-	// TODO: check size
-	m_first = poly.getPoint(pos);
-	m_second = poly.getPoint(pos + 1);
-	m_inst_mask |= TR_MASK_DATA;
-	//TR_INF << "X this:  0 " << m_first.x << m_first.y << " 1 " << m_second.x << m_second.y;
-}
-
 void TrGeoSegment::setPoints(const TrGeoSegment& other)
 {
 	setPoints(other.m_first, other.m_second);
@@ -328,20 +319,6 @@ bool TrGeoSegment::getSegmentData(const TrZoomMap & zoom_ref, poly_add & add, do
 	s_move.x -= shift;
 	zoom_ref.getLineByPoints(add, f_move, s_move);
 	return false;
-}
-
-void TrGeoSegment::getSegList(QList<TrGeoSegment> & seg_list, TrGeoPolygon & poly)
-{
-	seg_list.clear();
-	TrPoint first = m_first;
-	for(size_t i = 0; i < poly.getSize(); i++)
-	{
-		TrGeoSegment seg(first, poly.getPoint(i));
-		seg_list.append(seg);
-		first = poly.getPoint(i);
-	}
-	TrGeoSegment seg(first, m_second);
-	seg_list.append(seg);
 }
 
 TrPoint TrGeoSegment::getPointByAngle(const TrZoomMap & zoom_ref, double ang, bool dir)

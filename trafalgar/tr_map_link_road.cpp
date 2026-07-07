@@ -408,7 +408,17 @@ bool TrMapLinkRoad::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject 
 		if(ctrl == 35)
 		{
 			if((getType() & 0x000f) < 9)
-				handleSmallElement(zoom_ref, 0.2, m_mm_calc_width / 1000.0);
+			{
+				if(!(m_one_way & TR_LINK_DIR_BWD))
+				{
+					if(handleSmallElement(zoom_ref, 0.2, m_mm_calc_width / 1000.0))
+					{
+						TrMapLink * par = this->getParallelLink();
+						if(par != nullptr)
+							par->setPolygon(nullptr);
+					}
+				}
+			}
 		}
 
 		// code for double line

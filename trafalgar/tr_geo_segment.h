@@ -69,8 +69,6 @@ public:
 
 	void setPoints(TrPoint first, TrPoint second);
 
-	void setPoints(TrGeoPolygon & poly, size_t pos);
-
 	void setPoints(const TrGeoSegment& other);
 
 	TrPoint getFirstPoint();
@@ -112,9 +110,6 @@ public:
 	void doReverse();
 
 	int getAngleCode(const TrZoomMap & zoom_ref, const TrGeoSegment& other, double &ang, double level);
-
-	// TODO: remove
-	void getSegList(QList<TrGeoSegment> & seg_list, TrGeoPolygon & poly);
 
 	bool managePoints(const TrZoomMap &zoom_ref, QVector<TrPoint> &pts, int made, double value);
 
