@@ -81,6 +81,8 @@ public:
 
 	void setSecondPoint(TrPoint & pt);
 
+	bool isInside(TrPoint &pt);
+
 	static TrGeoSegment getSegBorder(const QVector<TrPoint> & vec, bool dir);
 
 	bool getSection(const TrZoomMap &zoom_ref, TrPoint &pt, double sec, bool dir);

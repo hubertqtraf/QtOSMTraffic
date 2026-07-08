@@ -623,6 +623,7 @@ uint8_t TrMapLinkRoad::handleShiftNode(const TrZoomMap & zoom_ref, TrMapLinkRoad
 			else
 				n->setMovePoint(first_segment.getSecondPoint());
 		}
+		return 5;
 	}
 	// one to two connection: avoid 'Z'
 	if(!all_one_way && (n->getConFlags() & 0x20))	// ==*-- and real node
@@ -638,19 +639,15 @@ uint8_t TrMapLinkRoad::handleShiftNode(const TrZoomMap & zoom_ref, TrMapLinkRoad
 	//if(all_one_way && (n->getConFlags() & 0x20))	// ==*-- and real node
 
 	// one to one connection: avoid 'Z'
-	if(all_one_way && (n->getConFlags() & 0x10))
+	if(all_one_way && (n->getConFlags() & 0x11))
 	{
 		TrGeoSegment test_segment;
-		// TODO: left drive?
-		if(n->getGeoId() == this->m_node_to->getGeoId())
-			test_segment.setPoints(cross_pt, first_segment.getSecondPoint());
-		else
-			test_segment.setPoints(next_segment.getSecondPoint(), cross_pt);
 
-		if(first_segment.getAngleCode(zoom_ref, test_segment, ang, 0.5) == 2)
+		if(!first_segment.isInside(cross_pt))
 		{
-			n->setMovePoint(next_segment.getFirstPoint());
-			return 33;
+
+			n->setMovePoint(n->getPoint());
+			return 5;
 		}
 	}
 	// small angle and one double dir link (>*==)

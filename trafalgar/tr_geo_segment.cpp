@@ -231,6 +231,13 @@ bool TrGeoSegment::getCrossPoint(const TrZoomMap & zoom_ref, TrPoint & pt, TrGeo
 	return true;
 }
 
+bool TrGeoSegment::isInside(TrPoint & pt)
+{
+	if((pt.x < m_second.x) && (pt.x > m_first.x))
+		return true;
+	return false;
+}
+
 double TrGeoSegment::getAngle(const TrZoomMap & zoom_ref) const
 {
 	if(m_inst_mask & TR_MASK_DATA)
