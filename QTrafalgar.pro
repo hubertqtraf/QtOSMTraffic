@@ -50,6 +50,7 @@ SOURCES += \
     UI/tr_select_box.cpp \
     UI/tr_set_item.cpp \
     UI/tr_set_model.cpp \
+    UI/viewlevel.cpp \
     trafalgar/tr_geo_object.cpp \
     trafalgar/tr_geo_point.cpp \
     trafalgar/tr_geo_poly.cpp \
@@ -102,6 +103,7 @@ HEADERS += \
     UI/tr_select_box.h \
     UI/tr_set_item.h \
     UI/tr_set_model.h \
+    UI/viewlevel.h \
     trafalgar/tr_defs.h \
     trafalgar/tr_geo_object.h \
     trafalgar/tr_geo_point.h \
