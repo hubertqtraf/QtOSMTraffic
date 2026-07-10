@@ -23,13 +23,22 @@
 #ifndef VIEWLEVEL_H
 #define VIEWLEVEL_H
 
+#include "tr_set_item.h"
+
 #include <QAbstractItemModel>
+#include <QDomDocument>
+
 
 class ViewLevel : public QAbstractItemModel
 {
 	Q_OBJECT
 
 public:
+	QDomDocument m_domDocument;
+	TrSetItem *m_rootItem;
+
+	//TrSetItem * getItem(const QModelIndex &index) const;
+
 	explicit ViewLevel(QObject *parent = nullptr);
 
 	// Header:
@@ -53,6 +62,9 @@ public:
 
 	Qt::ItemFlags flags(const QModelIndex& index) const override;
 
+	bool setDataByFile(const QString &fname);
+
+	QDomDocument * getDocument();
 private:
 };
 
