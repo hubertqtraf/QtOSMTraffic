@@ -47,8 +47,8 @@ class TrSetModel : public QAbstractItemModel
 {
 	Q_OBJECT
 private:
-	QDomDocument domDocument;
-	TrSetItem *rootItem;
+	QDomDocument m_domDocument;
+	TrSetItem *m_rootItem;
 
 	TrSetItem * getItem(const QModelIndex &index) const;
 

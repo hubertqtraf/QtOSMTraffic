@@ -38,7 +38,7 @@
 
 TrSetModel::TrSetModel(QObject *parent)
 	: QAbstractItemModel(parent)
-	, rootItem(nullptr)
+	, m_rootItem(nullptr)
 {
 }
 
@@ -54,8 +54,8 @@ bool TrSetModel::setDataByFile(const QString & fname)
 		return false;
 	}
 
-	domDocument.setContent(&file);
-	rootItem = new TrSetItem(domDocument, 0);
+	m_domDocument.setContent(&file);
+	m_rootItem = new TrSetItem(m_domDocument, 0);
 	file.close();
 	return true;
 }
@@ -73,7 +73,7 @@ TrSetItem * TrSetModel::getItem(const QModelIndex &index) const
 		if (item)
 			return item;
 	}
-	return rootItem;
+	return m_rootItem;
 }
 
 QVariant TrSetModel::data(const QModelIndex &index, int role) const
@@ -181,7 +181,7 @@ QModelIndex TrSetModel::index(int row, int column, const QModelIndex &parent) co
 	TrSetItem *parentItem;
 
 	if(!parent.isValid())
-		parentItem = rootItem;
+		parentItem = m_rootItem;
 	else
 		parentItem = static_cast<TrSetItem*>(parent.internalPointer());
 
@@ -200,7 +200,7 @@ QModelIndex TrSetModel::parent(const QModelIndex &child) const
 	TrSetItem *childItem = static_cast<TrSetItem*>(child.internalPointer());
 	TrSetItem *parentItem = childItem->parent();
 
-	if(!parentItem || parentItem == rootItem)
+	if(!parentItem || parentItem == m_rootItem)
 		return QModelIndex();
 
 	return createIndex(parentItem->row(), 0, parentItem);
@@ -214,7 +214,7 @@ int TrSetModel::rowCount(const QModelIndex &parent) const
 	TrSetItem *parentItem;
 
 	if(!parent.isValid())
-		parentItem = rootItem;
+		parentItem = m_rootItem;
 	else
 		parentItem = static_cast<TrSetItem*>(parent.internalPointer());
 
@@ -242,7 +242,7 @@ bool TrSetModel::setHeaderData(int section, Qt::Orientation orientation,
 	if (role != Qt::EditRole || orientation != Qt::Horizontal)
 		return false;
 
-	bool result = rootItem->setData(section, value);
+	bool result = m_rootItem->setData(section, value);
 
 	if(result)
 		emit headerDataChanged(orientation, section, section);
@@ -252,6 +252,6 @@ bool TrSetModel::setHeaderData(int section, Qt::Orientation orientation,
 
 QDomDocument * TrSetModel::getDocument()
 {
-	return &domDocument;
+	return &m_domDocument;
 }
 
