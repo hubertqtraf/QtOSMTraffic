@@ -42,6 +42,7 @@
 
 
 TrSetItem::TrSetItem(QDomNode &node, int row, TrSetItem *parent)
+	: QTreeWidgetItem(QTreeWidgetItem::Type)
 {
 	domNode = node;
 	// Record the item's location within its parent.
@@ -95,7 +96,10 @@ bool TrSetItem::getAtt(const QString & att_name, QDomNode & attribute)
 		attribute = attributeMap.item(i);
 
 		if(attribute.nodeName() == att_name)
+		{
+			//TR_INF << attribute.nodeName() << attribute.nodeValue();
 			return true;
+		}
 	}
 	return false;
 }
@@ -196,6 +200,36 @@ bool TrSetItem::setColor(int column, QColor & color)
 	}
 	return false;
 }
+
+Qt::CheckState TrSetItem::getState()
+{
+	QDomNode attribute;
+
+	if (getAtt("actiive", attribute) == true)
+	{
+		if(attribute.nodeValue() == "true")
+			return Qt::Checked;
+	}
+	return Qt::Unchecked;
+}
+
+
+void TrSetItem::setData(int column, int role, const QVariant &value)
+{
+	QDomNode attribute;
+
+	QDomNamedNodeMap attributeMap = domNode.attributes();
+
+	if (getAtt("actiive", attribute) == true)
+	{
+		bool data = value.toBool();
+		if(data == true)
+			attribute.setNodeValue("true");
+		else
+			attribute.setNodeValue("false");
+	}
+}
+
 
 bool TrSetItem::setData(int column, const QVariant &value)
 {

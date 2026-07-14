@@ -39,8 +39,9 @@
 #include <QtXml/qdom.h>
 #include <QtCore/qhash.h>
 #include <QtCore/qvariant.h>
+#include <qtreewidget.h>
 
-class TrSetItem
+class TrSetItem : QTreeWidgetItem
 {
 private:
 	QDomNode domNode;
@@ -66,7 +67,11 @@ public:
 
 	bool setColor(int column, QColor & color);
 
+	Qt::CheckState getState();
+
 	bool setColName(int column, QString & col_name);
+
+	void setData(int column, int role, const QVariant &value);
 
 	bool setData(int column, const QVariant &value);
 };
