@@ -27,6 +27,7 @@
 
 #include <QAbstractItemModel>
 #include <QDomDocument>
+#include <qtreewidget.h>
 
 
 class ViewLevel : public QAbstractItemModel
@@ -36,8 +37,9 @@ class ViewLevel : public QAbstractItemModel
 public:
 	QDomDocument m_domDocument;
 	TrSetItem *m_rootItem;
+	Qt::CheckState m_checkedState;
 
-	//TrSetItem * getItem(const QModelIndex &index) const;
+	TrSetItem * nodeForIndex(const QModelIndex &index) const;
 
 	explicit ViewLevel(QObject *parent = nullptr);
 

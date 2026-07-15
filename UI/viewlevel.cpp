@@ -29,8 +29,21 @@
 ViewLevel::ViewLevel(QObject *parent)
 	: QAbstractItemModel(parent)
 	, m_rootItem(nullptr)
+	, m_checkedState(Qt::Checked)
 {
 }
+
+TrSetItem * ViewLevel::nodeForIndex(const QModelIndex &index) const
+{
+	if (index.isValid())
+	{
+		TrSetItem * item = static_cast<TrSetItem*>(index.internalPointer());
+		if (item)
+			return item;
+	}
+	return m_rootItem;
+}
+
 
 QVariant ViewLevel::headerData(int section, Qt::Orientation orientation, int role) const
 {
@@ -124,65 +137,61 @@ QVariant ViewLevel::data(const QModelIndex &index, int role) const
 	if (!index.isValid())
 		return QVariant();
 
-	TrSetItem * item = static_cast<TrSetItem*>(index.internalPointer());
+	if(!index.isValid())
+			return QVariant();
 
-	switch(role)
+	if(role == Qt::CheckStateRole)
 	{
-	case Qt::DisplayRole:
+		if (index.column() == 2)
 		{
-		QDomNode node = item->node();
-		QStringList attributes;
-		QDomNamedNodeMap attributeMap = node.attributes();
+			TrSetItem *item = nodeForIndex(index);
+			if(item == nullptr)
+				return QVariant();
+			return item->getState();
+		}
+	}
+	else if (role == Qt::DisplayRole)
+	{
+		TrSetItem *item = nodeForIndex(index);
 
-		switch (index.column())
+		if (index.column() == 0)
 		{
-		case 0:
-			return node.nodeName();
-
-		case 1:
-			{
+			return item->node().nodeName();
+		}
+		if (index.column() == 1)
+		{
 			QString col_name;
 
 			if(item->setColName(1, col_name))
 			{
 				return col_name;
 			}
-			return "";
-			}
-
-		case 2:
-			return node.nodeName();
-
-		default:
-			return QVariant();
+			return item->node().nodeName();
 		}
-		}
-
-	case Qt::DecorationRole:
-		if(index.column() == 2)
-		{
-			QColor pal;
-			if(item->setColor(1, pal))
-				return pal;
-			else
-				return QVariant();
-		}
-		return QVariant();
-
-	default:
-		return QVariant();
 	}
-
+	return QVariant();
 }
 
 bool ViewLevel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-	if (data(index, role) != value)
+	if (role == Qt::CheckStateRole && index.column() == 2)
 	{
-		// FIXME: Implement me!
-		emit dataChanged(index, index, {role});
+		//TrSetItem *item = nodeForIndex(index);
+		QTreeWidgetItem *check = static_cast<QTreeWidgetItem*>(index.internalPointer());
+		bool boolVal = value.value<bool>();
+
+		if(!boolVal)
+		{
+			check->setCheckState(2, Qt::Unchecked);
+		}
+		else
+		{
+			check->setCheckState(2, Qt::Checked);
+		}
+		emit dataChanged(index, index);
 		return true;
 	}
+	emit dataChanged(index, index);
 	return false;
 }
 
@@ -191,7 +200,15 @@ Qt::ItemFlags ViewLevel::flags(const QModelIndex &index) const
 	if (!index.isValid())
 		return Qt::NoItemFlags;
 
-	return QAbstractItemModel::flags(index) | Qt::ItemIsEditable; // FIXME: Implement me!
+	Qt::ItemFlags flags = Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+
+	//if((index.column() == 2) && index.parent().isValid())
+	{
+		flags |= Qt::ItemIsUserCheckable;
+		return flags;
+	}
+	return QAbstractItemModel::flags(index);
+	//return QAbstractItemModel::flags(index) | Qt::ItemIsEditable; // FIXME: Implement me!
 }
 
 bool ViewLevel::setDataByFile(const QString & fname)
