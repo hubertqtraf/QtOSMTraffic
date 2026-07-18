@@ -42,10 +42,7 @@
 
 #include <QtCore/qvector.h>
 
-#include "osm_load.h"
-
 #include "osm_types.h"
-#include "tr_point.h"
 
 #include <QtCore/qxmlstream.h>
 
@@ -54,6 +51,8 @@ struct Relation
 {
 	uint64_t m_flags;
 	QVector<RelMember_t> m_members;
+	// helping element to check rings
+	QMap<int64_t, QPair<int64_t, uint64_t>> m_border;
 
 	Relation();
 	friend QDebug operator<<(QDebug dbg, const Relation& member);

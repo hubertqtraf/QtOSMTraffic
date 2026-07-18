@@ -38,6 +38,8 @@
 
 #include "tr_import_osm_rel.h"
 
+#include "osm_load.h"
+
 #include "osm_load_rel.h"
 
 #include <tr_prof_class_def.h>
