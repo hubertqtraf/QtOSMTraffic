@@ -135,6 +135,8 @@ public:
 
 	TrMapList * createPoiMap(QString name);
 
+	void cleanUpWorld();
+
 public slots:
 	void on_setBarValue(int val);
 

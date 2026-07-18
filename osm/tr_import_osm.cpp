@@ -40,7 +40,7 @@
 #include "osm_main.h"
 #include "osm_func.c"
 #endif
-#include "osm_load_rel.h"
+//#include "osm_load_rel.h"
 
 #include "tr_name_element.h"
 #include "tr_import_osm_stream.h"
@@ -653,6 +653,23 @@ bool TrImportOsm::createFaceList(TrMapList * osm_list, QString name)
 TrMapList * TrImportOsm::createPoiMap(QString name)
 {
 	return m_poi_map;
+}
+
+void TrImportOsm::cleanUpWorld()
+{
+    for(unsigned int i=0; i < m_waySize; i++)
+    {
+        if(m_ways[i].nd_id != nullptr)
+        {
+            free(m_ways[i].nd_id);
+            m_ways[i].nd_id = nullptr;
+        }
+    }
+    if(m_ways != nullptr)
+    {
+        free(m_ways);
+        m_ways = nullptr;
+    }
 }
 
 void TrImportOsm::on_setBarValue(int val)
