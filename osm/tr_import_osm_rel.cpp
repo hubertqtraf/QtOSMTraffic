@@ -45,7 +45,8 @@
 #include <tr_prof_class_def.h>
 
 Relation::Relation()
-        : m_flags(0)
+	: m_flags(0)
+	, m_id(0)
 {
 }
 
@@ -69,6 +70,48 @@ int Relation::isMultiPolyRing()
 		}
 	}
 	return count_out;
+}
+
+bool Relation::testRing(Way_t & way)
+{
+	if(way.n_nd_id < 1)
+		return 0;
+	m_border[way.id].first  = way.nd_id[0];
+	m_border[way.id].second = way.nd_id[way.n_nd_id-1];
+	m_used[way.id] = 0;
+	return true;
+}
+
+int64_t Relation::fillRingData(Way_t & way, QVector<int64_t> &data, int64_t start)
+{
+	if(start == -1)
+	{
+		for(int j = 0; j<way.n_nd_id; j++)
+			data.append(way.nd_id[j]);
+		return m_border[way.id].second;
+		m_used[way.id] = 1;
+	}
+	for(auto i = m_border.cbegin(), end = m_border.cend(); i != end; ++i)
+	{
+		if(m_used[i.key()] != 1)
+		{
+			if(start == i.value().first)
+			{
+				for(int j = 1; j<way.n_nd_id; j++)
+					data.append(way.nd_id[j]);
+				m_used[i.key()] = 1;
+				return data.last();
+			}
+			if(start == i.value().second)
+			{
+				for(int j = way.n_nd_id-1; j; j--)
+					data.append(way.nd_id[j-1]);
+				m_used[i.key()] = 1;
+				return data.last();
+			}
+		}
+	}
+	return -1;
 }
 
 // TODO: FLAG_FEATURE_AERA flag was removed at other function -> remove?
@@ -101,11 +144,15 @@ bool TrImportOsmRel::osmRelationRead(QXmlStreamReader & xml, QMap<uint64_t, Way_
 		//QMap<uint64_t, Rel_t> & rellist)
 {
 	rel.m_flags = 0;
+	bool ok;
 	rel.m_members.clear();
 	QXmlStreamAttributes attrs = xml.attributes();
 	m_tags.clear();
 
 	readRelation(attrs, rel);
+	rel.m_id = attrs.value("id").toLongLong(&ok);
+	if(!ok)
+		TR_WRN << "integer fault" << attrs.value("id");
 
 	while (!xml.atEnd())
 	{

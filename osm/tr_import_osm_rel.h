@@ -50,15 +50,19 @@
 struct Relation
 {
 	uint64_t m_flags;
+	int64_t m_id;
 	QVector<RelMember_t> m_members;
 	// helping element to check rings
-	QMap<int64_t, QPair<int64_t, uint64_t>> m_border;
+	QMap<int64_t, QPair<int64_t, int64_t>> m_border;
+	QMap<int64_t, int> m_used;
 
 	Relation();
 	friend QDebug operator<<(QDebug dbg, const Relation& member);
 
 	int isMultiPolyRing();
 	void resetPolyRing(QMap<uint64_t, Way_t> & waylist);
+	bool testRing(Way_t &way);
+	int64_t fillRingData(Way_t &way, QVector<int64_t> &data, int64_t start);
 };
 
 
