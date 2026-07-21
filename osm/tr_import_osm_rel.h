@@ -62,7 +62,8 @@ struct Relation
 	int isMultiPolyRing();
 	void resetPolyRing(QMap<uint64_t, Way_t> & waylist);
 	bool testRing(Way_t &way);
-	int64_t fillRingData(Way_t &way, QVector<int64_t> &data, int64_t start);
+	bool selectRingData(int64_t &w_key, int64_t start);
+	int64_t fillRingData(Way_t &way, QVector<int64_t> &data, int64_t start, bool dir);
 };
 
 

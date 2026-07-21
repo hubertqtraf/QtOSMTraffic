@@ -75,21 +75,50 @@ int Relation::isMultiPolyRing()
 bool Relation::testRing(Way_t & way)
 {
 	if(way.n_nd_id < 1)
-		return 0;
+		return false;
+	if(way.nd_id[0] == way.nd_id[way.n_nd_id-1])
+		return false;
 	m_border[way.id].first  = way.nd_id[0];
 	m_border[way.id].second = way.nd_id[way.n_nd_id-1];
 	m_used[way.id] = 0;
 	return true;
 }
 
-int64_t Relation::fillRingData(Way_t & way, QVector<int64_t> &data, int64_t start)
+bool Relation::selectRingData(int64_t & w_key, int64_t start)
+{
+	for(auto i = m_border.cbegin(), end = m_border.cend(); i != end; ++i)
+	{
+		if(w_key == -1)
+		{
+			w_key = i.key();
+			return true;
+		}
+		if(m_used[i.key()] != 1)
+		{
+			if(start == i.value().second)
+			{
+				w_key = i.key();
+				return true;
+			}
+			if(start == i.value().first)
+			{
+				w_key = i.key();
+				return false;
+			}
+		}
+	}
+	return -1;
+}
+
+
+int64_t Relation::fillRingData(Way_t & way, QVector<int64_t> &data, int64_t start, bool dir)
 {
 	if(start == -1)
 	{
 		for(int j = 0; j<way.n_nd_id; j++)
 			data.append(way.nd_id[j]);
-		return m_border[way.id].second;
 		m_used[way.id] = 1;
+		return data.last();
 	}
 	for(auto i = m_border.cbegin(), end = m_border.cend(); i != end; ++i)
 	{
