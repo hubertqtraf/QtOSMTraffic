@@ -90,6 +90,7 @@ private:
 	uint64_t getPlacement(const QString & value);
 
 	bool setRel2Face(Rel_t & rel, QVector<TrMapFace *> & face_list);
+	bool setRel2Face2(Rel_t & rel, QVector<TrMapFace *> & face_list);
 	bool appendFacePoint(uint64_t id, TrMapFace & face);
 	bool appendMultiWayPoint(Way_t & way, QVector<QVector<uint64_t>> & rings);
 

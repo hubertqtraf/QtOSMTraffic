@@ -271,9 +271,62 @@ bool TrImportOsmStream::appendMultiWayPoint(Way_t & way, QVector<QVector<uint64_
 	return false;
 }
 
+bool TrImportOsmStream::setRel2Face2(Rel_t & rel, QVector<TrMapFace *> & face_list)
+{
+	Relation test_rel;
+	for(uint32_t i = 0; i< rel.r_count; i++)
+	{
+		if(rel.members[i].flags & (REL_MEM_ROLE_OUT | REL_MEM_ROLE_IN))
+		{
+			if(m_waylist.contains(rel.members[i].id))
+			{
+				if(!test_rel.testRing(m_waylist[rel.members[i].id]))
+				{
+				}
+			}
+		}
+	}
+	int64_t start = -1;
+	int64_t w_key = -1;
+	QVector<int64_t> data;
+
+	for(uint32_t i = 0; i< rel.r_count; i++)
+	{
+		w_key = rel.members[i].id;
+		if(rel.members[i].flags & (REL_MEM_ROLE_OUT | REL_MEM_ROLE_IN))
+		{
+			if(m_waylist.contains(rel.members[i].id))
+			{
+				bool dir = test_rel.selectRingData(w_key, start);
+				if(w_key > 0)
+					start = test_rel.fillRingData(m_waylist[w_key], data, start, dir);
+				if(data.size() && (data.first() == data.last()))
+				{
+					TrMapFace * face = new TrMapFace;
+					face->appendPolygon(0);
+					for(int j = 0; j<data.size(); j++)
+					{
+						appendFacePoint(data[j], *face);
+					}
+					uint64_t type = (rel.flags & 0x0000000000f00000) >> 12;
+					face->setType((rel.flags & 0x000000000000000f) | type);
+					face->setDrawType((rel.flags >> 24) | 0xf000);
+					face_list.append(face);
+					data.clear();
+
+					start = -1;
+				}
+			}
+		}
+	}
+	return true;
+}
+
+
 bool TrImportOsmStream::setRel2Face(Rel_t & rel, QVector<TrMapFace *> & face_list)
 {
 	bool show = true;
+
 	QVector<QVector<uint64_t>> rings;
 	for(uint32_t i = 0; i< rel.r_count; i++)
 	{
@@ -282,6 +335,7 @@ bool TrImportOsmStream::setRel2Face(Rel_t & rel, QVector<TrMapFace *> & face_lis
 			if(m_waylist.contains(rel.members[i].id))
 			{
 				Way_t way = m_waylist[rel.members[i].id];
+
 				// one way -> closed ring
 				if(way.nd_id[0] == way.nd_id[way.n_nd_id -1])
 				{
@@ -738,8 +792,27 @@ void TrImportOsmStream::closeWay(QMap<QString, name_set> & name_map, uint64_t & 
 
 	if(m_tags.contains("placement"))
 	{
+		/*way.type &= 0xfffffffffffffff0;
+		//way.type |= 0x0008;
+		way.type |= 0x0001;*/
 		way.placement = static_cast<uint8_t>(getPlacement(m_tags["placement"]));
 		//TR_INF << HEX << "Placement" << way.placement << m_tags["placement"] << way.type;
+		/*if(way.placement & 0x02)
+		{
+			way.type &= 0xfffffffffffffff0;
+			way.type |= 0x0007;
+		}
+		if(way.placement & 0x01)
+		{
+			way.type &= 0xfffffffffffffff0;
+			way.type |= 0x0008;
+		}*/
+	}
+	if(m_tags.contains("placement:forward"))
+	{
+		way.placement = static_cast<uint8_t>(getPlacement(m_tags["placement:forward"]));
+		way.type &= 0xfffffffffffffff0;
+		way.type |= 0x0008;
 	}
 
 	if(m_tags.contains("junction"))
@@ -845,6 +918,13 @@ void TrImportOsmStream::closeOsm(World_t & world)
 		//memcpy(world.ways + (index * sizeof(Way_t)), &way, sizeof(Way_t));
 		world.ways[index].id = way.id;
 		world.ways[index].type = way.type;
+		/*if(way.n_nd_id)
+		{
+			world.ways[index].nd_id = (uint64_t*)malloc(sizeof(uint64_t) * way.n_nd_id);
+			memcpy(world.ways[index].nd_id, way.nd_id, sizeof(uint64_t) * way.n_nd_id);
+			free(way.nd_id);
+			way.nd_id = nullptr;
+		}*/
 		world.ways[index].nd_id = way.nd_id;
 		world.ways[index].n_nd_id = way.n_nd_id;
 		world.ways[index].lanes = way.lanes;
@@ -897,7 +977,8 @@ void TrImportOsmStream::addRelation(const Relation & rel)
 	Rel_t crel;
 	crel.flags = rel.m_flags;
 	crel.r_count = static_cast<uint>(rel.m_members.size());
-	crel.id = 0;
+	crel.id = rel.m_id;
+
 	if((crel.members = (RelMember_t *)malloc(sizeof(RelMember_t) * crel.r_count)) == nullptr)
 		return;
 	for(size_t i = 0; i<crel.r_count; i++)
@@ -1035,6 +1116,7 @@ uint64_t TrImportOsmStream::getLanes()
 	return ret;
 }
 
+// v='right_of:1'
 uint64_t TrImportOsmStream::getPlacement(const QString & value)
 {
 	uint64_t ret = 0L;
