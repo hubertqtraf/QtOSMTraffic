@@ -76,10 +76,10 @@ bool Relation::testRing(Way_t & way)
 {
 	if(way.n_nd_id < 1)
 		return false;
-	if(way.nd_id[0] == way.nd_id[way.n_nd_id-1])
-		return false;
 	m_border[way.id].first  = way.nd_id[0];
 	m_border[way.id].second = way.nd_id[way.n_nd_id-1];
+	if(way.nd_id[0] == way.nd_id[way.n_nd_id-1])
+		return false;
 	m_used[way.id] = 0;
 	return true;
 }

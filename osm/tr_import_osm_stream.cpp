@@ -271,6 +271,22 @@ bool TrImportOsmStream::appendMultiWayPoint(Way_t & way, QVector<QVector<uint64_
 	return false;
 }
 
+TrMapFace *  TrImportOsmStream::createFaceByReal(QVector<int64_t> &data, Rel_t & rel, int64_t id)
+{
+	TrMapFace * face = new TrMapFace;
+	face->appendPolygon(0);
+	for(int j = 0; j<data.size(); j++)
+	{
+		appendFacePoint(data[j], *face);
+	}
+	uint64_t type = (rel.flags & 0x0000000000f00000) >> 12;
+	face->setType((rel.flags & 0x000000000000000f) | type);
+	face->setDrawType((rel.flags >> 24) | 0xf000);
+	//face_list.append(face);
+	data.clear();
+	return face;
+}
+
 bool TrImportOsmStream::setRel2Face2(Rel_t & rel, QVector<TrMapFace *> & face_list)
 {
 	Relation test_rel;
@@ -300,20 +316,16 @@ bool TrImportOsmStream::setRel2Face2(Rel_t & rel, QVector<TrMapFace *> & face_li
 				bool dir = test_rel.selectRingData(w_key, start);
 				if(w_key > 0)
 					start = test_rel.fillRingData(m_waylist[w_key], data, start, dir);
+				if((start == -1) && (data.size()))
+				{
+					// TODO: getRelationOption
+					TrMapFace * face = createFaceByReal(data, rel, 0);
+					face_list.append(face);
+				}
 				if(data.size() && (data.first() == data.last()))
 				{
-					TrMapFace * face = new TrMapFace;
-					face->appendPolygon(0);
-					for(int j = 0; j<data.size(); j++)
-					{
-						appendFacePoint(data[j], *face);
-					}
-					uint64_t type = (rel.flags & 0x0000000000f00000) >> 12;
-					face->setType((rel.flags & 0x000000000000000f) | type);
-					face->setDrawType((rel.flags >> 24) | 0xf000);
+					TrMapFace * face = createFaceByReal(data, rel, 0);
 					face_list.append(face);
-					data.clear();
-
 					start = -1;
 				}
 			}

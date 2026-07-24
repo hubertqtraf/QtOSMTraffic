@@ -114,6 +114,8 @@ public:
 	QString errorString() const;
 
 	void addPoiFromWay(QMap<QString, name_set> &name_map, uint64_t &act_id, QMap<uint64_t, QString> &n_map, uint64_t id);
+	TrMapFace *createFaceByReal(QVector<int64_t> &data, Rel_t &rel, int64_t id);
+
 signals:
 	void valueBarChanged(int val);
 };
