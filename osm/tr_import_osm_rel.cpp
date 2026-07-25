@@ -107,7 +107,7 @@ bool Relation::selectRingData(int64_t & w_key, int64_t start)
 			}
 		}
 	}
-	return -1;
+	return false;
 }
 
 
