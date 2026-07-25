@@ -287,7 +287,7 @@ TrMapFace *  TrImportOsmStream::createFaceByReal(QVector<int64_t> &data, Rel_t &
 	return face;
 }
 
-bool TrImportOsmStream::setRel2Face2(Rel_t & rel, QVector<TrMapFace *> & face_list)
+bool TrImportOsmStream::setRel2Face(Rel_t  & rel, QVector<TrMapFace *> & face_list)
 {
 	Relation test_rel;
 	for(uint32_t i = 0; i< rel.r_count; i++)
@@ -316,6 +316,13 @@ bool TrImportOsmStream::setRel2Face2(Rel_t & rel, QVector<TrMapFace *> & face_li
 				bool dir = test_rel.selectRingData(w_key, start);
 				if(w_key > 0)
 					start = test_rel.fillRingData(m_waylist[w_key], data, start, dir);
+				if(test_rel.m_border.size() == 1)
+				{
+					// TODO: getRelationOption
+					TrMapFace * face = createFaceByReal(data, rel, 0);
+					face_list.append(face);
+					return true;
+				}
 				if((start == -1) && (data.size()))
 				{
 					// TODO: getRelationOption
@@ -335,7 +342,7 @@ bool TrImportOsmStream::setRel2Face2(Rel_t & rel, QVector<TrMapFace *> & face_li
 }
 
 
-bool TrImportOsmStream::setRel2Face(Rel_t & rel, QVector<TrMapFace *> & face_list)
+bool TrImportOsmStream::setRel2Face2(Rel_t & rel, QVector<TrMapFace *> & face_list)
 {
 	bool show = true;
 
@@ -744,6 +751,12 @@ void TrImportOsmStream::closeWay(QMap<QString, name_set> & name_map, uint64_t & 
 			if(m_tags.contains("name"))
 				addPoiFromWay(name_map, act_id, n_map, way.type);
 		}
+	}
+
+	if(m_tags.contains("building:part"))
+	{
+		uint64_t code = TrImportOsmRel::getBuildingClass(m_tags["building:part"]);
+		way.type = TYPE_BUILDING | code;
 	}
 
 	if(m_tags.contains("landuse"))
