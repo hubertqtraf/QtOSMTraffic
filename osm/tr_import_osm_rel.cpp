@@ -637,6 +637,8 @@ uint64_t TrImportOsmRel::getRailwayPointClass(const QString & value)
 		return 1;
 	if(value == "buffer_stop")
 		return 1;
+	if(value == "halt")
+		return (8 | FLAG_FEATURE_NODE | TYPE_RAIL);
 	if(value == "stop")
 		return (8 | FLAG_FEATURE_NODE | TYPE_RAIL);
 	if(value == "tram_stop")

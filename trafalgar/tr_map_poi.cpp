@@ -401,6 +401,15 @@ void TrMapPoi::draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mode
 		{
 			m_symbol->draw(zoom_ref, p, 3);
 		}
+		else
+		{
+			// defaults to stop/halt/... with no name
+			if(!m_name.size())
+			{
+				p->drawEllipse(static_cast <int>(screen.x-3),
+					static_cast <int>(screen.y-3), 6, 6);
+			}
+		}
 	}
 
 	if(m_name.size())
