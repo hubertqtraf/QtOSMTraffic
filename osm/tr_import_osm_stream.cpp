@@ -570,15 +570,11 @@ void TrImportOsmStream::closeNode(QMap<QString, name_set> & name_map,
 
 	if(m_tags.contains("name"))
 	{
+		// TODO: double use: n_map <> name_map
+		n_map[point.id] = m_tags["name"];
 		if(addName(name_map, m_tags["name"], act_id))
 		{
-			n_map[point.id] = m_tags["name"];
 			act_id++;
-		}
-		else
-		{
-			// ???
-			point.id = name_map[m_tags["name"]].id;
 		}
 	}
 
