@@ -64,8 +64,8 @@ TrMapPoi::TrMapPoi()
 
 TrMapPoi::~TrMapPoi()
 {
-    if(m_symbol != nullptr)
-        delete m_symbol;
+	if(m_symbol != nullptr)
+		delete m_symbol;
 }
 
 QDebug operator<<(QDebug dbg, const TrMapPoi & poi)
@@ -277,8 +277,27 @@ bool TrMapPoi::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject * bas
 
 			m_symbol = createSymbolData(zoom_ref, *res);
 		}
-		if((m_poi_flags & 0x000000000000000f) == 1)
+		if(((m_poi_flags & 0x000000000000000f) == 1) && (m_symbol == nullptr))
 		{
+			QVector<TrPoint> res[5];
+			TrPoint base = getPoint();
+			base.x = base.x + 1.0;
+			base.y = base.y + 1.0;
+			res->append(base);
+			base.x = base.x - 2.0;
+			base.y = base.y - 2.0;
+			res->append(base);
+			base = getPoint();
+			res->append(base);
+			base.x = base.x + 1.0;
+			base.y = base.y - 1.0;
+			res->append(base);
+			base.x = base.x - 2.0;
+			base.y = base.y + 2.0;
+			res->append(base);
+			m_symbol = createSymbolData(zoom_ref, *res);
+		}
+		if((m_poi_flags & TYPE_RAIL) && ((m_poi_flags & 0x000000000000000f) == 8) && (m_symbol == nullptr)) 		{
 			QVector<TrPoint> res[5];
 			TrPoint base = getPoint();
 			base.x = base.x + 1.0;
@@ -353,7 +372,7 @@ void TrMapPoi::draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mode
 		// TODO: check point draw...
 		if(TR_MASK_POINTS_NUM & s_mask)
 			p->drawStaticText(static_cast <int>(screen.x),
-                              static_cast <int>(screen.y+7), QStaticText(text));
+							  static_cast <int>(screen.y+7), QStaticText(text));
 		return;
 	}
 	if(m_poi_flags & TYPE_POI_P_PARKING)
