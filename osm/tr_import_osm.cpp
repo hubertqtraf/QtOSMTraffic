@@ -54,6 +54,8 @@
 #include <tr_map_net.h>
 
 #ifndef OSM_C_FILTER
+uint64_t TrImportOsm::s_osm_filter_mask = OSM_MASK_FILTER_REL;
+
 int inline findNode(Point_t * nodes, int n_node, uint64_t idx)
 {
 	int pos1 = 0;

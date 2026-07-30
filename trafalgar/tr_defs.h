@@ -38,8 +38,6 @@
 #ifndef TR_DEFS_H
 #define TR_DEFS_H
 
-#include <stdint.h>
-
 #include <QtCore/qdebug.h>
 #include <QtCore/qloggingcategory.h>
 

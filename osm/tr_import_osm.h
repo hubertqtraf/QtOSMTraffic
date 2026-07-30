@@ -41,6 +41,8 @@
 #include <tr_map_list.h>
 #ifdef OSM_C_FILTER
 #include "Itr_import_layer.h"
+#else
+#define OSM_MASK_FILTER_REL 0x0000020000000000U
 #endif
 
 #include <tr_map_net.h>
@@ -108,6 +110,10 @@ protected:
 
 public:
 	TrImportOsm();
+
+#ifndef OSM_C_FILTER
+	static uint64_t s_osm_filter_mask;
+#endif
 
 	virtual ~TrImportOsm();
 

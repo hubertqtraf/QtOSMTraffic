@@ -24,6 +24,8 @@
 #include "ui_fileoptions.h"
 
 #include <tr_defs.h>
+#include <tr_import_osm.h>
+
 #include <tr_map_link_road.h>
 
 #include <QFileDialog>
@@ -39,6 +41,7 @@ FileOptions::FileOptions(QWidget *parent) :
 	ui->setupUi(this);
 
 	ui->laneSpinBox->setValue(TrMapLinkRoad::ms_lane_width_p);
+	ui->relCheck->setChecked(true);
 }
 
 FileOptions::~FileOptions()
@@ -217,4 +220,12 @@ void FileOptions::on_buttonBox_accepted()
 void FileOptions::on_buttonBox_rejected()
 {
 	ui->laneSpinBox->setValue(TrMapLinkRoad::ms_lane_width_p);
+}
+
+void FileOptions::on_relCheck_clicked()
+{
+	if(ui->relCheck->isChecked())
+		TrImportOsm::s_osm_filter_mask |= OSM_MASK_FILTER_REL;
+	else
+		TrImportOsm::s_osm_filter_mask &= ~OSM_MASK_FILTER_REL;
 }

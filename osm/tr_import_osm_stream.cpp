@@ -38,7 +38,7 @@
 #include "osm_load_rel.h"
 
 #include "tr_import_osm_stream.h"
-
+#include "tr_import_osm.h"
 #include <tr_prof_class_def.h>
 
 #include <QtCore/qfile.h>
@@ -316,18 +316,21 @@ bool TrImportOsmStream::setRel2Face(Rel_t  & rel, QVector<TrMapFace *> & face_li
 				bool dir = test_rel.selectRingData(w_key, start);
 				if(w_key > 0)
 					start = test_rel.fillRingData(m_waylist[w_key], data, start, dir);
-				if(test_rel.m_border.size() == 1)
+				if(TrImportOsm::s_osm_filter_mask & OSM_MASK_FILTER_REL)
 				{
-					// TODO: getRelationOption
-					TrMapFace * face = createFaceByReal(data, rel, 0);
-					face_list.append(face);
-					return true;
-				}
-				if((start == -1) && (data.size()))
-				{
-					// TODO: getRelationOption
-					TrMapFace * face = createFaceByReal(data, rel, 0);
-					face_list.append(face);
+					if(test_rel.m_border.size() == 1)
+					{
+						// TODO: getRelationOption
+						TrMapFace * face = createFaceByReal(data, rel, 0);
+						face_list.append(face);
+						return true;
+					}
+					if((start == -1) && (data.size()))
+					{
+						// TODO: getRelationOption
+						TrMapFace * face = createFaceByReal(data, rel, 0);
+						face_list.append(face);
+					}
 				}
 				if(data.size() && (data.first() == data.last()))
 				{

@@ -60,6 +60,8 @@ private slots:
 
 	void on_buttonBox_rejected();
 
+	void on_relCheck_clicked();
+
 private:
 	Ui::FileOptions *ui;
 
