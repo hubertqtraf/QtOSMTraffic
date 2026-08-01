@@ -31,6 +31,7 @@ SOURCES += \
     UI/nodestype.cpp \
     UI/parkingdlg.cpp \
     UI/ruler.cpp \
+    UI/tilewidget.cpp \
     UI/tr_progess_thread.cpp \
     geo/geo_base.cpp \
     geo/geo_globe.cpp \
@@ -81,6 +82,7 @@ HEADERS += \
     UI/nodestype.h \
     UI/parkingdlg.h \
     UI/ruler.h \
+    UI/tilewidget.h \
     UI/tr_progess_thread.h \
     geo/geo_base.h \
     geo/geo_errno.h \
