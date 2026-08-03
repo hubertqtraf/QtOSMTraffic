@@ -1,12 +1,36 @@
+/******************************************************************
+ * project:	OSM Traffic
+ *
+ * (C)		Schmid Hubert 2026-2026
+ ******************************************************************/
+
+/*
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, see
+ * <https://www.gnu.org/licenses/>.
+ */
+
 #include "tilewidget.h"
 
 #include <qapplication.h>
+#include <qdir.h>
 #include <qpainter.h>
 
 
 TileWidget::TileWidget(QWidget *parent)
 	: QWidget{parent}
 	, m_level(1)
+	, m_rect{400.0, 400.0, 400,0, 400,0}
 {
 	//TR_INF << "! " << size();
 	resize(1,1);
@@ -41,6 +65,82 @@ double TileWidget::tileY2Lat(int y)
 	return lat_rad * 180.0 / M_PI;
 }
 
+void TileWidget::setBasePath(const QString &path)
+{
+	m_path = path;
+}
+
+bool TileWidget::createDir(const QString & path)
+{
+	QDir dir(path);
+	if(dir.exists())
+	{
+		return true;
+	}
+	if(dir.mkdir(path) == false)
+	{
+		qWarning("Cannot craete directory");
+		return false;
+	}
+	return true;
+}
+
+QString TileWidget::getPath(QVector<int> & data)
+{
+	QString path;
+
+	int tile_x = 0;
+	int tile_y = 0;
+	//if(!getTileCoor(false, tile_x, tile_y))
+	//        return path;
+
+	// TODO: param for dir
+	path = m_path +
+				QString::number(m_level) + "/" +
+				QString::number(tile_x) + "/" +
+				//QString::number(tile_y-1) + ".png";
+				QString::number(tile_y) + ".png";
+
+	/*data.clear();
+	data.append(m_level);
+	data.append(tile_x);
+	data.append(tile_y);*/
+	TR_INF << path;
+
+	return path;
+}
+
+bool TileWidget::setLavelPathCoor(double lon, double lat)
+{
+	return setLavelPath(lon2TileX(lon), lat2TileY(lat));
+}
+
+QString TileWidget::getCoorPath(double lon, double lat)
+{
+	int x = lon2TileX(lon);
+	int y = lat2TileY(lat);
+	return m_path + QString::number(m_level) + "/" +
+					QString::number(x) + "/" +
+					QString::number(y) + ".png";
+}
+
+bool TileWidget::setLavelPath(int x, int y)
+{
+	QString path = m_path + QString::number(m_level) + "/";
+
+	if(createDir(path) == false)
+		return false;
+	path.append(QString::number(x) + "/");
+	if(createDir(path) == false)
+		return false;
+	return true;
+}
+
+void TileWidget::setRect(const QVector<double> &rect)
+{
+	m_rect = rect;
+}
+
 void TileWidget::recalcExtRect()
 {
 	if(m_doc == nullptr)
@@ -53,8 +153,9 @@ void TileWidget::recalcExtRect()
 	m_doc->setSurroundingRect();
 
 	m_level = 19;
-	int x = lon2TileX(11.111);
-	int y = lat2TileY(22.222);
+	int x = lon2TileX(m_rect[0]);
+	int y = lat2TileY(m_rect[2]);
+	//TR_INF << m_rect[0] << m_rect[2] << x << y;
 	double lon1 = tileX2Lon(x);
 	double lat1 = tileY2Lat(y);
 	x+=1;
@@ -77,6 +178,7 @@ void TileWidget::paint(QPainter *p)
 			m_doc->draw(m_zoom_ref, p, 0);
 	}
 	p->drawRect(0,0, 257, 257);
+	// TODO -> send signal?
 }
 
 void TileWidget::createPngImage(QImage & image)

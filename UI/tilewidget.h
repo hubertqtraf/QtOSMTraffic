@@ -1,3 +1,25 @@
+/******************************************************************
+ * project:	OSM Traffic
+ *
+ * (C)		Schmid Hubert 2026-2026
+ ******************************************************************/
+
+/*
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, see
+ * <https://www.gnu.org/licenses/>.
+ */
+
 #ifndef TILEWIDGET_H
 #define TILEWIDGET_H
 
@@ -12,6 +34,10 @@ private:
 	TrDocument *m_doc;
 	TrZoomMap m_zoom_ref;
 	int m_level;
+	QString m_path;
+	QVector<double> m_rect;
+
+	bool createDir(const QString &path);
 
 public:
 	explicit TileWidget(QWidget *parent = nullptr);
@@ -22,12 +48,20 @@ public:
 	double tileY2Lat(int y);
 
 	void setDocument(TrDocument * doc);
+	void setRect(const QVector<double> &rect);
+
+	void setBasePath(const QString & path);
+	QString getPath(QVector<int> & data);
+	QString getCoorPath(double lon, double lat);
+	bool setLavelPathCoor(double lon, double lat);
+	bool setLavelPath(int x, int y);
 
 	void recalcExtRect();
 	void createPngImage(QImage &image);
 	virtual void paint(QPainter * p);
-signals:
 
+signals:
+	// TODO: signal draw->rsizee
 };
 
 #endif // TILEWIDGET_H
