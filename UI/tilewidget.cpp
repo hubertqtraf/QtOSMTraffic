@@ -115,13 +115,16 @@ bool TileWidget::setLavelPathCoor(double lon, double lat)
 	return setLavelPath(lon2TileX(lon), lat2TileY(lat));
 }
 
+QString TileWidget::getTilePath(int x, int y)
+{
+	return m_path + QString::number(m_level) + "/" +
+			QString::number(x) + "/" +
+			QString::number(y) + ".png";
+}
+
 QString TileWidget::getCoorPath(double lon, double lat)
 {
-	int x = lon2TileX(lon);
-	int y = lat2TileY(lat);
-	return m_path + QString::number(m_level) + "/" +
-					QString::number(x) + "/" +
-					QString::number(y) + ".png";
+	return getTilePath(lon2TileX(lon), lat2TileY(lat));
 }
 
 bool TileWidget::setLavelPath(int x, int y)
@@ -141,6 +144,21 @@ void TileWidget::setRect(const QVector<double> &rect)
 	m_rect = rect;
 }
 
+void TileWidget::recalcExtRect(int x, int y)
+{
+	m_level = 15;
+
+	double lon1 = tileX2Lon(x);
+	double lat1 = tileY2Lat(y);
+	x+=1;
+	y-=1;
+	double lon2 = tileX2Lon(x);
+	double lat2 = tileY2Lat(y);
+	m_zoom_ref.setVisibleWorld(lon1 * 100000, lat1 * 100000, lon2 * 100000, lat2 * 100000);
+	m_zoom_ref.zoom2Rect();
+	update();
+}
+
 void TileWidget::recalcExtRect()
 {
 	if(m_doc == nullptr)
@@ -152,7 +170,7 @@ void TileWidget::recalcExtRect()
 
 	m_doc->setSurroundingRect();
 
-	m_level = 19;
+	m_level = 17;
 	int x = lon2TileX(m_rect[0]);
 	int y = lat2TileY(m_rect[2]);
 	//TR_INF << m_rect[0] << m_rect[2] << x << y;
@@ -172,12 +190,14 @@ void TileWidget::recalcExtRect()
 
 void TileWidget::paint(QPainter *p)
 {
+
 	if(m_doc != nullptr)
 	{
 		if(m_doc->m_is_loaded)
 			m_doc->draw(m_zoom_ref, p, 0);
 	}
 	p->drawRect(0,0, 257, 257);
+
 	// TODO -> send signal?
 }
 
@@ -190,4 +210,12 @@ void TileWidget::createPngImage(QImage & image)
 
 	render(&painter);
 	painter.end();
+}
+
+void TileWidget::createPngImageByPath(const QString &path)
+{
+	QImage img(256, 256, QImage::Format_ARGB32);
+	//img.save(tile->getCoorPath(11.5902, 48.1355), nullptr, -1);
+	createPngImage(img);
+	img.save(path);
 }
