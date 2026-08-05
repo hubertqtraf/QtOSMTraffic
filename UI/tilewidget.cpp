@@ -30,6 +30,8 @@
 TileWidget::TileWidget(QWidget *parent)
 	: QWidget{parent}
 	, m_level(1)
+	, m_x(0)
+	, m_y(0)
 	, m_rect{400.0, 400.0, 400,0, 400,0}
 {
 	//TR_INF << "! " << size();
@@ -144,9 +146,20 @@ void TileWidget::setRect(const QVector<double> &rect)
 	m_rect = rect;
 }
 
+QVector<double> TileWidget::getRect()
+{
+	return 	m_rect;
+}
+
+void TileWidget::setLevel(int level)
+{
+	m_level = level;
+}
+
 void TileWidget::recalcExtRect(int x, int y)
 {
-	m_level = 15;
+	m_x = x;
+	m_y = y;
 
 	double lon1 = tileX2Lon(x);
 	double lat1 = tileY2Lat(y);
@@ -156,7 +169,8 @@ void TileWidget::recalcExtRect(int x, int y)
 	double lat2 = tileY2Lat(y);
 	m_zoom_ref.setVisibleWorld(lon1 * 100000, lat1 * 100000, lon2 * 100000, lat2 * 100000);
 	m_zoom_ref.zoom2Rect();
-	update();
+	//update();
+	//emit posChanged(m_x, m_y);
 }
 
 void TileWidget::recalcExtRect()
@@ -170,10 +184,9 @@ void TileWidget::recalcExtRect()
 
 	m_doc->setSurroundingRect();
 
-	m_level = 17;
 	int x = lon2TileX(m_rect[0]);
-	int y = lat2TileY(m_rect[2]);
-	//TR_INF << m_rect[0] << m_rect[2] << x << y;
+	int y = lat2TileY(m_rect[3]);
+	//TR_INF << m_rect[0] << m_rect[3] << x << y;
 	double lon1 = tileX2Lon(x);
 	double lat1 = tileY2Lat(y);
 	x+=1;
@@ -183,6 +196,7 @@ void TileWidget::recalcExtRect()
 	m_zoom_ref.setVisibleWorld(lon1 * 100000, lat1 * 100000, lon2 * 100000, lat2 * 100000);
 	m_zoom_ref.zoom2Rect();
 	update();
+	//emit posChanged(m_x, m_y);
 	//TR_MSG << m_doc->getSurroundRectVal(0) << m_doc->getSurroundRectVal(1) <<
 	//	m_doc->getSurroundRectVal(2) << m_doc->getSurroundRectVal(3);
 }
@@ -198,7 +212,7 @@ void TileWidget::paint(QPainter *p)
 	}
 	p->drawRect(0,0, 257, 257);
 
-	// TODO -> send signal?
+	emit posChanged(m_x, m_y);
 }
 
 void TileWidget::createPngImage(QImage & image)

@@ -34,6 +34,8 @@ private:
 	TrDocument *m_doc;
 	TrZoomMap m_zoom_ref;
 	int m_level;
+	int m_x;
+	int m_y;
 	QString m_path;
 	QVector<double> m_rect;
 
@@ -49,6 +51,8 @@ public:
 
 	void setDocument(TrDocument * doc);
 	void setRect(const QVector<double> &rect);
+	QVector<double> getRect();
+	void setLevel(int level);
 
 	void setBasePath(const QString & path);
 	QString getPath(QVector<int> & data);
@@ -65,7 +69,7 @@ public:
 	void createPngImageByPath(const QString &path);
 
 signals:
-	// TODO: signal draw->rsizee
+	void posChanged(int x, int y);
 };
 
 #endif // TILEWIDGET_H
