@@ -33,7 +33,9 @@ TileWidget::TileWidget(QWidget *parent)
 	, m_x(0)
 	, m_y(0)
 	, m_rect{400.0, 400.0, 400,0, 400,0}
+	, m_move(false)
 {
+	m_zoom_ref.setScreenDimension(256,256);
 	//TR_INF << "! " << size();
 	resize(1,1);
 }
@@ -170,40 +172,17 @@ void TileWidget::recalcExtRect(int x, int y)
 	m_zoom_ref.setVisibleWorld(lon1 * 100000, lat1 * 100000, lon2 * 100000, lat2 * 100000);
 	m_zoom_ref.zoom2Rect();
 	//update();
-	//emit posChanged(m_x, m_y);
+	emit posChanged(m_x, m_y);
 }
 
 void TileWidget::recalcExtRect()
 {
-	if(m_doc == nullptr)
-		return;
-	TR_MSG << QString::number(m_doc->getSurroundRectVal(0),'f', 2) <<
-		QString::number(m_doc->getSurroundRectVal(1),'f', 2) <<
-		QString::number(m_doc->getSurroundRectVal(2),'f', 2) <<
-		QString::number(m_doc->getSurroundRectVal(3),'f', 2); // << "edit_objects" << m_layerMap.size();
-
-	m_doc->setSurroundingRect();
-
-	int x = lon2TileX(m_rect[0]);
-	int y = lat2TileY(m_rect[3]);
-	//TR_INF << m_rect[0] << m_rect[3] << x << y;
-	double lon1 = tileX2Lon(x);
-	double lat1 = tileY2Lat(y);
-	x+=1;
-	y-=1;
-	double lon2 = tileX2Lon(x);
-	double lat2 = tileY2Lat(y);
-	m_zoom_ref.setVisibleWorld(lon1 * 100000, lat1 * 100000, lon2 * 100000, lat2 * 100000);
-	m_zoom_ref.zoom2Rect();
-	update();
-	//emit posChanged(m_x, m_y);
-	//TR_MSG << m_doc->getSurroundRectVal(0) << m_doc->getSurroundRectVal(1) <<
-	//	m_doc->getSurroundRectVal(2) << m_doc->getSurroundRectVal(3);
 }
-
 
 void TileWidget::paint(QPainter *p)
 {
+	p->setBrush(QBrush(QColor(100,100,100)));
+	p->drawRect(0,0, 257, 257);
 
 	if(m_doc != nullptr)
 	{
@@ -212,7 +191,7 @@ void TileWidget::paint(QPainter *p)
 	}
 	p->drawRect(0,0, 257, 257);
 
-	emit posChanged(m_x, m_y);
+	//emit posChanged(m_x, m_y);
 }
 
 void TileWidget::createPngImage(QImage & image)

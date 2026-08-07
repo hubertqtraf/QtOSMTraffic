@@ -44,6 +44,8 @@ private:
 public:
 	explicit TileWidget(QWidget *parent = nullptr);
 
+	bool m_move;
+
 	int lon2TileX(double lon);
 	int lat2TileY(double lat);
 	double tileX2Lon(int x);
