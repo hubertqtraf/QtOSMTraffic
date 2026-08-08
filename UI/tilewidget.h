@@ -36,6 +36,7 @@ private:
 	int m_level;
 	int m_x;
 	int m_y;
+	int m_start_x;
 	QString m_path;
 	QVector<double> m_rect;
 
@@ -55,6 +56,7 @@ public:
 	void setRect(const QVector<double> &rect);
 	QVector<double> getRect();
 	void setLevel(int level);
+	bool resetX(int &x, int &y);
 
 	void setBasePath(const QString & path);
 	QString getPath(QVector<int> & data);

@@ -32,6 +32,7 @@ TileWidget::TileWidget(QWidget *parent)
 	, m_level(1)
 	, m_x(0)
 	, m_y(0)
+	, m_start_x(0)
 	, m_rect{400.0, 400.0, 400,0, 400,0}
 	, m_move(false)
 {
@@ -114,6 +115,21 @@ QString TileWidget::getPath(QVector<int> & data)
 	return path;
 }
 
+bool TileWidget::resetX(int &x, int &y)
+{
+	int limit_y = lat2TileY(m_rect[3]); //m_tile->getRect().at(3));
+	if(y <= limit_y)
+	{
+		TR_INF << "limit Y" << limit_y; //<< y;
+		m_x++;
+		x = m_x;
+		m_y = lat2TileY(m_rect[2]);
+		y = m_y;
+		return true;
+	}
+	return false;
+}
+
 bool TileWidget::setLavelPathCoor(double lon, double lat)
 {
 	return setLavelPath(lon2TileX(lon), lat2TileY(lat));
@@ -146,6 +162,8 @@ bool TileWidget::setLavelPath(int x, int y)
 void TileWidget::setRect(const QVector<double> &rect)
 {
 	m_rect = rect;
+	m_x = lon2TileX(m_rect[1]);
+	m_y = lat2TileY(m_rect[2]);
 }
 
 QVector<double> TileWidget::getRect()

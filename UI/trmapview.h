@@ -29,6 +29,7 @@
 #include "trlinkdock.h"
 #include "ruler.h"
 #include "tr_progess_thread.h"
+#include "tilewidget.h"
 //#include <QSvgGenerator>
 #include <QDockWidget>
 #include <QWidget>
@@ -61,6 +62,7 @@ private:
 
 	TrProgress * m_fileProgress;
 	Ruler * m_ruler;
+	TileWidget * m_tile;
 
 protected:
 	void resizeEvent(QResizeEvent *);
@@ -70,6 +72,7 @@ public:
 	~TrMapView();
 
 	TrDocument & getDocument();
+	TileWidget *getTile();
 
 	void initObjects(uint64_t ctrl);
 
@@ -107,11 +110,15 @@ public:
 
 	void connectListToNet();
 
+	void createPngImage(QImage &image);
+
 public slots:
 	void on_handleResults(const TrGeoObject **obj);
 
 	/** react on on key */
 	void on_Key(QKeyEvent* key);
+
+	void on_nextTile(int x, int y);
 
 signals:
 	void sendMessage(const QString, int);

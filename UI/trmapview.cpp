@@ -54,6 +54,11 @@ TrMapView::TrMapView(QWidget *parent)
 	//m_fileProgress = new TrProgress();
 
 	m_ruler = new Ruler(this);
+	m_tile = new TileWidget(this);
+	m_tile->setDocument(&m_doc);
+	//m_tile->setBasePath("path-to/tiles");
+
+	connect(m_tile, &TileWidget::posChanged, this, &TrMapView::on_nextTile);
 
 	setMouseTracking(true);
 }
@@ -71,6 +76,11 @@ TrMapView::~TrMapView()
 TrDocument &TrMapView::getDocument()
 {
 	return m_doc;
+}
+
+TileWidget * TrMapView::getTile()
+{
+	return m_tile;
 }
 
 void TrMapView::setSettingsData(QStringList modes, QStringList layers)
@@ -129,6 +139,7 @@ void TrMapView::paint(QPainter *p)
 		p->setFont(QFont("Arial", 30));
 		p->drawText(rect(), Qt::AlignCenter, "Load a OSM Document");
 	}
+	m_tile->paint(p);
 }
 
 /*void TrMapView::paintSvg(QSvgGenerator & generator)
@@ -141,6 +152,7 @@ void TrMapView::paint(QPainter *p)
 
 void TrMapView::recalcExtRect()
 {
+
 	TR_MSG << QString::number(m_doc.getSurroundRectVal(0),'f', 2) <<
 		QString::number(m_doc.getSurroundRectVal(1),'f', 2) <<
 		QString::number(m_doc.getSurroundRectVal(2),'f', 2) <<
@@ -157,6 +169,7 @@ void TrMapView::recalcExtRect()
 	update();
 	TR_MSG << m_doc.getSurroundRectVal(0) << m_doc.getSurroundRectVal(1) <<
 		m_doc.getSurroundRectVal(2) << m_doc.getSurroundRectVal(3);
+	m_tile->recalcExtRect();
 }
 
 void TrMapView::resetZoom()
@@ -479,4 +492,40 @@ void TrMapView::on_Key(QKeyEvent *key)
 		zoomChange(true);
 	if(key->text() == "-")
 		zoomChange(false);
+}
+
+void TrMapView::createPngImage(QImage & image)
+{
+	QPainter painter;
+	painter.begin(&image);
+	painter.setRenderHint(QPainter::Antialiasing);
+	//paint(painter);
+	render(&painter);
+	painter.end();
+}
+
+void TrMapView::on_nextTile(int x, int y)
+{
+	if(m_tile->getRect().size() < 4)
+		return;
+	int limit_x = m_tile->lon2TileX(m_tile->getRect().at(1));
+	//int limit_y = m_tile->lat2TileY(m_tile->getRect().at(3));
+	//TR_INF << "+++++ " << y << limit_y << m_tile->lat2TileY(m_tile->getRect().at(3));
+
+	m_tile->m_move = true;
+
+	if(x >= limit_x)
+	{
+		TR_INF << "limit X " << limit_x << x;
+		return;
+	}
+	if(m_tile->resetX(x,y))
+	{
+	}
+	QString path = m_tile->getTilePath(x-1, y+1);
+	m_tile->setLavelPath(x-1,y+1);
+	TR_INF << path;
+	m_tile->createPngImageByPath(path);
+	--y;
+	m_tile->recalcExtRect(x, y);
 }
