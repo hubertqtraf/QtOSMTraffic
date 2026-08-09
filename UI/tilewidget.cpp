@@ -181,10 +181,11 @@ void TileWidget::recalcExtRect(int x, int y)
 	m_x = x;
 	m_y = y;
 
+	y+=1;
 	double lon1 = tileX2Lon(x);
 	double lat1 = tileY2Lat(y);
 	x+=1;
-	y-=1;
+	y+=1;
 	double lon2 = tileX2Lon(x);
 	double lat2 = tileY2Lat(y);
 	m_zoom_ref.setVisibleWorld(lon1 * 100000, lat1 * 100000, lon2 * 100000, lat2 * 100000);

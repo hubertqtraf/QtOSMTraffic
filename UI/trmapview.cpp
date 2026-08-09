@@ -56,7 +56,6 @@ TrMapView::TrMapView(QWidget *parent)
 	m_ruler = new Ruler(this);
 	m_tile = new TileWidget(this);
 	m_tile->setDocument(&m_doc);
-	//m_tile->setBasePath("path-to/tiles");
 
 	connect(m_tile, &TileWidget::posChanged, this, &TrMapView::on_nextTile);
 
@@ -494,16 +493,6 @@ void TrMapView::on_Key(QKeyEvent *key)
 		zoomChange(false);
 }
 
-void TrMapView::createPngImage(QImage & image)
-{
-	QPainter painter;
-	painter.begin(&image);
-	painter.setRenderHint(QPainter::Antialiasing);
-	//paint(painter);
-	render(&painter);
-	painter.end();
-}
-
 void TrMapView::on_nextTile(int x, int y)
 {
 	if(m_tile->getRect().size() < 4)
@@ -521,9 +510,10 @@ void TrMapView::on_nextTile(int x, int y)
 	}
 	if(m_tile->resetX(x,y))
 	{
+		this->update();
 	}
-	QString path = m_tile->getTilePath(x-1, y+1);
-	m_tile->setLavelPath(x-1,y+1);
+	QString path = m_tile->getTilePath(x, y);
+	m_tile->setLavelPath(x,y);
 	TR_INF << path;
 	m_tile->createPngImageByPath(path);
 	--y;

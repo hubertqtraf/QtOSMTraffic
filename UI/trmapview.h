@@ -110,8 +110,6 @@ public:
 
 	void connectListToNet();
 
-	void createPngImage(QImage &image);
-
 public slots:
 	void on_handleResults(const TrGeoObject **obj);
 
