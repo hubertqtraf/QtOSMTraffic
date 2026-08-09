@@ -68,7 +68,6 @@ private:
 	unsigned char flags;
 
 	QPoint m_double_click;
-	QColor m_background;
 	QFont * m_font;
 
 signals:
@@ -94,6 +93,8 @@ protected:
 
 public:
 	explicit TrCanvas(QWidget *parent = nullptr);
+
+	QColor m_background;
 
 	void setFont(QFont * font);
 	void useAntialiasing(bool enable);

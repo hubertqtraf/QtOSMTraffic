@@ -501,6 +501,7 @@ void TrMapView::on_nextTile(int x, int y)
 	//int limit_y = m_tile->lat2TileY(m_tile->getRect().at(3));
 	//TR_INF << "+++++ " << y << limit_y << m_tile->lat2TileY(m_tile->getRect().at(3));
 
+	m_tile->m_background = m_background;
 	m_tile->m_move = true;
 
 	if(x >= limit_x)
