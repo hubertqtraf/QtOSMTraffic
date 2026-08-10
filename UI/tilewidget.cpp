@@ -181,6 +181,7 @@ void TileWidget::recalcExtRect(int x, int y)
 	m_x = x;
 	m_y = y;
 
+	//TR_INF << x << y << m_move;
 	y+=1;
 	double lon1 = tileX2Lon(x);
 	double lat1 = tileY2Lat(y);
@@ -190,8 +191,8 @@ void TileWidget::recalcExtRect(int x, int y)
 	double lat2 = tileY2Lat(y);
 	m_zoom_ref.setVisibleWorld(lon1 * 100000, lat1 * 100000, lon2 * 100000, lat2 * 100000);
 	m_zoom_ref.zoom2Rect();
-	//update();
-	emit posChanged(m_x, m_y);
+	m_move = true;
+	update();
 }
 
 void TileWidget::recalcExtRect()
@@ -200,7 +201,7 @@ void TileWidget::recalcExtRect()
 
 void TileWidget::paint(QPainter *p)
 {
-	p->setBrush(QBrush(QColor(100,100,100)));
+	p->setBrush(QBrush(m_background));
 	p->drawRect(0,0, 257, 257);
 
 	if(m_doc != nullptr)
@@ -208,9 +209,13 @@ void TileWidget::paint(QPainter *p)
 		if(m_doc->m_is_loaded)
 			m_doc->draw(m_zoom_ref, p, 0);
 	}
-	p->drawRect(0,0, 257, 257);
 
-	//emit posChanged(m_x, m_y);
+	if(m_move)
+	{
+		//TR_INF << m_x << m_y;
+		m_move = false;
+		emit posChanged(m_x, m_y);
+	}
 }
 
 void TileWidget::createPngImage(QImage & image)
@@ -227,7 +232,6 @@ void TileWidget::createPngImage(QImage & image)
 void TileWidget::createPngImageByPath(const QString &path)
 {
 	QImage img(256, 256, QImage::Format_ARGB32);
-	//img.save(tile->getCoorPath(11.5902, 48.1355), nullptr, -1);
 	createPngImage(img);
 	img.save(path);
 }
