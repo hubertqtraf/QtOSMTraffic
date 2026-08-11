@@ -26,6 +26,7 @@
 #include <qdir.h>
 #include <qpainter.h>
 
+#include <math.h>
 
 TileWidget::TileWidget(QWidget *parent)
 	: QWidget{parent}
