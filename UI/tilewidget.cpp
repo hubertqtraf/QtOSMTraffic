@@ -137,7 +137,7 @@ bool TileWidget::setLavelPathCoor(double lon, double lat)
 
 QString TileWidget::getTilePath(int x, int y)
 {
-	return m_path + QString::number(m_level) + "/" +
+	return m_path + "/" + QString::number(m_level) + "/" +
 			QString::number(x) + "/" +
 			QString::number(y) + ".png";
 }
@@ -149,7 +149,7 @@ QString TileWidget::getCoorPath(double lon, double lat)
 
 bool TileWidget::setLavelPath(int x, int y)
 {
-	QString path = m_path + QString::number(m_level) + "/";
+	QString path = m_path + "/" + QString::number(m_level) + "/";
 
 	if(createDir(path) == false)
 		return false;

@@ -54,6 +54,8 @@ public:
 	void setVisibleWorld(double x1, double y1, double x2, double y2);
 	void setScreenDimension(int w, int h);
 	
+	TrPoint getVisibleWorld(bool left);
+
 	int getScreenWidth() const;
 	int getScreenHeight() const;
 	
@@ -93,6 +95,7 @@ public:
 	TrPoint getPointByAngle(const TrPoint & first_point, const TrPoint & second_point, double ang) const;
 
 	double getSegmentClosest(poly_add * orig,  TrPoint seg_point, TrPoint & pt) const;
+
 private:
 	double m_y_correction;
 	int m_screen_width;

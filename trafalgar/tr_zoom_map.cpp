@@ -96,6 +96,13 @@ int TrZoomMap::getScreenHeight() const
 	return m_screen_height;
 }
 
+TrPoint TrZoomMap::getVisibleWorld(bool left)
+{
+	if(left)
+		return m_visibleWorld[0];
+	return m_visibleWorld[1];
+}
+
 void TrZoomMap::moveToWorldRect(double dx, double dy)
 {
 	m_visibleWorld[0].x += dx;

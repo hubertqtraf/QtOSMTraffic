@@ -26,6 +26,8 @@
 
 #include <QDialog>
 
+#include <tilewidget.h>
+
 namespace Ui {
 class TileDialog;
 }
@@ -38,8 +40,18 @@ public:
 	explicit TileDialog(QWidget *parent = nullptr);
 	~TileDialog();
 
+	void setTile(TileWidget *tile);
+	void setRect(QVector<double> rect);
+
+private slots:
+	void on_BaseDirSelect_clicked();
+
+	void on_buttonBox_accepted();
+
 private:
 	Ui::TileDialog *ui;
+
+	TileWidget * m_tile;
 };
 
 #endif // TILEDIALOG_H

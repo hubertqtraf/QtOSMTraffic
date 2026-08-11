@@ -89,6 +89,7 @@ public:
 	void resetZoom();
 	void zoomChange(double value, const QPoint pt, int limit);
 	void zoomChange(bool dir);
+	QVector<double> getWorldRect();
 
 	void shiftChange(QPoint mv_pt);
 

@@ -47,6 +47,7 @@ MainWindow::MainWindow(QWidget *parent)
 	, m_profile_dlg(nullptr)
 	, m_file_options(nullptr)
 	, m_disp_option(nullptr)
+	, m_tiles_dlg(nullptr)
 	, m_nodes_type(nullptr)
 	, m_parking_dlg(nullptr)
 	, m_about(nullptr)
@@ -513,6 +514,20 @@ void MainWindow::on_actionDirectories_triggered()
 		m_file_options = new FileOptions(this);
 	}
 	m_file_options->show();
+}
+
+void MainWindow::on_actionTiles_triggered()
+{
+	if(m_tiles_dlg == nullptr)
+	{
+		m_tiles_dlg = new TileDialog(this);
+	}
+	if(m_map_view != nullptr)
+	{
+		m_tiles_dlg->setTile(m_map_view->getTile());
+		m_tiles_dlg->setRect(m_map_view->getWorldRect());
+	}
+	m_tiles_dlg->show();
 }
 
 void MainWindow::on_updateFileOptions()

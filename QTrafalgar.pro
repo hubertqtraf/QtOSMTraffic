@@ -31,6 +31,7 @@ SOURCES += \
     UI/nodestype.cpp \
     UI/parkingdlg.cpp \
     UI/ruler.cpp \
+    UI/tiledialog.cpp \
     UI/tilewidget.cpp \
     UI/tr_progess_thread.cpp \
     geo/geo_base.cpp \
@@ -82,6 +83,7 @@ HEADERS += \
     UI/nodestype.h \
     UI/parkingdlg.h \
     UI/ruler.h \
+    UI/tiledialog.h \
     UI/tilewidget.h \
     UI/tr_progess_thread.h \
     geo/geo_base.h \
@@ -140,6 +142,7 @@ FORMS += \
     UI/nodestype.ui \
     UI/parkingdlg.ui \
     UI/profiledialog.ui \
+    UI/tiledialog.ui \
     UI/trdispoptiondialog.ui \
     UI/trnetdock.ui  \
     UI/trlinkdock.ui \

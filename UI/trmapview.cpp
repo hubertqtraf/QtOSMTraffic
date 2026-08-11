@@ -139,7 +139,7 @@ void TrMapView::paint(QPainter *p)
 		p->drawText(rect(), Qt::AlignCenter, "Load a OSM Document");
 	}
 	// TODO: control the tile creation
-	//m_tile->paint(p);
+	m_tile->paint(p);
 }
 
 /*void TrMapView::paintSvg(QSvgGenerator & generator)
@@ -191,6 +191,18 @@ void TrMapView::zoomChange(bool dir)
 		zoomChange(0.8, pt, 0);
 	else
 		zoomChange(1.2, pt, 0);
+}
+
+QVector<double> TrMapView::getWorldRect()
+{
+	QVector<double> rect;
+	TrPoint left = m_zoom_ref.getVisibleWorld(true);
+	TrPoint right = m_zoom_ref.getVisibleWorld(false);
+	rect.append(left.x/100000);
+	rect.append(right.x/100000);
+	rect.append(left.y/100000);
+	rect.append(right.y/100000);
+	return rect;
 }
 
 void TrMapView::shiftChange(QPoint mv_pt)

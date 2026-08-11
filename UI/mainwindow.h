@@ -25,6 +25,7 @@
 
 #include "profiledialog.h"
 #include "trdispoptiondialog.h"
+#include "tiledialog.h"
 #include "trmapview.h"
 #include "trnetdock.h"
 #include "fileoptions.h"
@@ -72,6 +73,8 @@ private slots:
 
 	void on_actionRuler_changed();
 
+	void on_actionTiles_triggered();
+
 	void on_actionAntialiasing_triggered(bool checked);
 
 	void on_actionAboutQt_triggered();
@@ -117,6 +120,7 @@ private:
 	ProfileDialog * m_profile_dlg;
 	FileOptions * m_file_options;
 	TrDispOptionDialog * m_disp_option;
+	TileDialog * m_tiles_dlg;
 	NodesType * m_nodes_type;
 	ParkingDlg * m_parking_dlg;
 	About * m_about;
