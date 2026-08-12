@@ -46,6 +46,7 @@ public:
 	explicit TileWidget(QWidget *parent = nullptr);
 
 	bool m_move;
+	bool m_active;
 	QColor m_background;
 
 	int lon2TileX(double lon);

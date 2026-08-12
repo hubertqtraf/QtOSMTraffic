@@ -138,8 +138,9 @@ void TrMapView::paint(QPainter *p)
 		p->setFont(QFont("Arial", 30));
 		p->drawText(rect(), Qt::AlignCenter, "Load a OSM Document");
 	}
-	// TODO: control the tile creation
-	m_tile->paint(p);
+	// control the tile creation
+	if(m_tile->m_active)
+		m_tile->paint(p);
 }
 
 /*void TrMapView::paintSvg(QSvgGenerator & generator)
@@ -518,6 +519,7 @@ void TrMapView::on_nextTile(int x, int y)
 	if(x >= limit_x)
 	{
 		TR_INF << "limit X " << limit_x << x;
+		m_tile->m_active = false;
 		return;
 	}
 	if(m_tile->resetX(x,y))

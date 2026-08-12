@@ -73,6 +73,7 @@ void TileDialog::on_buttonBox_accepted()
 {
 	if(m_tile == nullptr)
 		return;
+	m_tile->m_active = true;
 	QVector<double> rect = m_tile->getRect();
 	if(rect.size() < 4)
 		return;

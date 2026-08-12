@@ -36,6 +36,7 @@ TileWidget::TileWidget(QWidget *parent)
 	, m_start_x(0)
 	, m_rect{400.0, 400.0, 400,0, 400,0}
 	, m_move(false)
+	, m_active(false)
 {
 	m_zoom_ref.setScreenDimension(256,256);
 	//TR_INF << "! " << size();
