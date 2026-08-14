@@ -120,7 +120,7 @@ QString TileWidget::getPath(QVector<int> & data)
 bool TileWidget::resetX(int &x, int &y)
 {
 	int limit_y = lat2TileY(m_rect[3]);
-	if(y <= limit_y)
+	if(y < limit_y)
 	{
 		TR_INF << "limit X" << lon2TileX(m_rect[1]) << x;
 		m_x++;
@@ -128,7 +128,7 @@ bool TileWidget::resetX(int &x, int &y)
 		m_y = lat2TileY(m_rect[2]);
 		y = m_y;
 		int limit_x = lon2TileX(m_rect[1]);
-		if(x >= limit_x)
+		if(x > limit_x)
 		{
 			TR_INF << "Stop: " << x;
 			m_move = false;
