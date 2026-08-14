@@ -511,23 +511,15 @@ void TrMapView::on_nextTile(int x, int y)
 {
 	if(m_tile->getRect().size() < 4)
 		return;
-	int limit_x = m_tile->lon2TileX(m_tile->getRect().at(1));
-	//TR_INF << "next " << y << limit_y << m_tile->lat2TileY(m_tile->getRect().at(3));
 
 	m_tile->m_background = m_background;
 
-	if(x >= limit_x)
-	{
-		TR_INF << "limit X " << limit_x << x;
-		m_tile->m_active = false;
-		return;
-	}
 	if(m_tile->resetX(x,y))
-	{
-	}
+		return;
+
 	QString path = m_tile->getTilePath(x, y);
 	m_tile->setLavelPath(x,y);
-	TR_INF << path;
+	TR_INF << path << x << y;
 	m_tile->createPngImageByPath(path);
 	--y;
 	m_tile->recalcExtRect(x, y);

@@ -74,13 +74,13 @@ void TileDialog::on_buttonBox_accepted()
 	if(m_tile == nullptr)
 		return;
 	m_tile->m_active = true;
+	m_tile->setLevel(ui->levelValue->value());
 	QVector<double> rect = m_tile->getRect();
 	if(rect.size() < 4)
 		return;
 	//TR_INF << rect;
 	m_tile->setBasePath(ui->BaseDir->text());
-	m_tile->setLevel(ui->levelValue->value());
 	m_tile->m_move = true;
 
-	m_tile->recalcExtRect(m_tile->lon2TileX(rect[0]), m_tile->lat2TileY(rect[3]));
+	m_tile->recalcExtRect(m_tile->lon2TileX(rect[0]), m_tile->lat2TileY(rect[2]));
 }

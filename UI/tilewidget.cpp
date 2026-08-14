@@ -119,15 +119,23 @@ QString TileWidget::getPath(QVector<int> & data)
 
 bool TileWidget::resetX(int &x, int &y)
 {
-	int limit_y = lat2TileY(m_rect[3]); //m_tile->getRect().at(3));
+	int limit_y = lat2TileY(m_rect[3]);
 	if(y <= limit_y)
 	{
-		TR_INF << "limit Y" << limit_y; //<< y;
+		TR_INF << "limit X" << lon2TileX(m_rect[1]) << x;
 		m_x++;
 		x = m_x;
 		m_y = lat2TileY(m_rect[2]);
 		y = m_y;
-		return true;
+		int limit_x = lon2TileX(m_rect[1]);
+		if(x >= limit_x)
+		{
+			TR_INF << "Stop: " << x;
+			m_move = false;
+			m_active = false;
+			return true;
+		}
+		recalcExtRect(m_x, m_y);
 	}
 	return false;
 }
@@ -191,7 +199,8 @@ void TileWidget::recalcExtRect(int x, int y)
 	y+=1;
 	double lon2 = tileX2Lon(x);
 	double lat2 = tileY2Lat(y);
-	m_zoom_ref.setVisibleWorld(lon1 * 100000, lat1 * 100000, lon2 * 100000, lat2 * 100000);
+	m_zoom_ref.setVisibleWorld(lon1 * TR_COOR_FACTOR, lat1 * TR_COOR_FACTOR,
+						lon2 * TR_COOR_FACTOR, lat2 * TR_COOR_FACTOR);
 	m_zoom_ref.zoom2Rect();
 	m_move = true;
 	update();
