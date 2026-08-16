@@ -126,6 +126,12 @@ void TrMapView::setElementDock(QDockWidget * dock)
 
 void TrMapView::paint(QPainter *p)
 {
+	// control the tile creation
+	if((m_tile->m_active) && (m_doc.m_is_loaded))
+	{
+		m_tile->paint(p);
+		return;
+	}
 	if(m_doc.m_is_loaded)
 	{
 		p->setRenderHint(QPainter::Antialiasing, m_antialiasing);
@@ -138,9 +144,6 @@ void TrMapView::paint(QPainter *p)
 		p->setFont(QFont("Arial", 30));
 		p->drawText(rect(), Qt::AlignCenter, "Load a OSM Document");
 	}
-	// control the tile creation
-	if(m_tile->m_active)
-		m_tile->paint(p);
 }
 
 /*void TrMapView::paintSvg(QSvgGenerator & generator)
@@ -518,8 +521,8 @@ void TrMapView::on_nextTile(int x, int y)
 		return;
 
 	QString path = m_tile->getTilePath(x, y);
+	emit sendMessage(path, 0);
 	m_tile->setLavelPath(x,y);
-	TR_INF << path << x << y;
 	m_tile->createPngImageByPath(path);
 	--y;
 	m_tile->recalcExtRect(x, y);
