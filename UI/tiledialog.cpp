@@ -95,6 +95,14 @@ void TileDialog::on_buttonBox_accepted()
 	m_tile->recalcExtRect(m_tile->lon2TileX(rect[0]), m_tile->lat2TileY(rect[2]));
 }
 
+void TileDialog::on_buttonBox_rejected()
+{
+	if(m_tile == nullptr)
+		return;
+	m_tile->m_move = true;
+	m_tile->m_active = false;
+}
+
 void TileDialog::on_levelValue_valueChanged(int level)
 {
 	m_tile->setLevel(level);

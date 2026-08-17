@@ -50,6 +50,8 @@ private slots:
 
 	void on_levelValue_valueChanged(int level);
 
+	void on_buttonBox_rejected();
+
 private:
 	Ui::TileDialog *ui;
 
