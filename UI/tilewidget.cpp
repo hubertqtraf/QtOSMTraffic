@@ -186,6 +186,11 @@ void TileWidget::setLevel(int level)
 	m_level = level;
 }
 
+int TileWidget::getLevel()
+{
+	return m_level;
+}
+
 void TileWidget::recalcExtRect(int x, int y)
 {
 	m_x = x;
@@ -236,6 +241,8 @@ void TileWidget::createPngImage(QImage & image)
 	painter.begin(&image);
 	paint(&painter);
 
+	//QPoint p(10, 10);
+	//render(&painter, p);
 	render(&painter);
 	painter.end();
 }

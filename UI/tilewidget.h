@@ -58,6 +58,7 @@ public:
 	void setRect(const QVector<double> &rect);
 	QVector<double> getRect();
 	void setLevel(int level);
+	int getLevel();
 	bool resetX(int &x, int &y);
 
 	void setBasePath(const QString & path);
