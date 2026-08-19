@@ -25,6 +25,7 @@
 
 #include "tr_document.h"
 
+#include <QProgressBar>
 #include <QWidget>
 
 class TileWidget : public QWidget
@@ -33,6 +34,7 @@ class TileWidget : public QWidget
 private:
 	TrDocument *m_doc;
 	TrZoomMap m_zoom_ref;
+	QProgressBar *m_bar;
 	int m_level;
 	int m_x;
 	int m_y;
@@ -70,6 +72,7 @@ public:
 
 	void recalcExtRect();
 	void recalcExtRect(int x, int y);
+	void setProgressBar(QProgressBar *bar);
 	void createPngImage(QImage &image);
 	virtual void paint(QPainter * p);
 
@@ -77,6 +80,7 @@ public:
 
 signals:
 	void posChanged(int x, int y);
+	void valueChanged(int value);
 };
 
 #endif // TILEWIDGET_H

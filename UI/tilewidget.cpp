@@ -30,6 +30,7 @@
 
 TileWidget::TileWidget(QWidget *parent)
 	: QWidget{parent}
+	, m_bar(nullptr)
 	, m_level(1)
 	, m_x(0)
 	, m_y(0)
@@ -128,11 +129,23 @@ bool TileWidget::resetX(int &x, int &y)
 		m_y = lat2TileY(m_rect[2]);
 		y = m_y;
 		int limit_x = lon2TileX(m_rect[1]);
+
+		// TODO: warnig on progessbar
+		/*int x_diff = lon2TileX(m_rect[1]) - lon2TileX(m_rect[0]);
+		if(x_diff)
+		{
+			int x1_diff = (x -1) - lon2TileX(m_rect[0]);
+			int val = (int)(((double)x1_diff/(double)x_diff) * 100.0);
+			emit valueChanged(val);
+		}*/
+
 		if(x > limit_x)
 		{
 			TR_INF << "Stop: " << x;
 			m_move = false;
 			m_active = false;
+			//emit valueChanged(0);
+			//m_bar->setTextVisible(true);
 			return true;
 		}
 		recalcExtRect(m_x, m_y);
@@ -232,6 +245,20 @@ void TileWidget::paint(QPainter *p)
 		m_move = false;
 		emit posChanged(m_x, m_y);
 	}
+	//p->end();
+}
+
+void TileWidget::setProgressBar(QProgressBar * bar)
+{
+	m_bar = bar;
+	if(m_bar != nullptr)
+	{
+		connect(this, SIGNAL(valueChanged(int)), m_bar, SLOT(setValue(int)));
+		m_bar->setRange(0,100);
+		emit valueChanged(0);
+	}
+	// TODO: progessbar warnig create slot?
+	//connect(&ios, SIGNAL(valueBarChanged(int)), this, SLOT(on_setBarValue(int)));
 }
 
 void TileWidget::createPngImage(QImage & image)

@@ -279,10 +279,10 @@ bool TrDocument::setSurroundingRect()
 		}
 		return false;
 	}
-    surroundingRect[0] = m_map_stack.getSurroundRectVal(0);
-    surroundingRect[1] = m_map_stack.getSurroundRectVal(1);
-    surroundingRect[2] = m_map_stack.getSurroundRectVal(2);
-    surroundingRect[3] = m_map_stack.getSurroundRectVal(3);
+	surroundingRect[0] = m_map_stack.getSurroundRectVal(0);
+	surroundingRect[1] = m_map_stack.getSurroundRectVal(1);
+	surroundingRect[2] = m_map_stack.getSurroundRectVal(2);
+	surroundingRect[3] = m_map_stack.getSurroundRectVal(3);
 
 	return true;
 }
@@ -300,7 +300,7 @@ void TrDocument::setSurroundingVecRect(const QVector<double> & rect)
 
 void TrDocument::draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mode)
 {
-    m_map_stack.draw(zoom_ref, p, mode);
+	m_map_stack.draw(zoom_ref, p, mode);
 }
 
 int TrDocument::checkFileHeader(const QXmlStreamAttributes & attrs)
@@ -390,7 +390,7 @@ uint64_t TrDocument::readXmlDescription(QXmlStreamReader & xml_in)
 				if(named_list->readXmlDescription(xml_in) != 0)
 				{
 					TR_ERR << "XML error";
-                    return TR_NO_VALUE;
+					return TR_NO_VALUE;
 				}
 
 				// TODO: remove 'm_name_map' object, use layer...
@@ -433,7 +433,7 @@ uint64_t TrDocument::readXmlDescription(QXmlStreamReader & xml_in)
 		}
 		xml_in.readNext();
 	}
-    return TR_NO_VALUE;
+	return TR_NO_VALUE;
 }
 
 void TrDocument::writeXmlDescription(QXmlStreamWriter & xml_out, uint64_t id)

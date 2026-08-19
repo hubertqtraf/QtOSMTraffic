@@ -526,6 +526,9 @@ void MainWindow::on_actionTiles_triggered()
 	{
 		m_tiles_dlg->setTile(m_map_view->getTile());
 		m_tiles_dlg->setRect(m_map_view->getWorldRect());
+		TileWidget * tile = m_map_view->getTile();
+		if(tile != nullptr)
+			tile->setProgressBar(m_progress);
 	}
 	m_tiles_dlg->show();
 }

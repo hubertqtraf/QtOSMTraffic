@@ -67,26 +67,26 @@ private:
 	// bool addColors(QDomNode & col_nd);
 
 public:
-    bool m_is_dirty;
-    bool m_is_loaded;
+	bool m_is_dirty;
+	bool m_is_loaded;
 
 	TrDocument(const QString & name, QObject * parent = nullptr);
 
-    TrDocument(QObject * parent = nullptr);
+	TrDocument(QObject * parent = nullptr);
 
 	virtual ~TrDocument();
 
-    void clean();
+	void clean();
 
 	virtual QString getName() const;
 
-    virtual bool setName(const QString & name);
+	virtual bool setName(const QString & name);
 
 	const QString & getFileName();
 
 	void setFileName(const QString & fname);
 
-    uint64_t getSettings() const;
+	uint64_t getSettings() const;
 
 	const QStringList getLayerNames();
 
