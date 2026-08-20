@@ -277,7 +277,10 @@ void TileWidget::createPngImageByPath(const QString &path)
 
 	createPngImage(img);
 	if(!m_copy)
+	{
 		img.save(path);
+		return;
+	}
 	QImage copy = img.copy(1, 1, 256, 256);
 	copy.save(path);
 }

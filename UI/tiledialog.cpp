@@ -42,6 +42,8 @@ TileDialog::~TileDialog()
 void TileDialog::setTile(TileWidget * tile)
 {
 	m_tile = tile;
+	if(m_tile != nullptr)
+		on_levelValue_valueChanged(ui->levelValue->value());
 }
 
 void TileDialog::setRect(QVector<double> rect)
@@ -55,10 +57,7 @@ void TileDialog::setRect(QVector<double> rect)
 	ui->lon2->setValue(rect[1]);
 	ui->lat1->setValue(rect[2]);
 	ui->lat2->setValue(rect[3]);
-	ui->x1->setValue(m_tile->lon2TileX(rect[0]));
-	ui->x2->setValue(m_tile->lon2TileX(rect[1]));
-	ui->y1->setValue(m_tile->lat2TileY(rect[2]));
-	ui->y2->setValue(m_tile->lat2TileY(rect[3]));
+	on_levelValue_valueChanged(ui->levelValue->value());
 }
 
 void TileDialog::on_BaseDirSelect_clicked()
