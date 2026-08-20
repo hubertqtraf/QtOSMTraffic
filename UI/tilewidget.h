@@ -49,6 +49,7 @@ public:
 
 	bool m_move;
 	bool m_active;
+	bool m_copy;
 	QColor m_background;
 
 	int lon2TileX(double lon);

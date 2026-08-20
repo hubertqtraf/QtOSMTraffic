@@ -38,8 +38,9 @@ TileWidget::TileWidget(QWidget *parent)
 	, m_rect{400.0, 400.0, 400,0, 400,0}
 	, m_move(false)
 	, m_active(false)
+	, m_copy(true)
 {
-	m_zoom_ref.setScreenDimension(256,256);
+	m_zoom_ref.setScreenDimension(257,257);
 	//TR_INF << "! " << size();
 	resize(1,1);
 }
@@ -264,19 +265,19 @@ void TileWidget::setProgressBar(QProgressBar * bar)
 void TileWidget::createPngImage(QImage & image)
 {
 	QPainter painter;
-
 	painter.begin(&image);
 	paint(&painter);
-
-	//QPoint p(10, 10);
-	//render(&painter, p);
 	render(&painter);
 	painter.end();
 }
 
 void TileWidget::createPngImageByPath(const QString &path)
 {
-	QImage img(256, 256, QImage::Format_ARGB32);
+	QImage img(257, 257, QImage::Format_ARGB32);
+
 	createPngImage(img);
-	img.save(path);
+	if(!m_copy)
+		img.save(path);
+	QImage copy = img.copy(1, 1, 256, 256);
+	copy.save(path);
 }
