@@ -7,6 +7,9 @@ Visualisation of OSM Data on base of a directed Graph.
 Calculate the road dimensions using given width OSM data or estimated lane width and number of the lanes.
 Option to move the base line from middle of the road to the left side to get a better dimensions view.
 
+Create WMS tiles for a rectangle area and a script ((C)Leaflet) to start the tile tree from the
+local file sytem.
+
 ###  How to use: 
 Get an OSM XML-File and load it, for example from 'josm' or 'merkaartor'
 
@@ -21,11 +24,11 @@ With this file is it possible to edit the colours of classes of elements (roads,
 
 #### Directory dialogue
 
-* select the menu point 'Settings->'Directories'
-* check the path of the file 'tr_default_profile.xml'
-* select a path for the OSM files (default '.')
-* select the shift mode
-* change the lane width in [mm]
+* Select the menu point 'Settings->'Directories'
+* Check the path of the file 'tr_default_profile.xml'
+* Select a path for the OSM files (default '.')
+* Select the shift mode
+* Change the lane width in [mm]
 
 ####  View options
 * Nodes: show the nodes of the directed Graph
@@ -33,6 +36,12 @@ With this file is it possible to edit the colours of classes of elements (roads,
 * POI: subset of "point of interest"
 * Street names
 * Parking: show the roadside parking
+
+####  Tile dialog
+* Define the rectangle by dragging the area by right mouse button
+* Select the menu point 'Tools->'Tiles'
+* Select a path for the Tile file tree
+* Define WMS Level (Z)
 
 ##  Tested  Systems
 I have complied the source code and test on the following systems:

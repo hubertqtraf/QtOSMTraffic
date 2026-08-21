@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>413</width>
+    <width>694</width>
     <height>300</height>
    </rect>
   </property>
@@ -27,7 +27,7 @@
        <item>
         <widget class="QLabel" name="label">
          <property name="text">
-          <string>QtOSMTraffic (C) 2025
+          <string>QtOSMTraffic (C) 2026
 
 Visualisation of OSM Data on base of a directed Graph. 
 Calculate the road dimensions using given width OSM data or estimated lane width and number of the lanes.
@@ -68,10 +68,10 @@ hubert-schmid@gmx.de</string>
    <item>
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+      <enum>Qt::Orientation::Horizontal</enum>
      </property>
      <property name="standardButtons">
-      <set>QDialogButtonBox::Ok</set>
+      <set>QDialogButtonBox::StandardButton::Ok</set>
      </property>
     </widget>
    </item>
