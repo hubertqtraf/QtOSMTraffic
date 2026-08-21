@@ -95,7 +95,7 @@ void TileDialog::on_pushButton_clicked()
 	QTextStream out(&file);
 
 	QString script = "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<base target=\"_top\"><meta charset=\"utf-8\">\n";
-	script.append("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n<title>Quick Start - Leaflet</title>\n");
+	script.append("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n<title>Trafalgar - Leaflet</title>\n");
 	script.append("<link rel=\"shortcut icon\" type=\"image/x-icon\" href=\"docs/images/favicon.ico\" />\n");
 	script.append("<link rel=\"stylesheet\" href=\"https://unpkg.com/leaflet@1.9.4/dist/leaflet.css\" integrity=\"sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=\" crossorigin=\"\"/>\n");
 	script.append("<script src=\"https://unpkg.com/leaflet@1.9.4/dist/leaflet.js\" integrity=\"sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=\" crossorigin=\"\"></script>\n");
