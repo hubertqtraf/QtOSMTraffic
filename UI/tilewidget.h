@@ -65,11 +65,10 @@ public:
 	bool resetX(int &x, int &y);
 
 	void setBasePath(const QString & path);
-	QString getPath(QVector<int> & data);
 	QString getCoorPath(double lon, double lat);
 	QString getTilePath(int x, int y);
 	bool setLavelPathCoor(double lon, double lat);
-	bool setLavelPath(int x, int y);
+	bool setLevelPath(int x);
 
 	void recalcExtRect();
 	void recalcExtRect(int x, int y);

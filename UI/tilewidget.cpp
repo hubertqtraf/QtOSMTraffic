@@ -94,31 +94,6 @@ bool TileWidget::createDir(const QString & path)
 	return true;
 }
 
-QString TileWidget::getPath(QVector<int> & data)
-{
-	QString path;
-
-	int tile_x = 0;
-	int tile_y = 0;
-	//if(!getTileCoor(false, tile_x, tile_y))
-	//        return path;
-
-	// TODO: param for dir
-	path = m_path +
-				QString::number(m_level) + "/" +
-				QString::number(tile_x) + "/" +
-				//QString::number(tile_y-1) + ".png";
-				QString::number(tile_y) + ".png";
-
-	/*data.clear();
-	data.append(m_level);
-	data.append(tile_x);
-	data.append(tile_y);*/
-	TR_INF << path;
-
-	return path;
-}
-
 bool TileWidget::resetX(int &x, int &y)
 {
 	int limit_y = lat2TileY(m_rect[3]);
@@ -156,7 +131,7 @@ bool TileWidget::resetX(int &x, int &y)
 
 bool TileWidget::setLavelPathCoor(double lon, double lat)
 {
-	return setLavelPath(lon2TileX(lon), lat2TileY(lat));
+	return setLevelPath(lon2TileX(lon));
 }
 
 QString TileWidget::getTilePath(int x, int y)
@@ -171,7 +146,7 @@ QString TileWidget::getCoorPath(double lon, double lat)
 	return getTilePath(lon2TileX(lon), lat2TileY(lat));
 }
 
-bool TileWidget::setLavelPath(int x, int y)
+bool TileWidget::setLevelPath(int x)
 {
 	QString path = m_path + "/" + QString::number(m_level) + "/";
 

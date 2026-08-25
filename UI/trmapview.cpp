@@ -522,7 +522,7 @@ void TrMapView::on_nextTile(int x, int y)
 
 	QString path = m_tile->getTilePath(x, y);
 	emit sendMessage(path, 0);
-	m_tile->setLavelPath(x,y);
+	m_tile->setLevelPath(x);
 	m_tile->createPngImageByPath(path);
 	--y;
 	m_tile->recalcExtRect(x, y);
