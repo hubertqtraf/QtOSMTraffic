@@ -99,13 +99,15 @@ void TileDialog::on_pushButton_clicked()
 	script.append("<link rel=\"shortcut icon\" type=\"image/x-icon\" href=\"docs/images/favicon.ico\" />\n");
 	script.append("<link rel=\"stylesheet\" href=\"https://unpkg.com/leaflet@1.9.4/dist/leaflet.css\" integrity=\"sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=\" crossorigin=\"\"/>\n");
 	script.append("<script src=\"https://unpkg.com/leaflet@1.9.4/dist/leaflet.js\" integrity=\"sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=\" crossorigin=\"\"></script>\n");
-	script.append("<style>\nhtml, body {\nheight: 100%;\nmargin: 0;\n}\nleaflet-container {\nheight: 400px;\nwidth: 600px;\nmax-width: 100%;\nmax-height: 100%;\n}\n</style>\n");
-	script.append("</head>\n<body>\n<div id=\"map\" style=\"width: 600px; height: 400px;\"></div>\n<script>\n");
 
 	double y_pos = ((ui->lat2->value() - ui->lat1->value()) / 2.0) + ui->lat1->value();
 	double x_pos = ((ui->lon2->value() - ui->lon1->value()) / 2.0) + ui->lon1->value();
 
 	out << script;
+	out << "<style>\nhtml, body {\nheight: 100%;\nmargin: 0;\n}\nleaflet-container {\nheight: "  << ui->area_h->value() << "px;\n";
+	out << "width: " << ui->area_w->value() << "px;\nmax-width: 100%;\nmax-height: 100%;\n}\n</style>\n";
+	out << "</head>\n<body>\n<div id=\"map\" style=\"width:" << ui->area_w->value() << "px; ";
+	out << "height: " << ui->area_h->value() << "px;\"></div>\n<script>\n";
 	out << "var map = L.map('map').setView({lon: " << x_pos << ", lat:" << y_pos << "}," << m_tile->getLevel()  << ");\n";
 	out << "L.tileLayer('file:///" << ui->BaseDir->text() << "/{z}/{x}/{y}.png', {\n";
 	out << "maxZoom: 19,\n";
