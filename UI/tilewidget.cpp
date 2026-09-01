@@ -39,6 +39,7 @@ TileWidget::TileWidget(QWidget *parent)
 	, m_move(false)
 	, m_active(false)
 	, m_copy(true)
+	, m_per(0)
 {
 	m_zoom_ref.setScreenDimension(257,257);
 	//TR_INF << "! " << size();
@@ -106,20 +107,21 @@ bool TileWidget::resetX(int &x, int &y)
 		y = m_y;
 		int limit_x = lon2TileX(m_rect[1]);
 
-		// TODO: warnig on progessbar
-		/*int x_diff = lon2TileX(m_rect[1]) - lon2TileX(m_rect[0]);
+		int x_diff = lon2TileX(m_rect[1]) - lon2TileX(m_rect[0]);
 		if(x_diff)
 		{
-			int x1_diff = (x -1) - lon2TileX(m_rect[0]);
-			int val = (int)(((double)x1_diff/(double)x_diff) * 100.0);
-			emit valueChanged(val);
-		}*/
+			int x1_diff = x - lon2TileX(m_rect[0]);
+			m_per = (int)(((double)x1_diff/(double)x_diff) * 100.0);
+			// TODO: warnig on progessbar
+			//emit valueChanged(val);
+		}
 
 		if(x > limit_x)
 		{
 			TR_INF << "Stop: " << x;
 			m_move = false;
 			m_active = false;
+			m_per = 0;
 			//emit valueChanged(0);
 			//m_bar->setTextVisible(true);
 			return true;

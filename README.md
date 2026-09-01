@@ -16,15 +16,15 @@ Get an OSM XML-File and load it, for example from 'josm' or 'merkaartor
 
 *Select the ‘left drive’ (Directory dialogue) option before the loading of the OSM file.*
 
-Select the base layers and single option to show the map. There predefined layer classes:
+Select the base layers and single option to show the map. There are predefined layer classes:
 
 #### Net view: road, rail, water and power
 
-This layers build a directed Graph. The road layer is unique and build the road geometry and follows the OSM 'highway' definition.
+This layers build a directed Graph each. The road layer is unique and build the road geometry and follows the OSM 'highway' definition.
 
 #### Area view: landuse, field, building
 
-The 'landuse' layer builds the base layer for the drawing and is close to the OSM landuse definition. Next is the 'field' layer is on top of the 'landuse' layer. 'Field' is not an OSM definition and may include OSM tags like ‘nature’, ‘sports’. etc. On top of the 'field' layer is the 'building' layer and follows the OSM tag plus 'manmade'
+The 'landuse' layer builds the base layer for the drawing and is close to the OSM landuse definition. Next is the 'field' layer witch is on top of the 'landuse' layer. 'Field' is not an OSM definition and may include OSM tags like ‘nature’, ‘sports’. etc. On top of the 'field' layer is the 'building' layer and follows the OSM tag plus 'manmade'.
 
 #### POI view
 
