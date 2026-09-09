@@ -62,11 +62,22 @@ public:
 	bool setData(const QModelIndex &index, const QVariant &value,
 				 int role = Qt::EditRole) override;
 
+	QDomElement addTagLine(int line, const QString &name, bool val);
+
+	// Add data:
+	bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
+	bool insertColumns(int column, int count, const QModelIndex &parent = QModelIndex()) override;
+
+	// Remove data:
+	bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
+	bool removeColumns(int column, int count, const QModelIndex &parent = QModelIndex()) override;
+
 	Qt::ItemFlags flags(const QModelIndex& index) const override;
 
 	bool setDataByFile(const QString &fname);
 
 	QDomDocument * getDocument();
+
 private:
 };
 

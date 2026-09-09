@@ -120,7 +120,7 @@ int ViewLevel::rowCount(const QModelIndex &parent) const
 	if(!parent.isValid())
 		parentItem = m_rootItem;
 	else
-		parentItem = static_cast<TrSetItem*>(parent.internalPointer());;
+		parentItem = static_cast<TrSetItem*>(parent.internalPointer());
 	return parentItem->node().childNodes().count();
 }
 
@@ -209,6 +209,71 @@ Qt::ItemFlags ViewLevel::flags(const QModelIndex &index) const
 	}
 	return QAbstractItemModel::flags(index);
 	//return QAbstractItemModel::flags(index) | Qt::ItemIsEditable; // FIXME: Implement me!
+}
+
+QDomElement ViewLevel::addTagLine(int line, const QString & name, bool val)
+{
+	QDomElement tag = m_domDocument.createElement("value");
+
+	QDomAttr a = tag.attributeNode("name");
+	tag.setAttribute( "name", name);
+	if(val)
+		tag.setAttribute("actiive", "true");
+	else
+		tag.setAttribute("actiive", "false");
+	tag.setAttribute( "index", QString::number(line));
+
+	return tag;
+}
+
+bool ViewLevel::insertRows(int row, int count, const QModelIndex &parent)
+{
+	beginInsertRows(parent, row, row + count - 1);
+	TR_INF << row << count << parent.row() << parent.column();
+	//QModelIndex idx = index(row, 1);
+	//if(role == Qt::CheckStateRole)
+	{
+		if (parent.column() == 2)
+		{
+			TrSetItem *item = nodeForIndex(parent);
+			if(item != nullptr)
+			{
+				TR_INF << item->node().nodeName();
+				QDomNamedNodeMap map = item->node().attributes();
+				TR_INF << map.count() << map.namedItem("name").nodeValue();
+				QDomElement tag = addTagLine(3,"test", true);
+
+				item->node().appendChild(tag);
+			}
+		}
+	}
+	// FIXME: Implement me!
+	endInsertRows();
+	return true;
+}
+
+bool ViewLevel::insertColumns(int column, int count, const QModelIndex &parent)
+{
+	beginInsertColumns(parent, column, column + count - 1);
+	// FIXME: Implement me!
+	endInsertColumns();
+	return true;
+}
+
+bool ViewLevel::removeRows(int row, int count, const QModelIndex &parent)
+{
+	beginRemoveRows(parent, row, row + count - 1);
+	// FIXME: Implement me!
+	endRemoveRows();
+	return true;
+}
+
+bool ViewLevel::removeColumns(int column, int count, const QModelIndex &parent)
+{
+	beginRemoveColumns(parent, column, column + count - 1);
+	// FIXME: Implement me!
+	endRemoveColumns();
+	return true;
 }
 
 bool ViewLevel::setDataByFile(const QString & fname)
