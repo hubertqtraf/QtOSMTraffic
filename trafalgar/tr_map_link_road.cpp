@@ -616,7 +616,12 @@ uint8_t TrMapLinkRoad::handleShiftNode(const TrZoomMap & zoom_ref, TrMapLinkRoad
 	// tiny angle (--*--)
 	if(code == 1)
 	{
-		if(all_one_way)
+		bool check = true;
+		// check: start/end on the same node
+		if(next_link->getNodeFrom() == getNodeFrom())check = false;
+		if(next_link->getNodeTo() == getNodeTo())check = false;
+
+		if(all_one_way && check)
 		{
 			if(n->getGeoId() == this->m_node_from->getGeoId())
 				n->setMovePoint(next_segment.getSecondPoint());
