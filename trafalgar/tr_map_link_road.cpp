@@ -683,7 +683,9 @@ uint8_t TrMapLinkRoad::handleShiftNode(const TrZoomMap & zoom_ref, TrMapLinkRoad
 
 	if((code == 0) || (code == 3))
 	{
-		if(all_one_way)
+		n->setMovePoint(cross_pt);
+		// TODO: check wrong? > remove the check?
+		/*if(all_one_way)
 		{
 			n->setMovePoint(cross_pt);
 		}
@@ -693,7 +695,7 @@ uint8_t TrMapLinkRoad::handleShiftNode(const TrZoomMap & zoom_ref, TrMapLinkRoad
 			if(test_seg.getLength(zoom_ref) > 5.0)
 				return 5;
 			n->setMovePoint(cross_pt);
-		}
+		}*/
 	}
 	return 33;
 }
@@ -802,74 +804,6 @@ uint8_t TrMapLinkRoad::handleCrossing(const TrZoomMap & zoom_ref, TrGeoObject * 
 	if(mode == 2)
 	{
 		return handleShiftNode(zoom_ref, next_link, node, mode);
-
-		/*getSegmentWithParm(first_segment, n->getGeoId(), (getOneWay() & TR_LINK_DIR_BWD) == TR_LINK_DIR_BWD, mode);
-		next_link->getSegmentWithParm(next_segment, n->getGeoId(), (next_link->getOneWay() & TR_LINK_DIR_BWD) == TR_LINK_DIR_BWD, mode);
-
-		//if(test){TrMapNet::ms_seg_1->setPoints(first_segment);}
-		//if(test){TrMapNet::ms_seg_2->setPoints(next_segment);}
-
-		first_segment.getCrossPoint(zoom_ref, cross_pt, next_segment);
-
-		if((!((getOneWay() & TR_LINK_DIR_ONEWAY))) && (!(next_link->getOneWay() & TR_LINK_DIR_ONEWAY)))
-		{
-			return 6;
-		}
-		double ang = 10.0;
-		int code = first_segment.getAngleCode(zoom_ref, next_segment, ang, 0.2);
-		if((first_segment.getLength(zoom_ref) < 5.0) || (next_segment.getLength(zoom_ref) < 5.0))
-		{
-			// TODO: check length of the segments
-			//return 7;
-		}
-		// TODO: magic number '0.2'; more logic on the rule?
-		if(ang < 0.2)
-		{
-			// ignore on small angle if the links starts with the same node
-			if(getNodeFrom() == next_link->getNodeFrom())
-				return 6;
-		}
-		//if(ang < (M_PI / 4.0))
-		//	return 7;
-		if((code == 3) || (code == 0))
-		{
-			n->setMovePoint(cross_pt);
-		}
-		if(((getOneWay() & TR_LINK_DIR_ONEWAY)) && (next_link->getOneWay() & TR_LINK_DIR_ONEWAY))
-		{
-			if((next_link->getNodeFrom() == getNodeTo()) || (next_link->getNodeTo() == getNodeFrom()))
-			{
-				if((ang > 2.5) && ((ang < 4.5)))
-				{
-					n->setMovePoint(n->getPoint());
-					return 9;
-				}
-			}
-		}
-		if(code == 1)
-		{
-			if(getOneWay() & TR_LINK_DIR_BWD)
-			{
-				first_segment.doReverse();
-			}
-			if(next_link->getOneWay() & TR_LINK_DIR_BWD)
-			{
-				next_segment.doReverse();
-			}
-
-			if(n->getGeoId() == this->m_node_from->getGeoId())
-			{
-				if(next_link->getOneWay() & TR_LINK_DIR_ONEWAY)
-					n->setMovePoint(next_segment.getSecondPoint());
-			}
-			else
-			{
-				if(getOneWay() & TR_LINK_DIR_ONEWAY)
-					n->setMovePoint(first_segment.getSecondPoint());
-			}
-			return code;
-		}*/
-		//return 33;
 	}
 
 	TrGeoObject * first_obj = getSegmentWithParm(first_segment, n->getGeoId(), false, mode);
