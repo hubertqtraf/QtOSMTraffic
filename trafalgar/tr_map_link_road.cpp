@@ -609,6 +609,7 @@ uint8_t TrMapLinkRoad::handleShiftNode(const TrZoomMap & zoom_ref, TrMapLinkRoad
 	//if(test){TrMapNet::ms_seg_2->setPoints(next_segment);}
 
 	first_segment.getCrossPoint(zoom_ref, cross_pt, next_segment);
+	//if(test)TrMapNet::ms_point = cross_pt;
 
 	double ang = 10.0;
 	int code = first_segment.getAngleCode(zoom_ref, next_segment, ang, 0.2);
@@ -646,11 +647,11 @@ uint8_t TrMapLinkRoad::handleShiftNode(const TrZoomMap & zoom_ref, TrMapLinkRoad
 	// one to one connection: avoid 'Z'
 	if(all_one_way && (n->getConFlags() & 0x11))
 	{
-		TrGeoSegment test_segment;
+		TrGeoSegment test_segment(cross_pt, next_segment.getFirstPoint());
 
-		if(!first_segment.isInside(cross_pt))
+		double diff = first_segment.getAngleDiff(zoom_ref, test_segment.getAngle(zoom_ref));
+		if(diff < 0.5)
 		{
-
 			n->setMovePoint(n->getPoint());
 			return 5;
 		}
