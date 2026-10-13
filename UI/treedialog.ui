@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>300</height>
+    <height>608</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -34,6 +34,13 @@
        <string>Standort</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_3">
+       <item row="3" column="1">
+        <widget class="QLabel" name="label_6">
+         <property name="text">
+          <string>Bild-nr.:</string>
+         </property>
+        </widget>
+       </item>
        <item row="4" column="1">
         <widget class="QLabel" name="label_8">
          <property name="text">
@@ -48,6 +55,16 @@
         <widget class="QLabel" name="label">
          <property name="text">
           <string>Blatt</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="3">
+        <widget class="QSpinBox" name="spinBox_3"/>
+       </item>
+       <item row="5" column="1">
+        <widget class="QLabel" name="label_15">
+         <property name="text">
+          <string>weitere</string>
          </property>
         </widget>
        </item>
@@ -77,22 +94,18 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="1">
-        <widget class="QLabel" name="label_6">
-         <property name="text">
-          <string>Bild-nr.:</string>
+       <item row="6" column="1">
+        <spacer name="verticalSpacer_3">
+         <property name="orientation">
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
-        </widget>
-       </item>
-       <item row="3" column="3">
-        <widget class="QSpinBox" name="spinBox_3"/>
-       </item>
-       <item row="5" column="1">
-        <widget class="QLabel" name="label_15">
-         <property name="text">
-          <string>etc</string>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
          </property>
-        </widget>
+        </spacer>
        </item>
       </layout>
      </widget>
@@ -101,6 +114,20 @@
        <string>Beschreibung</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_2">
+       <item row="6" column="0">
+        <widget class="QLabel" name="label_16">
+         <property name="text">
+          <string>Alter</string>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="0">
+        <widget class="QLabel" name="label_22">
+         <property name="text">
+          <string>Anzahl der Stämme:</string>
+         </property>
+        </widget>
+       </item>
        <item row="0" column="0">
         <widget class="QLabel" name="label_3">
          <property name="text">
@@ -142,22 +169,108 @@
          </item>
         </widget>
        </item>
-       <item row="2" column="1">
+       <item row="6" column="1">
+        <widget class="QSpinBox" name="spinBox_4"/>
+       </item>
+       <item row="3" column="1">
         <widget class="QCheckBox" name="checkBox">
          <property name="text">
           <string>Einzelbaum</string>
          </property>
         </widget>
        </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="label_16">
+       <item row="11" column="0">
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Orientation::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="9" column="0">
+        <widget class="QLabel" name="label_23">
          <property name="text">
-          <string>Alter</string>
+          <string>Kronenduchmesser (mi/max)</string>
          </property>
         </widget>
        </item>
-       <item row="3" column="1">
-        <widget class="QSpinBox" name="spinBox_4"/>
+       <item row="8" column="1">
+        <widget class="QSpinBox" name="spinBox_6"/>
+       </item>
+       <item row="7" column="0">
+        <widget class="QLabel" name="label_21">
+         <property name="text">
+          <string>Brusthöhenduchmesser (1.30m)</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="1">
+        <widget class="QSpinBox" name="spinBox_5"/>
+       </item>
+       <item row="0" column="2">
+        <widget class="QComboBox" name="comboBox">
+         <item>
+          <property name="text">
+           <string>Bergahorn</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Winterlinde</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Kastaie</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Esche</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Spitzahorn</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Robiie</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Sommerlinde</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Birke</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Eiche</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Buche</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="9" column="1">
+        <widget class="QSpinBox" name="spinBox_7"/>
+       </item>
+       <item row="9" column="2">
+        <widget class="QSpinBox" name="spinBox_8"/>
        </item>
       </layout>
      </widget>
@@ -166,6 +279,20 @@
        <string>Verhaeltnisse</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_5">
+       <item row="2" column="1">
+        <widget class="QCheckBox" name="checkBox_23">
+         <property name="text">
+          <string>Gebäude/Keller</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QCheckBox" name="checkBox_20">
+         <property name="text">
+          <string>frei</string>
+         </property>
+        </widget>
+       </item>
        <item row="0" column="0">
         <widget class="QLabel" name="label_17">
          <property name="text">
@@ -173,22 +300,98 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="0">
+       <item row="1" column="1">
+        <widget class="QCheckBox" name="checkBox_21">
+         <property name="text">
+          <string>Straße</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0">
+        <widget class="QCheckBox" name="checkBox_28">
+         <property name="text">
+          <string>Wiesen</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QCheckBox" name="checkBox_24">
+         <property name="text">
+          <string>überfüllt</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="0">
+        <widget class="QCheckBox" name="checkBox_30">
+         <property name="text">
+          <string>Sträucher</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QCheckBox" name="checkBox_22">
+         <property name="text">
+          <string>verdichtet</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QCheckBox" name="checkBox_25">
+         <property name="text">
+          <string>Nachbargehgehölz</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QCheckBox" name="checkBox_26">
+         <property name="text">
+          <string>Belag</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0">
         <widget class="QLabel" name="label_18">
          <property name="text">
           <string>Beflanzung</string>
          </property>
         </widget>
        </item>
-       <item row="2" column="0">
+       <item row="6" column="1">
+        <widget class="QCheckBox" name="checkBox_29">
+         <property name="text">
+          <string>Stauden</string>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="2">
+        <widget class="QLineEdit" name="lineEdit_9"/>
+       </item>
+       <item row="8" column="0">
         <widget class="QLabel" name="label_19">
          <property name="text">
           <string>     sostiges:</string>
          </property>
         </widget>
        </item>
-       <item row="2" column="1">
-        <widget class="QLineEdit" name="lineEdit_9"/>
+       <item row="4" column="1">
+        <widget class="QCheckBox" name="checkBox_27">
+         <property name="text">
+          <string>Bodennbearbeitug</string>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="0">
+        <spacer name="verticalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Orientation::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </widget>
@@ -197,7 +400,7 @@
        <string>Zustand</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_4">
-       <item row="19" column="0">
+       <item row="22" column="0">
         <widget class="QLabel" name="label_9">
          <property name="text">
           <string>Eindruck</string>
@@ -211,7 +414,7 @@
          </property>
         </widget>
        </item>
-       <item row="17" column="1">
+       <item row="19" column="1">
         <widget class="QLineEdit" name="lineEdit_7"/>
        </item>
        <item row="9" column="1">
@@ -228,7 +431,7 @@
          </property>
         </widget>
        </item>
-       <item row="11" column="1">
+       <item row="12" column="1">
         <widget class="QLineEdit" name="lineEdit_6"/>
        </item>
        <item row="2" column="0">
@@ -259,17 +462,24 @@
          </property>
         </widget>
        </item>
-       <item row="16" column="1">
+       <item row="17" column="1">
         <widget class="QCheckBox" name="checkBox_19">
          <property name="text">
           <string>vorzeitiger Färbung</string>
          </property>
         </widget>
        </item>
-       <item row="15" column="1">
+       <item row="16" column="1">
         <widget class="QCheckBox" name="checkBox_16">
          <property name="text">
           <string>Kronrnnverlichtung</string>
+         </property>
+        </widget>
+       </item>
+       <item row="20" column="0">
+        <widget class="QLabel" name="label_14">
+         <property name="text">
+          <string>     sostiges:</string>
          </property>
         </widget>
        </item>
@@ -294,7 +504,7 @@
          </property>
         </widget>
        </item>
-       <item row="19" column="1">
+       <item row="22" column="1">
         <widget class="QComboBox" name="comboBox_4">
          <item>
           <property name="text">
@@ -325,7 +535,7 @@
          </property>
         </widget>
        </item>
-       <item row="16" column="0">
+       <item row="17" column="0">
         <widget class="QCheckBox" name="checkBox_18">
          <property name="text">
           <string>vorzeitiger Laubfall</string>
@@ -339,19 +549,22 @@
          </property>
         </widget>
        </item>
-       <item row="14" column="0">
+       <item row="15" column="0">
         <widget class="QCheckBox" name="checkBox_14">
          <property name="text">
           <string>vollausgebidet</string>
          </property>
         </widget>
        </item>
-       <item row="15" column="0">
+       <item row="16" column="0">
         <widget class="QCheckBox" name="checkBox_17">
          <property name="text">
           <string>Wipfeldürre</string>
          </property>
         </widget>
+       </item>
+       <item row="20" column="1">
+        <widget class="QLineEdit" name="lineEdit_8"/>
        </item>
        <item row="10" column="0">
         <widget class="QCheckBox" name="checkBox_11">
@@ -367,10 +580,10 @@
          </property>
         </widget>
        </item>
-       <item row="17" column="0">
-        <widget class="QLabel" name="label_14">
+       <item row="19" column="0">
+        <widget class="QLabel" name="label_20">
          <property name="text">
-          <string>     sostiges:</string>
+          <string>     einngeschränkt durch </string>
          </property>
         </widget>
        </item>
@@ -381,7 +594,7 @@
          </property>
         </widget>
        </item>
-       <item row="13" column="0">
+       <item row="14" column="0">
         <widget class="QLabel" name="label_4">
          <property name="text">
           <string>Krone</string>
@@ -391,22 +604,26 @@
        <item row="5" column="1">
         <widget class="QLineEdit" name="lineEdit_5"/>
        </item>
-       <item row="14" column="1">
+       <item row="15" column="1">
         <widget class="QCheckBox" name="checkBox_15">
          <property name="text">
           <string>tote äste</string>
          </property>
         </widget>
        </item>
-       <item row="11" column="0">
+       <item row="12" column="0">
         <widget class="QLabel" name="label_13">
          <property name="text">
           <string>     sostiges:</string>
          </property>
         </widget>
        </item>
-       <item row="18" column="1">
-        <widget class="QLineEdit" name="lineEdit_8"/>
+       <item row="18" column="0">
+        <widget class="QCheckBox" name="checkBox_31">
+         <property name="text">
+          <string>Mispelbefall</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
