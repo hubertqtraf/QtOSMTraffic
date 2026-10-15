@@ -15,6 +15,9 @@ public:
 	explicit TreeDialog(QWidget *parent = nullptr);
 	~TreeDialog();
 
+private slots:
+	void on_treeSelect_activated(int index);
+
 private:
 	Ui::TreeDialog *ui;
 };

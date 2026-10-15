@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Tree</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="3" column="0">
@@ -24,10 +24,10 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="0">
+   <item row="2" column="0">
     <widget class="QTabWidget" name="Baum">
      <property name="currentIndex">
-      <number>3</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="pos">
       <attribute name="title">
@@ -49,7 +49,7 @@
         </widget>
        </item>
        <item row="4" column="3">
-        <widget class="QLineEdit" name="lineEdit_3"/>
+        <widget class="QLineEdit" name="road"/>
        </item>
        <item row="0" column="1">
         <widget class="QLabel" name="label">
@@ -59,7 +59,7 @@
         </widget>
        </item>
        <item row="3" column="3">
-        <widget class="QSpinBox" name="spinBox_3"/>
+        <widget class="QSpinBox" name="picNr"/>
        </item>
        <item row="5" column="1">
         <widget class="QLabel" name="label_15">
@@ -75,26 +75,50 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="3">
-        <widget class="QSpinBox" name="spinBox"/>
-       </item>
-       <item row="2" column="3">
-        <widget class="QSpinBox" name="spinBox_2"/>
-       </item>
-       <item row="0" column="3">
-        <widget class="QLineEdit" name="lineEdit"/>
-       </item>
-       <item row="5" column="3">
-        <widget class="QLineEdit" name="lineEdit_4"/>
-       </item>
-       <item row="2" column="1">
-        <widget class="QLabel" name="label_7">
+       <item row="7" column="1">
+        <widget class="QLabel" name="label_24">
          <property name="text">
-          <string>Flur-nr:</string>
+          <string>2026</string>
          </property>
         </widget>
        </item>
-       <item row="6" column="1">
+       <item row="7" column="3">
+        <widget class="QComboBox" name="comboBox">
+         <item>
+          <property name="text">
+           <string>----</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>gefunden</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>gefällt</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>unsicher</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="1" column="3">
+        <widget class="QSpinBox" name="treeNr"/>
+       </item>
+       <item row="2" column="3">
+        <widget class="QSpinBox" name="flurNr"/>
+       </item>
+       <item row="0" column="3">
+        <widget class="QLineEdit" name="map"/>
+       </item>
+       <item row="5" column="3">
+        <widget class="QLineEdit" name="etc"/>
+       </item>
+       <item row="9" column="1">
         <spacer name="verticalSpacer_3">
          <property name="orientation">
           <enum>Qt::Orientation::Vertical</enum>
@@ -106,6 +130,27 @@
           </size>
          </property>
         </spacer>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLabel" name="label_7">
+         <property name="text">
+          <string>Flur-nr:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="1">
+        <widget class="QLabel" name="label_25">
+         <property name="text">
+          <string>OSM-ID</string>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="3">
+        <widget class="QSpinBox" name="spinBox">
+         <property name="maximum">
+          <number>999999999</number>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -136,7 +181,7 @@
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="QLineEdit" name="lineEdit_2"/>
+        <widget class="QLineEdit" name="treeName"/>
        </item>
        <item row="1" column="0">
         <widget class="QLabel" name="label_5">
@@ -146,7 +191,12 @@
         </widget>
        </item>
        <item row="1" column="1">
-        <widget class="QComboBox" name="comboBox_2">
+        <widget class="QComboBox" name="hSelect">
+         <item>
+          <property name="text">
+           <string>----</string>
+          </property>
+         </item>
          <item>
           <property name="text">
            <string>bis 10m</string>
@@ -170,10 +220,10 @@
         </widget>
        </item>
        <item row="6" column="1">
-        <widget class="QSpinBox" name="spinBox_4"/>
+        <widget class="QSpinBox" name="age"/>
        </item>
        <item row="3" column="1">
-        <widget class="QCheckBox" name="checkBox">
+        <widget class="QCheckBox" name="single">
          <property name="text">
           <string>Einzelbaum</string>
          </property>
@@ -200,7 +250,11 @@
         </widget>
        </item>
        <item row="8" column="1">
-        <widget class="QSpinBox" name="spinBox_6"/>
+        <widget class="QSpinBox" name="spinBox_6">
+         <property name="minimum">
+          <number>1</number>
+         </property>
+        </widget>
        </item>
        <item row="7" column="0">
         <widget class="QLabel" name="label_21">
@@ -213,40 +267,15 @@
         <widget class="QSpinBox" name="spinBox_5"/>
        </item>
        <item row="0" column="2">
-        <widget class="QComboBox" name="comboBox">
+        <widget class="QComboBox" name="treeSelect">
+         <item>
+          <property name="text">
+           <string>----</string>
+          </property>
+         </item>
          <item>
           <property name="text">
            <string>Bergahorn</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Winterlinde</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Kastaie</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Esche</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Spitzahorn</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Robiie</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Sommerlinde</string>
           </property>
          </item>
          <item>
@@ -256,12 +285,42 @@
          </item>
          <item>
           <property name="text">
+           <string>Buche</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
            <string>Eiche</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>Buche</string>
+           <string>Esche</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Kastaie</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Robiie</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Spitzahorn</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Sommerlinde</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Winterlinde</string>
           </property>
          </item>
         </widget>
@@ -280,14 +339,14 @@
       </attribute>
       <layout class="QGridLayout" name="gridLayout_5">
        <item row="2" column="1">
-        <widget class="QCheckBox" name="checkBox_23">
+        <widget class="QCheckBox" name="build">
          <property name="text">
           <string>Gebäude/Keller</string>
          </property>
         </widget>
        </item>
        <item row="1" column="0">
-        <widget class="QCheckBox" name="checkBox_20">
+        <widget class="QCheckBox" name="free">
          <property name="text">
           <string>frei</string>
          </property>
@@ -301,7 +360,7 @@
         </widget>
        </item>
        <item row="1" column="1">
-        <widget class="QCheckBox" name="checkBox_21">
+        <widget class="QCheckBox" name="road_2">
          <property name="text">
           <string>Straße</string>
          </property>
@@ -315,7 +374,7 @@
         </widget>
        </item>
        <item row="3" column="0">
-        <widget class="QCheckBox" name="checkBox_24">
+        <widget class="QCheckBox" name="ueber">
          <property name="text">
           <string>überfüllt</string>
          </property>
@@ -329,21 +388,21 @@
         </widget>
        </item>
        <item row="2" column="0">
-        <widget class="QCheckBox" name="checkBox_22">
+        <widget class="QCheckBox" name="ver">
          <property name="text">
           <string>verdichtet</string>
          </property>
         </widget>
        </item>
        <item row="3" column="1">
-        <widget class="QCheckBox" name="checkBox_25">
+        <widget class="QCheckBox" name="other">
          <property name="text">
           <string>Nachbargehgehölz</string>
          </property>
         </widget>
        </item>
        <item row="4" column="0">
-        <widget class="QCheckBox" name="checkBox_26">
+        <widget class="QCheckBox" name="belag">
          <property name="text">
           <string>Belag</string>
          </property>
@@ -363,9 +422,6 @@
          </property>
         </widget>
        </item>
-       <item row="8" column="2">
-        <widget class="QLineEdit" name="lineEdit_9"/>
-       </item>
        <item row="8" column="0">
         <widget class="QLabel" name="label_19">
          <property name="text">
@@ -374,7 +430,7 @@
         </widget>
        </item>
        <item row="4" column="1">
-        <widget class="QCheckBox" name="checkBox_27">
+        <widget class="QCheckBox" name="boden">
          <property name="text">
           <string>Bodennbearbeitug</string>
          </property>
@@ -392,6 +448,9 @@
           </size>
          </property>
         </spacer>
+       </item>
+       <item row="8" column="1">
+        <widget class="QLineEdit" name="lineEdit_9"/>
        </item>
       </layout>
      </widget>
@@ -428,6 +487,13 @@
         <widget class="QCheckBox" name="checkBox_13">
          <property name="text">
           <string>bearbeitet</string>
+         </property>
+        </widget>
+       </item>
+       <item row="18" column="0">
+        <widget class="QCheckBox" name="checkBox_31">
+         <property name="text">
+          <string>Mispelbefall</string>
          </property>
         </widget>
        </item>
@@ -506,6 +572,11 @@
        </item>
        <item row="22" column="1">
         <widget class="QComboBox" name="comboBox_4">
+         <item>
+          <property name="text">
+           <string>----</string>
+          </property>
+         </item>
          <item>
           <property name="text">
            <string>gut</string>
@@ -615,13 +686,6 @@
         <widget class="QLabel" name="label_13">
          <property name="text">
           <string>     sostiges:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="18" column="0">
-        <widget class="QCheckBox" name="checkBox_31">
-         <property name="text">
-          <string>Mispelbefall</string>
          </property>
         </widget>
        </item>

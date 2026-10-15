@@ -12,3 +12,9 @@ TreeDialog::~TreeDialog()
 {
 	delete ui;
 }
+
+void TreeDialog::on_treeSelect_activated(int index)
+{
+	QString select = ui->treeSelect->currentText();
+	ui->treeName->setText(select);
+}
