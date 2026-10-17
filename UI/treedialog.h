@@ -24,7 +24,12 @@
 #ifndef TREEDIALOG_H
 #define TREEDIALOG_H
 
+#include <QAbstractButton>
 #include <QDialog>
+
+#define TAG "tag"
+
+#define BUND_POS_MAP "BUND:pos:map"
 
 namespace Ui {
 class TreeDialog;
@@ -39,9 +44,14 @@ public:
 	~TreeDialog();
 
 	void save(const QString &fname);
+	void read(const QString &fname);
 
 private slots:
 	void on_treeSelect_activated(int index);
+
+	void on_buttonBox_clicked(QAbstractButton *button);
+
+	void on_buttonBox_accepted();
 
 private:
 	Ui::TreeDialog *ui;

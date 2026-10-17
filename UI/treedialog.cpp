@@ -45,14 +45,65 @@ void TreeDialog::save(const QString &fname)
 		return;
 
 	QTextStream out(&file);
-	out << createXmlPair("ttt", "test", "value") << "\n";
-	out << createXmlInt("ttt", "test", -77) << "\n";
+	out << "<tree>\n";
+	out << createXmlPair(TAG, BUND_POS_MAP, ui->map->text()) << "\n";
+	out << createXmlInt(TAG, "BUND:pos:tree_nr", ui->treeNr->value()) << "\n";
+	out << createXmlInt(TAG, "BUND:pos:flur_nr", ui->flurNr->value()) << "\n";
+	out << createXmlInt(TAG, "BUND:pos:pic_nr", ui->picNr->value()) << "\n";
+	out << createXmlPair(TAG, "BUND:pos:road", ui->road->text()) << "\n";
+	out << createXmlPair(TAG, "BUND:pos:etc", ui->etc->text()) << "\n";
+	out << createXmlPair(TAG, "BUND:pos:act", ui->act->currentText()) << "\n";
+	// TODO: label etc.?
+	out << createXmlInt(TAG, "BUND:pos:osm_id", ui->OSM_ID->value()) << "\n";
+
+	out << createXmlPair(TAG, "BUND:desc:type", ui->type->text()) << "\n";
+	out << createXmlPair(TAG, "BUND:desc:height", ui->treeHeight->currentText()) << "\n";
+	out << createXmlInt(TAG, "BUND:desc:single", ui->singleTree->checkState()) << "\n";
+	out << createXmlInt(TAG, "BUND:desc:age", ui->age->value()) << "\n";
+	out << createXmlInt(TAG, "BUND:desc:diameter", ui->diameter->value()) << "\n";
+	out << createXmlInt(TAG, "BUND:desc:count", ui->trunkCount->value()) << "\n";
+	out << createXmlInt(TAG, "BUND:desc:diameter:min", ui->diameterMin->value()) << "\n";
+	out << createXmlInt(TAG, "BUND:desc:diameter:max", ui->diameterMax->value()) << "\n";
+	out << "<tree/>";
+}
+
+void TreeDialog::read(const QString &fname)
+{
+	QFile file(fname);
+	if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+		return;
+
+	QXmlStreamReader xml;
+	xml.setDevice(&file);
+
+	while (!xml.atEnd())
+	{
+		xml.readNext();
+		if(xml.isStartElement())
+		{
+			if(xml.name().toString() == TAG)
+			{
+				QXmlStreamAttributes attrs = xml.attributes();
+				QString key = attrs.value("k").toString();
+				QString value = attrs.value("v").toString();
+				if(key == BUND_POS_MAP)
+				{
+					ui->map->setText(value);
+				}
+				TR_INF << key << value;
+			}
+		}
+	}
+	if (xml.hasError())
+	{
+		//... do error handling
+	}
 }
 
 void TreeDialog::on_treeSelect_activated(int index)
 {
 	QString select = ui->treeSelect->currentText();
-	ui->treeName->setText(select);
+	ui->type->setText(select);
 }
 
 QString TreeDialog::createXmlPair(const QString &tag, const QString &name, const QString &value)
@@ -64,4 +115,21 @@ QString TreeDialog::createXmlPair(const QString &tag, const QString &name, const
 QString TreeDialog::createXmlInt(const QString &tag, const QString &name, int value)
 {
 	return createXmlPair(tag, name, QString::number(value));
+}
+
+void TreeDialog::on_buttonBox_clicked(QAbstractButton *button)
+{
+	enum QDialogButtonBox::StandardButton std = ui->buttonBox->standardButton(button);
+	if(std == QDialogButtonBox::Ok)
+		accept();
+	if(std == QDialogButtonBox::Save)
+	{
+	}
+	if(std == QDialogButtonBox::Open)
+	{
+	}
+}
+
+void TreeDialog::on_buttonBox_accepted()
+{
 }
