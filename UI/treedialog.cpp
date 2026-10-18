@@ -47,23 +47,23 @@ void TreeDialog::save(const QString &fname)
 	QTextStream out(&file);
 	out << "<tree>\n";
 	out << createXmlPair(TAG, BUND_POS_MAP, ui->map->text()) << "\n";
-	out << createXmlInt(TAG, "BUND:pos:tree_nr", ui->treeNr->value()) << "\n";
-	out << createXmlInt(TAG, "BUND:pos:flur_nr", ui->flurNr->value()) << "\n";
-	out << createXmlInt(TAG, "BUND:pos:pic_nr", ui->picNr->value()) << "\n";
-	out << createXmlPair(TAG, "BUND:pos:road", ui->road->text()) << "\n";
-	out << createXmlPair(TAG, "BUND:pos:etc", ui->etc->text()) << "\n";
-	out << createXmlPair(TAG, "BUND:pos:act", ui->act->currentText()) << "\n";
+	out << createXmlInt(TAG, BUND_POS_TREE_NR , ui->treeNr->value()) << "\n";
+	out << createXmlInt(TAG, BUND_POS_FLUR, ui->flurNr->value()) << "\n";
+	out << createXmlInt(TAG, BUND_POS_PIC_NR, ui->picNr->value()) << "\n";
+	out << createXmlPair(TAG, BUND_POS_ROAD, ui->road->text()) << "\n";
+	out << createXmlPair(TAG, BUND_POS_ETC, ui->etc->text()) << "\n";
+	out << createXmlInt(TAG, BUND_POS_ACT, ui->act->currentIndex()) << "\n";
 	// TODO: label etc.?
-	out << createXmlInt(TAG, "BUND:pos:osm_id", ui->OSM_ID->value()) << "\n";
+	out << createXmlInt(TAG, BUND_POS_OSM_ID, ui->OSM_ID->value()) << "\n";
 
-	out << createXmlPair(TAG, "BUND:desc:type", ui->type->text()) << "\n";
-	out << createXmlPair(TAG, "BUND:desc:height", ui->treeHeight->currentText()) << "\n";
-	out << createXmlInt(TAG, "BUND:desc:single", ui->singleTree->checkState()) << "\n";
-	out << createXmlInt(TAG, "BUND:desc:age", ui->age->value()) << "\n";
-	out << createXmlInt(TAG, "BUND:desc:diameter", ui->diameter->value()) << "\n";
-	out << createXmlInt(TAG, "BUND:desc:count", ui->trunkCount->value()) << "\n";
-	out << createXmlInt(TAG, "BUND:desc:diameter:min", ui->diameterMin->value()) << "\n";
-	out << createXmlInt(TAG, "BUND:desc:diameter:max", ui->diameterMax->value()) << "\n";
+	out << createXmlPair(TAG, BUND_DESC_TYPE, ui->type->text()) << "\n";
+	out << createXmlInt(TAG, BUND_DESC_HEIGHT, ui->treeHeight->currentIndex()) << "\n";
+	out << createXmlInt(TAG, BUND_DESC_SINGLE, ui->singleTree->checkState()) << "\n";
+	out << createXmlInt(TAG, BUND_DESC_AGE, ui->age->value()) << "\n";
+	out << createXmlInt(TAG, BUND_DESC_DIA, ui->diameter->value()) << "\n";
+	out << createXmlInt(TAG, BUND_DESC_COUNT, ui->trunkCount->value()) << "\n";
+	out << createXmlInt(TAG, BUND_DESC_DIA_MIN, ui->diameterMin->value()) << "\n";
+	out << createXmlInt(TAG, BUND_DESC_DIA_MAX, ui->diameterMax->value()) << "\n";
 	out << "<tree/>";
 }
 
@@ -90,7 +90,68 @@ void TreeDialog::read(const QString &fname)
 				{
 					ui->map->setText(value);
 				}
-				TR_INF << key << value;
+				if(key == BUND_POS_TREE_NR)
+				{
+					ui->treeNr->setValue(getID(value));
+				}
+				if(key == BUND_POS_FLUR)
+				{
+					ui->flurNr->setValue(getID(value));
+				}
+				if(key == BUND_POS_PIC_NR)
+				{
+					ui->picNr->setValue(getID(value));
+				}
+				if(key == BUND_POS_ROAD)
+				{
+					ui->road->setText(value);
+				}
+				if(key == BUND_POS_ETC)
+				{
+					ui->etc->setText(value);
+				}
+				if(key == BUND_POS_ACT)
+				{
+					ui->act->setCurrentIndex(getID(value));
+				}
+				if(key == BUND_POS_OSM_ID)
+				{
+					ui->OSM_ID->setValue(getID(value));
+				}
+
+				if(key == BUND_DESC_TYPE)
+				{
+					ui->type->setText(value);
+				}
+				if(key == BUND_DESC_HEIGHT)
+				{
+					ui->treeHeight->setCurrentIndex(getID(value));
+				}
+				if(key == BUND_DESC_SINGLE)
+				{
+					ui->singleTree->setCheckState(getCheckState(value));
+				}
+				if(key == BUND_DESC_AGE)
+				{
+					ui->age->setValue(getID(value));
+				}
+				if(key == BUND_DESC_DIA)
+				{
+					ui->diameter->setValue(getID(value));
+				}
+				if(key == BUND_DESC_COUNT)
+				{
+					ui->trunkCount->setValue(getID(value));
+				}
+				if(key == BUND_DESC_DIA_MIN)
+				{
+					ui->diameterMin->setValue(getID(value));
+				}
+				if(key == BUND_DESC_DIA_MAX)
+				{
+					ui->diameterMax->setValue(getID(value));
+				}
+				//TR_INF << key << value;
 			}
 		}
 	}
@@ -115,6 +176,25 @@ QString TreeDialog::createXmlPair(const QString &tag, const QString &name, const
 QString TreeDialog::createXmlInt(const QString &tag, const QString &name, int value)
 {
 	return createXmlPair(tag, name, QString::number(value));
+}
+
+int TreeDialog::getID(const QString & value)
+{
+	bool ok;
+	int num = value.toInt(&ok);
+	if (!ok)
+	{
+		return 0;
+	}
+	//cout << "Conversion failed" <<endl;
+	return num;
+}
+
+Qt::CheckState TreeDialog::getCheckState(const QString & value)
+{
+	if(value == "2")
+		return Qt::Checked;
+	return Qt::Unchecked;
 }
 
 void TreeDialog::on_buttonBox_clicked(QAbstractButton *button)

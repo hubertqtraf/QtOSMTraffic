@@ -30,6 +30,23 @@
 #define TAG "tag"
 
 #define BUND_POS_MAP "BUND:pos:map"
+#define BUND_POS_TREE_NR "BUND:pos:tree_nr"
+#define BUND_POS_FLUR "BUND:pos:flur_nr"
+#define BUND_POS_PIC_NR "BUND:pos:pic_nr"
+#define BUND_POS_ROAD "BUND:pos:road"
+#define BUND_POS_ETC "BUND:pos:etc"
+#define BUND_POS_ACT "BUND:pos:act"
+#define BUND_POS_OSM_ID "BUND:pos:osm_id"
+
+#define BUND_DESC_TYPE "BUND:desc:type"
+#define BUND_DESC_HEIGHT "BUND:desc:height"
+#define BUND_DESC_SINGLE "BUND:desc:single"
+#define BUND_DESC_AGE "BUND:desc:age"
+#define BUND_DESC_DIA "BUND:desc:diameter"
+#define BUND_DESC_COUNT "BUND:desc:count"
+#define BUND_DESC_DIA_MIN "BUND:desc:diameter:min"
+#define BUND_DESC_DIA_MAX "BUND:desc:diameter:max"
+
 
 namespace Ui {
 class TreeDialog;
@@ -58,6 +75,8 @@ private:
 
 	QString createXmlPair(const QString &tag, const QString &name, const QString &value);
 	QString createXmlInt(const QString &tag, const QString &name, int value);
+	int getID(const QString &value);
+	Qt::CheckState getCheckState(const QString & value);
 };
 
 #endif // TREEDIALOG_H
