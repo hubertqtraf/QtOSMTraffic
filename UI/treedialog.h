@@ -63,6 +63,8 @@ public:
 	void save(const QString &fname);
 	void read(const QString &fname);
 
+	void setNodeData(const QString &name, const QString &id);
+
 private slots:
 	void on_treeSelect_activated(int index);
 

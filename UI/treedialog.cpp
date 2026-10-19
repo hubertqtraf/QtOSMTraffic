@@ -53,8 +53,7 @@ void TreeDialog::save(const QString &fname)
 	out << createXmlPair(TAG, BUND_POS_ROAD, ui->road->text()) << "\n";
 	out << createXmlPair(TAG, BUND_POS_ETC, ui->etc->text()) << "\n";
 	out << createXmlInt(TAG, BUND_POS_ACT, ui->act->currentIndex()) << "\n";
-	// TODO: label etc.?
-	out << createXmlInt(TAG, BUND_POS_OSM_ID, ui->OSM_ID->value()) << "\n";
+	out << createXmlPair(TAG, BUND_POS_OSM_ID, ui->OSM_ID->text()) << "\n";
 
 	out << createXmlPair(TAG, BUND_DESC_TYPE, ui->type->text()) << "\n";
 	out << createXmlInt(TAG, BUND_DESC_HEIGHT, ui->treeHeight->currentIndex()) << "\n";
@@ -116,7 +115,7 @@ void TreeDialog::read(const QString &fname)
 				}
 				if(key == BUND_POS_OSM_ID)
 				{
-					ui->OSM_ID->setValue(getID(value));
+					ui->OSM_ID->setText(value);
 				}
 
 				if(key == BUND_DESC_TYPE)
@@ -161,6 +160,26 @@ void TreeDialog::read(const QString &fname)
 	}
 }
 
+void TreeDialog::setNodeData(const QString &name, const QString &id)
+{
+	QStringList list = name.split(u' ');
+	Qt::CheckState osm = Qt::Checked;
+
+	if(list.size() >= 3)
+	{
+		if(list[0] == "ott")
+		{
+			ui->road->setText(list[1]);
+			osm = Qt::Unchecked;
+			ui->treeNr->setValue(getID(list.last()));
+		}
+	}
+	else
+		ui->road->setText(name);
+	ui->inOSM->setCheckState(osm);
+	ui->OSM_ID->setText(id);
+}
+
 void TreeDialog::on_treeSelect_activated(int index)
 {
 	QString select = ui->treeSelect->currentText();
@@ -184,9 +203,9 @@ int TreeDialog::getID(const QString & value)
 	int num = value.toInt(&ok);
 	if (!ok)
 	{
+		//cout << "Conversion failed" <<endl;
 		return 0;
 	}
-	//cout << "Conversion failed" <<endl;
 	return num;
 }
 
