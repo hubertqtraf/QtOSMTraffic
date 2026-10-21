@@ -180,6 +180,12 @@ void TreeDialog::setNodeData(const QString &name, const QString &id)
 	ui->OSM_ID->setText(id);
 }
 
+void TreeDialog::setCoorData(const QString &x, const QString &y)
+{
+	ui->CoorX->setText(x);
+	ui->CoorY->setText(y);
+}
+
 void TreeDialog::on_treeSelect_activated(int index)
 {
 	QString select = ui->treeSelect->currentText();

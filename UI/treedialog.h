@@ -64,6 +64,7 @@ public:
 	void read(const QString &fname);
 
 	void setNodeData(const QString &name, const QString &id);
+	void setCoorData(const QString &x, const QString &y);
 
 private slots:
 	void on_treeSelect_activated(int index);

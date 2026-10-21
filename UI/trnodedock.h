@@ -39,6 +39,11 @@ public:
 	~TrNodeDock();
 
 	void setData(TrGeoPoint *node);
+	QString getNodeText();
+	QString getNodeId();
+	QString getCoorX();
+	QString getCoorY();
+
 private:
 	Ui::TrNodeDock *ui;
 };

@@ -70,3 +70,23 @@ void TrNodeDock::setData(TrGeoPoint * node)
 	ui->lineEdit_X->setText(QString().setNum(pt.x/TR_COOR_FACTOR, 'g', 11));
 	ui->lineEdit_Y->setText(QString().setNum(pt.y/TR_COOR_FACTOR, 'g', 11));
 }
+
+QString TrNodeDock::getNodeText()
+{
+	return ui->lineEdit_text->text();
+}
+
+QString TrNodeDock::getNodeId()
+{
+	return ui->lineEdit_ID->text();
+}
+
+QString TrNodeDock::getCoorX()
+{
+	return ui->lineEdit_X->text();
+}
+
+QString TrNodeDock::getCoorY()
+{
+	return ui->lineEdit_Y->text();
+}
