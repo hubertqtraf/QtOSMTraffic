@@ -25,9 +25,12 @@
 #define TREEDIALOG_H
 
 #include <QAbstractButton>
+#include <QAbstractItemModel>
 #include <QDialog>
+#include <QTreeWidget>
 
 #define TAG "tag"
+#define TREE "tree"
 
 #define BUND_POS_MAP "BUND:pos:map"
 #define BUND_POS_TREE_NR "BUND:pos:tree_nr"
@@ -52,6 +55,7 @@ namespace Ui {
 class TreeDialog;
 }
 
+
 class TreeDialog : public QDialog
 {
 	Q_OBJECT
@@ -61,6 +65,7 @@ public:
 	~TreeDialog();
 
 	void save(const QString &fname);
+	void saveTree(QTextStream &out, const QString &map, int local_id);
 	void read(const QString &fname);
 
 	void setNodeData(const QString &name, const QString &id);
@@ -73,8 +78,12 @@ private slots:
 
 	void on_buttonBox_accepted();
 
+	void on_treeWidget_itemActivated(QTreeWidgetItem *item, int column);
+
 private:
 	Ui::TreeDialog *ui;
+
+	QMap<QString, int> tree_map;
 
 	QString createXmlPair(const QString &tag, const QString &name, const QString &value);
 	QString createXmlInt(const QString &tag, const QString &name, int value);

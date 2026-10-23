@@ -26,11 +26,16 @@
 #include "treedialog.h"
 #include "ui_treedialog.h"
 
+
 TreeDialog::TreeDialog(QWidget *parent) :
 	QDialog(parent),
 	ui(new Ui::TreeDialog)
 {
 	ui->setupUi(this);
+
+	ui->treeWidget->setColumnCount(2);
+	//for (int i = 0; i < 2; ++i)
+	//	new QTreeWidgetItem(ui->treeWidget, { tr("item: %1").arg(i) });
 }
 
 TreeDialog::~TreeDialog()
@@ -46,6 +51,12 @@ void TreeDialog::save(const QString &fname)
 
 	QTextStream out(&file);
 	out << "<tree>\n";
+	saveTree(out, "xxx", 0);
+	out << "<tree/>";
+}
+
+void TreeDialog::saveTree(QTextStream &out, const QString &map, int local_id)
+{
 	out << createXmlPair(TAG, BUND_POS_MAP, ui->map->text()) << "\n";
 	out << createXmlInt(TAG, BUND_POS_TREE_NR , ui->treeNr->value()) << "\n";
 	out << createXmlInt(TAG, BUND_POS_FLUR, ui->flurNr->value()) << "\n";
@@ -63,7 +74,6 @@ void TreeDialog::save(const QString &fname)
 	out << createXmlInt(TAG, BUND_DESC_COUNT, ui->trunkCount->value()) << "\n";
 	out << createXmlInt(TAG, BUND_DESC_DIA_MIN, ui->diameterMin->value()) << "\n";
 	out << createXmlInt(TAG, BUND_DESC_DIA_MAX, ui->diameterMax->value()) << "\n";
-	out << "<tree/>";
 }
 
 void TreeDialog::read(const QString &fname)
@@ -80,6 +90,18 @@ void TreeDialog::read(const QString &fname)
 		xml.readNext();
 		if(xml.isStartElement())
 		{
+			if(xml.name().toString() == TREE)
+			{
+				QXmlStreamAttributes attrs = xml.attributes();
+				QString ref = attrs.value("map").toString() + "_" +
+						attrs.value("local_id").toString();
+				if(attrs.value("map").toString() != "")
+				{
+					QStringList list;
+					list.append(attrs.value("map").toString());
+					new QTreeWidgetItem(ui->treeWidget, list, Qt::DisplayRole);
+				}
+			}
 			if(xml.name().toString() == TAG)
 			{
 				QXmlStreamAttributes attrs = xml.attributes();
@@ -237,4 +259,12 @@ void TreeDialog::on_buttonBox_clicked(QAbstractButton *button)
 
 void TreeDialog::on_buttonBox_accepted()
 {
+}
+
+void TreeDialog::on_treeWidget_itemActivated(QTreeWidgetItem *item, int column)
+{
+	if(item == nullptr)
+		return;
+	QVariant text = item->data(column, Qt::DisplayRole);
+	ui->map->setText(text.toString());
 }
