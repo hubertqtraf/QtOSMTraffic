@@ -76,6 +76,59 @@ void TreeDialog::saveTree(QTextStream &out, const QString &map, int local_id)
 	out << createXmlInt(TAG, BUND_DESC_DIA_MAX, ui->diameterMax->value()) << "\n";
 }
 
+QTreeWidgetItem * TreeDialog::getTreeItem(QTreeWidgetItem * base, const QString &node)
+{
+	int childCount = base->childCount();
+	for (int i = 0; i < childCount; ++i)
+	{
+		QTreeWidgetItem *child = base->child(i);
+		QString test = child->data(0, Qt::DisplayRole).toString();
+		//TR_INF << test;
+		return child;
+	}
+	/*QList<QTreeWidgetItem *> ilist = ui->treeWidget->findItems(node, Qt::MatchExactly);
+	if(ilist.size() == 1)
+	{
+		if(ilist.size() == 1)
+			return ilist[0];
+	}*/
+	return nullptr;
+}
+
+void TreeDialog::addTreeNode(const QString &page, const QString &nr)
+{
+	ui->treeWidget->clearSelection();
+	//ui->treeWidget->setSelectionModel();
+
+	if(tree_map.contains(page))
+	{
+		QTreeWidgetItem * imap = getTreeItem(ui->treeWidget->topLevelItem(0), page);
+		if(imap)
+		{
+			QTreeWidgetItem * inr = getTreeItem(imap, nr);
+			if(inr == nullptr)
+			{
+				QStringList list;
+				list.append(nr);
+				QTreeWidgetItem *jnr = new QTreeWidgetItem(imap, list, Qt::DisplayRole);
+				jnr->setSelected(true);
+				imap->setExpanded(true);
+			}
+		}
+		return;
+	}
+	QStringList list;
+	list.append(page);
+	QTreeWidgetItem *jmap = new QTreeWidgetItem(ui->treeWidget, list, Qt::DisplayRole);
+	list.clear();
+	list.append(nr);
+	QTreeWidgetItem *inr = new QTreeWidgetItem(jmap, list, Qt::DisplayRole);
+	inr->setSelected(true);
+	jmap->setExpanded(true);
+	tree_map[page] = 1;
+}
+
+
 void TreeDialog::read(const QString &fname)
 {
 	QFile file(fname);
@@ -97,9 +150,7 @@ void TreeDialog::read(const QString &fname)
 						attrs.value("local_id").toString();
 				if(attrs.value("map").toString() != "")
 				{
-					QStringList list;
-					list.append(attrs.value("map").toString());
-					new QTreeWidgetItem(ui->treeWidget, list, Qt::DisplayRole);
+					addTreeNode(attrs.value("map").toString(), attrs.value("local_id").toString());
 				}
 			}
 			if(xml.name().toString() == TAG)
@@ -191,13 +242,14 @@ void TreeDialog::setNodeData(const QString &name, const QString &id)
 	{
 		if(list[0] == "ott")
 		{
-			ui->road->setText(list[1]);
+			ui->map->setText(list[1]);
 			osm = Qt::Unchecked;
 			ui->treeNr->setValue(getID(list.last()));
+			addTreeNode(list[1], list.last());
 		}
 	}
-	else
-		ui->road->setText(name);
+	//else
+	//	ui->map->setText(name);
 	ui->inOSM->setCheckState(osm);
 	ui->OSM_ID->setText(id);
 }

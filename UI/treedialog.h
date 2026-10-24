@@ -71,6 +71,10 @@ public:
 	void setNodeData(const QString &name, const QString &id);
 	void setCoorData(const QString &x, const QString &y);
 
+	void addTreeNode(const QString &page, const QString &nr);
+
+	QTreeWidgetItem *getTreeItem(QTreeWidgetItem *base, const QString &node);
+
 private slots:
 	void on_treeSelect_activated(int index);
 
