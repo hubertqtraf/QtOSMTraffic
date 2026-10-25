@@ -83,15 +83,20 @@ QTreeWidgetItem * TreeDialog::getTreeItem(QTreeWidgetItem * base, const QString 
 	{
 		QTreeWidgetItem *child = base->child(i);
 		QString test = child->data(0, Qt::DisplayRole).toString();
-		//TR_INF << test;
-		return child;
+		if(test == node)
+			return child;
 	}
-	/*QList<QTreeWidgetItem *> ilist = ui->treeWidget->findItems(node, Qt::MatchExactly);
+	return nullptr;
+}
+
+QTreeWidgetItem * TreeDialog::getBaseTreeItem(QTreeWidgetItem * base, const QString &node)
+{
+	QList<QTreeWidgetItem *> ilist = ui->treeWidget->findItems(node, Qt::MatchExactly);
 	if(ilist.size() == 1)
 	{
 		if(ilist.size() == 1)
 			return ilist[0];
-	}*/
+	}
 	return nullptr;
 }
 
@@ -102,8 +107,8 @@ void TreeDialog::addTreeNode(const QString &page, const QString &nr)
 
 	if(tree_map.contains(page))
 	{
-		QTreeWidgetItem * imap = getTreeItem(ui->treeWidget->topLevelItem(0), page);
-		if(imap)
+		QTreeWidgetItem * imap = getBaseTreeItem(ui->treeWidget->topLevelItem(0), page);
+		if(imap != nullptr)
 		{
 			QTreeWidgetItem * inr = getTreeItem(imap, nr);
 			if(inr == nullptr)
@@ -126,6 +131,9 @@ void TreeDialog::addTreeNode(const QString &page, const QString &nr)
 	inr->setSelected(true);
 	jmap->setExpanded(true);
 	tree_map[page] = 1;
+
+	ui->map->setText(page);
+	ui->treeNr->setValue(getID(nr));
 }
 
 
@@ -319,4 +327,5 @@ void TreeDialog::on_treeWidget_itemActivated(QTreeWidgetItem *item, int column)
 		return;
 	QVariant text = item->data(column, Qt::DisplayRole);
 	ui->map->setText(text.toString());
+	//ui->treeNr->setValue(getID(text.toString()));
 }

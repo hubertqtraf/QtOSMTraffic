@@ -75,6 +75,8 @@ public:
 
 	QTreeWidgetItem *getTreeItem(QTreeWidgetItem *base, const QString &node);
 
+	QTreeWidgetItem *getBaseTreeItem(QTreeWidgetItem *base, const QString &node);
+
 private slots:
 	void on_treeSelect_activated(int index);
 
