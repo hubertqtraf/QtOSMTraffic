@@ -33,9 +33,7 @@ TreeDialog::TreeDialog(QWidget *parent) :
 {
 	ui->setupUi(this);
 
-	ui->treeWidget->setColumnCount(2);
-	//for (int i = 0; i < 2; ++i)
-	//	new QTreeWidgetItem(ui->treeWidget, { tr("item: %1").arg(i) });
+	ui->treeWidget->setColumnCount(1);
 }
 
 TreeDialog::~TreeDialog()
@@ -45,14 +43,31 @@ TreeDialog::~TreeDialog()
 
 void TreeDialog::save(const QString &fname)
 {
+	QString map;
+
 	QFile file(fname);
 	if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
 		return;
 
 	QTextStream out(&file);
-	out << "<tree>\n";
-	saveTree(out, "xxx", 0);
-	out << "<tree/>";
+	QTreeWidgetItemIterator it(ui->treeWidget);
+	while (*it)
+	{
+		if((*it)->childCount())
+		{
+			map = (*it)->text(0);
+			//out << "--->" << (*it)->text(0) << " - " << (*it)->childCount() << "\n";
+		}
+		else
+		{
+			ui->map->setText(map);
+			ui->treeNr->setValue(getID((*it)->text(0)));
+			out << "<tree map=\"" << map << "\" " << "local_id=\""  << (*it)->text(0) << "\"" << ">\n";
+			saveTree(out, map, 0);
+			out << "<tree/>\n";
+		}
+		++it;
+	}
 }
 
 void TreeDialog::saveTree(QTextStream &out, const QString &map, int local_id)
