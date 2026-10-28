@@ -51,6 +51,17 @@
 #define BUND_DESC_DIA_MAX "BUND:desc:diameter:max"
 
 
+class TreeElement
+{
+public:
+	TreeElement();
+
+	int flur_nr;
+	int pic_nr;
+	QString road;
+	QString etc;
+};
+
 namespace Ui {
 class TreeDialog;
 }
@@ -89,12 +100,16 @@ private slots:
 private:
 	Ui::TreeDialog *ui;
 
-	QMap<QString, int> tree_map;
+	bool m_ok_clicked;
+	QMap<QString, QMap<int, TreeElement>> m_tree_map;
+	TreeElement *getTreeNodeData(const QString &page, const QString &nr);
 
 	QString createXmlPair(const QString &tag, const QString &name, const QString &value);
 	QString createXmlInt(const QString &tag, const QString &name, int value);
 	int getID(const QString &value);
 	Qt::CheckState getCheckState(const QString & value);
+	void addTreeNodeData(const QString &page, const QString &nr);
+
 };
 
 #endif // TREEDIALOG_H

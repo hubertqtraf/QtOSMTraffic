@@ -27,9 +27,19 @@
 #include "ui_treedialog.h"
 
 
-TreeDialog::TreeDialog(QWidget *parent) :
-	QDialog(parent),
-	ui(new Ui::TreeDialog)
+TreeElement::TreeElement()
+	: flur_nr(0)
+	, pic_nr(0)
+	, road{""}
+	, etc{""}
+{
+}
+
+
+TreeDialog::TreeDialog(QWidget *parent)
+	: QDialog(parent)
+	, ui(new Ui::TreeDialog)
+	, m_ok_clicked(false)
 {
 	ui->setupUi(this);
 
@@ -50,7 +60,17 @@ void TreeDialog::save(const QString &fname)
 		return;
 
 	QTextStream out(&file);
-	QTreeWidgetItemIterator it(ui->treeWidget);
+	for (auto i = m_tree_map.cbegin(), end = m_tree_map.cend(); i != end; ++i)
+	{
+		QMap<int, TreeElement> nr_map = i.value();
+		for (auto j = nr_map.cbegin(), end = nr_map.cend(); j != end; ++j)
+		{
+			out << "<tree map=\"" << i.key() << "\" " << "local_id=\""  << j.key() << "\"" << ">\n";
+			saveTree(out,i.key(), j.key());
+			out << "<tree/>\n";
+		}
+	}
+	/*QTreeWidgetItemIterator it(ui->treeWidget);
 	while (*it)
 	{
 		if((*it)->childCount())
@@ -67,17 +87,20 @@ void TreeDialog::save(const QString &fname)
 			out << "<tree/>\n";
 		}
 		++it;
-	}
+	}*/
 }
 
 void TreeDialog::saveTree(QTextStream &out, const QString &map, int local_id)
 {
-	out << createXmlPair(TAG, BUND_POS_MAP, ui->map->text()) << "\n";
-	out << createXmlInt(TAG, BUND_POS_TREE_NR , ui->treeNr->value()) << "\n";
-	out << createXmlInt(TAG, BUND_POS_FLUR, ui->flurNr->value()) << "\n";
-	out << createXmlInt(TAG, BUND_POS_PIC_NR, ui->picNr->value()) << "\n";
-	out << createXmlPair(TAG, BUND_POS_ROAD, ui->road->text()) << "\n";
-	out << createXmlPair(TAG, BUND_POS_ETC, ui->etc->text()) << "\n";
+	TreeElement * elem = getTreeNodeData(map, QString::number(local_id));
+	if(elem == nullptr)
+		return;
+	out << createXmlPair(TAG, BUND_POS_MAP, map) << "\n";
+	out << createXmlInt(TAG, BUND_POS_TREE_NR , local_id) << "\n";
+	out << createXmlInt(TAG, BUND_POS_FLUR, m_tree_map[map][local_id].flur_nr) << "\n";
+	out << createXmlInt(TAG, BUND_POS_PIC_NR, m_tree_map[map][local_id].pic_nr) << "\n";
+	out << createXmlPair(TAG, BUND_POS_ROAD, m_tree_map[map][local_id].road) << "\n";
+	out << createXmlPair(TAG, BUND_POS_ETC, m_tree_map[map][local_id].etc) << "\n";
 	out << createXmlInt(TAG, BUND_POS_ACT, ui->act->currentIndex()) << "\n";
 	out << createXmlPair(TAG, BUND_POS_OSM_ID, ui->OSM_ID->text()) << "\n";
 
@@ -115,12 +138,40 @@ QTreeWidgetItem * TreeDialog::getBaseTreeItem(QTreeWidgetItem * base, const QStr
 	return nullptr;
 }
 
+void TreeDialog::addTreeNodeData(const QString &page, const QString &nr)
+{
+	TreeElement tree_element;
+	int index = getID(nr);
+
+	if(m_tree_map.contains(page))
+	{
+		m_tree_map[page][index] = tree_element;
+	}
+	else
+	{
+		QMap<int, TreeElement> tree;
+		tree[index] = tree_element;
+		m_tree_map[page] = tree;
+	}
+}
+
+TreeElement * TreeDialog::getTreeNodeData(const QString &page, const QString &nr)
+{
+	if(page == "")
+		return nullptr;
+	QMap<int, TreeElement> tree = m_tree_map[page];
+	int index = getID(nr);
+	if(index == 0)
+		return nullptr;
+	return &(tree[index]);
+}
+
 void TreeDialog::addTreeNode(const QString &page, const QString &nr)
 {
 	ui->treeWidget->clearSelection();
 	//ui->treeWidget->setSelectionModel();
 
-	if(tree_map.contains(page))
+	if(m_tree_map.contains(page))
 	{
 		QTreeWidgetItem * imap = getBaseTreeItem(ui->treeWidget->topLevelItem(0), page);
 		if(imap != nullptr)
@@ -133,6 +184,8 @@ void TreeDialog::addTreeNode(const QString &page, const QString &nr)
 				QTreeWidgetItem *jnr = new QTreeWidgetItem(imap, list, Qt::DisplayRole);
 				jnr->setSelected(true);
 				imap->setExpanded(true);
+
+				addTreeNodeData(page, nr);
 			}
 		}
 		return;
@@ -145,7 +198,8 @@ void TreeDialog::addTreeNode(const QString &page, const QString &nr)
 	QTreeWidgetItem *inr = new QTreeWidgetItem(jmap, list, Qt::DisplayRole);
 	inr->setSelected(true);
 	jmap->setExpanded(true);
-	tree_map[page] = 1;
+
+	addTreeNodeData(page, nr);
 
 	ui->map->setText(page);
 	ui->treeNr->setValue(getID(nr));
@@ -161,6 +215,11 @@ void TreeDialog::read(const QString &fname)
 	QXmlStreamReader xml;
 	xml.setDevice(&file);
 
+	QString local_map;
+	QString local_nr;
+	int local_id = 0;
+	//TreeElement * element = nullptr;
+
 	while (!xml.atEnd())
 	{
 		xml.readNext();
@@ -169,11 +228,14 @@ void TreeDialog::read(const QString &fname)
 			if(xml.name().toString() == TREE)
 			{
 				QXmlStreamAttributes attrs = xml.attributes();
-				QString ref = attrs.value("map").toString() + "_" +
-						attrs.value("local_id").toString();
+				//QString ref = attrs.value("map").toString() + "_" +
+				//		attrs.value("local_id").toString();
 				if(attrs.value("map").toString() != "")
 				{
-					addTreeNode(attrs.value("map").toString(), attrs.value("local_id").toString());
+					local_map = attrs.value("map").toString();
+					local_nr = attrs.value("local_id").toString();
+					local_id = getID(local_nr);
+					addTreeNode(local_map, local_nr);
 				}
 			}
 			if(xml.name().toString() == TAG)
@@ -181,6 +243,7 @@ void TreeDialog::read(const QString &fname)
 				QXmlStreamAttributes attrs = xml.attributes();
 				QString key = attrs.value("k").toString();
 				QString value = attrs.value("v").toString();
+
 				if(key == BUND_POS_MAP)
 				{
 					ui->map->setText(value);
@@ -191,19 +254,20 @@ void TreeDialog::read(const QString &fname)
 				}
 				if(key == BUND_POS_FLUR)
 				{
-					ui->flurNr->setValue(getID(value));
+					m_tree_map[local_map][local_id].flur_nr = getID(value);
 				}
 				if(key == BUND_POS_PIC_NR)
 				{
-					ui->picNr->setValue(getID(value));
+					m_tree_map[local_map][local_id].pic_nr = getID(value);
 				}
 				if(key == BUND_POS_ROAD)
 				{
-					ui->road->setText(value);
+					m_tree_map[local_map][local_id].road = value;
+					//ui->road->setText(value);
 				}
 				if(key == BUND_POS_ETC)
 				{
-					ui->etc->setText(value);
+					m_tree_map[local_map][local_id].etc = value;
 				}
 				if(key == BUND_POS_ACT)
 				{
@@ -247,6 +311,17 @@ void TreeDialog::read(const QString &fname)
 					ui->diameterMax->setValue(getID(value));
 				}
 				//TR_INF << key << value;
+			}
+		}
+		if(xml.isEndElement())
+		{
+			if(xml.name().toString() == TREE)
+			{
+				//int index = getID(local_nr);
+				local_map = "";
+				local_nr = "";
+				local_id = 0;
+				//element = nullptr;
 			}
 		}
 	}
@@ -323,7 +398,10 @@ void TreeDialog::on_buttonBox_clicked(QAbstractButton *button)
 {
 	enum QDialogButtonBox::StandardButton std = ui->buttonBox->standardButton(button);
 	if(std == QDialogButtonBox::Ok)
+	{
+		m_ok_clicked = true;
 		accept();
+	}
 	if(std == QDialogButtonBox::Save)
 	{
 	}
@@ -334,13 +412,41 @@ void TreeDialog::on_buttonBox_clicked(QAbstractButton *button)
 
 void TreeDialog::on_buttonBox_accepted()
 {
+	// copy data from gui to db
+	ui->map->text();
+	QString nr = QString::number(ui->treeNr->value());
+	TreeElement * elem = getTreeNodeData(ui->map->text(), nr);
+	if((elem == nullptr) || (m_ok_clicked == false))
+		return;
+	m_tree_map[ui->map->text()][ui->treeNr->value()].flur_nr = ui->flurNr->value();
+	m_tree_map[ui->map->text()][ui->treeNr->value()].pic_nr = ui->picNr->value();
+	m_tree_map[ui->map->text()][ui->treeNr->value()].road = ui->road->text();
+	m_tree_map[ui->map->text()][ui->treeNr->value()].etc = ui->etc->text();
+
+	m_ok_clicked = false;
 }
 
 void TreeDialog::on_treeWidget_itemActivated(QTreeWidgetItem *item, int column)
 {
 	if(item == nullptr)
 		return;
+	if(item->childCount() == 0)
+		;//return;
+	QTreeWidgetItem * parent = item->parent();
+	if(parent == nullptr)
+		return;
+	QString base = parent->data(column, Qt::DisplayRole).toString();
 	QVariant text = item->data(column, Qt::DisplayRole);
-	ui->map->setText(text.toString());
-	//ui->treeNr->setValue(getID(text.toString()));
+	ui->map->setText(base);
+	ui->treeNr->setValue(getID(text.toString()));
+	TreeElement * elem = getTreeNodeData(base, text.toString());
+	if(elem == nullptr)
+		return;
+	int id = getID(text.toString());
+	ui->flurNr->setValue(m_tree_map[base][id].flur_nr);
+	ui->picNr->setValue(m_tree_map[base][id].pic_nr);
+	ui->road->setText(m_tree_map[base][id].road);
+	ui->etc->setText(m_tree_map[base][id].etc);
+
+	//ui->flurNr->setValue(m_tree->flur_nr);
 }
