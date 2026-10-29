@@ -41,6 +41,9 @@
 #define BUND_POS_ACT "BUND:pos:act"
 #define BUND_POS_OSM_ID "BUND:pos:osm_id"
 
+#define BUND_POS_COOR_X "BUND:pos:coor_x"
+#define BUND_POS_COOR_Y "BUND:pos:coor_y"
+
 #define BUND_DESC_TYPE "BUND:desc:type"
 #define BUND_DESC_HEIGHT "BUND:desc:height"
 #define BUND_DESC_SINGLE "BUND:desc:single"
@@ -60,6 +63,9 @@ public:
 	int pic_nr;
 	QString road;
 	QString etc;
+
+	double coor_x;
+	double coor_y;
 };
 
 namespace Ui {
@@ -79,8 +85,8 @@ public:
 	void saveTree(QTextStream &out, const QString &map, int local_id);
 	void read(const QString &fname);
 
-	void setNodeData(const QString &name, const QString &id);
-	void setCoorData(const QString &x, const QString &y);
+	void setNodeData(const QString &name, const QString &osm_id,
+					 const QString &x, const QString &y);
 
 	void addTreeNode(const QString &page, const QString &nr);
 
@@ -106,10 +112,12 @@ private:
 
 	QString createXmlPair(const QString &tag, const QString &name, const QString &value);
 	QString createXmlInt(const QString &tag, const QString &name, int value);
+	QString createXmlDouble(const QString &tag, const QString &name, double value);
+
 	int getID(const QString &value);
+	double getCoor(const QString &value);
 	Qt::CheckState getCheckState(const QString & value);
 	void addTreeNodeData(const QString &page, const QString &nr);
-
 };
 
 #endif // TREEDIALOG_H
