@@ -25,9 +25,9 @@
     </widget>
    </item>
    <item row="2" column="0">
-    <widget class="QTabWidget" name="Baum">
+    <widget class="QTabWidget" name="tree_tab">
      <property name="currentIndex">
-      <number>0</number>
+      <number>4</number>
      </property>
      <widget class="QWidget" name="tab_3">
       <attribute name="title">
@@ -535,21 +535,21 @@
         <widget class="QLineEdit" name="lineEdit_7"/>
        </item>
        <item row="9" column="1">
-        <widget class="QCheckBox" name="checkBox_12">
+        <widget class="QCheckBox" name="cond_stem_6">
          <property name="text">
           <string>Sammbruch</string>
          </property>
         </widget>
        </item>
        <item row="10" column="1">
-        <widget class="QCheckBox" name="checkBox_13">
+        <widget class="QCheckBox" name="cond_stem_8">
          <property name="text">
           <string>bearbeitet</string>
          </property>
         </widget>
        </item>
        <item row="18" column="0">
-        <widget class="QCheckBox" name="checkBox_31">
+        <widget class="QCheckBox" name="cond_crown_7">
          <property name="text">
           <string>Mispelbefall</string>
          </property>
@@ -559,42 +559,42 @@
         <widget class="QLineEdit" name="lineEdit_6"/>
        </item>
        <item row="2" column="0">
-        <widget class="QCheckBox" name="checkBox_2">
+        <widget class="QCheckBox" name="cond_root_1">
          <property name="text">
           <string>verletzt</string>
          </property>
         </widget>
        </item>
        <item row="7" column="0">
-        <widget class="QCheckBox" name="checkBox_6">
+        <widget class="QCheckBox" name="cond_stem_1">
          <property name="text">
           <string>Ridenschaden</string>
          </property>
         </widget>
        </item>
        <item row="4" column="0">
-        <widget class="QCheckBox" name="checkBox_4">
+        <widget class="QCheckBox" name="cond_root_3">
          <property name="text">
           <string>freiliegend</string>
          </property>
         </widget>
        </item>
        <item row="8" column="1">
-        <widget class="QCheckBox" name="checkBox_9">
+        <widget class="QCheckBox" name="cond_stem_4">
          <property name="text">
           <string>Frostriss</string>
          </property>
         </widget>
        </item>
        <item row="17" column="1">
-        <widget class="QCheckBox" name="checkBox_19">
+        <widget class="QCheckBox" name="cond_crown_6">
          <property name="text">
           <string>vorzeitiger Färbung</string>
          </property>
         </widget>
        </item>
        <item row="16" column="1">
-        <widget class="QCheckBox" name="checkBox_16">
+        <widget class="QCheckBox" name="cond_crown_4">
          <property name="text">
           <string>Kronrnnverlichtung</string>
          </property>
@@ -615,14 +615,14 @@
         </widget>
        </item>
        <item row="9" column="0">
-        <widget class="QCheckBox" name="checkBox_10">
+        <widget class="QCheckBox" name="cond_stem_5">
          <property name="text">
           <string>Höhlung</string>
          </property>
         </widget>
        </item>
        <item row="2" column="1">
-        <widget class="QCheckBox" name="checkBox_3">
+        <widget class="QCheckBox" name="cond_root_2">
          <property name="text">
           <string>Fäulnis</string>
          </property>
@@ -658,35 +658,35 @@
         </widget>
        </item>
        <item row="4" column="1">
-        <widget class="QCheckBox" name="checkBox_5">
+        <widget class="QCheckBox" name="cond_root_4">
          <property name="text">
           <string>Halsschadenn</string>
          </property>
         </widget>
        </item>
        <item row="17" column="0">
-        <widget class="QCheckBox" name="checkBox_18">
+        <widget class="QCheckBox" name="cond_crown_5">
          <property name="text">
           <string>vorzeitiger Laubfall</string>
          </property>
         </widget>
        </item>
        <item row="7" column="1">
-        <widget class="QCheckBox" name="checkBox_7">
+        <widget class="QCheckBox" name="cond_stem_2">
          <property name="text">
           <string>Ausbruch</string>
          </property>
         </widget>
        </item>
        <item row="15" column="0">
-        <widget class="QCheckBox" name="checkBox_14">
+        <widget class="QCheckBox" name="cond_crown_1">
          <property name="text">
           <string>vollausgebidet</string>
          </property>
         </widget>
        </item>
        <item row="16" column="0">
-        <widget class="QCheckBox" name="checkBox_17">
+        <widget class="QCheckBox" name="cond_crown_3">
          <property name="text">
           <string>Wipfeldürre</string>
          </property>
@@ -696,7 +696,7 @@
         <widget class="QLineEdit" name="lineEdit_8"/>
        </item>
        <item row="10" column="0">
-        <widget class="QCheckBox" name="checkBox_11">
+        <widget class="QCheckBox" name="cond_stem_7">
          <property name="text">
           <string>Gabelung</string>
          </property>
@@ -717,7 +717,7 @@
         </widget>
        </item>
        <item row="8" column="0">
-        <widget class="QCheckBox" name="checkBox_8">
+        <widget class="QCheckBox" name="cond_stem_3">
          <property name="text">
           <string>Faulstelle</string>
          </property>
@@ -734,7 +734,7 @@
         <widget class="QLineEdit" name="lineEdit_5"/>
        </item>
        <item row="15" column="1">
-        <widget class="QCheckBox" name="checkBox_15">
+        <widget class="QCheckBox" name="cond_crown_2">
          <property name="text">
           <string>tote äste</string>
          </property>

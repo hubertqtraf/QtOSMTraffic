@@ -53,6 +53,30 @@
 #define BUND_DESC_DIA_MIN "BUND:desc:diameter:min"
 #define BUND_DESC_DIA_MAX "BUND:desc:diameter:max"
 
+#define BUND_REL_FLAGS "BUND:relation:flags"
+#define BUND_COND_FLAGS "BUND:cond:flags"
+
+#define BUND_COND_ROOT_1  0x0000000000000001
+#define BUND_COND_ROOT_2  0x0000000000000002
+#define BUND_COND_ROOT_3  0x0000000000000004
+#define BUND_COND_ROOT_4  0x0000000000000008
+
+#define BUND_COND_STEM_1  0x0000000000010000
+#define BUND_COND_STEM_2  0x0000000000020000
+#define BUND_COND_STEM_3  0x0000000000040000
+#define BUND_COND_STEM_4  0x0000000000080000
+#define BUND_COND_STEM_5  0x0000000000100000
+#define BUND_COND_STEM_6  0x0000000000200000
+#define BUND_COND_STEM_7  0x0000000000400000
+#define BUND_COND_STEM_8  0x0000000000800000
+
+#define BUND_COND_CROWN_1 0x0000000100000000
+#define BUND_COND_CROWN_2 0x0000000200000000
+#define BUND_COND_CROWN_3 0x0000000400000000
+#define BUND_COND_CROWN_4 0x0000000800000000
+#define BUND_COND_CROWN_5 0x0000001000000000
+#define BUND_COND_CROWN_6 0x0000002000000000
+#define BUND_COND_CROWN_7 0x0000004000000000
 
 class TreeElement
 {
@@ -66,6 +90,9 @@ public:
 
 	double coor_x;
 	double coor_y;
+
+	uint64_t rel_flags;
+	uint64_t cond_flags;
 };
 
 namespace Ui {
@@ -114,7 +141,11 @@ private:
 	QString createXmlInt(const QString &tag, const QString &name, int value);
 	QString createXmlDouble(const QString &tag, const QString &name, double value);
 
+	uint64_t condFlags();
+	void condFlagsToGui(uint64_t flags);
+
 	int getID(const QString &value);
+	uint64_t getFlags(const QString &value);
 	double getCoor(const QString &value);
 	Qt::CheckState getCheckState(const QString & value);
 	void addTreeNodeData(const QString &page, const QString &nr);

@@ -32,6 +32,12 @@ TreeElement::TreeElement()
 	, pic_nr(0)
 	, road{""}
 	, etc{""}
+
+	, coor_x(0.0)
+	, coor_y(0.0)
+
+	, rel_flags(0x0000000000000000)
+	, cond_flags(0x0000000000000000)
 {
 }
 
@@ -104,6 +110,9 @@ void TreeDialog::saveTree(QTextStream &out, const QString &map, int local_id)
 	out << createXmlInt(TAG, BUND_POS_ACT, ui->act->currentIndex()) << "\n";
 	out << createXmlPair(TAG, BUND_POS_OSM_ID, ui->OSM_ID->text()) << "\n";
 
+	out << createXmlDouble(TAG, BUND_POS_COOR_X, m_tree_map[map][local_id].coor_x) << "\n";
+	out << createXmlDouble(TAG, BUND_POS_COOR_Y, m_tree_map[map][local_id].coor_y) << "\n";
+
 	out << createXmlPair(TAG, BUND_DESC_TYPE, ui->type->text()) << "\n";
 	out << createXmlInt(TAG, BUND_DESC_HEIGHT, ui->treeHeight->currentIndex()) << "\n";
 	out << createXmlInt(TAG, BUND_DESC_SINGLE, ui->singleTree->checkState()) << "\n";
@@ -112,6 +121,12 @@ void TreeDialog::saveTree(QTextStream &out, const QString &map, int local_id)
 	out << createXmlInt(TAG, BUND_DESC_COUNT, ui->trunkCount->value()) << "\n";
 	out << createXmlInt(TAG, BUND_DESC_DIA_MIN, ui->diameterMin->value()) << "\n";
 	out << createXmlInt(TAG, BUND_DESC_DIA_MAX, ui->diameterMax->value()) << "\n";
+
+	QString rel_flags = "0x" + QString::number(m_tree_map[map][local_id].rel_flags, 16);
+	out << createXmlPair(TAG, BUND_REL_FLAGS, rel_flags) << "\n";
+
+	QString cond_flags = "0x" + QString::number(m_tree_map[map][local_id].cond_flags, 16);
+	out << createXmlPair(TAG, BUND_COND_FLAGS, cond_flags) << "\n";
 }
 
 QTreeWidgetItem * TreeDialog::getTreeItem(QTreeWidgetItem * base, const QString &node)
@@ -278,6 +293,15 @@ void TreeDialog::read(const QString &fname)
 					ui->OSM_ID->setText(value);
 				}
 
+				if(key == BUND_POS_COOR_X)
+				{
+					m_tree_map[local_map][local_id].coor_x = getCoor(value);
+				}
+				if(key == BUND_POS_COOR_Y)
+				{
+					m_tree_map[local_map][local_id].coor_y = getCoor(value);
+				}
+
 				if(key == BUND_DESC_TYPE)
 				{
 					ui->type->setText(value);
@@ -310,6 +334,17 @@ void TreeDialog::read(const QString &fname)
 				{
 					ui->diameterMax->setValue(getID(value));
 				}
+
+				if(key == BUND_COND_FLAGS)
+				{
+					uint64_t flags = getFlags(value);
+					m_tree_map[local_map][local_id].cond_flags = flags;
+				}
+				if(key == BUND_REL_FLAGS)
+				{
+					uint64_t flags = getFlags(value);
+					m_tree_map[local_map][local_id].rel_flags = flags;
+				}
 				//TR_INF << key << value;
 			}
 		}
@@ -331,10 +366,15 @@ void TreeDialog::read(const QString &fname)
 	}
 }
 
-void TreeDialog::setNodeData(const QString &name, const QString &id)
+void TreeDialog::setNodeData(const QString &name, const QString &osm_id,
+							 const QString &x, const QString &y)
 {
 	QStringList list = name.split(u' ');
 	Qt::CheckState osm = Qt::Checked;
+
+	ui->tree_tab->setCurrentIndex(0);
+
+	int t_id = 0;
 
 	if(list.size() >= 3)
 	{
@@ -342,21 +382,28 @@ void TreeDialog::setNodeData(const QString &name, const QString &id)
 		{
 			ui->map->setText(list[1]);
 			osm = Qt::Unchecked;
-			ui->treeNr->setValue(getID(list.last()));
+			t_id = getID(list.last());
+			ui->treeNr->setValue(t_id);
 			addTreeNode(list[1], list.last());
 		}
 	}
 	//else
 	//	ui->map->setText(name);
 	ui->inOSM->setCheckState(osm);
-	ui->OSM_ID->setText(id);
+	ui->OSM_ID->setText(osm_id);
+	ui->CoorX->setText(x);
+	ui->CoorY->setText(y);
+	if(getTreeNodeData(ui->map->text(), ui->treeNr->text()) == nullptr)
+			return;
+	m_tree_map[ui->map->text()][t_id].coor_x = getCoor(ui->CoorX->text());
+	m_tree_map[ui->map->text()][t_id].coor_y = getCoor(ui->CoorY->text());
 }
 
-void TreeDialog::setCoorData(const QString &x, const QString &y)
+/*void TreeDialog::setCoorData(const QString &x, const QString &y)
 {
 	ui->CoorX->setText(x);
 	ui->CoorY->setText(y);
-}
+}*/
 
 void TreeDialog::on_treeSelect_activated(int index)
 {
@@ -375,10 +422,173 @@ QString TreeDialog::createXmlInt(const QString &tag, const QString &name, int va
 	return createXmlPair(tag, name, QString::number(value));
 }
 
+QString TreeDialog::createXmlDouble(const QString &tag, const QString &name, double value)
+{
+	return createXmlPair(tag, name, QString::number(value, 'g', 10));
+}
+
+uint64_t TreeDialog::condFlags()
+{
+	uint64_t flags = 0x0000000000000000;
+
+	if(ui->cond_root_1->isChecked())
+		flags |= BUND_COND_ROOT_1;
+	if(ui->cond_root_2->isChecked())
+		flags |= BUND_COND_ROOT_2;
+	if(ui->cond_root_3->isChecked())
+		flags |= BUND_COND_ROOT_3;
+	if(ui->cond_root_4->isChecked())
+		flags |= BUND_COND_ROOT_4;
+
+	if(ui->cond_stem_1->isChecked())
+		flags |= BUND_COND_STEM_1;
+	if(ui->cond_stem_2->isChecked())
+		flags |= BUND_COND_STEM_2;
+	if(ui->cond_stem_3->isChecked())
+		flags |= BUND_COND_STEM_3;
+	if(ui->cond_stem_4->isChecked())
+		flags |= BUND_COND_STEM_4;
+	if(ui->cond_stem_5->isChecked())
+		flags |= BUND_COND_STEM_5;
+	if(ui->cond_stem_6->isChecked())
+		flags |= BUND_COND_STEM_6;
+	if(ui->cond_stem_7->isChecked())
+		flags |= BUND_COND_STEM_7;
+	if(ui->cond_stem_8->isChecked())
+		flags |= BUND_COND_STEM_8;
+
+	if(ui->cond_crown_1->isChecked())
+		flags |= BUND_COND_CROWN_1;
+	if(ui->cond_crown_2->isChecked())
+		flags |= BUND_COND_CROWN_2;
+	if(ui->cond_crown_3->isChecked())
+		flags |= BUND_COND_CROWN_3;
+	if(ui->cond_crown_4->isChecked())
+		flags |= BUND_COND_CROWN_4;
+	if(ui->cond_crown_5->isChecked())
+		flags |= BUND_COND_CROWN_5;
+	if(ui->cond_crown_6->isChecked())
+		flags |= BUND_COND_CROWN_6;
+	if(ui->cond_crown_7->isChecked())
+		flags |= BUND_COND_CROWN_7;
+
+	return flags;
+}
+
+void TreeDialog::condFlagsToGui(uint64_t flags)
+{
+	if(flags & BUND_COND_ROOT_1)
+		ui->cond_root_1->setCheckState(Qt::Checked);
+	else
+		ui->cond_root_1->setCheckState(Qt::Unchecked);
+	if(flags & BUND_COND_ROOT_2)
+		ui->cond_root_2->setCheckState(Qt::Checked);
+	else
+		ui->cond_root_2->setCheckState(Qt::Unchecked);
+	if(flags & BUND_COND_ROOT_3)
+		ui->cond_root_3->setCheckState(Qt::Checked);
+	else
+		ui->cond_root_3->setCheckState(Qt::Unchecked);
+	if(flags & BUND_COND_ROOT_4)
+		ui->cond_root_4->setCheckState(Qt::Checked);
+	else
+		ui->cond_root_4->setCheckState(Qt::Unchecked);
+
+	if(flags & BUND_COND_STEM_1)
+		ui->cond_stem_1->setCheckState(Qt::Checked);
+	else
+		ui->cond_stem_1->setCheckState(Qt::Unchecked);
+	if(flags & BUND_COND_STEM_2)
+		ui->cond_stem_2->setCheckState(Qt::Checked);
+	else
+		ui->cond_stem_2->setCheckState(Qt::Unchecked);
+	if(flags & BUND_COND_STEM_3)
+		ui->cond_stem_3->setCheckState(Qt::Checked);
+	else
+		ui->cond_stem_3->setCheckState(Qt::Unchecked);
+	if(flags & BUND_COND_STEM_4)
+		ui->cond_stem_4->setCheckState(Qt::Checked);
+	else
+		ui->cond_stem_4->setCheckState(Qt::Unchecked);
+	if(flags & BUND_COND_STEM_5)
+		ui->cond_stem_5->setCheckState(Qt::Checked);
+	else
+		ui->cond_stem_5->setCheckState(Qt::Unchecked);
+	if(flags & BUND_COND_STEM_6)
+		ui->cond_stem_6->setCheckState(Qt::Checked);
+	else
+		ui->cond_stem_6->setCheckState(Qt::Unchecked);
+	if(flags & BUND_COND_STEM_7)
+		ui->cond_stem_7->setCheckState(Qt::Checked);
+	else
+		ui->cond_stem_7->setCheckState(Qt::Unchecked);
+	if(flags & BUND_COND_STEM_8)
+		ui->cond_stem_8->setCheckState(Qt::Checked);
+	else
+		ui->cond_stem_8->setCheckState(Qt::Unchecked);
+
+	if(flags & BUND_COND_CROWN_1)
+		ui->cond_crown_1->setCheckState(Qt::Checked);
+	else
+		ui->cond_crown_1->setCheckState(Qt::Unchecked);
+	if(flags & BUND_COND_CROWN_2)
+		ui->cond_crown_2->setCheckState(Qt::Checked);
+	else
+		ui->cond_crown_2->setCheckState(Qt::Unchecked);
+	if(flags & BUND_COND_CROWN_3)
+		ui->cond_crown_3->setCheckState(Qt::Checked);
+	else
+		ui->cond_crown_3->setCheckState(Qt::Unchecked);
+	if(flags & BUND_COND_CROWN_4)
+		ui->cond_crown_4->setCheckState(Qt::Checked);
+	else
+		ui->cond_crown_4->setCheckState(Qt::Unchecked);
+	if(flags & BUND_COND_CROWN_5)
+		ui->cond_crown_5->setCheckState(Qt::Checked);
+	else
+		ui->cond_crown_5->setCheckState(Qt::Unchecked);
+	if(flags & BUND_COND_CROWN_6)
+		ui->cond_crown_6->setCheckState(Qt::Checked);
+	else
+		ui->cond_crown_6->setCheckState(Qt::Unchecked);
+	if(flags & BUND_COND_CROWN_7)
+		ui->cond_crown_7->setCheckState(Qt::Checked);
+	else
+		ui->cond_crown_7->setCheckState(Qt::Unchecked);
+}
+
+
 int TreeDialog::getID(const QString & value)
 {
 	bool ok;
 	int num = value.toInt(&ok);
+	if (!ok)
+	{
+		//cout << "Conversion failed" <<endl;
+		return 0;
+	}
+	return num;
+}
+
+uint64_t TreeDialog::getFlags(const QString &value)
+{
+	bool ok;
+	if(!value.startsWith("0x"))
+		return 0;
+	QString hex = value.last(value.size()-2);
+	uint64_t flags = hex.toULongLong(&ok, 16);
+	if (!ok)
+	{
+		//cout << "Conversion failed" <<endl;
+		return 0;
+	}
+	return flags;
+}
+
+double TreeDialog::getCoor(const QString &value)
+{
+	bool ok;
+	double num = value.toDouble(&ok);
 	if (!ok)
 	{
 		//cout << "Conversion failed" <<endl;
@@ -423,6 +633,14 @@ void TreeDialog::on_buttonBox_accepted()
 	m_tree_map[ui->map->text()][ui->treeNr->value()].road = ui->road->text();
 	m_tree_map[ui->map->text()][ui->treeNr->value()].etc = ui->etc->text();
 
+	m_tree_map[ui->map->text()][ui->treeNr->value()].coor_x = getCoor(ui->CoorX->text());
+	m_tree_map[ui->map->text()][ui->treeNr->value()].coor_y = getCoor(ui->CoorY->text());
+
+	//m_tree_map[ui->map->text()][ui->treeNr->value()].rel_flags = relFlags();
+	m_tree_map[ui->map->text()][ui->treeNr->value()].cond_flags = condFlags();
+
+	//ui->tree_tab->setCurrentIndex(2);
+
 	m_ok_clicked = false;
 }
 
@@ -448,5 +666,12 @@ void TreeDialog::on_treeWidget_itemActivated(QTreeWidgetItem *item, int column)
 	ui->road->setText(m_tree_map[base][id].road);
 	ui->etc->setText(m_tree_map[base][id].etc);
 
+	ui->CoorX->setText(QString::number(m_tree_map[base][id].coor_x, 'g', 10));
+	ui->CoorY->setText(QString::number(m_tree_map[base][id].coor_y, 'g', 10));
 	//ui->flurNr->setValue(m_tree->flur_nr);
+
+	//relFlagsToGui(m_tree_map[base][id].rel_flags);
+	condFlagsToGui(m_tree_map[base][id].cond_flags);
+
+	ui->tree_tab->setCurrentIndex(1);
 }
