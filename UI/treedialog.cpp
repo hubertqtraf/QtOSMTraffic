@@ -39,11 +39,19 @@ TreeElement::TreeElement()
 	, coor_x(0.0)
 	, coor_y(0.0)
 
+	, tree_type("")
+	, height(0)
+	, single(0)
+	, age(0)
+	, dia(0)
+	, stem_count(0)
+	, dia_min(0)
+	, dia_max(0)
+
 	, rel_flags(0x0000000000000000)
 	, cond_flags(0x0000000000000000)
 {
 }
-
 
 TreeDialog::TreeDialog(QWidget *parent)
 	: QDialog(parent)
@@ -117,14 +125,14 @@ void TreeDialog::saveTree(QTextStream &out, const QString &map, int local_id)
 	out << createXmlDouble(TAG, BUND_POS_COOR_X, m_tree_map[map][local_id].coor_x) << "\n";
 	out << createXmlDouble(TAG, BUND_POS_COOR_Y, m_tree_map[map][local_id].coor_y) << "\n";
 
-	out << createXmlPair(TAG, BUND_DESC_TYPE, ui->type->text()) << "\n";
-	out << createXmlInt(TAG, BUND_DESC_HEIGHT, ui->treeHeight->currentIndex()) << "\n";
-	out << createXmlInt(TAG, BUND_DESC_SINGLE, ui->singleTree->checkState()) << "\n";
-	out << createXmlInt(TAG, BUND_DESC_AGE, ui->age->value()) << "\n";
-	out << createXmlInt(TAG, BUND_DESC_DIA, ui->diameter->value()) << "\n";
-	out << createXmlInt(TAG, BUND_DESC_COUNT, ui->trunkCount->value()) << "\n";
-	out << createXmlInt(TAG, BUND_DESC_DIA_MIN, ui->diameterMin->value()) << "\n";
-	out << createXmlInt(TAG, BUND_DESC_DIA_MAX, ui->diameterMax->value()) << "\n";
+	out << createXmlPair(TAG, BUND_DESC_TYPE, m_tree_map[map][local_id].tree_type) << "\n"; //ui->type->text()) << "\n";
+	out << createXmlInt(TAG, BUND_DESC_HEIGHT, m_tree_map[map][local_id].height) << "\n"; // ui->treeHeight->currentIndex()) << "\n";
+	out << createXmlInt(TAG, BUND_DESC_SINGLE, m_tree_map[map][local_id].single) << "\n"; //ui->singleTree->checkState()) << "\n";
+	out << createXmlInt(TAG, BUND_DESC_AGE, m_tree_map[map][local_id].age) << "\n"; // ui->age->value()) << "\n";
+	out << createXmlInt(TAG, BUND_DESC_DIA, m_tree_map[map][local_id].dia ) << "\n"; //ui->diameter->value()) << "\n";
+	out << createXmlInt(TAG, BUND_DESC_COUNT, m_tree_map[map][local_id].stem_count) << "\n"; //ui->trunkCount->value()) << "\n";
+	out << createXmlInt(TAG, BUND_DESC_DIA_MIN, m_tree_map[map][local_id].dia_min) << "\n"; //ui->diameterMin->value()) << "\n";
+	out << createXmlInt(TAG, BUND_DESC_DIA_MAX, m_tree_map[map][local_id].dia_max) << "\n"; //ui->diameterMax->value()) << "\n";
 
 	QString rel_flags = "0x" + QString::number(m_tree_map[map][local_id].rel_flags, 16);
 	out << createXmlPair(TAG, BUND_REL_FLAGS, rel_flags) << "\n";
@@ -314,35 +322,43 @@ void TreeDialog::read(const QString &fname)
 
 				if(key == BUND_DESC_TYPE)
 				{
-					ui->type->setText(value);
+					m_tree_map[local_map][local_id].tree_type = value;
+					//ui->type->setText(value);
 				}
 				if(key == BUND_DESC_HEIGHT)
 				{
-					ui->treeHeight->setCurrentIndex(getID(value));
+					m_tree_map[local_map][local_id].height = getID(value);
+					//ui->treeHeight->setCurrentIndex(getID(value));
 				}
 				if(key == BUND_DESC_SINGLE)
 				{
-					ui->singleTree->setCheckState(getCheckState(value));
+					m_tree_map[local_map][local_id].single = getID(value);
+					//ui->singleTree->setCheckState(getCheckState(value));
 				}
 				if(key == BUND_DESC_AGE)
 				{
-					ui->age->setValue(getID(value));
+					m_tree_map[local_map][local_id].age = getID(value);
+					//ui->age->setValue(getID(value));
 				}
 				if(key == BUND_DESC_DIA)
 				{
-					ui->diameter->setValue(getID(value));
+					m_tree_map[local_map][local_id].dia = getID(value);
+					//ui->diameter->setValue(getID(value));
 				}
 				if(key == BUND_DESC_COUNT)
 				{
-					ui->trunkCount->setValue(getID(value));
+					m_tree_map[local_map][local_id].stem_count = getID(value);
+					//ui->trunkCount->setValue(getID(value));
 				}
 				if(key == BUND_DESC_DIA_MIN)
 				{
-					ui->diameterMin->setValue(getID(value));
+					m_tree_map[local_map][local_id].dia_min = getID(value);
+					//ui->diameterMin->setValue(getID(value));
 				}
 				if(key == BUND_DESC_DIA_MAX)
 				{
-					ui->diameterMax->setValue(getID(value));
+					m_tree_map[local_map][local_id].dia_max = getID(value);
+					//ui->diameterMax->setValue(getID(value));
 				}
 
 				if(key == BUND_REL_FLAGS)
@@ -405,6 +421,7 @@ void TreeDialog::setNodeData(const QString &name, const QString &osm_id,
 	ui->CoorY->setText(y);
 	if(getTreeNodeData(ui->map->text(), ui->treeNr->text()) == nullptr)
 			return;
+	m_tree_map[ui->map->text()][t_id].osm_id = getCoor(ui->OSM_ID->text());
 	m_tree_map[ui->map->text()][t_id].coor_x = getCoor(ui->CoorX->text());
 	m_tree_map[ui->map->text()][t_id].coor_y = getCoor(ui->CoorY->text());
 }
@@ -649,6 +666,15 @@ void TreeDialog::on_buttonBox_accepted()
 	m_tree_map[ui->map->text()][ui->treeNr->value()].coor_x = getCoor(ui->CoorX->text());
 	m_tree_map[ui->map->text()][ui->treeNr->value()].coor_y = getCoor(ui->CoorY->text());
 
+	m_tree_map[ui->map->text()][ui->treeNr->value()].tree_type = ui->type->text();
+	m_tree_map[ui->map->text()][ui->treeNr->value()].height = ui->treeHeight->currentIndex();
+	m_tree_map[ui->map->text()][ui->treeNr->value()].single = ui->singleTree->checkState();
+	m_tree_map[ui->map->text()][ui->treeNr->value()].age = ui->age->value();
+	m_tree_map[ui->map->text()][ui->treeNr->value()].dia = ui->diameter->value();
+	m_tree_map[ui->map->text()][ui->treeNr->value()].stem_count = ui->trunkCount->value();
+	m_tree_map[ui->map->text()][ui->treeNr->value()].dia_min = ui->diameterMin->value();
+	m_tree_map[ui->map->text()][ui->treeNr->value()].dia_max = ui->diameterMax->value();
+
 	//m_tree_map[ui->map->text()][ui->treeNr->value()].rel_flags = relFlags();
 	m_tree_map[ui->map->text()][ui->treeNr->value()].cond_flags = condFlags();
 
@@ -688,6 +714,18 @@ void TreeDialog::on_treeWidget_itemActivated(QTreeWidgetItem *item, int column)
 	ui->CoorX->setText(QString::number(m_tree_map[base][id].coor_x, 'g', 10));
 	ui->CoorY->setText(QString::number(m_tree_map[base][id].coor_y, 'g', 10));
 	//ui->flurNr->setValue(m_tree->flur_nr);
+
+	ui->type->setText(m_tree_map[base][id].tree_type);
+	ui->treeHeight->setCurrentIndex(m_tree_map[base][id].height);
+	if(m_tree_map[base][id].single == 0)
+		ui->singleTree->setCheckState(Qt::Unchecked);
+	else
+		ui->singleTree->setCheckState(Qt::Checked);
+	ui->age->setValue(m_tree_map[base][id].age);
+	ui->diameter->setValue(m_tree_map[base][id].dia);
+	ui->trunkCount->setValue(m_tree_map[base][id].stem_count);
+	ui->diameterMin->setValue(m_tree_map[base][id].dia_min);
+	ui->diameterMax->setValue(m_tree_map[base][id].dia_max);
 
 	//relFlagsToGui(m_tree_map[base][id].rel_flags);
 	condFlagsToGui(m_tree_map[base][id].cond_flags);

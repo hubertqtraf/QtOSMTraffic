@@ -96,6 +96,15 @@ public:
 	double coor_x;
 	double coor_y;
 
+	QString tree_type;
+	int height;
+	int single;
+	int age;
+	int dia;
+	int stem_count;
+	int dia_min;
+	int dia_max;
+
 	uint64_t rel_flags;
 	uint64_t cond_flags;
 };
