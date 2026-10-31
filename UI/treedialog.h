@@ -39,8 +39,9 @@
 #define BUND_POS_ROAD "BUND:pos:road"
 #define BUND_POS_ETC "BUND:pos:etc"
 #define BUND_POS_ACT "BUND:pos:act"
-#define BUND_POS_OSM_ID "BUND:pos:osm_id"
 
+#define BUND_POS_OSM_INC "BUND:pos:osm_inc"
+#define BUND_POS_OSM_ID "BUND:pos:osm_id"
 #define BUND_POS_COOR_X "BUND:pos:coor_x"
 #define BUND_POS_COOR_Y "BUND:pos:coor_y"
 
@@ -87,6 +88,10 @@ public:
 	int pic_nr;
 	QString road;
 	QString etc;
+
+	int act;
+	int osm_id;
+	int osm_inc;
 
 	double coor_x;
 	double coor_y;

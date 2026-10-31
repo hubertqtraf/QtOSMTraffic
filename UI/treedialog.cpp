@@ -33,6 +33,9 @@ TreeElement::TreeElement()
 	, road{""}
 	, etc{""}
 
+	, act(0)
+	, osm_id(0)
+	, osm_inc()
 	, coor_x(0.0)
 	, coor_y(0.0)
 
@@ -107,8 +110,9 @@ void TreeDialog::saveTree(QTextStream &out, const QString &map, int local_id)
 	out << createXmlInt(TAG, BUND_POS_PIC_NR, m_tree_map[map][local_id].pic_nr) << "\n";
 	out << createXmlPair(TAG, BUND_POS_ROAD, m_tree_map[map][local_id].road) << "\n";
 	out << createXmlPair(TAG, BUND_POS_ETC, m_tree_map[map][local_id].etc) << "\n";
-	out << createXmlInt(TAG, BUND_POS_ACT, ui->act->currentIndex()) << "\n";
-	out << createXmlPair(TAG, BUND_POS_OSM_ID, ui->OSM_ID->text()) << "\n";
+	out << createXmlInt(TAG, BUND_POS_ACT, m_tree_map[map][local_id].act) << "\n"; //ui->act->currentIndex()) << "\n";
+	out << createXmlInt(TAG, BUND_POS_OSM_INC, m_tree_map[map][local_id].osm_inc) << "\n";
+	out << createXmlInt(TAG, BUND_POS_OSM_ID, m_tree_map[map][local_id].osm_id) << "\n"; //ui->OSM_ID->text()) << "\n";
 
 	out << createXmlDouble(TAG, BUND_POS_COOR_X, m_tree_map[map][local_id].coor_x) << "\n";
 	out << createXmlDouble(TAG, BUND_POS_COOR_Y, m_tree_map[map][local_id].coor_y) << "\n";
@@ -286,11 +290,17 @@ void TreeDialog::read(const QString &fname)
 				}
 				if(key == BUND_POS_ACT)
 				{
-					ui->act->setCurrentIndex(getID(value));
+					//ui->act->setCurrentIndex(getID(value));
+					m_tree_map[local_map][local_id].act = getID(value);
+				}
+				if(key == BUND_POS_OSM_INC)
+				{
+					m_tree_map[local_map][local_id].osm_inc = getID(value);
 				}
 				if(key == BUND_POS_OSM_ID)
 				{
-					ui->OSM_ID->setText(value);
+					//ui->OSM_ID->setText(value);
+					m_tree_map[local_map][local_id].osm_id = getID(value);
 				}
 
 				if(key == BUND_POS_COOR_X)
@@ -335,15 +345,15 @@ void TreeDialog::read(const QString &fname)
 					ui->diameterMax->setValue(getID(value));
 				}
 
-				if(key == BUND_COND_FLAGS)
-				{
-					uint64_t flags = getFlags(value);
-					m_tree_map[local_map][local_id].cond_flags = flags;
-				}
 				if(key == BUND_REL_FLAGS)
 				{
 					uint64_t flags = getFlags(value);
 					m_tree_map[local_map][local_id].rel_flags = flags;
+				}
+				if(key == BUND_COND_FLAGS)
+				{
+					uint64_t flags = getFlags(value);
+					m_tree_map[local_map][local_id].cond_flags = flags;
 				}
 				//TR_INF << key << value;
 			}
@@ -633,6 +643,9 @@ void TreeDialog::on_buttonBox_accepted()
 	m_tree_map[ui->map->text()][ui->treeNr->value()].road = ui->road->text();
 	m_tree_map[ui->map->text()][ui->treeNr->value()].etc = ui->etc->text();
 
+	m_tree_map[ui->map->text()][ui->treeNr->value()].act = ui->act->currentIndex();
+	m_tree_map[ui->map->text()][ui->treeNr->value()].osm_inc = ui->inOSM->checkState();
+	m_tree_map[ui->map->text()][ui->treeNr->value()].osm_id = getID(ui->OSM_ID->text());
 	m_tree_map[ui->map->text()][ui->treeNr->value()].coor_x = getCoor(ui->CoorX->text());
 	m_tree_map[ui->map->text()][ui->treeNr->value()].coor_y = getCoor(ui->CoorY->text());
 
@@ -666,6 +679,12 @@ void TreeDialog::on_treeWidget_itemActivated(QTreeWidgetItem *item, int column)
 	ui->road->setText(m_tree_map[base][id].road);
 	ui->etc->setText(m_tree_map[base][id].etc);
 
+	ui->act->setCurrentIndex(m_tree_map[base][id].act);
+	if(m_tree_map[base][id].osm_inc == 0)
+		ui->inOSM->setCheckState(Qt::Unchecked);
+	else
+		ui->inOSM->setCheckState(Qt::Checked);
+	ui->OSM_ID->setText(QString::number(m_tree_map[base][id].osm_id, 'g', 10));
 	ui->CoorX->setText(QString::number(m_tree_map[base][id].coor_x, 'g', 10));
 	ui->CoorY->setText(QString::number(m_tree_map[base][id].coor_y, 'g', 10));
 	//ui->flurNr->setValue(m_tree->flur_nr);

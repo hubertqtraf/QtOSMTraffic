@@ -27,7 +27,7 @@
    <item row="2" column="0">
     <widget class="QTabWidget" name="tree_tab">
      <property name="currentIndex">
-      <number>4</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="tab_3">
       <attribute name="title">
@@ -397,14 +397,14 @@
       </attribute>
       <layout class="QGridLayout" name="gridLayout_5">
        <item row="2" column="1">
-        <widget class="QCheckBox" name="build">
+        <widget class="QCheckBox" name="rel_roots_4">
          <property name="text">
           <string>Gebäude/Keller</string>
          </property>
         </widget>
        </item>
        <item row="1" column="0">
-        <widget class="QCheckBox" name="free">
+        <widget class="QCheckBox" name="rel_roots_1">
          <property name="text">
           <string>frei</string>
          </property>
@@ -418,49 +418,49 @@
         </widget>
        </item>
        <item row="1" column="1">
-        <widget class="QCheckBox" name="road_2">
+        <widget class="QCheckBox" name="rel_roots_2">
          <property name="text">
           <string>Straße</string>
          </property>
         </widget>
        </item>
        <item row="6" column="0">
-        <widget class="QCheckBox" name="checkBox_28">
+        <widget class="QCheckBox" name="rel_planting_1">
          <property name="text">
           <string>Wiesen</string>
          </property>
         </widget>
        </item>
        <item row="3" column="0">
-        <widget class="QCheckBox" name="ueber">
+        <widget class="QCheckBox" name="rel_roots_5">
          <property name="text">
           <string>überfüllt</string>
          </property>
         </widget>
        </item>
        <item row="7" column="0">
-        <widget class="QCheckBox" name="checkBox_30">
+        <widget class="QCheckBox" name="rel_planting_3">
          <property name="text">
           <string>Sträucher</string>
          </property>
         </widget>
        </item>
        <item row="2" column="0">
-        <widget class="QCheckBox" name="ver">
+        <widget class="QCheckBox" name="rel_roots_3">
          <property name="text">
           <string>verdichtet</string>
          </property>
         </widget>
        </item>
        <item row="3" column="1">
-        <widget class="QCheckBox" name="other">
+        <widget class="QCheckBox" name="rel_roots_6">
          <property name="text">
           <string>Nachbargehgehölz</string>
          </property>
         </widget>
        </item>
        <item row="4" column="0">
-        <widget class="QCheckBox" name="belag">
+        <widget class="QCheckBox" name="rel_roots_7">
          <property name="text">
           <string>Belag</string>
          </property>
@@ -474,7 +474,7 @@
         </widget>
        </item>
        <item row="6" column="1">
-        <widget class="QCheckBox" name="checkBox_29">
+        <widget class="QCheckBox" name="rel_planting_2">
          <property name="text">
           <string>Stauden</string>
          </property>
@@ -488,7 +488,7 @@
         </widget>
        </item>
        <item row="4" column="1">
-        <widget class="QCheckBox" name="boden">
+        <widget class="QCheckBox" name="rel_roots_8">
          <property name="text">
           <string>Bodennbearbeitug</string>
          </property>
@@ -508,7 +508,7 @@
         </spacer>
        </item>
        <item row="8" column="1">
-        <widget class="QLineEdit" name="lineEdit_9"/>
+        <widget class="QLineEdit" name="rel_misc"/>
        </item>
       </layout>
      </widget>
@@ -532,7 +532,7 @@
         </widget>
        </item>
        <item row="19" column="1">
-        <widget class="QLineEdit" name="lineEdit_7"/>
+        <widget class="QLineEdit" name="cond_limit"/>
        </item>
        <item row="9" column="1">
         <widget class="QCheckBox" name="cond_stem_6">
@@ -556,7 +556,7 @@
         </widget>
        </item>
        <item row="12" column="1">
-        <widget class="QLineEdit" name="lineEdit_6"/>
+        <widget class="QLineEdit" name="cond_stem_misc"/>
        </item>
        <item row="2" column="0">
         <widget class="QCheckBox" name="cond_root_1">
@@ -629,7 +629,7 @@
         </widget>
        </item>
        <item row="22" column="1">
-        <widget class="QComboBox" name="comboBox_4">
+        <widget class="QComboBox" name="impression">
          <item>
           <property name="text">
            <string>----</string>
@@ -693,7 +693,7 @@
         </widget>
        </item>
        <item row="20" column="1">
-        <widget class="QLineEdit" name="lineEdit_8"/>
+        <widget class="QLineEdit" name="cond_crown_misc"/>
        </item>
        <item row="10" column="0">
         <widget class="QCheckBox" name="cond_stem_7">
@@ -731,7 +731,7 @@
         </widget>
        </item>
        <item row="5" column="1">
-        <widget class="QLineEdit" name="lineEdit_5"/>
+        <widget class="QLineEdit" name="cond_roor_misc"/>
        </item>
        <item row="15" column="1">
         <widget class="QCheckBox" name="cond_crown_2">
