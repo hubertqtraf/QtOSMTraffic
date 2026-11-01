@@ -55,12 +55,30 @@
 #define BUND_DESC_DIA_MAX "BUND:desc:diameter:max"
 
 #define BUND_REL_FLAGS "BUND:relation:flags"
+#define BUND_REL_OTHER "BUND:relation:other"
+
+#define BUND_REL_ROOT_1  0x0000000000000001
+#define BUND_REL_ROOT_2  0x0000000000000002
+#define BUND_REL_ROOT_3  0x0000000000000004
+#define BUND_REL_ROOT_4  0x0000000000000008
+#define BUND_REL_ROOT_5  0x0000000000000010
+#define BUND_REL_ROOT_6  0x0000000000000020
+#define BUND_REL_ROOT_7  0x0000000000000040
+#define BUND_REL_ROOT_8  0x0000000000000080
+
+#define BUND_REL_PLANT_1  0x0000000000010000
+#define BUND_REL_PLANT_2  0x0000000000020000
+#define BUND_REL_PLANT_3  0x0000000000040000
+
 #define BUND_COND_FLAGS "BUND:cond:flags"
+#define BUND_COND_ROOT_OTHER "BUND:cond:root:other"
 
 #define BUND_COND_ROOT_1  0x0000000000000001
 #define BUND_COND_ROOT_2  0x0000000000000002
 #define BUND_COND_ROOT_3  0x0000000000000004
 #define BUND_COND_ROOT_4  0x0000000000000008
+
+#define BUND_COND_STEM_OTHER "BUND:cond:stem:other"
 
 #define BUND_COND_STEM_1  0x0000000000010000
 #define BUND_COND_STEM_2  0x0000000000020000
@@ -71,6 +89,9 @@
 #define BUND_COND_STEM_7  0x0000000000400000
 #define BUND_COND_STEM_8  0x0000000000800000
 
+#define BUND_COND_CROWN_OTHER "BUND:cond:crown:other"
+#define BUND_COND_CROWN_LIMIT "BUND:cond:crown:limit"
+
 #define BUND_COND_CROWN_1 0x0000000100000000
 #define BUND_COND_CROWN_2 0x0000000200000000
 #define BUND_COND_CROWN_3 0x0000000400000000
@@ -79,34 +100,43 @@
 #define BUND_COND_CROWN_6 0x0000002000000000
 #define BUND_COND_CROWN_7 0x0000004000000000
 
+#define BUND_ALL "BUND_ALL"
+
 class TreeElement
 {
 public:
 	TreeElement();
 
-	int flur_nr;
-	int pic_nr;
-	QString road;
-	QString etc;
+	int flur_nr;			// TODO: to string
+	int pic_nr;				// TODO: to string
+	QString road;			// street name close the tree
+	QString etc;			//
 
-	int act;
+	int act;				// compare to 2026
 	int osm_id;
 	int osm_inc;
 
-	double coor_x;
+	double coor_x;			// coor
 	double coor_y;
 
-	QString tree_type;
-	int height;
-	int single;
-	int age;
+	QString tree_type;		// name of the tree
+	int height;				// height of the tree
+	int single;				// no other tree
+	int age;				// age of the tree in years
 	int dia;
 	int stem_count;
-	int dia_min;
-	int dia_max;
+	int dia_min;			// TODO: to double
+	int dia_max;			// TODO: to double
 
 	uint64_t rel_flags;
+	QString rel_other;
 	uint64_t cond_flags;
+	QString root_other;
+	QString stem_other;
+	QString crown_limit;
+	QString crown_other;
+
+	int all;				//
 };
 
 namespace Ui {
@@ -154,6 +184,9 @@ private:
 	QString createXmlPair(const QString &tag, const QString &name, const QString &value);
 	QString createXmlInt(const QString &tag, const QString &name, int value);
 	QString createXmlDouble(const QString &tag, const QString &name, double value);
+
+	uint64_t relFlags();
+	void relFlagsToGui(uint64_t flags);
 
 	uint64_t condFlags();
 	void condFlagsToGui(uint64_t flags);

@@ -28,8 +28,8 @@
 
 
 TreeElement::TreeElement()
-	: flur_nr(0)
-	, pic_nr(0)
+	: flur_nr(0)	// TODO: to string
+	, pic_nr(0)		// TODO: to string
 	, road{""}
 	, etc{""}
 
@@ -49,7 +49,15 @@ TreeElement::TreeElement()
 	, dia_max(0)
 
 	, rel_flags(0x0000000000000000)
+	, rel_other("")
+
 	, cond_flags(0x0000000000000000)
+	, root_other("")
+	, stem_other("")
+	, crown_limit("")
+	, crown_other("")
+
+	, all()
 {
 }
 
@@ -136,9 +144,16 @@ void TreeDialog::saveTree(QTextStream &out, const QString &map, int local_id)
 
 	QString rel_flags = "0x" + QString::number(m_tree_map[map][local_id].rel_flags, 16);
 	out << createXmlPair(TAG, BUND_REL_FLAGS, rel_flags) << "\n";
+	out << createXmlPair(TAG, BUND_REL_OTHER, m_tree_map[map][local_id].rel_other) << "\n";
 
 	QString cond_flags = "0x" + QString::number(m_tree_map[map][local_id].cond_flags, 16);
 	out << createXmlPair(TAG, BUND_COND_FLAGS, cond_flags) << "\n";
+	out << createXmlPair(TAG, BUND_COND_ROOT_OTHER, m_tree_map[map][local_id].root_other) << "\n";
+	out << createXmlPair(TAG, BUND_COND_STEM_OTHER, m_tree_map[map][local_id].stem_other) << "\n";
+	out << createXmlPair(TAG, BUND_COND_CROWN_OTHER, m_tree_map[map][local_id].crown_other) << "\n";
+	out << createXmlPair(TAG, BUND_COND_CROWN_LIMIT, m_tree_map[map][local_id].crown_limit) << "\n";
+
+	out << createXmlInt(TAG, BUND_ALL, m_tree_map[map][local_id].all) << "\n";
 }
 
 QTreeWidgetItem * TreeDialog::getTreeItem(QTreeWidgetItem * base, const QString &node)
@@ -366,10 +381,34 @@ void TreeDialog::read(const QString &fname)
 					uint64_t flags = getFlags(value);
 					m_tree_map[local_map][local_id].rel_flags = flags;
 				}
+				if(key == BUND_REL_OTHER)
+				{
+					m_tree_map[local_map][local_id].rel_other = value;
+				}
 				if(key == BUND_COND_FLAGS)
 				{
 					uint64_t flags = getFlags(value);
 					m_tree_map[local_map][local_id].cond_flags = flags;
+				}
+				if(key == BUND_COND_ROOT_OTHER)
+				{
+					m_tree_map[local_map][local_id].root_other = value;
+				}
+				if(key == BUND_COND_STEM_OTHER)
+				{
+					m_tree_map[local_map][local_id].stem_other = value;
+				}
+				if(key == BUND_COND_CROWN_OTHER)
+				{
+					m_tree_map[local_map][local_id].crown_other = value;
+				}
+				if(key == BUND_COND_CROWN_LIMIT)
+				{
+					m_tree_map[local_map][local_id].crown_limit = value;
+				}
+				if(key == BUND_ALL)
+				{
+					m_tree_map[local_map][local_id].all = getID(value);
 				}
 				//TR_INF << key << value;
 			}
@@ -453,6 +492,85 @@ QString TreeDialog::createXmlDouble(const QString &tag, const QString &name, dou
 {
 	return createXmlPair(tag, name, QString::number(value, 'g', 10));
 }
+
+uint64_t TreeDialog::relFlags()
+{
+	uint64_t flags = 0x0000000000000000;
+
+	if(ui->rel_roots_1->isChecked())
+		flags |= BUND_REL_ROOT_1;
+	if(ui->rel_roots_2->isChecked())
+		flags |= BUND_REL_ROOT_2;
+	if(ui->rel_roots_3->isChecked())
+		flags |= BUND_REL_ROOT_3;
+	if(ui->rel_roots_4->isChecked())
+		flags |= BUND_REL_ROOT_4;
+	if(ui->rel_roots_5->isChecked())
+		flags |= BUND_REL_ROOT_5;
+	if(ui->rel_roots_6->isChecked())
+		flags |= BUND_REL_ROOT_6;
+	if(ui->rel_roots_7->isChecked())
+		flags |= BUND_REL_ROOT_7;
+	if(ui->rel_roots_8->isChecked())
+		flags |= BUND_REL_ROOT_8;
+	if(ui->rel_planting_1->isChecked())
+		flags |= BUND_REL_PLANT_1;
+	if(ui->rel_planting_2->isChecked())
+		flags |= BUND_REL_PLANT_2;
+	if(ui->rel_planting_3->isChecked())
+		flags |= BUND_REL_PLANT_3;
+	return flags;
+}
+
+void TreeDialog::relFlagsToGui(uint64_t flags)
+{
+	if(flags & BUND_REL_ROOT_1)
+		ui->rel_roots_1->setCheckState(Qt::Checked);
+	else
+		ui->rel_roots_1->setCheckState(Qt::Unchecked);
+	if(flags & BUND_REL_ROOT_2)
+		ui->rel_roots_2->setCheckState(Qt::Checked);
+	else
+		ui->rel_roots_2->setCheckState(Qt::Unchecked);
+	if(flags & BUND_REL_ROOT_3)
+		ui->rel_roots_3->setCheckState(Qt::Checked);
+	else
+		ui->rel_roots_3->setCheckState(Qt::Unchecked);
+	if(flags & BUND_REL_ROOT_4)
+		ui->rel_roots_4->setCheckState(Qt::Checked);
+	else
+		ui->rel_roots_4->setCheckState(Qt::Unchecked);
+	if(flags & BUND_REL_ROOT_5)
+		ui->rel_roots_5->setCheckState(Qt::Checked);
+	else
+		ui->rel_roots_5->setCheckState(Qt::Unchecked);
+	if(flags & BUND_REL_ROOT_6)
+		ui->rel_roots_6->setCheckState(Qt::Checked);
+	else
+		ui->rel_roots_6->setCheckState(Qt::Unchecked);
+	if(flags & BUND_REL_ROOT_7)
+		ui->rel_roots_7->setCheckState(Qt::Checked);
+	else
+		ui->rel_roots_7->setCheckState(Qt::Unchecked);
+	if(flags & BUND_REL_ROOT_8)
+		ui->rel_roots_8->setCheckState(Qt::Checked);
+	else
+		ui->rel_roots_8->setCheckState(Qt::Unchecked);
+
+	if(flags & BUND_REL_PLANT_1)
+		ui->rel_planting_1->setCheckState(Qt::Checked);
+	else
+		ui->rel_planting_1->setCheckState(Qt::Unchecked);
+	if(flags & BUND_REL_PLANT_2)
+		ui->rel_planting_2->setCheckState(Qt::Checked);
+	else
+		ui->rel_planting_2->setCheckState(Qt::Unchecked);
+	if(flags & BUND_REL_PLANT_3)
+		ui->rel_planting_3->setCheckState(Qt::Checked);
+	else
+		ui->rel_planting_3->setCheckState(Qt::Unchecked);
+}
+
 
 uint64_t TreeDialog::condFlags()
 {
@@ -675,8 +793,15 @@ void TreeDialog::on_buttonBox_accepted()
 	m_tree_map[ui->map->text()][ui->treeNr->value()].dia_min = ui->diameterMin->value();
 	m_tree_map[ui->map->text()][ui->treeNr->value()].dia_max = ui->diameterMax->value();
 
-	//m_tree_map[ui->map->text()][ui->treeNr->value()].rel_flags = relFlags();
+	m_tree_map[ui->map->text()][ui->treeNr->value()].rel_flags = relFlags();
+	m_tree_map[ui->map->text()][ui->treeNr->value()].rel_other = ui->rel_misc->text();
 	m_tree_map[ui->map->text()][ui->treeNr->value()].cond_flags = condFlags();
+	m_tree_map[ui->map->text()][ui->treeNr->value()].root_other = ui->cond_roor_misc->text();
+	m_tree_map[ui->map->text()][ui->treeNr->value()].stem_other = ui->cond_stem_misc->text();
+	m_tree_map[ui->map->text()][ui->treeNr->value()].crown_other = ui->cond_crown_misc->text();
+	m_tree_map[ui->map->text()][ui->treeNr->value()].crown_limit = ui->cond_limit->text();
+
+	m_tree_map[ui->map->text()][ui->treeNr->value()].all = ui->impression->currentIndex();
 
 	//ui->tree_tab->setCurrentIndex(2);
 
@@ -727,8 +852,15 @@ void TreeDialog::on_treeWidget_itemActivated(QTreeWidgetItem *item, int column)
 	ui->diameterMin->setValue(m_tree_map[base][id].dia_min);
 	ui->diameterMax->setValue(m_tree_map[base][id].dia_max);
 
-	//relFlagsToGui(m_tree_map[base][id].rel_flags);
+	relFlagsToGui(m_tree_map[base][id].rel_flags);
+	ui->rel_misc->setText(m_tree_map[base][id].rel_other);
 	condFlagsToGui(m_tree_map[base][id].cond_flags);
+	ui->cond_roor_misc->setText(m_tree_map[base][id].root_other);
+	ui->cond_stem_misc->setText(m_tree_map[base][id].stem_other);
+	ui->cond_crown_misc->setText(m_tree_map[base][id].crown_other);
+	ui->cond_limit->setText(m_tree_map[base][id].crown_limit);
+
+	ui->impression->setCurrentIndex(m_tree_map[base][id].all);
 
 	ui->tree_tab->setCurrentIndex(1);
 }
