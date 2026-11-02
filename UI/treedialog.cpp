@@ -878,6 +878,4 @@ void TreeDialog::on_treeWidget_itemActivated(QTreeWidgetItem *item, int column)
 	ui->cond_limit->setText(m_tree_map[base][id].crown_limit);
 
 	ui->impression->setCurrentIndex(m_tree_map[base][id].all);
-
-	ui->tree_tab->setCurrentIndex(1);
 }
