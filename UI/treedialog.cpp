@@ -21,6 +21,7 @@
  */
 
 #include <QFile>
+#include <QFileDialog>
 #include <tr_geo_object.h>
 
 #include "treedialog.h"
@@ -28,8 +29,8 @@
 
 
 TreeElement::TreeElement()
-	: flur_nr(0)	// TODO: to string
-	, pic_nr(0)		// TODO: to string
+	: flur_nr("")
+	, pic_nr("")
 	, road{""}
 	, etc{""}
 
@@ -122,8 +123,8 @@ void TreeDialog::saveTree(QTextStream &out, const QString &map, int local_id)
 		return;
 	out << createXmlPair(TAG, BUND_POS_MAP, map) << "\n";
 	out << createXmlInt(TAG, BUND_POS_TREE_NR , local_id) << "\n";
-	out << createXmlInt(TAG, BUND_POS_FLUR, m_tree_map[map][local_id].flur_nr) << "\n";
-	out << createXmlInt(TAG, BUND_POS_PIC_NR, m_tree_map[map][local_id].pic_nr) << "\n";
+	out << createXmlPair(TAG, BUND_POS_FLUR, m_tree_map[map][local_id].flur_nr) << "\n";
+	out << createXmlPair(TAG, BUND_POS_PIC_NR, m_tree_map[map][local_id].pic_nr) << "\n";
 	out << createXmlPair(TAG, BUND_POS_ROAD, m_tree_map[map][local_id].road) << "\n";
 	out << createXmlPair(TAG, BUND_POS_ETC, m_tree_map[map][local_id].etc) << "\n";
 	out << createXmlInt(TAG, BUND_POS_ACT, m_tree_map[map][local_id].act) << "\n"; //ui->act->currentIndex()) << "\n";
@@ -137,10 +138,10 @@ void TreeDialog::saveTree(QTextStream &out, const QString &map, int local_id)
 	out << createXmlInt(TAG, BUND_DESC_HEIGHT, m_tree_map[map][local_id].height) << "\n"; // ui->treeHeight->currentIndex()) << "\n";
 	out << createXmlInt(TAG, BUND_DESC_SINGLE, m_tree_map[map][local_id].single) << "\n"; //ui->singleTree->checkState()) << "\n";
 	out << createXmlInt(TAG, BUND_DESC_AGE, m_tree_map[map][local_id].age) << "\n"; // ui->age->value()) << "\n";
-	out << createXmlInt(TAG, BUND_DESC_DIA, m_tree_map[map][local_id].dia ) << "\n"; //ui->diameter->value()) << "\n";
+	out << createXmlDouble(TAG, BUND_DESC_DIA, m_tree_map[map][local_id].dia ) << "\n"; //ui->diameter->value()) << "\n";
 	out << createXmlInt(TAG, BUND_DESC_COUNT, m_tree_map[map][local_id].stem_count) << "\n"; //ui->trunkCount->value()) << "\n";
-	out << createXmlInt(TAG, BUND_DESC_DIA_MIN, m_tree_map[map][local_id].dia_min) << "\n"; //ui->diameterMin->value()) << "\n";
-	out << createXmlInt(TAG, BUND_DESC_DIA_MAX, m_tree_map[map][local_id].dia_max) << "\n"; //ui->diameterMax->value()) << "\n";
+	out << createXmlDouble(TAG, BUND_DESC_DIA_MIN, m_tree_map[map][local_id].dia_min) << "\n"; //ui->diameterMin->value()) << "\n";
+	out << createXmlDouble(TAG, BUND_DESC_DIA_MAX, m_tree_map[map][local_id].dia_max) << "\n"; //ui->diameterMax->value()) << "\n";
 
 	QString rel_flags = "0x" + QString::number(m_tree_map[map][local_id].rel_flags, 16);
 	out << createXmlPair(TAG, BUND_REL_FLAGS, rel_flags) << "\n";
@@ -296,11 +297,11 @@ void TreeDialog::read(const QString &fname)
 				}
 				if(key == BUND_POS_FLUR)
 				{
-					m_tree_map[local_map][local_id].flur_nr = getID(value);
+					m_tree_map[local_map][local_id].flur_nr = value;
 				}
 				if(key == BUND_POS_PIC_NR)
 				{
-					m_tree_map[local_map][local_id].pic_nr = getID(value);
+					m_tree_map[local_map][local_id].pic_nr = value;
 				}
 				if(key == BUND_POS_ROAD)
 				{
@@ -342,7 +343,7 @@ void TreeDialog::read(const QString &fname)
 				}
 				if(key == BUND_DESC_HEIGHT)
 				{
-					m_tree_map[local_map][local_id].height = getID(value);
+					m_tree_map[local_map][local_id].height = getCoor(value);
 					//ui->treeHeight->setCurrentIndex(getID(value));
 				}
 				if(key == BUND_DESC_SINGLE)
@@ -357,7 +358,7 @@ void TreeDialog::read(const QString &fname)
 				}
 				if(key == BUND_DESC_DIA)
 				{
-					m_tree_map[local_map][local_id].dia = getID(value);
+					m_tree_map[local_map][local_id].dia = getCoor(value);
 					//ui->diameter->setValue(getID(value));
 				}
 				if(key == BUND_DESC_COUNT)
@@ -367,12 +368,12 @@ void TreeDialog::read(const QString &fname)
 				}
 				if(key == BUND_DESC_DIA_MIN)
 				{
-					m_tree_map[local_map][local_id].dia_min = getID(value);
+					m_tree_map[local_map][local_id].dia_min = getCoor(value);
 					//ui->diameterMin->setValue(getID(value));
 				}
 				if(key == BUND_DESC_DIA_MAX)
 				{
-					m_tree_map[local_map][local_id].dia_max = getID(value);
+					m_tree_map[local_map][local_id].dia_max = getCoor(value);
 					//ui->diameterMax->setValue(getID(value));
 				}
 
@@ -759,9 +760,25 @@ void TreeDialog::on_buttonBox_clicked(QAbstractButton *button)
 	}
 	if(std == QDialogButtonBox::Save)
 	{
+		QString fileName = QFileDialog::getSaveFileName(this, tr("Save Tree File"),
+					".", tr("Tree File (*.xml)"));
+		if(fileName.isEmpty())
+		{
+			// Warnig...
+			return;
+		}
+		save(fileName);
 	}
 	if(std == QDialogButtonBox::Open)
 	{
+		QString fileName = QFileDialog::getOpenFileName(this, tr("Open Tree File"),
+					".", tr("Tree File (*.xml)"));
+		if(fileName.isEmpty())
+		{
+			// Warnig...
+			return;
+		}
+		read(fileName);
 	}
 }
 
@@ -773,8 +790,8 @@ void TreeDialog::on_buttonBox_accepted()
 	TreeElement * elem = getTreeNodeData(ui->map->text(), nr);
 	if((elem == nullptr) || (m_ok_clicked == false))
 		return;
-	m_tree_map[ui->map->text()][ui->treeNr->value()].flur_nr = ui->flurNr->value();
-	m_tree_map[ui->map->text()][ui->treeNr->value()].pic_nr = ui->picNr->value();
+	m_tree_map[ui->map->text()][ui->treeNr->value()].flur_nr = ui->flurNr->text();
+	m_tree_map[ui->map->text()][ui->treeNr->value()].pic_nr = ui->picNr->text();
 	m_tree_map[ui->map->text()][ui->treeNr->value()].road = ui->road->text();
 	m_tree_map[ui->map->text()][ui->treeNr->value()].etc = ui->etc->text();
 
@@ -825,8 +842,8 @@ void TreeDialog::on_treeWidget_itemActivated(QTreeWidgetItem *item, int column)
 	if(elem == nullptr)
 		return;
 	int id = getID(text.toString());
-	ui->flurNr->setValue(m_tree_map[base][id].flur_nr);
-	ui->picNr->setValue(m_tree_map[base][id].pic_nr);
+	ui->flurNr->setText(m_tree_map[base][id].flur_nr);
+	ui->picNr->setText(m_tree_map[base][id].pic_nr);
 	ui->road->setText(m_tree_map[base][id].road);
 	ui->etc->setText(m_tree_map[base][id].etc);
 

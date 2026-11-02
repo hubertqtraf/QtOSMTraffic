@@ -107,8 +107,8 @@ class TreeElement
 public:
 	TreeElement();
 
-	int flur_nr;			// TODO: to string
-	int pic_nr;				// TODO: to string
+	QString flur_nr;			//
+	QString pic_nr;				//
 	QString road;			// street name close the tree
 	QString etc;			//
 
@@ -120,13 +120,13 @@ public:
 	double coor_y;
 
 	QString tree_type;		// name of the tree
-	int height;				// height of the tree
+	double height;				// height of the tree
 	int single;				// no other tree
 	int age;				// age of the tree in years
-	int dia;
+	double dia;
 	int stem_count;
-	int dia_min;			// TODO: to double
-	int dia_max;			// TODO: to double
+	double dia_min;			//
+	double dia_max;			//
 
 	uint64_t rel_flags;
 	QString rel_other;
