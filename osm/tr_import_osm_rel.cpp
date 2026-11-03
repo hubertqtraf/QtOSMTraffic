@@ -985,7 +985,7 @@ uint64_t TrImportOsmRel::getNaturalClass(const QString & value, bool node)
 	}
 	if((value == "tree") && node)// POI
 	{
-		return (8 | TYPE_NATURAL | FLAG_FEATURE_NODE | TYPE_POI_N_TREE);
+		return (TYPE_NATURAL | FLAG_FEATURE_NODE | POI_NATURE | TYPE_POI_N_TREE);
 	}
 	if((value == "peak") && node)
 	{

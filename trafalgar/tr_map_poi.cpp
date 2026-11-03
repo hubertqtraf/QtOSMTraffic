@@ -192,7 +192,13 @@ bool TrMapPoi::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject * bas
 	}
 
 	if(m_poi_flags & TYPE_NATURAL)
+	{
 		m_geo_active_pen = list->getObjectPen(col);
+		if(m_poi_flags & TYPE_POI_N_TREE)
+		{
+			//
+		}
+	}
 
 	if(m_poi_flags & (TYPE_BUILDING | TYPE_RESTRICT))
 		m_geo_active_pen = list->getObjectPen(col);
@@ -431,14 +437,21 @@ void TrMapPoi::draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mode
 		}
 	}
 
+	if(m_poi_flags & TYPE_POI_N_TREE)
+	{
+		p->drawEllipse(static_cast <int>(screen.x-7),
+			static_cast <int>(screen.y-6), 4, 12);
+		if(m_name.size())
+			if((TR_MASK_POINTS_NUM & s_mask) && text)
+				p->drawStaticText(static_cast <int>(screen.x),
+					static_cast <int>(screen.y), QStaticText(m_name));
+		return;
+	}
+
 	if(m_name.size())
 	{
-		if(m_poi_flags & TYPE_POI_N_TREE)
-			p->drawEllipse(static_cast <int>(screen.x-7),
-				static_cast <int>(screen.y-6), 4, 12);
-		else
-			p->drawEllipse(static_cast <int>(screen.x-3),
-				static_cast <int>(screen.y-3), 6, 6);
+		p->drawEllipse(static_cast <int>(screen.x-3),
+			static_cast <int>(screen.y-3), 6, 6);
 		if((TR_MASK_POINTS_NUM & s_mask) && text)
 			p->drawStaticText(static_cast <int>(screen.x),
 				static_cast <int>(screen.y), QStaticText(m_name));
