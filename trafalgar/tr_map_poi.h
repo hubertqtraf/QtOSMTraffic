@@ -53,6 +53,7 @@ private:
 	TrGeoObject * m_symbol;
 
 	TrGeoObject *createSymbolData(const TrZoomMap & zoom_ref, const QVector<TrPoint> & sym);
+	TrPoint symbolMetric(const TrZoomMap & zoom_ref, const TrPoint & base, double metric);
 
 protected:
 

@@ -91,6 +91,22 @@ TrGeoObject * TrMapPoi::createSymbolData(const TrZoomMap & zoom_ref, const QVect
 	return poly;
 }
 
+TrPoint TrMapPoi::symbolMetric(const TrZoomMap & zoom_ref, const TrPoint &base, double metric)
+{
+	TrPoint res;
+
+	TrPoint test = getPoint();
+	zoom_ref.getMetric(test, true);
+	test.x = test.x - metric;
+	test.y = test.y + metric;
+	zoom_ref.getMetric(test, false);
+	res.x = base.x - test.x;
+	res.y = test.y - base.y;
+
+	return res;
+}
+
+
 uint64_t TrMapPoi::getPoiTypeFlags() const
 {
 	return m_poi_flags;
@@ -196,8 +212,25 @@ bool TrMapPoi::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject * bas
 		m_geo_active_pen = list->getObjectPen(col);
 		if(m_poi_flags & TYPE_POI_N_TREE)
 		{
-			//
+			if(m_symbol != nullptr)
+			{
+				return true;
+			}
+			QVector<TrPoint> res[3];
+			TrPoint base = getPoint();
+			TrPoint metric = symbolMetric(zoom_ref, getPoint(), 5.0);
+
+			res->append(base);
+			base.x = base.x - metric.x;
+			base.y = base.y + metric.y;
+			res->append(base);
+			base.x = getPoint().x + metric.x;
+			base.y = getPoint().y - metric.y;
+			res->append(base);
+			m_symbol = createSymbolData(zoom_ref, *res);
 		}
+		else
+			;
 	}
 
 	if(m_poi_flags & (TYPE_BUILDING | TYPE_RESTRICT))
@@ -215,17 +248,18 @@ bool TrMapPoi::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject * bas
 			}
 			QVector<TrPoint> res[5];
 			TrPoint base = getPoint();
-			base.x = base.x + 5.0;
+			TrPoint metric = symbolMetric(zoom_ref, getPoint(), 5.0);
+			base.x = base.x + metric.x;
 			base.y = base.y + 5.0;
 			res->append(base);
-			base.x = getPoint().x - 5.0;
-			base.y = getPoint().y + 5.0;
+			base.x = getPoint().x - metric.x;
+			base.y = getPoint().y + metric.y;
 			res->append(base);
-			base.x = getPoint().x + 5.0;
-			base.y = getPoint().y - 5.0;
+			base.x = getPoint().x + metric.x;
+			base.y = getPoint().y - metric.y;
 			res->append(base);
-			base.x = getPoint().x - 5.0;
-			base.y = getPoint().y - 5.0;
+			base.x = getPoint().x - metric.x;
+			base.y = getPoint().y - metric.y;
 			res->append(base);
 			res->append(res[0]);
 
@@ -242,13 +276,14 @@ bool TrMapPoi::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject * bas
 			}
 			QVector<TrPoint> res[4];
 			TrPoint base = getPoint();
-			base.x = base.x + 5.0;
+			TrPoint metric = symbolMetric(zoom_ref, getPoint(), 1.0);
+			base.x = base.x + (metric.x * 5.0);
 			res->append(base);
-			base.x = getPoint().x - 5.0;
+			base.x = getPoint().x - (metric.x * 5.0);
 			base.y = getPoint().y;
 			res->append(base);
 			base.x = getPoint().x;
-			base.y = getPoint().y - 20.0;
+			base.y = getPoint().y - (metric.x * 5.0);
 			res->append(base);
 			res->append(res[0]);
 			m_symbol = createSymbolData(zoom_ref, *res);
@@ -267,17 +302,18 @@ bool TrMapPoi::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject * bas
 		{
 			QVector<TrPoint> res[5];
 			TrPoint base = getPoint();
-			base.x = base.x + 1.0;
-			base.y = base.y + 2.0;
+			TrPoint metric = symbolMetric(zoom_ref, getPoint(), 1.0);
+			base.x = base.x + metric.x;
+			base.y = base.y + (metric.x * 2.0);
 			res->append(base);
-			base.x = getPoint().x - 1.0;
-			base.y = getPoint().y + 2.0;
+			base.x = getPoint().x - metric.x;
+			base.y = getPoint().y + (metric.x * 2.0);
 			res->append(base);
-			base.x = getPoint().x + 1.0;
-			base.y = getPoint().y - 2.0;
+			base.x = getPoint().x + metric.x;
+			base.y = getPoint().y - (metric.x * 2.0);
 			res->append(base);
-			base.x = getPoint().x - 1.0;
-			base.y = getPoint().y - 2.0;
+			base.x = getPoint().x - metric.x;
+			base.y = getPoint().y - (metric.x * 2.0);
 			res->append(base);
 			res->append(res[0]);
 
@@ -287,38 +323,40 @@ bool TrMapPoi::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject * bas
 		{
 			QVector<TrPoint> res[5];
 			TrPoint base = getPoint();
-			base.x = base.x + 1.0;
-			base.y = base.y + 1.0;
+			TrPoint metric = symbolMetric(zoom_ref, getPoint(), 1.0);
+			base.x = base.x + metric.x;
+			base.y = base.y + metric.y;
 			res->append(base);
-			base.x = base.x - 2.0;
-			base.y = base.y - 2.0;
+			base.x = base.x - (metric.x * 2.0);
+			base.y = base.y - (metric.y * 2.0);
 			res->append(base);
 			base = getPoint();
 			res->append(base);
-			base.x = base.x + 1.0;
-			base.y = base.y - 1.0;
+			base.x = base.x + metric.x;
+			base.y = base.y - metric.y;
 			res->append(base);
-			base.x = base.x - 2.0;
-			base.y = base.y + 2.0;
+			base.x = base.x - (metric.x * 2.0);
+			base.y = base.y + (metric.y * 2.0);
 			res->append(base);
 			m_symbol = createSymbolData(zoom_ref, *res);
 		}
 		if((m_poi_flags & TYPE_RAIL) && ((m_poi_flags & 0x000000000000000f) == 8) && (m_symbol == nullptr)) 		{
 			QVector<TrPoint> res[5];
 			TrPoint base = getPoint();
-			base.x = base.x + 1.0;
-			base.y = base.y + 1.0;
+			TrPoint metric = symbolMetric(zoom_ref, getPoint(), 1.0);
+			base.x = base.x + metric.x;
+			base.y = base.y + metric.y;
 			res->append(base);
-			base.x = base.x - 2.0;
-			base.y = base.y - 2.0;
+			base.x = base.x - (metric.x * 2.0);
+			base.y = base.y - (metric.y * 2.0);
 			res->append(base);
 			base = getPoint();
 			res->append(base);
-			base.x = base.x + 1.0;
-			base.y = base.y - 1.0;
+			base.x = base.x + metric.x;
+			base.y = base.y - metric.y;
 			res->append(base);
-			base.x = base.x - 2.0;
-			base.y = base.y + 2.0;
+			base.x = base.x - (metric.x * 2.0);
+			base.y = base.y + (metric.y * 2.0);
 			res->append(base);
 			m_symbol = createSymbolData(zoom_ref, *res);
 		}
@@ -439,8 +477,12 @@ void TrMapPoi::draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mode
 
 	if(m_poi_flags & TYPE_POI_N_TREE)
 	{
-		p->drawEllipse(static_cast <int>(screen.x-7),
-			static_cast <int>(screen.y-6), 4, 12);
+		if(m_symbol != nullptr)
+		{
+			m_symbol->draw(zoom_ref, p, 3);
+		}
+		p->drawEllipse(static_cast <int>(screen.x-3),
+			static_cast <int>(screen.y-3), 6, 6);
 		if(m_name.size())
 			if((TR_MASK_POINTS_NUM & s_mask) && text)
 				p->drawStaticText(static_cast <int>(screen.x),
