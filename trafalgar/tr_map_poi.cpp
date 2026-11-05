@@ -482,7 +482,21 @@ void TrMapPoi::draw(const TrZoomMap & zoom_ref, QPainter * p, unsigned char mode
 	{
 		if(m_symbol != nullptr)
 		{
-			m_symbol->draw(zoom_ref, p, 3);
+			QVector<TrPoint> points;
+			TrGeoPolygon * sys_poly = dynamic_cast<TrGeoPolygon *>(m_symbol);
+			if(sys_poly != nullptr)
+			{
+				sys_poly->getPoints(points);
+				if(points.size() == 3)
+				{
+					zoom_ref.setMovePoint(&(points[1].x),&(points[1].y));
+					zoom_ref.setMovePoint(&(points[2].x),&(points[2].y));
+					int dx = points[2].x - points[1].x;
+					//int dy = points[2].y - points[1].y;	// TODO: check dy
+					p->drawEllipse(static_cast<int>(screen.x-(dx/2.0)),
+								   static_cast<int>(screen.y-(dx/2.0)), dx, dx);
+				}
+			}
 		}
 		p->drawEllipse(static_cast <int>(screen.x-3),
 			static_cast <int>(screen.y-3), 6, 6);
