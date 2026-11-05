@@ -505,6 +505,14 @@ void TrImportOsmStream::closeNode(QMap<QString, name_set> & name_map,
 				QString ele = m_tags["ele"];
 				point.pt_data = ele.toInt();
 			}
+			if((code & TYPE_POI_N_TREE) == TYPE_POI_N_TREE)
+			{
+				point.pt_data = 100;	// diameter [dm]
+				if(m_tags.contains("diameter_crown"))
+				{
+					point.pt_data = (m_tags["diameter_crown"].toInt() * 10);
+				}
+			}
 			point.pt_type = code;
 		}
 	}

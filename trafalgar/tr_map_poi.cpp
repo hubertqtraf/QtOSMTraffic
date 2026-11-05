@@ -216,9 +216,12 @@ bool TrMapPoi::init(const TrZoomMap & zoom_ref, uint64_t ctrl, TrGeoObject * bas
 			{
 				return true;
 			}
+			double dia = ((m_poi_data & 0x00000000000000ffff) / 20.0);
+			if(dia < 0.1)
+				dia = 5.0;
 			QVector<TrPoint> res[3];
 			TrPoint base = getPoint();
-			TrPoint metric = symbolMetric(zoom_ref, getPoint(), 5.0);
+			TrPoint metric = symbolMetric(zoom_ref, getPoint(), dia);
 
 			res->append(base);
 			base.x = base.x - metric.x;
