@@ -721,7 +721,7 @@ uint64_t TreeDialog::getFlags(const QString &value)
 	bool ok;
 	if(!value.startsWith("0x"))
 		return 0;
-	QString hex = value.last(value.size()-2);
+	QString hex = value.mid(2);
 	uint64_t flags = hex.toULongLong(&ok, 16);
 	if (!ok)
 	{
