@@ -56,7 +56,6 @@ private:
 	TrGeoObject * selectObject(const TrPoint & pt, uint64_t & pos, uint64_t flag);
 
 	QDockWidget * m_elementDock;
-	TrNodeDock * m_dockNode;
 	QScrollArea * m_linkScrollArea;
 	TrLinkDock * m_dockLink;
 
@@ -70,6 +69,8 @@ protected:
 public:
 	TrMapView(QWidget *parent);
 	~TrMapView();
+
+	TrNodeDock * m_dockNode;
 
 	TrDocument & getDocument();
 	TileWidget *getTile();

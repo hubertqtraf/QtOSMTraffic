@@ -35,10 +35,9 @@ TrMapView::TrMapView(QWidget *parent)
 	, m_selected_point{0,0}
 	, m_selected(nullptr)
 	, m_elementDock(nullptr)
-	, m_dockNode(nullptr)
 	, m_dockLink(nullptr)
 	, m_fileProgress(nullptr)
-
+	, m_dockNode(nullptr)
 {
 	m_dockLink = new TrLinkDock(m_elementDock);
 	m_linkScrollArea = new QScrollArea(m_elementDock);
