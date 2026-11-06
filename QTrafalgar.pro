@@ -34,6 +34,8 @@ SOURCES += \
     UI/tiledialog.cpp \
     UI/tilewidget.cpp \
     UI/tr_progess_thread.cpp \
+    UI/treedialog.cpp \
+    UI/trlevel.cpp \
     geo/geo_base.cpp \
     geo/geo_globe.cpp \
     geo/geo_lin.cpp \
@@ -86,6 +88,8 @@ HEADERS += \
     UI/tiledialog.h \
     UI/tilewidget.h \
     UI/tr_progess_thread.h \
+    UI/treedialog.h \
+    UI/trlevel.h \
     geo/geo_base.h \
     geo/geo_errno.h \
     geo/geo_globe.h \
@@ -144,6 +148,7 @@ FORMS += \
     UI/profiledialog.ui \
     UI/tiledialog.ui \
     UI/trdispoptiondialog.ui \
+    UI/treedialog.ui \
     UI/trnetdock.ui  \
     UI/trlinkdock.ui \
     UI/trnodedock.ui
