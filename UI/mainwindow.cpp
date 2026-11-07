@@ -48,6 +48,7 @@ MainWindow::MainWindow(QWidget *parent)
 	, m_file_options(nullptr)
 	, m_disp_option(nullptr)
 	, m_tiles_dlg(nullptr)
+	, m_trees_dlg(nullptr)
 	, m_nodes_type(nullptr)
 	, m_parking_dlg(nullptr)
 	, m_about(nullptr)
@@ -531,6 +532,22 @@ void MainWindow::on_actionTiles_triggered()
 			tile->setProgressBar(m_progress);
 	}
 	m_tiles_dlg->show();
+}
+
+void MainWindow::on_actionTrees_triggered()
+{
+	if(m_trees_dlg == nullptr)
+	{
+		m_trees_dlg = new TreeDialog(this);
+	}
+	if(m_map_view != nullptr)
+	{
+		m_trees_dlg->setNodeData(m_map_view->m_dockNode->getNodeText(),
+								 m_map_view->m_dockNode->getNodeId(),
+								 m_map_view->m_dockNode->getCoorX(),
+								 m_map_view->m_dockNode->getCoorY());
+		m_trees_dlg->exec();
+	}
 }
 
 void MainWindow::on_updateFileOptions()

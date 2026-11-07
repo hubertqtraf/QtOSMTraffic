@@ -70,6 +70,7 @@
      <string>Tools</string>
     </property>
     <addaction name="actionTiles"/>
+    <addaction name="actionTrees"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuView"/>
@@ -275,6 +276,11 @@
   <action name="actionTiles">
    <property name="text">
     <string>Tiles</string>
+   </property>
+  </action>
+  <action name="actionTrees">
+   <property name="text">
+    <string>Trees</string>
    </property>
   </action>
  </widget>

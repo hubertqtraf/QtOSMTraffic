@@ -785,8 +785,11 @@ void TreeDialog::on_buttonBox_clicked(QAbstractButton *button)
 void TreeDialog::on_buttonBox_accepted()
 {
 	// copy data from gui to db
-	ui->map->text();
 	QString nr = QString::number(ui->treeNr->value());
+
+	if(ui->map->text().size() && nr.size())
+		addTreeNode(ui->map->text(), nr);
+
 	TreeElement * elem = getTreeNodeData(ui->map->text(), nr);
 	if((elem == nullptr) || (m_ok_clicked == false))
 		return;

@@ -32,6 +32,7 @@
 #include "nodestype.h"
 #include "about.h"
 #include "parkingdlg.h"
+#include "treedialog.h"
 
 #include <QMainWindow>
 #include <QScrollArea>
@@ -99,6 +100,8 @@ private slots:
 
 	void on_actionParking_triggered();
 
+	void on_actionTrees_triggered();
+
 public slots:
 	void on_updateNetOptions(uint64_t flags);
 
@@ -121,6 +124,7 @@ private:
 	FileOptions * m_file_options;
 	TrDispOptionDialog * m_disp_option;
 	TileDialog * m_tiles_dlg;
+	TreeDialog * m_trees_dlg;
 	NodesType * m_nodes_type;
 	ParkingDlg * m_parking_dlg;
 	About * m_about;
