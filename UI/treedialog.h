@@ -165,6 +165,7 @@ public:
 
 	QTreeWidgetItem *getBaseTreeItem(QTreeWidgetItem *base, const QString &node);
 
+
 private slots:
 	void on_treeSelect_activated(int index);
 
@@ -186,7 +187,9 @@ private:
 	QString createXmlDouble(const QString &tag, const QString &name, double value);
 
 	uint64_t relFlags();
-	void relFlagsToGui(uint64_t flags);
+	void relFlagsToGui(const uint64_t flags);
+
+	void elementToGui(const TreeElement &te);
 
 	uint64_t condFlags();
 	void condFlagsToGui(uint64_t flags);

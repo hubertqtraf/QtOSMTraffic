@@ -116,6 +116,45 @@ void TreeDialog::save(const QString &fname)
 	}*/
 }
 
+void TreeDialog::elementToGui(const TreeElement & te)
+{
+	ui->flurNr->setText(te.flur_nr);
+	ui->picNr->setText(te.pic_nr);
+	ui->road->setText(te.road);
+	ui->etc->setText(te.etc);
+
+	ui->act->setCurrentIndex(te.act);
+	if(te.osm_inc == 0)
+		ui->inOSM->setCheckState(Qt::Unchecked);
+	else
+		ui->inOSM->setCheckState(Qt::Checked);
+	ui->OSM_ID->setText(QString::number(te.osm_id, 'g', 10));
+	ui->CoorX->setText(QString::number(te.coor_x, 'g', 10));
+	ui->CoorY->setText(QString::number(te.coor_y, 'g', 10));
+
+	ui->type->setText(te.tree_type);
+	ui->treeHeight->setCurrentIndex(te.height);
+	if(te.single == 0)
+		ui->singleTree->setCheckState(Qt::Unchecked);
+	else
+		ui->singleTree->setCheckState(Qt::Checked);
+	ui->age->setValue(te.age);
+	ui->diameter->setValue(te.dia);
+	ui->trunkCount->setValue(te.stem_count);
+	ui->diameterMin->setValue(te.dia_min);
+	ui->diameterMax->setValue(te.dia_max);
+
+	relFlagsToGui(te.rel_flags);
+	ui->rel_misc->setText(te.rel_other);
+	condFlagsToGui(te.cond_flags);
+	ui->cond_roor_misc->setText(te.root_other);
+	ui->cond_stem_misc->setText(te.stem_other);
+	ui->cond_crown_misc->setText(te.crown_other);
+	ui->cond_limit->setText(te.crown_limit);
+
+	ui->impression->setCurrentIndex(te.all);
+}
+
 void TreeDialog::saveTree(QTextStream &out, const QString &map, int local_id)
 {
 	TreeElement * elem = getTreeNodeData(map, QString::number(local_id));
@@ -438,9 +477,14 @@ void TreeDialog::setNodeData(const QString &name, const QString &osm_id,
 	QStringList list = name.split(u' ');
 	Qt::CheckState osm = Qt::Checked;
 
+	TreeElement tree;
+	elementToGui(tree);
+
 	ui->tree_tab->setCurrentIndex(0);
 
 	int t_id = 0;
+	ui->map->setText("");
+	ui->treeNr->setValue(0);
 
 	if(list.size() >= 3)
 	{
@@ -832,6 +876,8 @@ void TreeDialog::on_treeWidget_itemActivated(QTreeWidgetItem *item, int column)
 {
 	if(item == nullptr)
 		return;
+	TreeElement tree;
+	elementToGui(tree);
 	if(item->childCount() == 0)
 		;//return;
 	QTreeWidgetItem * parent = item->parent();
@@ -845,40 +891,6 @@ void TreeDialog::on_treeWidget_itemActivated(QTreeWidgetItem *item, int column)
 	if(elem == nullptr)
 		return;
 	int id = getID(text.toString());
-	ui->flurNr->setText(m_tree_map[base][id].flur_nr);
-	ui->picNr->setText(m_tree_map[base][id].pic_nr);
-	ui->road->setText(m_tree_map[base][id].road);
-	ui->etc->setText(m_tree_map[base][id].etc);
 
-	ui->act->setCurrentIndex(m_tree_map[base][id].act);
-	if(m_tree_map[base][id].osm_inc == 0)
-		ui->inOSM->setCheckState(Qt::Unchecked);
-	else
-		ui->inOSM->setCheckState(Qt::Checked);
-	ui->OSM_ID->setText(QString::number(m_tree_map[base][id].osm_id, 'g', 10));
-	ui->CoorX->setText(QString::number(m_tree_map[base][id].coor_x, 'g', 10));
-	ui->CoorY->setText(QString::number(m_tree_map[base][id].coor_y, 'g', 10));
-	//ui->flurNr->setValue(m_tree->flur_nr);
-
-	ui->type->setText(m_tree_map[base][id].tree_type);
-	ui->treeHeight->setCurrentIndex(m_tree_map[base][id].height);
-	if(m_tree_map[base][id].single == 0)
-		ui->singleTree->setCheckState(Qt::Unchecked);
-	else
-		ui->singleTree->setCheckState(Qt::Checked);
-	ui->age->setValue(m_tree_map[base][id].age);
-	ui->diameter->setValue(m_tree_map[base][id].dia);
-	ui->trunkCount->setValue(m_tree_map[base][id].stem_count);
-	ui->diameterMin->setValue(m_tree_map[base][id].dia_min);
-	ui->diameterMax->setValue(m_tree_map[base][id].dia_max);
-
-	relFlagsToGui(m_tree_map[base][id].rel_flags);
-	ui->rel_misc->setText(m_tree_map[base][id].rel_other);
-	condFlagsToGui(m_tree_map[base][id].cond_flags);
-	ui->cond_roor_misc->setText(m_tree_map[base][id].root_other);
-	ui->cond_stem_misc->setText(m_tree_map[base][id].stem_other);
-	ui->cond_crown_misc->setText(m_tree_map[base][id].crown_other);
-	ui->cond_limit->setText(m_tree_map[base][id].crown_limit);
-
-	ui->impression->setCurrentIndex(m_tree_map[base][id].all);
+	elementToGui(m_tree_map[base][id]);
 }
