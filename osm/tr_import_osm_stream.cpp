@@ -510,7 +510,10 @@ void TrImportOsmStream::closeNode(QMap<QString, name_set> & name_map,
 				point.pt_data = 100;	// diameter [dm]
 				if(m_tags.contains("diameter_crown"))
 				{
-					point.pt_data = (m_tags["diameter_crown"].toInt() * 10);
+					bool ok;
+					point.pt_data = (m_tags["diameter_crown"].toDouble(&ok) * 10);
+					if(ok == false)
+						point.pt_data = 0;
 				}
 			}
 			point.pt_type = code;

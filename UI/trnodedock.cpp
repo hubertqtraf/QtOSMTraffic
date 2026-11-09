@@ -90,3 +90,8 @@ QString TrNodeDock::getCoorY()
 {
 	return ui->lineEdit_Y->text();
 }
+
+QString TrNodeDock::getNodeData()
+{
+	return ui->lineEdit_Data->text();
+}

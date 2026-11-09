@@ -43,6 +43,7 @@ public:
 	QString getNodeId();
 	QString getCoorX();
 	QString getCoorY();
+	QString getNodeData();
 
 private:
 	Ui::TrNodeDock *ui;

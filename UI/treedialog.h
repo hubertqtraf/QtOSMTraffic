@@ -157,7 +157,7 @@ public:
 	void read(const QString &fname);
 
 	void setNodeData(const QString &name, const QString &osm_id,
-					 const QString &x, const QString &y);
+					 const QString &x, const QString &y,  const QString &data);
 
 	void addTreeNode(const QString &page, const QString &nr);
 

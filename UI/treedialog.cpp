@@ -472,10 +472,13 @@ void TreeDialog::read(const QString &fname)
 }
 
 void TreeDialog::setNodeData(const QString &name, const QString &osm_id,
-							 const QString &x, const QString &y)
+							 const QString &x, const QString &y, const QString &data)
 {
 	QStringList list = name.split(u' ');
 	Qt::CheckState osm = Qt::Checked;
+
+	int poi_data = getID(data);
+	poi_data &= 0x000000000000ffff;
 
 	TreeElement tree;
 	elementToGui(tree);
@@ -503,6 +506,8 @@ void TreeDialog::setNodeData(const QString &name, const QString &osm_id,
 	ui->OSM_ID->setText(osm_id);
 	ui->CoorX->setText(x);
 	ui->CoorY->setText(y);
+	if(poi_data)
+		ui->diameterMax->setValue(poi_data/10.0);
 	if(getTreeNodeData(ui->map->text(), ui->treeNr->text()) == nullptr)
 			return;
 	m_tree_map[ui->map->text()][t_id].osm_id = getCoor(ui->OSM_ID->text());

@@ -545,7 +545,8 @@ void MainWindow::on_actionTrees_triggered()
 		m_trees_dlg->setNodeData(m_map_view->m_dockNode->getNodeText(),
 								 m_map_view->m_dockNode->getNodeId(),
 								 m_map_view->m_dockNode->getCoorX(),
-								 m_map_view->m_dockNode->getCoorY());
+								 m_map_view->m_dockNode->getCoorY(),
+								 m_map_view->m_dockNode->getNodeData());
 		m_trees_dlg->exec();
 	}
 }
