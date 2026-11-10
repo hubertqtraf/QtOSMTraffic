@@ -86,15 +86,18 @@ void TreeDialog::save(const QString &fname)
 		return;
 
 	QTextStream out(&file);
+	out << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 	for (auto i = m_tree_map.cbegin(), end = m_tree_map.cend(); i != end; ++i)
 	{
+		out << "<" << TREE_LIST << ">\n";
 		QMap<int, TreeElement> nr_map = i.value();
 		for (auto j = nr_map.cbegin(), end = nr_map.cend(); j != end; ++j)
 		{
 			out << "<tree map=\"" << i.key() << "\" " << "local_id=\""  << j.key() << "\"" << ">\n";
 			saveTree(out,i.key(), j.key());
-			out << "<tree/>\n";
+			out << "</tree>\n";
 		}
+		out << "</" << TREE_LIST << ">\n";
 	}
 	/*QTreeWidgetItemIterator it(ui->treeWidget);
 	while (*it)
@@ -307,6 +310,10 @@ void TreeDialog::read(const QString &fname)
 		xml.readNext();
 		if(xml.isStartElement())
 		{
+			if(xml.name().toString() == TREE_LIST)
+			{
+				TR_INF << "start";
+			}
 			if(xml.name().toString() == TREE)
 			{
 				QXmlStreamAttributes attrs = xml.attributes();
@@ -455,6 +462,10 @@ void TreeDialog::read(const QString &fname)
 		}
 		if(xml.isEndElement())
 		{
+			if(xml.name().toString() == TREE_LIST)
+			{
+				TR_INF << "end";
+			}
 			if(xml.name().toString() == TREE)
 			{
 				//int index = getID(local_nr);
