@@ -79,7 +79,7 @@ TreeDialog::~TreeDialog()
 
 void TreeDialog::save(const QString &fname)
 {
-	QString map;
+	//QString map;
 
 	QFile file(fname);
 	if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
@@ -87,9 +87,9 @@ void TreeDialog::save(const QString &fname)
 
 	QTextStream out(&file);
 	out << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+	out << "<" << TREE_LIST << ">\n";
 	for (auto i = m_tree_map.cbegin(), end = m_tree_map.cend(); i != end; ++i)
 	{
-		out << "<" << TREE_LIST << ">\n";
 		QMap<int, TreeElement> nr_map = i.value();
 		for (auto j = nr_map.cbegin(), end = nr_map.cend(); j != end; ++j)
 		{
@@ -97,8 +97,8 @@ void TreeDialog::save(const QString &fname)
 			saveTree(out,i.key(), j.key());
 			out << "</tree>\n";
 		}
-		out << "</" << TREE_LIST << ">\n";
 	}
+	out << "</" << TREE_LIST << ">\n";
 	/*QTreeWidgetItemIterator it(ui->treeWidget);
 	while (*it)
 	{
@@ -544,7 +544,7 @@ QString TreeDialog::createXmlPair(const QString &tag, const QString &name, const
 	return ret;
 }
 
-QString TreeDialog::createXmlInt(const QString &tag, const QString &name, int value)
+QString TreeDialog::createXmlInt(const QString &tag, const QString &name, int64_t value)
 {
 	return createXmlPair(tag, name, QString::number(value));
 }
@@ -764,10 +764,10 @@ void TreeDialog::condFlagsToGui(uint64_t flags)
 }
 
 
-int TreeDialog::getID(const QString & value)
+int64_t TreeDialog::getID(const QString & value)
 {
 	bool ok;
-	int num = value.toInt(&ok);
+	int64_t num = value.toLongLong(&ok);
 	if (!ok)
 	{
 		//cout << "Conversion failed" <<endl;

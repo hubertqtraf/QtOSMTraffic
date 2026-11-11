@@ -114,7 +114,7 @@ public:
 	QString etc;			//
 
 	int act;				// compare to 2026
-	int osm_id;
+	int64_t osm_id;
 	int osm_inc;
 
 	double coor_x;			// coor
@@ -184,7 +184,7 @@ private:
 	TreeElement *getTreeNodeData(const QString &page, const QString &nr);
 
 	QString createXmlPair(const QString &tag, const QString &name, const QString &value);
-	QString createXmlInt(const QString &tag, const QString &name, int value);
+	QString createXmlInt(const QString &tag, const QString &name, int64_t value);
 	QString createXmlDouble(const QString &tag, const QString &name, double value);
 
 	uint64_t relFlags();
@@ -195,7 +195,7 @@ private:
 	uint64_t condFlags();
 	void condFlagsToGui(uint64_t flags);
 
-	int getID(const QString &value);
+	int64_t getID(const QString &value);
 	uint64_t getFlags(const QString &value);
 	double getCoor(const QString &value);
 	Qt::CheckState getCheckState(const QString & value);
