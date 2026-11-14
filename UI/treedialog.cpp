@@ -94,7 +94,13 @@ void TreeDialog::save(const QString &fname)
 		for (auto j = nr_map.cbegin(), end = nr_map.cend(); j != end; ++j)
 		{
 			out << "<tree map=\"" << i.key() << "\" " << "local_id=\""  << j.key() << "\"" << ">\n";
-			saveTree(out,i.key(), j.key());
+			TreeElement * elem = getTreeNodeData(i.key(), QString::number(j.key()));
+			if(elem == nullptr)
+				return;
+			out << createXmlPair(TAG, BUND_POS_MAP, i.key()) << "\n";
+			out << createXmlInt(TAG, BUND_POS_TREE_NR, j.key()) << "\n";
+			saveTree(out, *elem);
+			//saveTree(out,i.key(), j.key());
 			out << "</tree>\n";
 		}
 	}
@@ -158,45 +164,83 @@ void TreeDialog::elementToGui(const TreeElement & te)
 	ui->impression->setCurrentIndex(te.all);
 }
 
-void TreeDialog::saveTree(QTextStream &out, const QString &map, int local_id)
+void TreeDialog::guiToElement(TreeElement & te)
 {
-	TreeElement * elem = getTreeNodeData(map, QString::number(local_id));
-	if(elem == nullptr)
-		return;
-	out << createXmlPair(TAG, BUND_POS_MAP, map) << "\n";
-	out << createXmlInt(TAG, BUND_POS_TREE_NR , local_id) << "\n";
-	out << createXmlPair(TAG, BUND_POS_FLUR, m_tree_map[map][local_id].flur_nr) << "\n";
-	out << createXmlPair(TAG, BUND_POS_PIC_NR, m_tree_map[map][local_id].pic_nr) << "\n";
-	out << createXmlPair(TAG, BUND_POS_ROAD, m_tree_map[map][local_id].road) << "\n";
-	out << createXmlPair(TAG, BUND_POS_ETC, m_tree_map[map][local_id].etc) << "\n";
-	out << createXmlInt(TAG, BUND_POS_ACT, m_tree_map[map][local_id].act) << "\n"; //ui->act->currentIndex()) << "\n";
-	out << createXmlInt(TAG, BUND_POS_OSM_INC, m_tree_map[map][local_id].osm_inc) << "\n";
-	out << createXmlInt(TAG, BUND_POS_OSM_ID, m_tree_map[map][local_id].osm_id) << "\n"; //ui->OSM_ID->text()) << "\n";
+	te.flur_nr = ui->flurNr->text();
+	te.pic_nr = ui->picNr->text();
+	te.road = ui->road->text();
+	te.etc = ui->etc->text();
 
-	out << createXmlDouble(TAG, BUND_POS_COOR_X, m_tree_map[map][local_id].coor_x) << "\n";
-	out << createXmlDouble(TAG, BUND_POS_COOR_Y, m_tree_map[map][local_id].coor_y) << "\n";
+	te.act = ui->act->currentIndex();
+	te.osm_inc = ui->inOSM->checkState();
+	te.osm_id = getID(ui->OSM_ID->text());
+	te.coor_x = getCoor(ui->CoorX->text());
+	te.coor_y = getCoor(ui->CoorY->text());
 
-	out << createXmlPair(TAG, BUND_DESC_TYPE, m_tree_map[map][local_id].tree_type) << "\n"; //ui->type->text()) << "\n";
-	out << createXmlInt(TAG, BUND_DESC_HEIGHT, m_tree_map[map][local_id].height) << "\n"; // ui->treeHeight->currentIndex()) << "\n";
-	out << createXmlInt(TAG, BUND_DESC_SINGLE, m_tree_map[map][local_id].single) << "\n"; //ui->singleTree->checkState()) << "\n";
-	out << createXmlInt(TAG, BUND_DESC_AGE, m_tree_map[map][local_id].age) << "\n"; // ui->age->value()) << "\n";
-	out << createXmlDouble(TAG, BUND_DESC_DIA, m_tree_map[map][local_id].dia ) << "\n"; //ui->diameter->value()) << "\n";
-	out << createXmlInt(TAG, BUND_DESC_COUNT, m_tree_map[map][local_id].stem_count) << "\n"; //ui->trunkCount->value()) << "\n";
-	out << createXmlDouble(TAG, BUND_DESC_DIA_MIN, m_tree_map[map][local_id].dia_min) << "\n"; //ui->diameterMin->value()) << "\n";
-	out << createXmlDouble(TAG, BUND_DESC_DIA_MAX, m_tree_map[map][local_id].dia_max) << "\n"; //ui->diameterMax->value()) << "\n";
+	te.tree_type = ui->type->text();
+	te.height = ui->treeHeight->currentIndex();
+	te.single = ui->singleTree->checkState();
+	te.age = ui->age->value();
+	te.dia = ui->diameter->value();
+	te.stem_count = ui->trunkCount->value();
+	te.dia_min = ui->diameterMin->value();
+	te.dia_max = ui->diameterMax->value();
 
-	QString rel_flags = "0x" + QString::number(m_tree_map[map][local_id].rel_flags, 16);
+	te.rel_flags = relFlags();
+	te.rel_other = ui->rel_misc->text();
+	te.cond_flags = condFlags();
+	te.root_other = ui->cond_roor_misc->text();
+	te.stem_other = ui->cond_stem_misc->text();
+	te.crown_other = ui->cond_crown_misc->text();
+	te.crown_limit = ui->cond_limit->text();
+
+	te.all = ui->impression->currentIndex();
+}
+
+void TreeDialog::guiToTreelist(const QString &base, int id)
+{
+	guiToElement(m_tree_map[base][id]);
+}
+
+void TreeDialog::saveTree(QTextStream &out, const TreeElement & te)
+{
+	//TreeElement * elem = getTreeNodeData(map, QString::number(local_id));
+	//if(elem == nullptr)
+	//		return;
+	//out << createXmlPair(TAG, BUND_POS_MAP, map) << "\n";
+	//out << createXmlInt(TAG, BUND_POS_TREE_NR , local_id) << "\n";
+	out << createXmlPair(TAG, BUND_POS_FLUR, te.flur_nr) << "\n";
+	out << createXmlPair(TAG, BUND_POS_PIC_NR, te.pic_nr) << "\n";
+	out << createXmlPair(TAG, BUND_POS_ROAD, te.road) << "\n";
+	out << createXmlPair(TAG, BUND_POS_ETC, te.etc) << "\n";
+	out << createXmlInt(TAG, BUND_POS_ACT, te.act) << "\n";
+	out << createXmlInt(TAG, BUND_POS_OSM_INC, te.osm_inc) << "\n";
+	out << createXmlInt(TAG, BUND_POS_OSM_ID, te.osm_id) << "\n";
+
+	out << createXmlDouble(TAG, BUND_POS_COOR_X, te.coor_x) << "\n";
+	out << createXmlDouble(TAG, BUND_POS_COOR_Y, te.coor_y) << "\n";
+
+	out << createXmlPair(TAG, BUND_DESC_TYPE, te.tree_type) << "\n";
+	out << createXmlInt(TAG, BUND_DESC_HEIGHT, te.height) << "\n";
+	out << createXmlInt(TAG, BUND_DESC_SINGLE, te.single) << "\n";
+	out << createXmlInt(TAG, BUND_DESC_AGE, te.age) << "\n";
+	out << createXmlDouble(TAG, BUND_DESC_DIA, te.dia ) << "\n";
+	out << createXmlInt(TAG, BUND_DESC_COUNT, te.stem_count) << "\n";
+	out << createXmlDouble(TAG, BUND_DESC_DIA_MIN, te.dia_min) << "\n";
+	out << createXmlDouble(TAG, BUND_DESC_DIA_MAX, te.dia_max) << "\n";
+
+	QString rel_flags = "0x" + QString::number(te.rel_flags, 16);
 	out << createXmlPair(TAG, BUND_REL_FLAGS, rel_flags) << "\n";
-	out << createXmlPair(TAG, BUND_REL_OTHER, m_tree_map[map][local_id].rel_other) << "\n";
+	out << createXmlPair(TAG, BUND_REL_OTHER, te.rel_other) << "\n";
 
-	QString cond_flags = "0x" + QString::number(m_tree_map[map][local_id].cond_flags, 16);
+	QString cond_flags = "0x" + QString::number(te.cond_flags, 16);
 	out << createXmlPair(TAG, BUND_COND_FLAGS, cond_flags) << "\n";
-	out << createXmlPair(TAG, BUND_COND_ROOT_OTHER, m_tree_map[map][local_id].root_other) << "\n";
-	out << createXmlPair(TAG, BUND_COND_STEM_OTHER, m_tree_map[map][local_id].stem_other) << "\n";
-	out << createXmlPair(TAG, BUND_COND_CROWN_OTHER, m_tree_map[map][local_id].crown_other) << "\n";
-	out << createXmlPair(TAG, BUND_COND_CROWN_LIMIT, m_tree_map[map][local_id].crown_limit) << "\n";
+	out << createXmlPair(TAG, BUND_COND_ROOT_OTHER, te.root_other) << "\n";
+	out << createXmlPair(TAG, BUND_COND_STEM_OTHER, te.stem_other) << "\n";
+	out << createXmlPair(TAG, BUND_COND_CROWN_OTHER, te.crown_other) << "\n";
+	out << createXmlPair(TAG, BUND_COND_CROWN_LIMIT, te.crown_limit) << "\n";
 
-	out << createXmlInt(TAG, BUND_ALL, m_tree_map[map][local_id].all) << "\n";
+	out << createXmlInt(TAG, BUND_ALL, te.all) << "\n";
 }
 
 QTreeWidgetItem * TreeDialog::getTreeItem(QTreeWidgetItem * base, const QString &node)
@@ -312,7 +356,6 @@ void TreeDialog::read(const QString &fname)
 		{
 			if(xml.name().toString() == TREE_LIST)
 			{
-				TR_INF << "start";
 			}
 			if(xml.name().toString() == TREE)
 			{
@@ -464,7 +507,6 @@ void TreeDialog::read(const QString &fname)
 		{
 			if(xml.name().toString() == TREE_LIST)
 			{
-				TR_INF << "end";
 			}
 			if(xml.name().toString() == TREE)
 			{
@@ -853,37 +895,8 @@ void TreeDialog::on_buttonBox_accepted()
 	TreeElement * elem = getTreeNodeData(ui->map->text(), nr);
 	if((elem == nullptr) || (m_ok_clicked == false))
 		return;
-	m_tree_map[ui->map->text()][ui->treeNr->value()].flur_nr = ui->flurNr->text();
-	m_tree_map[ui->map->text()][ui->treeNr->value()].pic_nr = ui->picNr->text();
-	m_tree_map[ui->map->text()][ui->treeNr->value()].road = ui->road->text();
-	m_tree_map[ui->map->text()][ui->treeNr->value()].etc = ui->etc->text();
 
-	m_tree_map[ui->map->text()][ui->treeNr->value()].act = ui->act->currentIndex();
-	m_tree_map[ui->map->text()][ui->treeNr->value()].osm_inc = ui->inOSM->checkState();
-	m_tree_map[ui->map->text()][ui->treeNr->value()].osm_id = getID(ui->OSM_ID->text());
-	m_tree_map[ui->map->text()][ui->treeNr->value()].coor_x = getCoor(ui->CoorX->text());
-	m_tree_map[ui->map->text()][ui->treeNr->value()].coor_y = getCoor(ui->CoorY->text());
-
-	m_tree_map[ui->map->text()][ui->treeNr->value()].tree_type = ui->type->text();
-	m_tree_map[ui->map->text()][ui->treeNr->value()].height = ui->treeHeight->currentIndex();
-	m_tree_map[ui->map->text()][ui->treeNr->value()].single = ui->singleTree->checkState();
-	m_tree_map[ui->map->text()][ui->treeNr->value()].age = ui->age->value();
-	m_tree_map[ui->map->text()][ui->treeNr->value()].dia = ui->diameter->value();
-	m_tree_map[ui->map->text()][ui->treeNr->value()].stem_count = ui->trunkCount->value();
-	m_tree_map[ui->map->text()][ui->treeNr->value()].dia_min = ui->diameterMin->value();
-	m_tree_map[ui->map->text()][ui->treeNr->value()].dia_max = ui->diameterMax->value();
-
-	m_tree_map[ui->map->text()][ui->treeNr->value()].rel_flags = relFlags();
-	m_tree_map[ui->map->text()][ui->treeNr->value()].rel_other = ui->rel_misc->text();
-	m_tree_map[ui->map->text()][ui->treeNr->value()].cond_flags = condFlags();
-	m_tree_map[ui->map->text()][ui->treeNr->value()].root_other = ui->cond_roor_misc->text();
-	m_tree_map[ui->map->text()][ui->treeNr->value()].stem_other = ui->cond_stem_misc->text();
-	m_tree_map[ui->map->text()][ui->treeNr->value()].crown_other = ui->cond_crown_misc->text();
-	m_tree_map[ui->map->text()][ui->treeNr->value()].crown_limit = ui->cond_limit->text();
-
-	m_tree_map[ui->map->text()][ui->treeNr->value()].all = ui->impression->currentIndex();
-
-	//ui->tree_tab->setCurrentIndex(2);
+	guiToTreelist(ui->map->text(), ui->treeNr->value());
 
 	m_ok_clicked = false;
 }

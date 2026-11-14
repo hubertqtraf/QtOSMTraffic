@@ -154,7 +154,7 @@ public:
 	~TreeDialog();
 
 	void save(const QString &fname);
-	void saveTree(QTextStream &out, const QString &map, int local_id);
+	void saveTree(QTextStream &out, const TreeElement &te);
 	void read(const QString &fname);
 
 	void setNodeData(const QString &name, const QString &osm_id,
@@ -191,6 +191,8 @@ private:
 	void relFlagsToGui(const uint64_t flags);
 
 	void elementToGui(const TreeElement &te);
+	void guiToElement(TreeElement & te);
+	void guiToTreelist(const QString &base, int id);
 
 	uint64_t condFlags();
 	void condFlagsToGui(uint64_t flags);
