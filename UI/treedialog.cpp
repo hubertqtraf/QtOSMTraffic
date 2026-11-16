@@ -79,32 +79,34 @@ TreeDialog::~TreeDialog()
 
 void TreeDialog::save(const QString &fname)
 {
-	//QString map;
-
 	QFile file(fname);
 	if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
 		return;
 
-	QTextStream out(&file);
-	out << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-	out << "<" << TREE_LIST << ">\n";
+	QXmlStreamWriter out(&file);
+	out.setAutoFormatting(true);
+	out.writeStartDocument();
+
+	out.writeStartElement(TREE_LIST);
 	for (auto i = m_tree_map.cbegin(), end = m_tree_map.cend(); i != end; ++i)
 	{
 		QMap<int, TreeElement> nr_map = i.value();
 		for (auto j = nr_map.cbegin(), end = nr_map.cend(); j != end; ++j)
 		{
-			out << "<tree map=\"" << i.key() << "\" " << "local_id=\""  << j.key() << "\"" << ">\n";
+			out.writeStartElement(TREE);
+			out.writeAttribute("map", i.key());
+			out.writeAttribute("local_id", QString::number(j.key()));
 			TreeElement * elem = getTreeNodeData(i.key(), QString::number(j.key()));
 			if(elem == nullptr)
 				return;
-			out << createXmlPair(TAG, BUND_POS_MAP, i.key()) << "\n";
-			out << createXmlInt(TAG, BUND_POS_TREE_NR, j.key()) << "\n";
+			createXmlPair(out, BUND_POS_MAP, i.key());
+			createXmlInt(out, BUND_POS_TREE_NR, j.key());
 			saveTree(out, *elem);
-			//saveTree(out,i.key(), j.key());
-			out << "</tree>\n";
+			out.writeEndElement();
 		}
 	}
-	out << "</" << TREE_LIST << ">\n";
+	out.writeEndElement();
+	//out << "</" << TREE_LIST << ">\n";
 	/*QTreeWidgetItemIterator it(ui->treeWidget);
 	while (*it)
 	{
@@ -202,45 +204,40 @@ void TreeDialog::guiToTreelist(const QString &base, int id)
 	guiToElement(m_tree_map[base][id]);
 }
 
-void TreeDialog::saveTree(QTextStream &out, const TreeElement & te)
+void TreeDialog::saveTree(QXmlStreamWriter &out, const TreeElement & te)
 {
-	//TreeElement * elem = getTreeNodeData(map, QString::number(local_id));
-	//if(elem == nullptr)
-	//		return;
-	//out << createXmlPair(TAG, BUND_POS_MAP, map) << "\n";
-	//out << createXmlInt(TAG, BUND_POS_TREE_NR , local_id) << "\n";
-	out << createXmlPair(TAG, BUND_POS_FLUR, te.flur_nr) << "\n";
-	out << createXmlPair(TAG, BUND_POS_PIC_NR, te.pic_nr) << "\n";
-	out << createXmlPair(TAG, BUND_POS_ROAD, te.road) << "\n";
-	out << createXmlPair(TAG, BUND_POS_ETC, te.etc) << "\n";
-	out << createXmlInt(TAG, BUND_POS_ACT, te.act) << "\n";
-	out << createXmlInt(TAG, BUND_POS_OSM_INC, te.osm_inc) << "\n";
-	out << createXmlInt(TAG, BUND_POS_OSM_ID, te.osm_id) << "\n";
+	createXmlPair(out, BUND_POS_FLUR, te.flur_nr);
+	createXmlPair(out, BUND_POS_PIC_NR, te.pic_nr);
+	createXmlPair(out, BUND_POS_ROAD, te.road);
+	createXmlPair(out, BUND_POS_ETC, te.etc);
+	createXmlInt(out, BUND_POS_ACT, te.act);
+	createXmlInt(out, BUND_POS_OSM_INC, te.osm_inc);
+	createXmlInt(out, BUND_POS_OSM_ID, te.osm_id);
 
-	out << createXmlDouble(TAG, BUND_POS_COOR_X, te.coor_x) << "\n";
-	out << createXmlDouble(TAG, BUND_POS_COOR_Y, te.coor_y) << "\n";
+	createXmlDouble(out, BUND_POS_COOR_X, te.coor_x);
+	createXmlDouble(out, BUND_POS_COOR_Y, te.coor_y);
 
-	out << createXmlPair(TAG, BUND_DESC_TYPE, te.tree_type) << "\n";
-	out << createXmlInt(TAG, BUND_DESC_HEIGHT, te.height) << "\n";
-	out << createXmlInt(TAG, BUND_DESC_SINGLE, te.single) << "\n";
-	out << createXmlInt(TAG, BUND_DESC_AGE, te.age) << "\n";
-	out << createXmlDouble(TAG, BUND_DESC_DIA, te.dia ) << "\n";
-	out << createXmlInt(TAG, BUND_DESC_COUNT, te.stem_count) << "\n";
-	out << createXmlDouble(TAG, BUND_DESC_DIA_MIN, te.dia_min) << "\n";
-	out << createXmlDouble(TAG, BUND_DESC_DIA_MAX, te.dia_max) << "\n";
+	createXmlPair(out, BUND_DESC_TYPE, te.tree_type);
+	createXmlInt(out, BUND_DESC_HEIGHT, te.height);
+	createXmlInt(out, BUND_DESC_SINGLE, te.single);
+	createXmlInt(out, BUND_DESC_AGE, te.age);
+	createXmlDouble(out, BUND_DESC_DIA, te.dia);
+	createXmlInt(out, BUND_DESC_COUNT, te.stem_count);
+	createXmlDouble(out, BUND_DESC_DIA_MIN, te.dia_min);
+	createXmlDouble(out, BUND_DESC_DIA_MAX, te.dia_max);
 
 	QString rel_flags = "0x" + QString::number(te.rel_flags, 16);
-	out << createXmlPair(TAG, BUND_REL_FLAGS, rel_flags) << "\n";
-	out << createXmlPair(TAG, BUND_REL_OTHER, te.rel_other) << "\n";
+	createXmlPair(out, BUND_REL_FLAGS, rel_flags);
+	createXmlPair(out, BUND_REL_OTHER, te.rel_other);
 
 	QString cond_flags = "0x" + QString::number(te.cond_flags, 16);
-	out << createXmlPair(TAG, BUND_COND_FLAGS, cond_flags) << "\n";
-	out << createXmlPair(TAG, BUND_COND_ROOT_OTHER, te.root_other) << "\n";
-	out << createXmlPair(TAG, BUND_COND_STEM_OTHER, te.stem_other) << "\n";
-	out << createXmlPair(TAG, BUND_COND_CROWN_OTHER, te.crown_other) << "\n";
-	out << createXmlPair(TAG, BUND_COND_CROWN_LIMIT, te.crown_limit) << "\n";
+	createXmlPair(out, BUND_COND_FLAGS, cond_flags);
+	createXmlPair(out, BUND_COND_ROOT_OTHER, te.root_other);
+	createXmlPair(out, BUND_COND_STEM_OTHER, te.stem_other);
+	createXmlPair(out, BUND_COND_CROWN_OTHER, te.crown_other);
+	createXmlPair(out, BUND_COND_CROWN_LIMIT, te.crown_limit);
 
-	out << createXmlInt(TAG, BUND_ALL, te.all) << "\n";
+	createXmlInt(out, BUND_ALL, te.all);
 }
 
 QTreeWidgetItem * TreeDialog::getTreeItem(QTreeWidgetItem * base, const QString &node)
@@ -580,20 +577,22 @@ void TreeDialog::on_treeSelect_activated(int index)
 	ui->type->setText(select);
 }
 
-QString TreeDialog::createXmlPair(const QString &tag, const QString &name, const QString &value)
+void TreeDialog::createXmlPair(QXmlStreamWriter &out, const QString &name, const QString &value)
 {
-	QString ret = "<" + tag + " k=\"" + name + "\" " + "v=\"" + value + "\"/>";
-	return ret;
+	out.writeStartElement(TAG);
+	out.writeAttribute("k", name);
+	out.writeAttribute("v", value);
+	out.writeEndElement();
 }
 
-QString TreeDialog::createXmlInt(const QString &tag, const QString &name, int64_t value)
+void TreeDialog::createXmlInt(QXmlStreamWriter &out, const QString &name, int64_t value)
 {
-	return createXmlPair(tag, name, QString::number(value));
+	createXmlPair(out, name, QString::number(value));
 }
 
-QString TreeDialog::createXmlDouble(const QString &tag, const QString &name, double value)
+void TreeDialog::createXmlDouble(QXmlStreamWriter &out, const QString &name, double value)
 {
-	return createXmlPair(tag, name, QString::number(value, 'g', 10));
+	createXmlPair(out, name, QString::number(value, 'g', 10));
 }
 
 uint64_t TreeDialog::relFlags()

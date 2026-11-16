@@ -28,6 +28,7 @@
 #include <QAbstractItemModel>
 #include <QDialog>
 #include <QTreeWidget>
+#include <QXmlStreamWriter>
 
 #define TAG "tag"
 #define TREE "tree"
@@ -154,7 +155,7 @@ public:
 	~TreeDialog();
 
 	void save(const QString &fname);
-	void saveTree(QTextStream &out, const TreeElement &te);
+	void saveTree(QXmlStreamWriter &out, const TreeElement &te);
 	void read(const QString &fname);
 
 	void setNodeData(const QString &name, const QString &osm_id,
@@ -183,9 +184,9 @@ private:
 	QMap<QString, QMap<int, TreeElement>> m_tree_map;
 	TreeElement *getTreeNodeData(const QString &page, const QString &nr);
 
-	QString createXmlPair(const QString &tag, const QString &name, const QString &value);
-	QString createXmlInt(const QString &tag, const QString &name, int64_t value);
-	QString createXmlDouble(const QString &tag, const QString &name, double value);
+	void createXmlPair(QXmlStreamWriter &out, const QString &name, const QString &value);
+	void createXmlInt(QXmlStreamWriter &out, const QString &name, int64_t value);
+	void createXmlDouble(QXmlStreamWriter &out, const QString &name, double value);
 
 	uint64_t relFlags();
 	void relFlagsToGui(const uint64_t flags);
