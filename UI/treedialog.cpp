@@ -285,8 +285,13 @@ TreeElement * TreeDialog::getTreeNodeData(const QString &page, const QString &nr
 {
 	if(page == "")
 		return nullptr;
-	QMap<int, TreeElement> tree = m_tree_map[page];
 	int index = getID(nr);
+	if(m_tree_map.contains(page))
+	{
+		if(m_tree_map[page].contains(index))
+			return &(m_tree_map[page][index]);
+	}
+	QMap<int, TreeElement> tree = m_tree_map[page];
 	if(index == 0)
 		return nullptr;
 	return &(tree[index]);
@@ -312,6 +317,10 @@ void TreeDialog::addTreeNode(const QString &page, const QString &nr)
 				imap->setExpanded(true);
 
 				addTreeNodeData(page, nr);
+			}
+			else
+			{
+				inr->setSelected(true);
 			}
 		}
 		return;
@@ -529,7 +538,6 @@ void TreeDialog::setNodeData(const QString &name, const QString &osm_id,
 
 	int poi_data = getID(data);
 	poi_data &= 0x000000000000ffff;
-
 	TreeElement tree;
 	elementToGui(tree);
 
@@ -546,8 +554,13 @@ void TreeDialog::setNodeData(const QString &name, const QString &osm_id,
 			ui->map->setText(list[1]);
 			osm = Qt::Unchecked;
 			t_id = getID(list.last());
+			TreeElement * elem = getTreeNodeData(list[1], list.last());
 			ui->treeNr->setValue(t_id);
 			addTreeNode(list[1], list.last());
+			if(elem != nullptr)
+			{
+				elementToGui(*elem);
+			}
 		}
 	}
 	//else
