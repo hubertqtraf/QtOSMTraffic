@@ -70,6 +70,7 @@ TreeDialog::TreeDialog(QWidget *parent)
 	ui->setupUi(this);
 
 	ui->treeWidget->setColumnCount(1);
+	ui->treeWidget->setHeaderLabel("Blatt und Baumnr.");
 }
 
 TreeDialog::~TreeDialog()
@@ -139,7 +140,7 @@ void TreeDialog::elementToGui(const TreeElement & te)
 		ui->inOSM->setCheckState(Qt::Unchecked);
 	else
 		ui->inOSM->setCheckState(Qt::Checked);
-	ui->OSM_ID->setText(QString::number(te.osm_id, 'g', 10));
+	ui->OSM_ID->setText(QString::number(te.osm_id, 10));
 	ui->CoorX->setText(QString::number(te.coor_x, 'g', 10));
 	ui->CoorY->setText(QString::number(te.coor_y, 'g', 10));
 
