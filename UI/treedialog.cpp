@@ -84,6 +84,28 @@ void TreeDialog::save(const QString &fname)
 	if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
 		return;
 
+	if(fname.endsWith(".csv"))
+	{
+		QTextStream out(&file);
+		out << "map, " << "local_id, " << "flur_nr, " << "pic_nr, " << "street, " << "etc, ";
+		out << "act, " << "inc, " << "osm_id, " << "x, " << "y, ";
+		out << "\n";
+		for (auto i = m_tree_map.cbegin(), end = m_tree_map.cend(); i != end; ++i)
+		{
+			QMap<int, TreeElement> nr_map = i.value();
+			for (auto j = nr_map.cbegin(), end = nr_map.cend(); j != end; ++j)
+			{
+				TreeElement * elem = getTreeNodeData(i.key(), QString::number(j.key()));
+				if(elem == nullptr)
+					return;
+				out << i.key() << ", " << j.key();
+				saveTreeCsv(out, *elem);
+				out << "\n";
+			}
+		}
+		return;
+	}
+
 	QXmlStreamWriter out(&file);
 	out.setAutoFormatting(true);
 	out.writeStartDocument();
@@ -239,6 +261,15 @@ void TreeDialog::saveTree(QXmlStreamWriter &out, const TreeElement & te)
 	createXmlPair(out, BUND_COND_CROWN_LIMIT, te.crown_limit);
 
 	createXmlInt(out, BUND_ALL, te.all);
+}
+
+void TreeDialog::saveTreeCsv(QTextStream &out, const TreeElement &te)
+{
+	out << ", " << te.flur_nr << ", " << te.pic_nr;
+	out << ", " << te.road <<  ", " << te.etc;
+	out << ", " << te.act << ", " << te.osm_inc << ", " << te.osm_id;
+	out << ", " << QString::number(te.coor_x, 'g', 10);
+	out << ", " << QString::number(te.coor_y, 'g', 10);
 }
 
 QTreeWidgetItem * TreeDialog::getTreeItem(QTreeWidgetItem * base, const QString &node)
@@ -876,7 +907,7 @@ void TreeDialog::on_buttonBox_clicked(QAbstractButton *button)
 	if(std == QDialogButtonBox::Save)
 	{
 		QString fileName = QFileDialog::getSaveFileName(this, tr("Save Tree File"),
-					".", tr("Tree File (*.xml)"));
+					".", tr("Tree File (*.xml *.csv)"));
 		if(fileName.isEmpty())
 		{
 			// Warnig...

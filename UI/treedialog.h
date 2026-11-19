@@ -156,6 +156,7 @@ public:
 
 	void save(const QString &fname);
 	void saveTree(QXmlStreamWriter &out, const TreeElement &te);
+	void saveTreeCsv(QTextStream &out, const TreeElement &te);
 	void read(const QString &fname);
 
 	void setNodeData(const QString &name, const QString &osm_id,
