@@ -66,6 +66,7 @@ TreeDialog::TreeDialog(QWidget *parent)
 	: QDialog(parent)
 	, ui(new Ui::TreeDialog)
 	, m_ok_clicked(false)
+	, m_path(".")
 {
 	ui->setupUi(this);
 
@@ -100,8 +101,8 @@ void TreeDialog::save(const QString &fname)
 		out << "cond_crown_1, " << "cond_crown_2," << "cond_crown_3, " << "cond_crown_4,";
 		out << "cond_crown_5, " << "cond_crown_6," << "cond_crown_7, " << "cond_limit, ";
 		out << "cond_crown, " << "ALL";
-
 		out << "\n";
+
 		for (auto i = m_tree_map.cbegin(), end = m_tree_map.cend(); i != end; ++i)
 		{
 			QMap<int, TreeElement> nr_map = i.value();
@@ -972,23 +973,27 @@ void TreeDialog::on_buttonBox_clicked(QAbstractButton *button)
 	if(std == QDialogButtonBox::Save)
 	{
 		QString fileName = QFileDialog::getSaveFileName(this, tr("Save Tree File"),
-					".", tr("Tree File (*.xml *.csv)"));
+					m_path.path(), tr("Tree File (*.xml *.csv)"));
 		if(fileName.isEmpty())
 		{
 			// Warnig...
 			return;
 		}
+		QFileInfo info(fileName);
+		m_path = info.dir();
 		save(fileName);
 	}
 	if(std == QDialogButtonBox::Open)
 	{
 		QString fileName = QFileDialog::getOpenFileName(this, tr("Open Tree File"),
-					".", tr("Tree File (*.xml)"));
+					m_path.path(), tr("Tree File (*.xml)"));
 		if(fileName.isEmpty())
 		{
 			// Warnig...
 			return;
 		}
+		QFileInfo info(fileName);
+		m_path = info.dir();
 		read(fileName);
 	}
 }

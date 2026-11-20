@@ -27,6 +27,7 @@
 #include <QAbstractButton>
 #include <QAbstractItemModel>
 #include <QDialog>
+#include <QDir>
 #include <QTreeWidget>
 #include <QXmlStreamWriter>
 
@@ -184,6 +185,9 @@ private:
 	Ui::TreeDialog *ui;
 
 	bool m_ok_clicked;
+
+	QDir m_path;
+
 	QMap<QString, QMap<int, TreeElement>> m_tree_map;
 	TreeElement *getTreeNodeData(const QString &page, const QString &nr);
 
