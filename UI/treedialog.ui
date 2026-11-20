@@ -17,7 +17,7 @@
    <item row="0" column="1">
     <widget class="QTabWidget" name="tree_tab">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="pos">
       <attribute name="title">
@@ -315,7 +315,7 @@
          </item>
          <item>
           <property name="text">
-           <string>Kastaie</string>
+           <string>Kastanie</string>
           </property>
          </item>
          <item>

@@ -89,6 +89,18 @@ void TreeDialog::save(const QString &fname)
 		QTextStream out(&file);
 		out << "map, " << "local_id, " << "flur_nr, " << "pic_nr, " << "street, " << "etc, ";
 		out << "act, " << "inc, " << "osm_id, " << "x, " << "y, ";
+		out << "type, " << "height," << "single," << "age, ";
+		out << "dia, " << "count," << "dia_max," << "dia_min, ";
+		out << "re_root_1, " << "re_root_2," << "re_root_3, " << "re_root_4, ";
+		out << "re_root_5, " << "re_root_6," << "re_root_7, " << "re_root_8, ";
+		out << "re_plant_1, " << "re_plant_2," << "re_plant_3, " << "rel_etc, ";
+		out << "cond_root_1, " << "cond_root_2," << "cond_root_3, " << "cond_root_4," << "cond_etc, ";
+		out << "cond_stem_1, " << "cond_stem_2," << "cond_stem_3, " << "cond_stem_4,";
+		out << "cond_stem_5, " << "cond_stem_6," << "cond_stem_7, " << "cond_stem_8," << "cond_stem, ";
+		out << "cond_crown_1, " << "cond_crown_2," << "cond_crown_3, " << "cond_crown_4,";
+		out << "cond_crown_5, " << "cond_crown_6," << "cond_crown_7, " << "cond_limit, ";
+		out << "cond_crown, " << "ALL";
+
 		out << "\n";
 		for (auto i = m_tree_map.cbegin(), end = m_tree_map.cend(); i != end; ++i)
 		{
@@ -270,6 +282,58 @@ void TreeDialog::saveTreeCsv(QTextStream &out, const TreeElement &te)
 	out << ", " << te.act << ", " << te.osm_inc << ", " << te.osm_id;
 	out << ", " << QString::number(te.coor_x, 'g', 10);
 	out << ", " << QString::number(te.coor_y, 'g', 10);
+
+	out << ", " << te.tree_type << ", " << te.height;
+	// TODO: list index to string?
+	out << ", " << te.single << ", " << te.age;
+	out << ", " << te.dia << ", " << te.stem_count;
+	out << ", " << te.dia_max << ", " << te.dia_min;
+
+	out << ", " << getBitValue(te.rel_flags, BUND_REL_ROOT_1);
+	out << ", " << getBitValue(te.rel_flags, BUND_REL_ROOT_2);
+	out << ", " << getBitValue(te.rel_flags, BUND_REL_ROOT_3);
+	out << ", " << getBitValue(te.rel_flags, BUND_REL_ROOT_4);
+	out << ", " << getBitValue(te.rel_flags, BUND_REL_ROOT_5);
+	out << ", " << getBitValue(te.rel_flags, BUND_REL_ROOT_6);
+	out << ", " << getBitValue(te.rel_flags, BUND_REL_ROOT_7);
+	out << ", " << getBitValue(te.rel_flags, BUND_REL_ROOT_8);
+
+	out << ", " << getBitValue(te.rel_flags, BUND_REL_PLANT_1);
+	out << ", " << getBitValue(te.rel_flags, BUND_REL_PLANT_2);
+	out << ", " << getBitValue(te.rel_flags, BUND_REL_PLANT_3);
+	out << ", " << te.rel_other;
+
+	out << ", " << getBitValue(te.cond_flags, BUND_COND_ROOT_1);
+	out << ", " << getBitValue(te.cond_flags, BUND_COND_ROOT_2);
+	out << ", " << getBitValue(te.cond_flags, BUND_COND_ROOT_3);
+	out << ", " << getBitValue(te.cond_flags, BUND_COND_ROOT_4);
+	out << ", " << te.root_other;
+
+	out << ", " << getBitValue(te.cond_flags, BUND_COND_STEM_1);
+	out << ", " << getBitValue(te.cond_flags, BUND_COND_STEM_2);
+	out << ", " << getBitValue(te.cond_flags, BUND_COND_STEM_3);
+	out << ", " << getBitValue(te.cond_flags, BUND_COND_STEM_4);
+	out << ", " << getBitValue(te.cond_flags, BUND_COND_STEM_5);
+	out << ", " << getBitValue(te.cond_flags, BUND_COND_STEM_6);
+	out << ", " << getBitValue(te.cond_flags, BUND_COND_STEM_7);
+	out << ", " << getBitValue(te.cond_flags, BUND_COND_STEM_8);
+	out << ", " << te.stem_other;
+
+	out << ", " << getBitValue(te.cond_flags, BUND_COND_CROWN_1);
+	out << ", " << getBitValue(te.cond_flags, BUND_COND_CROWN_2);
+	out << ", " << getBitValue(te.cond_flags, BUND_COND_CROWN_3);
+	out << ", " << getBitValue(te.cond_flags, BUND_COND_CROWN_4);
+	out << ", " << getBitValue(te.cond_flags, BUND_COND_CROWN_5);
+	out << ", " << getBitValue(te.cond_flags, BUND_COND_CROWN_6);
+	out << ", " << getBitValue(te.cond_flags, BUND_COND_CROWN_7);
+	out << ", " << te.crown_limit;
+	out << ", " << te.crown_other;
+	out << ", " << te.all;
+}
+
+bool TreeDialog::getBitValue(uint64_t val, uint64_t mask)
+{
+	return ((val & mask) == mask);
 }
 
 QTreeWidgetItem * TreeDialog::getTreeItem(QTreeWidgetItem * base, const QString &node)
@@ -561,6 +625,7 @@ void TreeDialog::read(const QString &fname)
 		//... do error handling
 	}
 }
+
 
 void TreeDialog::setNodeData(const QString &name, const QString &osm_id,
 							 const QString &x, const QString &y, const QString &data)
