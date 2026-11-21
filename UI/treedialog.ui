@@ -17,7 +17,7 @@
    <item row="0" column="1">
     <widget class="QTabWidget" name="tree_tab">
      <property name="currentIndex">
-      <number>1</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="pos">
       <attribute name="title">
@@ -366,7 +366,7 @@
        <item row="5" column="2">
         <widget class="QCheckBox" name="rel_roots_6">
          <property name="text">
-          <string>Nachbargehgehölz</string>
+          <string>Nachbargehgehölz (6)</string>
          </property>
         </widget>
        </item>
@@ -380,14 +380,14 @@
        <item row="9" column="0">
         <widget class="QCheckBox" name="rel_planting_3">
          <property name="text">
-          <string>Sträucher</string>
+          <string>Sträucher (3)</string>
          </property>
         </widget>
        </item>
        <item row="6" column="2">
         <widget class="QCheckBox" name="rel_roots_8">
          <property name="text">
-          <string>Bodennbearbeitug</string>
+          <string>Bodennbearbeitug (8)</string>
          </property>
         </widget>
        </item>
@@ -407,28 +407,28 @@
        <item row="6" column="0">
         <widget class="QCheckBox" name="rel_roots_7">
          <property name="text">
-          <string>Belag</string>
+          <string>Belag (7)</string>
          </property>
         </widget>
        </item>
        <item row="3" column="2">
         <widget class="QCheckBox" name="rel_roots_2">
          <property name="text">
-          <string>Straße</string>
+          <string>Straße (2)</string>
          </property>
         </widget>
        </item>
        <item row="4" column="2">
         <widget class="QCheckBox" name="rel_roots_4">
          <property name="text">
-          <string>Gebäude/Keller</string>
+          <string>Gebäude/Keller (4)</string>
          </property>
         </widget>
        </item>
        <item row="8" column="2">
         <widget class="QCheckBox" name="rel_planting_2">
          <property name="text">
-          <string>Stauden</string>
+          <string>Stauden (2)</string>
          </property>
         </widget>
        </item>
@@ -449,14 +449,14 @@
        <item row="8" column="0">
         <widget class="QCheckBox" name="rel_planting_1">
          <property name="text">
-          <string>Wiesen</string>
+          <string>Wiesen (1)</string>
          </property>
         </widget>
        </item>
        <item row="5" column="0">
         <widget class="QCheckBox" name="rel_roots_5">
          <property name="text">
-          <string>überfüllt</string>
+          <string>überfüllt (5)</string>
          </property>
         </widget>
        </item>
@@ -466,14 +466,14 @@
        <item row="3" column="0">
         <widget class="QCheckBox" name="rel_roots_1">
          <property name="text">
-          <string>frei</string>
+          <string>frei (1)</string>
          </property>
         </widget>
        </item>
        <item row="4" column="0">
         <widget class="QCheckBox" name="rel_roots_3">
          <property name="text">
-          <string>verdichtet</string>
+          <string>verdichtet (3)       </string>
          </property>
         </widget>
        </item>
@@ -511,21 +511,21 @@
        <item row="9" column="1">
         <widget class="QCheckBox" name="cond_stem_6">
          <property name="text">
-          <string>Sammbruch</string>
+          <string>Sammbruch (6)</string>
          </property>
         </widget>
        </item>
        <item row="10" column="1">
         <widget class="QCheckBox" name="cond_stem_8">
          <property name="text">
-          <string>bearbeitet</string>
+          <string>bearbeitet (8)</string>
          </property>
         </widget>
        </item>
        <item row="18" column="0">
         <widget class="QCheckBox" name="cond_crown_7">
          <property name="text">
-          <string>Mispelbefall</string>
+          <string>Mispelbefall (7)</string>
          </property>
         </widget>
        </item>
@@ -535,42 +535,42 @@
        <item row="2" column="0">
         <widget class="QCheckBox" name="cond_root_1">
          <property name="text">
-          <string>verletzt</string>
+          <string>verletzt (1)</string>
          </property>
         </widget>
        </item>
        <item row="7" column="0">
         <widget class="QCheckBox" name="cond_stem_1">
          <property name="text">
-          <string>Ridenschaden</string>
+          <string>Ridenschaden (1)</string>
          </property>
         </widget>
        </item>
        <item row="4" column="0">
         <widget class="QCheckBox" name="cond_root_3">
          <property name="text">
-          <string>freiliegend</string>
+          <string>freiliegend (3)</string>
          </property>
         </widget>
        </item>
        <item row="8" column="1">
         <widget class="QCheckBox" name="cond_stem_4">
          <property name="text">
-          <string>Frostriss</string>
+          <string>Frostriss (4)</string>
          </property>
         </widget>
        </item>
        <item row="17" column="1">
         <widget class="QCheckBox" name="cond_crown_6">
          <property name="text">
-          <string>vorzeitiger Färbung</string>
+          <string>vorzeitiger Färbung (6)</string>
          </property>
         </widget>
        </item>
        <item row="16" column="1">
         <widget class="QCheckBox" name="cond_crown_4">
          <property name="text">
-          <string>Kronrnnverlichtung</string>
+          <string>Kronrnnverlichtung (4)</string>
          </property>
         </widget>
        </item>
@@ -591,14 +591,14 @@
        <item row="9" column="0">
         <widget class="QCheckBox" name="cond_stem_5">
          <property name="text">
-          <string>Höhlung</string>
+          <string>Höhlung (5)</string>
          </property>
         </widget>
        </item>
        <item row="2" column="1">
         <widget class="QCheckBox" name="cond_root_2">
          <property name="text">
-          <string>Fäulnis</string>
+          <string>Fäulnis (2)</string>
          </property>
         </widget>
        </item>
@@ -634,35 +634,35 @@
        <item row="4" column="1">
         <widget class="QCheckBox" name="cond_root_4">
          <property name="text">
-          <string>Halsschadenn</string>
+          <string>Halsschadenn (4)</string>
          </property>
         </widget>
        </item>
        <item row="17" column="0">
         <widget class="QCheckBox" name="cond_crown_5">
          <property name="text">
-          <string>vorzeitiger Laubfall</string>
+          <string>vorzeitiger Laubfall (5)</string>
          </property>
         </widget>
        </item>
        <item row="7" column="1">
         <widget class="QCheckBox" name="cond_stem_2">
          <property name="text">
-          <string>Ausbruch</string>
+          <string>Ausbruch (2)</string>
          </property>
         </widget>
        </item>
        <item row="15" column="0">
         <widget class="QCheckBox" name="cond_crown_1">
          <property name="text">
-          <string>vollausgebidet</string>
+          <string>vollausgebidet (1)</string>
          </property>
         </widget>
        </item>
        <item row="16" column="0">
         <widget class="QCheckBox" name="cond_crown_3">
          <property name="text">
-          <string>Wipfeldürre</string>
+          <string>Wipfeldürre (3)</string>
          </property>
         </widget>
        </item>
@@ -672,7 +672,7 @@
        <item row="10" column="0">
         <widget class="QCheckBox" name="cond_stem_7">
          <property name="text">
-          <string>Gabelung</string>
+          <string>Gabelung (7)</string>
          </property>
         </widget>
        </item>
@@ -693,7 +693,7 @@
        <item row="8" column="0">
         <widget class="QCheckBox" name="cond_stem_3">
          <property name="text">
-          <string>Faulstelle</string>
+          <string>Faulstelle (3)</string>
          </property>
         </widget>
        </item>
@@ -710,7 +710,7 @@
        <item row="15" column="1">
         <widget class="QCheckBox" name="cond_crown_2">
          <property name="text">
-          <string>tote äste</string>
+          <string>tote äste (2)</string>
          </property>
         </widget>
        </item>
