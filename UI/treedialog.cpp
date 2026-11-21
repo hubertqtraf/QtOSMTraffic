@@ -996,6 +996,10 @@ void TreeDialog::on_buttonBox_clicked(QAbstractButton *button)
 		m_path = info.dir();
 		read(fileName);
 	}
+	if(std == QDialogButtonBox::Apply)
+	{
+		guiToTreelist(ui->map->text(), ui->treeNr->value());
+	}
 }
 
 void TreeDialog::on_buttonBox_accepted()
