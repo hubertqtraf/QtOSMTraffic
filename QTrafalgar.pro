@@ -28,6 +28,7 @@ INCLUDEPATH += ./trafalgar
 SOURCES += \
     UI/about.cpp \
     UI/fileoptions.cpp \
+    UI/imageviewer.cpp \
     UI/nodestype.cpp \
     UI/parkingdlg.cpp \
     UI/ruler.cpp \
@@ -82,6 +83,7 @@ SOURCES += \
 HEADERS += \
     UI/about.h \
     UI/fileoptions.h \
+    UI/imageviewer.h \
     UI/nodestype.h \
     UI/parkingdlg.h \
     UI/ruler.h \
