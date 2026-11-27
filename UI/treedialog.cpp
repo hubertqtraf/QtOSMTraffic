@@ -39,6 +39,7 @@ TreeElement::TreeElement()
 	, osm_inc()
 	, coor_x(0.0)
 	, coor_y(0.0)
+	, scan("")
 
 	, tree_type("")
 	, height(0)
@@ -67,6 +68,7 @@ TreeDialog::TreeDialog(QWidget *parent)
 	, ui(new Ui::TreeDialog)
 	, m_ok_clicked(false)
 	, m_path(".")
+	, m_view_scan(nullptr)
 {
 	ui->setupUi(this);
 
@@ -89,7 +91,7 @@ void TreeDialog::save(const QString &fname)
 	{
 		QTextStream out(&file);
 		out << "map, " << "local_id, " << "flur_nr, " << "pic_nr, " << "street, " << "etc, ";
-		out << "act, " << "inc, " << "osm_id, " << "x, " << "y, ";
+		out << "act, " << "inc, " << "osm_id, " << "x, " << "y, " << "scan, ";
 		out << "type, " << "height," << "single," << "age, ";
 		out << "dia, " << "count," << "dia_max," << "dia_min, ";
 		out << "re_root_1, " << "re_root_2," << "re_root_3, " << "re_root_4, ";
@@ -178,6 +180,7 @@ void TreeDialog::elementToGui(const TreeElement & te)
 	ui->OSM_ID->setText(QString::number(te.osm_id, 10));
 	ui->CoorX->setText(QString::number(te.coor_x, 'g', 10));
 	ui->CoorY->setText(QString::number(te.coor_y, 'g', 10));
+	ui->scan_fname->setText(te.scan);
 
 	ui->type->setText(te.tree_type);
 	ui->treeHeight->setCurrentIndex(te.height);
@@ -214,6 +217,7 @@ void TreeDialog::guiToElement(TreeElement & te)
 	te.osm_id = getID(ui->OSM_ID->text());
 	te.coor_x = getCoor(ui->CoorX->text());
 	te.coor_y = getCoor(ui->CoorY->text());
+	te.scan = ui->scan_fname->text();
 
 	te.tree_type = ui->type->text();
 	te.height = ui->treeHeight->currentIndex();
@@ -252,6 +256,7 @@ void TreeDialog::saveTree(QXmlStreamWriter &out, const TreeElement & te)
 
 	createXmlDouble(out, BUND_POS_COOR_X, te.coor_x);
 	createXmlDouble(out, BUND_POS_COOR_Y, te.coor_y);
+	createXmlPair(out, BUND_POS_SCAN, te.scan);
 
 	createXmlPair(out, BUND_DESC_TYPE, te.tree_type);
 	createXmlInt(out, BUND_DESC_HEIGHT, te.height);
@@ -283,6 +288,7 @@ void TreeDialog::saveTreeCsv(QTextStream &out, const TreeElement &te)
 	out << ", " << te.act << ", " << te.osm_inc << ", " << te.osm_id;
 	out << ", " << QString::number(te.coor_x, 'g', 10);
 	out << ", " << QString::number(te.coor_y, 'g', 10);
+	out << ", " << te.scan;
 
 	out << ", " << te.tree_type << ", " << te.height;
 	// TODO: list index to string?
@@ -527,7 +533,10 @@ void TreeDialog::read(const QString &fname)
 				{
 					m_tree_map[local_map][local_id].coor_y = getCoor(value);
 				}
-
+				if(key == BUND_POS_SCAN)
+				{
+					m_tree_map[local_map][local_id].scan = value;
+				}
 				if(key == BUND_DESC_TYPE)
 				{
 					m_tree_map[local_map][local_id].tree_type = value;
@@ -1040,4 +1049,19 @@ void TreeDialog::on_treeWidget_itemActivated(QTreeWidgetItem *item, int column)
 	int id = getID(text.toString());
 
 	elementToGui(m_tree_map[base][id]);
+}
+
+void TreeDialog::on_pushButton_clicked()
+{
+	QString path = m_path.path() + "/" + ui->scan_fname->text();
+	if(m_view_scan == nullptr)
+	{
+		m_view_scan = new ImageViewer(this, path);
+	}
+	else
+		m_view_scan->read(path);
+	if(m_view_scan->exec())
+	{
+
+	}
 }

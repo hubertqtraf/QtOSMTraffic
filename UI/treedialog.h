@@ -24,6 +24,8 @@
 #ifndef TREEDIALOG_H
 #define TREEDIALOG_H
 
+#include "imageviewer.h"
+
 #include <QAbstractButton>
 #include <QAbstractItemModel>
 #include <QDialog>
@@ -47,6 +49,7 @@
 #define BUND_POS_OSM_ID "BUND:pos:osm_id"
 #define BUND_POS_COOR_X "BUND:pos:coor_x"
 #define BUND_POS_COOR_Y "BUND:pos:coor_y"
+#define BUND_POS_SCAN "BUND:pos:scan"
 
 #define BUND_DESC_TYPE "BUND:desc:type"
 #define BUND_DESC_HEIGHT "BUND:desc:height"
@@ -121,6 +124,7 @@ public:
 
 	double coor_x;			// coor
 	double coor_y;
+	QString scan;
 
 	QString tree_type;		// name of the tree
 	double height;				// height of the tree
@@ -181,12 +185,15 @@ private slots:
 
 	void on_treeWidget_itemActivated(QTreeWidgetItem *item, int column);
 
+	void on_pushButton_clicked();
+
 private:
 	Ui::TreeDialog *ui;
 
 	bool m_ok_clicked;
 
 	QDir m_path;
+	ImageViewer * m_view_scan;
 
 	QMap<QString, QMap<int, TreeElement>> m_tree_map;
 	TreeElement *getTreeNodeData(const QString &page, const QString &nr);

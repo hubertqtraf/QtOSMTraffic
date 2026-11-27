@@ -34,7 +34,9 @@ class ImageViewer : public QDialog
 public:
 	explicit ImageViewer(QWidget *parent = nullptr, const QString &fname = "");
 
+	void read(const QString &fname);
 	void setImage(const QImage &newImage);
+
 signals:
 
 private:

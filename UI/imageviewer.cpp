@@ -44,10 +44,15 @@ ImageViewer::ImageViewer(QWidget *parent, const QString &fname)
 	QVBoxLayout *mainLayout = new QVBoxLayout(this);
 	mainLayout->addWidget(m_scrollArea);
 
+	read(fname);
+
 	//createActions();
 
 	//resize(QGuiApplication::primaryScreen()->availableSize() * 3 / 5);
+}
 
+void ImageViewer::read(const QString &fname)
+{
 	QImageReader reader(fname);
 	reader.setAutoTransform(true);
 	const QImage newImage = reader.read();
@@ -59,7 +64,6 @@ ImageViewer::ImageViewer(QWidget *parent, const QString &fname)
 	resize(400,600);
 	m_imageLabel->resize(newImage.width(), newImage.height());
 }
-
 
 void ImageViewer::setImage(const QImage &newImage)
 {
