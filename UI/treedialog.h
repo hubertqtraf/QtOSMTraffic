@@ -28,6 +28,7 @@
 
 #include <QAbstractButton>
 #include <QAbstractItemModel>
+#include <QDate>
 #include <QDialog>
 #include <QDir>
 #include <QTreeWidget>
