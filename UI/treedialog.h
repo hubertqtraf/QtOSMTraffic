@@ -192,7 +192,7 @@ private slots:
 
 	void on_treeWidget_itemActivated(QTreeWidgetItem *item, int column);
 
-	void on_pushButton_clicked();
+	void on_show_scan_clicked();
 
 private:
 	Ui::TreeDialog *ui;

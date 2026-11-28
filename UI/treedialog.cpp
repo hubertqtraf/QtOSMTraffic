@@ -1090,7 +1090,7 @@ void TreeDialog::on_treeWidget_itemActivated(QTreeWidgetItem *item, int column)
 	elementToGui(m_tree_map[base][id]);
 }
 
-void TreeDialog::on_pushButton_clicked()
+void TreeDialog::on_show_scan_clicked()
 {
 	QString path = m_path.path() + "/" + ui->scan_fname->text();
 	if(m_view_scan == nullptr)
