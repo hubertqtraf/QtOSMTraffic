@@ -60,6 +60,9 @@ TreeElement::TreeElement()
 	, crown_other("")
 
 	, all()
+	, user_nr(1)
+	, date(1994, 9, 1)
+	, user_name("")
 {
 }
 
@@ -102,7 +105,7 @@ void TreeDialog::save(const QString &fname)
 		out << "cond_stem_5, " << "cond_stem_6," << "cond_stem_7, " << "cond_stem_8," << "cond_stem, ";
 		out << "cond_crown_1, " << "cond_crown_2," << "cond_crown_3, " << "cond_crown_4,";
 		out << "cond_crown_5, " << "cond_crown_6," << "cond_crown_7, " << "cond_limit, ";
-		out << "cond_crown, " << "ALL";
+		out << "cond_crown, " << "ALL, " << "nr, " << "date, " << "user";
 		out << "\n";
 
 		for (auto i = m_tree_map.cbegin(), end = m_tree_map.cend(); i != end; ++i)
@@ -203,6 +206,9 @@ void TreeDialog::elementToGui(const TreeElement & te)
 	ui->cond_limit->setText(te.crown_limit);
 
 	ui->impression->setCurrentIndex(te.all);
+	ui->user_nr->setValue(te.user_nr);
+	ui->dateEdit->setDate(te.date);
+	ui->user_name->setText(te.user_name);
 }
 
 void TreeDialog::guiToElement(TreeElement & te)
@@ -237,6 +243,9 @@ void TreeDialog::guiToElement(TreeElement & te)
 	te.crown_limit = ui->cond_limit->text();
 
 	te.all = ui->impression->currentIndex();
+	te.user_nr = ui->user_nr->value();
+	te.date = ui->dateEdit->date();
+	te.user_name = ui->user_name->text();
 }
 
 void TreeDialog::guiToTreelist(const QString &base, int id)
@@ -279,6 +288,11 @@ void TreeDialog::saveTree(QXmlStreamWriter &out, const TreeElement & te)
 	createXmlPair(out, BUND_COND_CROWN_LIMIT, te.crown_limit);
 
 	createXmlInt(out, BUND_ALL, te.all);
+	createXmlInt(out, BUND_ALL_USER_NR, te.user_nr);
+	//QString all_date = te.date.toString(Qt::ISODate);
+	QString all_date = te.date.toString("dd.MM.yyyy");
+	createXmlPair(out, BUND_ALL_USER_DATE, all_date);
+	createXmlPair(out, BUND_ALL_USER_NAME, te.user_name);
 }
 
 void TreeDialog::saveTreeCsv(QTextStream &out, const TreeElement &te)
@@ -336,6 +350,9 @@ void TreeDialog::saveTreeCsv(QTextStream &out, const TreeElement &te)
 	out << ", " << te.crown_limit;
 	out << ", " << te.crown_other;
 	out << ", " << te.all;
+	out << ", " << te.user_nr;
+	out << ", " << te.date.toString(Qt::TextDate); //(Qt::ISODate);
+	out << ", " << te.user_name;
 }
 
 bool TreeDialog::getBitValue(uint64_t val, uint64_t mask)
@@ -611,6 +628,28 @@ void TreeDialog::read(const QString &fname)
 				if(key == BUND_ALL)
 				{
 					m_tree_map[local_map][local_id].all = getID(value);
+				}
+				if(key == BUND_ALL_USER_NR)
+				{
+					m_tree_map[local_map][local_id].user_nr = getID(value);
+				}
+				if(key == BUND_ALL_USER_DATE)
+				{
+					if(value.size() < 10)
+					{
+						m_tree_map[local_map][local_id].date.setDate(1996, 1, 23);
+					}
+					else
+					{
+						int day = value.mid(0,2).toInt();
+						int month = value.mid(3,2).toInt();
+						int year = value.mid(6,4).toInt();
+						m_tree_map[local_map][local_id].date.setDate(year, month, day);
+					}
+				}
+				if(key == BUND_ALL_USER_NAME)
+				{
+					m_tree_map[local_map][local_id].user_name = value;
 				}
 				//TR_INF << key << value;
 			}

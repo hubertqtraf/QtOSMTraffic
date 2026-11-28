@@ -107,6 +107,9 @@
 #define BUND_COND_CROWN_7 0x0000004000000000
 
 #define BUND_ALL "BUND_ALL"
+#define BUND_ALL_USER_NR "BUND:all:user_nr"
+#define BUND_ALL_USER_DATE "BUND:all:user_date"
+#define BUND_ALL_USER_NAME "BUND:all:user_name"
 
 class TreeElement
 {
@@ -143,7 +146,10 @@ public:
 	QString crown_limit;
 	QString crown_other;
 
-	int all;				//
+	int all;			//
+	int user_nr;
+	QDate date;
+	QString user_name;
 };
 
 namespace Ui {
